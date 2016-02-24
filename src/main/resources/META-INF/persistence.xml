@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+     http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <!-- persistence.xml需要放到Classpath下面 -->
+
+    <persistence-unit name="domain" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <properties>
+             <!--Oracle Dialect -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle8iDialect"/>-->
+             <!--Database Driver —— Oracle -->
+            <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver"/>
+             <!--Database Connection URL -->
+            <!--<property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.0.12:1521:orcl"/>-->
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@(description=(address=(protocol=tcp)(port=1521)(host=127.1.0.1))(connect_data=(service_name=oracle)))"/>
+            <property name="hibernate.connection.username" value="jims"/>
+            <property name="hibernate.connection.password" value="hisuser"/>
+
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>
