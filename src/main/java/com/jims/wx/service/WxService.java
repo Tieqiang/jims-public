@@ -19,6 +19,9 @@ import javax.ws.rs.QueryParam;
 @Path("wx-service")
 public class WxService {
 
+    public final static String access_token_url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=APPID&secret=APPSECRET";
+    public static String appId = "wx75bf60f4b0d3a8fb";
+    public static String secret = "12bacb204a9a6e168843df163f903e51";
 
     @Path("check")
     @Produces("text/html")
@@ -29,7 +32,8 @@ public class WxService {
         System.out.println(timestamp);
         System.out.println(nonce);
         System.out.println(echostr);
-        createMyMenu() ;
+        //createMyMenu() ;
+
         return echostr ;
     }
 
@@ -42,23 +46,33 @@ public class WxService {
         SslContextFactory sslContextFactory = new SslContextFactory();
         HttpClient httpClient = new HttpClient(sslContextFactory) ;
         httpClient.setConnectTimeout(5000);
-
+        String token ="";
+        String expires = "";
         try {
             httpClient.start();
-            String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxecde8da70c21dc65&secret=d4624c36b6795d1d99dcf0547af5443d" ;
+            //String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wx75bf60f4b0d3a8fb&secret=12bacb204a9a6e168843df163f903e51" ;
+            String url = access_token_url.replace("APPID", appId).replace("APPSECRET", secret);
             ContentResponse response = httpClient.GET(url) ;
             String str = response.getContentAsString() ;
-            System.out.println(str);
+            System.out.println("success:"+str);
+            if(null != str && str.contains("access_token")){
+                String [] info = str.split(",");
+                token = info[0].substring(info[0].indexOf("\":\"")+3,info[0].length()-1);
+                System.out.println("token:" + token);
+                expires = info[1].substring(info[1].indexOf("\":")+2);
+                System.out.println("expires:" + expires);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
 
-        return null ;
+        return token ;
     }
 
     private void createMyMenu(){
-        String accessTooken = "j--GLT-ZusnA4okojdU5G-JHWab-LcQ-DcA38RpF90AolSqb3-huMqUXLtL7QQueJxk-FIaUzezS1RJ-6pqIOKzpbtHElhMbisHS2t3hXRUoZTy6xOgLgc1XQJ_KZYQ4WMRcAJAGWB" ;
+
+        String accessToken = getAccessToKen();
         String menuData = " {\n" +
                 "     \"button\":[\n" +
                 "     {\t\n" +
@@ -86,7 +100,7 @@ public class WxService {
                 "            }]\n" +
                 "       }]\n" +
                 " }" ;
-        String url = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessTooken ;
+        String url = " https://api.weixin.qq.com/cgi-bin/menu/create?access_token="+accessToken ;
         SslContextFactory sslContextFactory = new SslContextFactory();
         HttpClient httpClient = new HttpClient(sslContextFactory) ;
         try {
@@ -101,4 +115,12 @@ public class WxService {
 
     }
 
+    public void receiveTextMessage(){
+        //String fromUserName = "";
+        //String toUserName = "";
+        //String msgType = "";
+        //String content = "";
+        //long msgId=1111;
+        //long createTime=2222 ;
+    }
 }
