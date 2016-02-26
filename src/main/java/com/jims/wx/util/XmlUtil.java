@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.Writer;
 
 /**
- *
+ * Object和XML相互转化
  * Created by wangjing on 2016/2/26.
  */
 public class XmlUtil {
