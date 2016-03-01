@@ -32,7 +32,6 @@ public class WxService {
         System.out.println(timestamp);
         System.out.println(nonce);
         System.out.println(echostr);
-        //createMyMenu() ;
 
         return echostr ;
     }
@@ -116,11 +115,6 @@ public class WxService {
     }
 
     public void receiveTextMessage(){
-        //String fromUserName = "";
-        //String toUserName = "";
-        //String msgType = "";
-        //String content = "";
-        //long msgId=1111;
-        //long createTime=2222 ;
+
     }
 }
