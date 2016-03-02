@@ -8,6 +8,36 @@
     <persistence-unit name="domain" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
 
+        <class>com.jims.wx.entity.ClinicTypeSetting</class>
+        <class>com.jims.wx.entity.AppUser</class>
+        <class>com.jims.wx.entity.ClinicSchedule</class>
+        <class>com.jims.wx.entity.DoctInfo</class>
+        <class>com.jims.wx.entity.Article</class>
+        <class>com.jims.wx.entity.AnswerSheet</class>
+        <class>com.jims.wx.entity.PatVsUser</class>
+        <class>com.jims.wx.entity.ResponseMessage</class>
+        <class>com.jims.wx.entity.ResponseArticle</class>
+        <class>com.jims.wx.entity.FodderDict</class>
+        <class>com.jims.wx.entity.MenuTypeDict</class>
+        <class>com.jims.wx.entity.PatInfo</class>
+        <class>com.jims.wx.entity.SubjectOptions</class>
+        <class>com.jims.wx.entity.ClinicMaster</class>
+        <class>com.jims.wx.entity.SchemaVersion</class>
+        <class>com.jims.wx.entity.ClinicIndex</class>
+        <class>com.jims.wx.entity.HospitalInfo</class>
+        <class>com.jims.wx.entity.AccessTooken</class>
+        <class>com.jims.wx.entity.QuestionnaireVsSubject</class>
+        <class>com.jims.wx.entity.RequestMessage</class>
+        <class>com.jims.wx.entity.AnswerResult</class>
+        <class>com.jims.wx.entity.WxOpenAccountConfig</class>
+        <class>com.jims.wx.entity.AppUserGroups</class>
+        <class>com.jims.wx.entity.Subject</class>
+        <class>com.jims.wx.entity.OpenAccountMenu</class>
+        <class>com.jims.wx.entity.ClinicTypeCharge</class>
+        <class>com.jims.wx.entity.PayWayDict</class>
+        <class>com.jims.wx.entity.QuestionnaireModel</class>
+        <class>com.jims.wx.entity.ClinicForRegist</class>
+
         <properties>
              <!--Oracle Dialect -->
             <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle10gDialect"/>
