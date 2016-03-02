@@ -57,9 +57,9 @@ public class Main {
         flyway.setEncoding("UTF-8");
         flyway.setValidateOnMigrate(true);
         //清空所有表结构
-        //flyway.clean();
+//        flyway.clean();
         //初始化flyWAy
-        flyway.init();
+//        flyway.init();
         //执行版本控制
         flyway.migrate();
 
