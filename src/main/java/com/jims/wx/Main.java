@@ -50,9 +50,9 @@ public class Main {
 
         Flyway flyway = new Flyway();
         //设置数据库链接配置
-        flyway.setDataSource("jdbc:oracle:thin:@127.0.0.1:1521:oracle","wx","wx");
+        flyway.setDataSource("jdbc:oracle:thin:@127.0.0.1:1521:slhislocal","weixin","weixin");
         //设置schema用户
-        flyway.setSchemas("WX");
+        flyway.setSchemas("WEIXIN");
         flyway.setTable("SCHEMA_VERSION");
         flyway.setEncoding("UTF-8");
         flyway.setValidateOnMigrate(true);
