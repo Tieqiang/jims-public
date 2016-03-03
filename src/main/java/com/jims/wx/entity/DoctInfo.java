@@ -28,9 +28,7 @@ public class DoctInfo implements java.io.Serializable {
 	private String headUrl;
 	private String description;
 	private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
-
 	// Constructors
-
 	/** default constructor */
 	public DoctInfo() {
 	}
