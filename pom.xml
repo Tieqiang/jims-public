@@ -41,6 +41,7 @@
         <spring.version>3.2.5.RELEASE</spring.version>
         <guava.version>14.0.1</guava.version>
         <flyway.version>3.0</flyway.version>
+        <sitemesh.version>3.0.0</sitemesh.version>
     </properties>
 
     <dependencies>
@@ -247,6 +248,11 @@
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
             <version>${flyway.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.sitemesh</groupId>
+            <artifactId>sitemesh</artifactId>
+            <version>${sitemesh.version}</version>
         </dependency>
     </dependencies>
 
