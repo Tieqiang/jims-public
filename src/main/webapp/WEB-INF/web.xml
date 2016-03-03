@@ -58,4 +58,30 @@
         <listener-class>com.jims.wx.listener.ContextListener</listener-class>
     </listener>
 
+    <filter>
+        <filter-name>sitemeshFilter</filter-name>
+        <filter-class>org.sitemesh.config.ConfigurableSiteMeshFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>sitemeshFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter>
+        <filter-name>setCharsetFilter</filter-name>
+        <filter-class>com.jims.wx.filter.SetCharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding </param-name>
+            <param-value>UTF-8 </param-value>
+        </init-param>
+        <init-param>
+            <param-name>ignore </param-name>
+            <param-value>true </param-value>
+        </init-param>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>setCharsetFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
 </web-app>
