@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <sitemesh>
-
     <mapping path="/*" decorator="/WEB-INF/views/layout/default.html" />
-    <mapping path="/exclude.jsp*" exclue="true" />
-
+    <!--<mapping path="/exclude.jsp*" exclue="true" />-->
+    <mapping path="/login.html" exclue="true" />
 </sitemesh>
