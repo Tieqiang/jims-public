@@ -2,6 +2,7 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.HospitalInfo;
 import com.jims.wx.facade.HospitalInfoFacade;
+import com.jims.wx.vo.HosInfoDictVo;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -46,6 +47,7 @@ public class HospitalInfoService {
 
         return Response.status(Response.Status.OK).entity(dict).build() ;
     }
+   
 
     @Path("update")
     @PUT

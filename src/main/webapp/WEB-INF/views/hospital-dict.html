@@ -4,102 +4,94 @@
     <meta charset="UTF-8">
     <title>平台医院管理</title>
     <link href="assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <script src="assert/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
-    <script src="javascript/hospital-dict.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="assert/bootstrap/css/bootstrap.min.css">
 
 </head>
-<style type="text/css">
-    body {
-        font: 12px/1.5 Tahoma, Helvetica, 'SimSun', sans-serif;
-        color: #444;
-        margin: 0;
-        padding: 0;
-        background-color: #fff;
-        display: block;
-    }
 
-</style>
 <body>
-<ul class="nav nav-tabs">
-    <li><a href="">平台医院列表</a></li>
-</ul>
-
-<form id="hospitalFrom" class="form-horizontal" style="padding-top: 3px;">
-    <div class="control-group">
-        <label class="control-label" for="hospitalName"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">医院名称:</label>
-
-        <div class="controls">
-            <input id="hospitalName" type="text"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px;height: 25px;"/>
-        </div>
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title">平台医院信息</h3>
     </div>
-    <div class="control-group">
-        <label class="control-label" for="unitCode"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">医院编码:</label>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <!--<form role="form">-->
+            <!-- text input -->
+            <div id="hospitalDictDiv">
+                <div class="form-group">
+                    <label>医院名称：</label>
+                    <input type="text" class="form-control" id="hospitalName" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院编码：</label>
+                    <input type="text" class="form-control" id="unitCode" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院位置：</label>
+                    <input type="text" class="form-control" id="location" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院邮编：</label>
+                    <input type="text" class="form-control" id="zipCode" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院组织结构完整编码：</label>
+                    <input type="text" class="form-control" id="organizationFullCode" placeholder="请输入...">
+                </div>
 
-        <div class="controls">
-            <input id="unitCode" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label pull-left" for="location">医院地址:</label>
+                <div class="form-group">
+                    <label>上级医院：</label>
+                    <select class="form-control select2" id="parentHospital" multiple="multiple"
+                            data-placeholder="  请选择..." style="width: 100%;">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>California</option>
+                        <option>Delaware</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Washington</option>
+                    </select>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-default">取消</button>
+                    <button  class="btn btn-info pull-right" id="btnSubmit">下一步</button>
+                </div>
+            </div>
 
-        <div class="controls">
-            <input id="location" type="text" class="pull-left"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="zipCode"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">医院邮编:</label>
 
-        <div class="controls">
-            <input id="zipCode" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
-    </div>
+            <div id="hospitalInfoDiv" style="display: none">
+                <!-- text input -->
+                <div class="form-group">
+                    <label>应用ID：</label>
+                    <input type="text" class="form-control" id="appId" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院网址：</label>
+                    <input type="text" class="form-control" id="infoUrl" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院简介：</label>
 
-    <div class="control-group">
-        <label class="control-label" for="parentHospital"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">上级医院:</label>
+                    <div class="box-body pad">
+                        <textarea id="content" name="content" rows="10" cols="80"></textarea>
+                    </div>
+                </div>
 
-        <div class="controls">
-            <input id="parentHospital" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
+                <div class="box-footer">
+                    <button class="btn btn-default" onclick="history.go(-1);">上一步</button>
+                    <button  id="btnSubmit1" class="btn btn-info pull-right">提交</button>
+                </div>
+            </div>
+        <!--</form>-->
     </div>
-    <div class="control-group">
-        <label class="control-label" for="appId"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">应用ID:</label>
+    <!-- /.box-body -->
+</div>
 
-        <div class="controls">
-            <input id="appId" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="infoUrl"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">医院首页地址:</label>
 
-        <div class="controls">
-            <input id="infoUrl" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label" for="content"
-               style="float: left; width: 500px;padding-top: 5px;text-align: right;">医院首页地址:</label>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+<script src="javascript/hospital-dict.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../../assert/plugins/ckeditor/ckeditor.js"></script>
 
-        <div class="controls">
-            <input id="content" type="text" digits="true"
-                   style="border: 1px solid #ccc;    margin: 5px 0 20px 25px;  webkit-border-radius: 3px ;moz-border-radius: 3px; border-radius: 3px; height: 25px;"/>
-        </div>
-    </div>
-    <div class="form-actions" style="padding-left: 530px;">
-        <input id="btnSubmit" class="btn btn-primary" type="button" value="保 存"/>&nbsp;
-        <input id="btnCancel" class="btn" type="button" value="返 回" onclick="history.go(-1)"/>
-    </div>
-</form>
+
 </body>
 </html>
