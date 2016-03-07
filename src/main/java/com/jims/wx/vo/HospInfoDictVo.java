@@ -1,15 +1,21 @@
 package com.jims.wx.vo;
 
+import com.jims.wx.entity.DeptDict;
+
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by Dt on 2016-03-04.
  */
-public class hosInfoDictVo {
+public class HospInfoDictVo {
     private String id;
     private String hospitalName;
     private String parentHospital ;
     private String unitCode;
     private String location;
     private String zipCode;
+    private Set<DeptDict> deptDicts = new HashSet<DeptDict>(0);
 
     private String organizationFullCode;
     private String hospitalId;
@@ -17,16 +23,17 @@ public class hosInfoDictVo {
     private String infoUrl;
     private String content;
 
-    public hosInfoDictVo() {
+    public HospInfoDictVo() {
     }
 
-    public hosInfoDictVo(String id, String hospitalName, String parentHospital, String unitCode, String location, String zipCode, String organizationFullCode, String hospitalId, String appId, String infoUrl, String content) {
+    public HospInfoDictVo(String id, String hospitalName, String parentHospital, String unitCode, String location, String zipCode, Set<DeptDict> deptDicts, String organizationFullCode, String hospitalId, String appId, String infoUrl, String content) {
         this.id = id;
         this.hospitalName = hospitalName;
         this.parentHospital = parentHospital;
         this.unitCode = unitCode;
         this.location = location;
         this.zipCode = zipCode;
+        this.deptDicts = deptDicts;
         this.organizationFullCode = organizationFullCode;
         this.hospitalId = hospitalId;
         this.appId = appId;
@@ -120,5 +127,13 @@ public class hosInfoDictVo {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public Set<DeptDict> getDeptDicts() {
+        return deptDicts;
+    }
+
+    public void setDeptDicts(Set<DeptDict> deptDicts) {
+        this.deptDicts = deptDicts;
     }
 }
