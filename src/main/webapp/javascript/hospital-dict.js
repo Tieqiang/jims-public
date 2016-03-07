@@ -3,23 +3,37 @@
  */
 
 $(function () {
+    var hospitalVo = {};
+    var content = CKEDITOR.replace('content');
+
+    //下拉框检索
+    $(".select2").select2();
+
     $("#btnSubmit").click(function(){
-        var hospitalDict = {};
-        var hospitalInfo = {};
-        hospitalDict.hospitalName = $("#hospitalName").val();
-        hospitalDict.unitCode = $("#unitCode").val();
-        hospitalDict.location = $("#location").val();
-        hospitalDict.zipCode = $("#zipCode").val();
-        hospitalDict.parentHospital = $("#parentHospital").val();
+        hospitalVo.hospitalName = $("#hospitalName").val();
+        hospitalVo.unitCode = $("#unitCode").val();
+        hospitalVo.location = $("#location").val();
+        hospitalVo.zipCode = $("#zipCode").val();
+        hospitalVo.parentHospital = $("#parentHospital").val();
+        hospitalVo.organizationFullCode = $("#organizationFullCode").val();
+        hospitalVo.parentHospital =$("#parentHospital").val().toString();
+
+        $("#hospitalDictDiv").css("display","none");
+        $("#hospitalInfoDiv").css("display","block");
+
+    });
+    $("#btnSubmit1").click(function(){
+        hospitalVo.appId = $("#appId").val();
+        hospitalVo.infoUrl = $("#infoUrl").val();
+        hospitalVo.content = content.document.getBody().getHtml();
 
         jQuery.ajax({
             'type': 'POST',
-            'url': "/api/hospital-dict/add",
+            'url': "/api/hospital-dict/add_vo",
             'contentType': 'application/json',
-            'data': JSON.stringify(hospital),
+            'data': JSON.stringify(hospitalVo),
             'dataType': 'json',
             'success': function(data){
-                hospitalInfo.hospitalId = data.id;
                 console.log(data);
             },
             'error': function(data){
