@@ -25,6 +25,9 @@
         <class>com.jims.wx.entity.SchemaVersion</class>
         <class>com.jims.wx.entity.ClinicIndex</class>
         <class>com.jims.wx.entity.HospitalInfo</class>
+        <class>com.jims.wx.entity.HospitalDict</class>
+        <class>com.jims.wx.entity.DeptDict</class>
+        <class>com.jims.wx.entity.StaffDict</class>
         <class>com.jims.wx.entity.AccessTooken</class>
         <class>com.jims.wx.entity.QuestionnaireVsSubject</class>
         <class>com.jims.wx.entity.RequestMessage</class>

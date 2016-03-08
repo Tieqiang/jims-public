@@ -52,4 +52,13 @@ public class HospitalDictFacade extends BaseFacade {
         ids.add(id) ;
         super.removeByStringIds(HospitalDict.class,ids);
     }
+
+    /**
+     * 根据医院Id查询医院
+     * @param hospitalId
+     * @return
+     */
+    public HospitalDict findHospitalDictById(String hospitalId){
+        return (HospitalDict)entityManager.createQuery("from HospitalDict a where a.id = '"+hospitalId+"'").getResultList().get(0);
+    }
 }

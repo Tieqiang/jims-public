@@ -4,7 +4,7 @@ import com.jims.wx.entity.HospitalDict;
 import com.jims.wx.entity.HospitalInfo;
 import com.jims.wx.facade.HospitalDictFacade;
 import com.jims.wx.facade.HospitalInfoFacade;
-import com.jims.wx.vo.HosInfoDictVo;
+import com.jims.wx.vo.HospInfoDictVo;
 import oracle.sql.BLOB;
 
 import javax.inject.Inject;
@@ -18,6 +18,7 @@ import java.util.List;
  * Created by Dt on 2016/3/3.
  */
 @Path("hospital-dict")
+@Produces("application/json")
 public class HospitalDictService {
 
     private HospitalDictFacade hospitalDictFacade;
@@ -58,7 +59,7 @@ public class HospitalDictService {
     @Path("add_vo")
     @POST
     @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public Response addHospitalInfoDictVo(HosInfoDictVo dict){
+    public Response addHospitalInfoDictVo(HospInfoDictVo dict){
         HospitalDict hospitalDict = new HospitalDict();
         HospitalInfo hospitalInfo = new HospitalInfo();
 
@@ -93,7 +94,7 @@ public class HospitalDictService {
         HospitalDict merge = hospitalDictFacade.updateHospitalDict(dict);
         System.out.println(merge.getHospitalName());
 
-        return Response.status(Response.Status.OK).entity("success").build() ;
+        return Response.status(Response.Status.OK).entity(dict).build() ;
     }
 
     @Path("delete/{id}")
@@ -106,12 +107,10 @@ public class HospitalDictService {
         return Response.status(Response.Status.OK).build() ;
     }
 
-    private String strToBinstr(String str) {
-        char[] strChar=str.toCharArray();
-        String result="";
-        for(int i=0;i<strChar.length;i++){
-            result +=Integer.toBinaryString(strChar[i])+ " ";
-        }
-        return result;
+    @Path("find-by-hospitalId")
+    @GET
+    public HospitalDict findHospitalDictById(@QueryParam("hospitalId") String hospitalId){
+        return hospitalDictFacade.findHospitalDictById(hospitalId);
     }
+
 }

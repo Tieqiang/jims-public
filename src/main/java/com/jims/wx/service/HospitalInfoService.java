@@ -2,7 +2,7 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.HospitalInfo;
 import com.jims.wx.facade.HospitalInfoFacade;
-import com.jims.wx.vo.HosInfoDictVo;
+import com.jims.wx.vo.HospInfoDictVo;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;

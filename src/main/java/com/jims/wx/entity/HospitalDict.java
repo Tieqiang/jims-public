@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
@@ -20,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "HOSPITAL_DICT", schema = "JIMS")
-@XmlRootElement
+//@XmlRootElement
 public class HospitalDict implements java.io.Serializable {
 
 	// Fields
@@ -126,6 +127,7 @@ public class HospitalDict implements java.io.Serializable {
     //@JsonManagedReference
     @JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "hospitalDict")
+//    @XmlTransient
 	public Set<DeptDict> getDeptDicts() {
 		return this.deptDicts;
 	}
