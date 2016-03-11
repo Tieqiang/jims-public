@@ -24,18 +24,25 @@ public class ResponseMessageService {
         this.responseMessageFacade = responseMessageFacade;
     }
 
+    /**
+     * 查询回复消息列表
+     * @return
+     */
     @GET
     @Path("list-all")
     @Produces({MediaType.APPLICATION_JSON})
     public List<ResponseMessage> listAll() {
-        return responseMessageFacade.findAll();
+        return responseMessageFacade.findAll(ResponseMessage.class);
     }
 
-
+    /**
+     * 回复消息（保存）
+     * @param msg
+     * @return
+     */
     @POST
     @Path("reply")
     public Response save(ResponseMessage msg) {
-
         try {
             if (null != msg) {
                 msg = responseMessageFacade.save(msg);
@@ -53,5 +60,17 @@ public class ResponseMessageService {
             }
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
+    }
+
+    /**
+     * 根据ID删除msg
+     * @param id
+     * @return
+     */
+    @DELETE
+    @Path("del/{id}")
+    public Response delDeptDict(@PathParam("id") String id) {
+        ResponseMessage msg = responseMessageFacade.deleteById(id);
+        return Response.status(Response.Status.OK).entity(msg).build();
     }
 }
