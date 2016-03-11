@@ -25,7 +25,7 @@
     </style>
 </head>
 <body>
-<div class="container" style="border:1px solid black;">
+<div class="container">
     <div class="row-fluid" style="border-bottom:1px solid #CBCBCF;">
         <h3>
             消息管理
@@ -42,7 +42,7 @@
 
     <div id="myTabContent" class="tab-content">
         <div class="tab-pane fade in active" id="all">
-            <div class="table-responsive">
+            <div class="table-responsive" id="reqMsg">
                 <table class="table">
                     <tbody>
                     <tr>
@@ -59,7 +59,7 @@
                                 </tr>
                                 <tr id="replyArea">
                                     <td colspan="4">
-                                        <textarea class="form-control area" rows="3"></textarea>
+                                        <textarea id="area" class="form-control" rows="3"></textarea>
                                         <button class="btn" id="send">发送</button>
                                         &nbsp;&nbsp;
                                         <button class="btn" id="cancel">收起</button>
