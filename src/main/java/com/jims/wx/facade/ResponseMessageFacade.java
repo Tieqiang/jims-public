@@ -7,6 +7,7 @@ import com.jims.wx.vo.ReceiveMessage;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -20,14 +21,27 @@ public class ResponseMessageFacade extends BaseFacade{
         this.entityManager = entityManager;
     }
 
-    public List<ResponseMessage> findAll(){
 
-        return null;
-    }
-
+    /**
+     * 添加，修改msg
+     * @param msg
+     * @return
+     */
     @Transactional
     public ResponseMessage save(ResponseMessage msg){
         msg = super.merge(msg);
+        return msg;
+    }
+
+    /**
+     * 删除msg
+     * @param id
+     * @return
+     */
+    @Transactional
+    public ResponseMessage deleteById(String id){
+        ResponseMessage msg = get(ResponseMessage.class, id);
+        this.remove(id);
         return msg;
     }
 }
