@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+    <title>消息回复</title>
+
+
+
+</head>
+<body>
+
+
+<div ng-app="myApp">
+    <div ng-controller="customersCtrl">
+        <table>
+            <tr ng-repeat="x in names">
+                <td>{{ x.content }}</td>
+                <td>{{ x.fromUserName }}</td>
+            </tr>
+        </table>
+    </div>
+
+    <div ng-controller="formCtrl">
+        <form novalidate>
+            toUserName:<br>
+            <input type="text" ng-model="msg.toUserName"><br>
+            fromUserName:<br>
+            <input type="text" ng-model="msg.fromUserName"><br>
+            msgType:<br>
+            <input type="text" ng-model="msg.msgType"><br>
+            content:<br>
+            <input type="text" ng-model="msg.content"><br>
+            <button ng-click="submit()">submit</button>
+        </form>
+    </div>
+</div>
+
+
+
+
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../javascript/open-account-menu.js" type="text/javascript"></script>
+</body>
+</html>
