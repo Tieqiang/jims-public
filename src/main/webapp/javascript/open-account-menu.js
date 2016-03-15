@@ -5,39 +5,23 @@
 
 var app = angular.module("myApp", []);
 
-app.controller('customersCtrl', ["$scope","$http",function ($scope, $http) {
+app.controller('customersCtrl', function ($scope, $http) {
     $http.get("/api/req-msg/list-all")
         .success(function (data) {  console.log(data);
             $scope.names = data;
         });
-}]);
-
-$(".replyArea").hide();
-$(".collect").tooltip({
-    title: "收藏",
-    trigger: 'hover',
-    placement: 'bottom'
-});
-$(".reply").tooltip({
-    title: "快捷回复",
-    trigger: 'hover',
-    placement: 'bottom'
 });
 
-
-$(".collect").click(function () {
-    $(this).toggleClass("selected");
+app.controller('formCtrl', function ($scope, $http) {
+    $scope.submit = function () {
+        $http.post("/api/req-msg/add", $scope.msg)
+            .success(function (data) {
+                alert("ok");
+            });
+    };
+    $scope.submit();
 
 });
 
-$(".cancel").click(function () {
-    var index = $(this).attr("index");
-    $(this).parents("#replyArea" + index).hide();
-});
-
-$(".reply").click(function () {
-    var index = $(this).attr("index");
-    $("#replyArea" + index).toggle();
-});
 
 
