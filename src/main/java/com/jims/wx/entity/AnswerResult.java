@@ -1,14 +1,8 @@
 package com.jims.wx.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * AnswerResult entity. @author MyEclipse Persistence Tools
@@ -18,7 +12,6 @@ import org.hibernate.annotations.GenericGenerator;
 public class AnswerResult implements java.io.Serializable {
 
 	// Fields
-
 	private String id;
 	private Subject subject;
 	private AnswerSheet answerSheet;
@@ -37,7 +30,7 @@ public class AnswerResult implements java.io.Serializable {
 		this.answer = answer;
 	}
 
-	// Property accessors
+    // Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
 	@Id
 	@GeneratedValue(generator = "generator")
@@ -50,7 +43,8 @@ public class AnswerResult implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+
+	@ManyToOne
 	@JoinColumn(name = "SUBJECT_ID")
 	public Subject getSubject() {
 		return this.subject;
@@ -60,7 +54,7 @@ public class AnswerResult implements java.io.Serializable {
 		this.subject = subject;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
 	@JoinColumn(name = "ANSWER_SHEET_ID")
 	public AnswerSheet getAnswerSheet() {
 		return this.answerSheet;
