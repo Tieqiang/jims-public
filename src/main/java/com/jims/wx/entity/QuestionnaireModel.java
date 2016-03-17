@@ -28,8 +28,8 @@ public class QuestionnaireModel implements java.io.Serializable {
 	private String createPerson;
 	private BigDecimal totalNumbers;
 	private String appId;
-	private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
-			0);
+	//private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
+	//		0);
 
 	// Constructors
 
@@ -39,15 +39,24 @@ public class QuestionnaireModel implements java.io.Serializable {
 
 	/** full constructor */
 	public QuestionnaireModel(String title, String memo, String createPerson,
-			BigDecimal totalNumbers, String appId,
-			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+			BigDecimal totalNumbers, String appId) {
 		this.title = title;
 		this.memo = memo;
 		this.createPerson = createPerson;
 		this.totalNumbers = totalNumbers;
 		this.appId = appId;
-		this.questionnaireVsSubjects = questionnaireVsSubjects;
 	}
+
+    //public QuestionnaireModel(String title, String memo, String createPerson,
+    //                          BigDecimal totalNumbers, String appId,
+    //                          Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+    //    this.title = title;
+    //    this.memo = memo;
+    //    this.createPerson = createPerson;
+    //    this.totalNumbers = totalNumbers;
+    //    this.appId = appId;
+    //    //this.questionnaireVsSubjects = questionnaireVsSubjects;
+    //}
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -107,14 +116,14 @@ public class QuestionnaireModel implements java.io.Serializable {
 		this.appId = appId;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "questionnaireModel")
-	public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
-		return this.questionnaireVsSubjects;
-	}
-
-	public void setQuestionnaireVsSubjects(
-			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
-		this.questionnaireVsSubjects = questionnaireVsSubjects;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "questionnaireModel")
+	//public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
+	//	return this.questionnaireVsSubjects;
+	//}
+    //
+	//public void setQuestionnaireVsSubjects(
+	//		Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+	//	this.questionnaireVsSubjects = questionnaireVsSubjects;
+	//}
 
 }
