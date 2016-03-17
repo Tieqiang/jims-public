@@ -29,7 +29,7 @@ public class AnswerSheet implements java.io.Serializable {
 	private String patId;
 	private String questionnaireId;
 	private Date createTime;
-	private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
+	//private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
 
 	// Constructors
 
@@ -39,13 +39,21 @@ public class AnswerSheet implements java.io.Serializable {
 
 	/** full constructor */
 	public AnswerSheet(String openId, String patId, String questionnaireId,
-			Date createTime, Set<AnswerResult> answerResults) {
+			Date createTime) {
 		this.openId = openId;
 		this.patId = patId;
 		this.questionnaireId = questionnaireId;
 		this.createTime = createTime;
-		this.answerResults = answerResults;
 	}
+
+    //public AnswerSheet(String openId, String patId, String questionnaireId,
+    //                   Date createTime, Set<AnswerResult> answerResults) {
+    //    this.openId = openId;
+    //    this.patId = patId;
+    //    this.questionnaireId = questionnaireId;
+    //    this.createTime = createTime;
+    //    this.answerResults = answerResults;
+    //}
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -97,13 +105,13 @@ public class AnswerSheet implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "answerSheet")
-	public Set<AnswerResult> getAnswerResults() {
-		return this.answerResults;
-	}
-
-	public void setAnswerResults(Set<AnswerResult> answerResults) {
-		this.answerResults = answerResults;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "answerSheet")
+	//public Set<AnswerResult> getAnswerResults() {
+	//	return this.answerResults;
+	//}
+    //
+	//public void setAnswerResults(Set<AnswerResult> answerResults) {
+	//	this.answerResults = answerResults;
+	//}
 
 }
