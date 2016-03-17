@@ -25,11 +25,11 @@ public class Subject implements java.io.Serializable {
 	private String questionContent;
 	private String questionType;
 	private String preAnswer;
-	private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
-	private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
-			0);
-	private Set<SubjectOptions> subjectOptionses = new HashSet<SubjectOptions>(
-			0);
+	//private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
+	//private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
+	//		0);
+	//private Set<SubjectOptions> subjectOptionses = new HashSet<SubjectOptions>(
+	//		0);
 
 	// Constructors
 
@@ -39,17 +39,23 @@ public class Subject implements java.io.Serializable {
 
 	/** full constructor */
 	public Subject(String questionContent, String questionType,
-			String preAnswer, Set<AnswerResult> answerResults,
-			Set<QuestionnaireVsSubject> questionnaireVsSubjects,
-			Set<SubjectOptions> subjectOptionses) {
+			String preAnswer) {
 		this.questionContent = questionContent;
 		this.questionType = questionType;
 		this.preAnswer = preAnswer;
-		this.answerResults = answerResults;
-		this.questionnaireVsSubjects = questionnaireVsSubjects;
-		this.subjectOptionses = subjectOptionses;
 	}
 
+    //public Subject(String questionContent, String questionType,
+    //               String preAnswer, Set<AnswerResult> answerResults,
+    //               Set<QuestionnaireVsSubject> questionnaireVsSubjects,
+    //               Set<SubjectOptions> subjectOptionses) {
+    //    this.questionContent = questionContent;
+    //    this.questionType = questionType;
+    //    this.preAnswer = preAnswer;
+    //    this.answerResults = answerResults;
+    //    this.questionnaireVsSubjects = questionnaireVsSubjects;
+    //    this.subjectOptionses = subjectOptionses;
+    //}
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
 	@Id
@@ -90,32 +96,32 @@ public class Subject implements java.io.Serializable {
 		this.preAnswer = preAnswer;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	public Set<AnswerResult> getAnswerResults() {
-		return this.answerResults;
-	}
-
-	public void setAnswerResults(Set<AnswerResult> answerResults) {
-		this.answerResults = answerResults;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
-		return this.questionnaireVsSubjects;
-	}
-
-	public void setQuestionnaireVsSubjects(
-			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
-		this.questionnaireVsSubjects = questionnaireVsSubjects;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	public Set<SubjectOptions> getSubjectOptionses() {
-		return this.subjectOptionses;
-	}
-
-	public void setSubjectOptionses(Set<SubjectOptions> subjectOptionses) {
-		this.subjectOptionses = subjectOptionses;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	//public Set<AnswerResult> getAnswerResults() {
+	//	return this.answerResults;
+	//}
+    //
+	//public void setAnswerResults(Set<AnswerResult> answerResults) {
+	//	this.answerResults = answerResults;
+	//}
+    //
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	//public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
+	//	return this.questionnaireVsSubjects;
+	//}
+    //
+	//public void setQuestionnaireVsSubjects(
+	//		Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+	//	this.questionnaireVsSubjects = questionnaireVsSubjects;
+	//}
+    //
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	//public Set<SubjectOptions> getSubjectOptionses() {
+	//	return this.subjectOptionses;
+	//}
+    //
+	//public void setSubjectOptionses(Set<SubjectOptions> subjectOptionses) {
+	//	this.subjectOptionses = subjectOptionses;
+	//}
 
 }
