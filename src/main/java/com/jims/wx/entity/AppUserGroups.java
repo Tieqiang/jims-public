@@ -34,7 +34,7 @@ public class AppUserGroups implements java.io.Serializable {
 	private String operator;
 	private Date updateTime;
 	private String updateOperator;
-	private Set<AppUser> appUsers = new HashSet<AppUser>(0);
+	//private Set<AppUser> appUsers = new HashSet<AppUser>(0);
 
 	// Constructors
 
@@ -45,7 +45,7 @@ public class AppUserGroups implements java.io.Serializable {
 	/** full constructor */
 	public AppUserGroups(String name, BigDecimal count, String groupStatus,
 			String appId, Date createTime, String operator, Date updateTime,
-			String updateOperator, Set<AppUser> appUsers) {
+			String updateOperator) {
 		this.name = name;
 		this.count = count;
 		this.groupStatus = groupStatus;
@@ -54,7 +54,7 @@ public class AppUserGroups implements java.io.Serializable {
 		this.operator = operator;
 		this.updateTime = updateTime;
 		this.updateOperator = updateOperator;
-		this.appUsers = appUsers;
+		//this.appUsers = appUsers;
 	}
 
 	// Property accessors
@@ -106,7 +106,7 @@ public class AppUserGroups implements java.io.Serializable {
 		this.appId = appId;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATE_TIME", length = 7)
 	public Date getCreateTime() {
 		return this.createTime;
@@ -125,7 +125,7 @@ public class AppUserGroups implements java.io.Serializable {
 		this.operator = operator;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "UPDATE_TIME", length = 7)
 	public Date getUpdateTime() {
 		return this.updateTime;
@@ -144,13 +144,13 @@ public class AppUserGroups implements java.io.Serializable {
 		this.updateOperator = updateOperator;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUserGroups")
-	public Set<AppUser> getAppUsers() {
-		return this.appUsers;
-	}
-
-	public void setAppUsers(Set<AppUser> appUsers) {
-		this.appUsers = appUsers;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUserGroups")
+	//public Set<AppUser> getAppUsers() {
+	//	return this.appUsers;
+	//}
+    //
+	//public void setAppUsers(Set<AppUser> appUsers) {
+	//	this.appUsers = appUsers;
+	//}
 
 }
