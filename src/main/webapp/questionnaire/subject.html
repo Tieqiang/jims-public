@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div ng-app="myApp">
+
+    <div class="col-sm-12" ng-controller="buttonCtrl">
+        <div class="col-sm-2 text-left">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#myModel" ng-click="get()">
+                新增
+            </button>
+        </div>
+
+        <div class="row-fluid text-left col-sm-4">
+            <form class="navbar-form" role="search">
+                <div class="form-group ">
+                    <input type="text" class="form-control " placeholder="查询...">
+                </div>
+                <button type="submit" class="btn"><span class="glyphicon glyphicon-search ">查询</span></button>
+            </form>
+
+        </div>
+    </div>
+
+    <ul id="myTab" class="nav nav-tabs">
+        <li class="active">
+                全部信息
+        </li>
+    </ul>
+
+    <div class="container col-sm-5 " ng-controller="tableCtrl">
+        <button class="btn btn-danger" ng-click="delMulti(x.id)">删除</button>
+        <div class="center-block">
+            <table  class="table table-hover table-bordered ">
+                <tr class="active"><th><input type="checkbox" ng-model="all"/></th><th>题目列表</th><th>题目类型</th><th>答案</th>
+                    <th>操作</th></tr>
+                <tr ng-repeat="x in names">
+                    <td><input type="checkbox" ng-checked="all" name="checkIds" ng-model="checkSubject" value="{{x.id}}"/></td>
+                    <td class="success col-sm-2">{{x.questionContent }}</td>
+                    <td class="warning col-sm-1">{{x.questionType }}</td>
+                    <td class="info col-sm-1">{{x.preAnswer }}</td>
+                    <td>
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#detailModel" ng-click="get(x.id)">
+                            详情
+                        </button>
+                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#updateModel" ng-click="get(x.id)">
+                          修改
+                        </button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <!-- detail model -->
+        <div class="modal fade" id="detailModel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModalLabel">详细信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table ">
+                            <tr class="info">
+                                <td>题目</td>
+                                <td>{{name.questionContent }}</td>
+                            </tr>
+                            <tr class="warning">
+                                <td>类型</td>
+                                <td>{{name.questionType }}</td>
+                            </tr>
+                            <tr class="success">
+                                <td>预置答案</td>
+                                <td>{{name.preAnswer }}</td>
+                            </tr>
+                            <tr class="danger">
+                                <td>具体内容</td>
+                                <td>
+                                    <ol type="A">
+                                        <li ng-repeat="y in options" class="text-left">{{y.optContent}}</li>
+                                    </ol>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- update model -->
+        <div class="modal fade" id="updateModel" tabindex="-1" role="dialog" aria-labelledby="myModelLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myModelLabel">修改信息</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table ">
+                            <tr class="info">
+                                <td>题目</td>
+                                <td><input type="text" ng-model="name.questionContent"
+                                           value="{{name.questionContent }}"></td>
+                            </tr>
+                            <tr class="warning">
+                                <td>类型</td>
+                                <td><input type="text" ng-model="name.questionType" value="{{name.questionType }}"></td>
+                            </tr>
+                            <tr class="success">
+                                <td>预置答案</td>
+                                <td><input type="text" ng-model="name.preAnswer" value="{{name.preAnswer }}"></td>
+                            </tr>
+                            <tr class="danger">
+                                <td>具体内容</td>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>
+                                                <ol type="A">
+                                                    <li ng-repeat="y in options" class="text-left">{{y.optContent}}
+                                                        <button type="button" class="close" ng-click="delOption(y.id)">
+                                                            ×
+                                                        </button>
+                                                    </li>
+                                                </ol>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <ol type="">
+                                                    <li>
+                                                        <input type="text" ng-model="name.questionContent"
+                                                               value="{{name.questionContent }}">
+                                                        <button type="button" class="open" ng-click="delOption(y.id)">
+                                                            +
+                                                        </button>
+                                                    </li>
+                                                </ol>
+
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-success" ng-click="updateSubject(name.id)">提交</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../assert/angular/ng-grid.min.js"></script>
+<script src="../javascript/questionnaireJs/module/subject-module.js" type="text/javascript"></script>
+<script src="../javascript/questionnaireJs/service/subject-service.js" type="text/javascript"></script>
+<script src="../javascript/questionnaireJs/controller/subject-controller.js" type="text/javascript"></script>
+
+</body>
+</html>
