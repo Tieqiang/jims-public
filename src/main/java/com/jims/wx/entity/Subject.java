@@ -1,15 +1,14 @@
 package com.jims.wx.entity;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import com.jims.wx.vo.SubjectOptionsVo;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -25,13 +24,17 @@ public class Subject implements java.io.Serializable {
 	private String questionContent;
 	private String questionType;
 	private String preAnswer;
-	//private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
-	//private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
-	//		0);
-	//private Set<SubjectOptions> subjectOptionses = new HashSet<SubjectOptions>(
-	//		0);
+	private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
+	private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
+			0);
 
-	// Constructors
+    @JsonManagedReference
+	private Set<SubjectOptions> subjectOptionses = new HashSet<SubjectOptions>(
+			0);
+
+    @Transient
+    private List<SubjectOptionsVo> options= new ArrayList<SubjectOptionsVo>();
+
 
 	/** default constructor */
 	public Subject() {
@@ -39,23 +42,17 @@ public class Subject implements java.io.Serializable {
 
 	/** full constructor */
 	public Subject(String questionContent, String questionType,
-			String preAnswer) {
+			String preAnswer, Set<AnswerResult> answerResults,
+			Set<QuestionnaireVsSubject> questionnaireVsSubjects,
+			Set<SubjectOptions> subjectOptionses) {
 		this.questionContent = questionContent;
 		this.questionType = questionType;
 		this.preAnswer = preAnswer;
+		this.answerResults = answerResults;
+		this.questionnaireVsSubjects = questionnaireVsSubjects;
+		this.subjectOptionses = subjectOptionses;
 	}
 
-    //public Subject(String questionContent, String questionType,
-    //               String preAnswer, Set<AnswerResult> answerResults,
-    //               Set<QuestionnaireVsSubject> questionnaireVsSubjects,
-    //               Set<SubjectOptions> subjectOptionses) {
-    //    this.questionContent = questionContent;
-    //    this.questionType = questionType;
-    //    this.preAnswer = preAnswer;
-    //    this.answerResults = answerResults;
-    //    this.questionnaireVsSubjects = questionnaireVsSubjects;
-    //    this.subjectOptionses = subjectOptionses;
-    //}
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
 	@Id
@@ -96,32 +93,41 @@ public class Subject implements java.io.Serializable {
 		this.preAnswer = preAnswer;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	//public Set<AnswerResult> getAnswerResults() {
-	//	return this.answerResults;
-	//}
-    //
-	//public void setAnswerResults(Set<AnswerResult> answerResults) {
-	//	this.answerResults = answerResults;
-	//}
-    //
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	//public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
-	//	return this.questionnaireVsSubjects;
-	//}
-    //
-	//public void setQuestionnaireVsSubjects(
-	//		Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
-	//	this.questionnaireVsSubjects = questionnaireVsSubjects;
-	//}
-    //
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
-	//public Set<SubjectOptions> getSubjectOptionses() {
-	//	return this.subjectOptionses;
-	//}
-    //
-	//public void setSubjectOptionses(Set<SubjectOptions> subjectOptionses) {
-	//	this.subjectOptionses = subjectOptionses;
-	//}
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	public Set<AnswerResult> getAnswerResults() {
+		return this.answerResults;
+	}
 
+	public void setAnswerResults(Set<AnswerResult> answerResults) {
+		this.answerResults = answerResults;
+	}
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
+		return this.questionnaireVsSubjects;
+	}
+
+	public void setQuestionnaireVsSubjects(
+			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+		this.questionnaireVsSubjects = questionnaireVsSubjects;
+	}
+
+    @JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
+	public Set<SubjectOptions> getSubjectOptionses() {
+		return this.subjectOptionses;
+	}
+
+	public void setSubjectOptionses(Set<SubjectOptions> subjectOptionses) {
+		this.subjectOptionses = subjectOptionses;
+	}
+
+    @Transient
+    public List<SubjectOptionsVo> getOptions() {
+        return options;
+    }
+
+    public void setOptions(List<SubjectOptionsVo> options) {
+        this.options = options;
+    }
 }

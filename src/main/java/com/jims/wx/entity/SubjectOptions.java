@@ -8,6 +8,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -20,6 +23,7 @@ public class SubjectOptions implements java.io.Serializable {
 	// Fields
 
 	private String id;
+    @JsonBackReference
 	private Subject subject;
 	private String optContent;
 	private String optStatus;
@@ -50,6 +54,7 @@ public class SubjectOptions implements java.io.Serializable {
 		this.id = id;
 	}
 
+    @JsonBackReference
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUBJECT_ID")
 	public Subject getSubject() {
