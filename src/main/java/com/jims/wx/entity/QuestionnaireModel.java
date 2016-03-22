@@ -1,17 +1,12 @@
 package com.jims.wx.entity;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import org.hibernate.annotations.GenericGenerator;
 
 /**
  * QuestionnaireModel entity. @author MyEclipse Persistence Tools
@@ -28,8 +23,12 @@ public class QuestionnaireModel implements java.io.Serializable {
 	private String createPerson;
 	private BigDecimal totalNumbers;
 	private String appId;
-	//private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
-	//		0);
+
+    @JsonManagedReference
+	private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
+			0);
+    @Transient
+    private String subIds;
 
 	// Constructors
 
@@ -39,24 +38,15 @@ public class QuestionnaireModel implements java.io.Serializable {
 
 	/** full constructor */
 	public QuestionnaireModel(String title, String memo, String createPerson,
-			BigDecimal totalNumbers, String appId) {
+			BigDecimal totalNumbers, String appId,
+			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
 		this.title = title;
 		this.memo = memo;
 		this.createPerson = createPerson;
 		this.totalNumbers = totalNumbers;
 		this.appId = appId;
+		this.questionnaireVsSubjects = questionnaireVsSubjects;
 	}
-
-    //public QuestionnaireModel(String title, String memo, String createPerson,
-    //                          BigDecimal totalNumbers, String appId,
-    //                          Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
-    //    this.title = title;
-    //    this.memo = memo;
-    //    this.createPerson = createPerson;
-    //    this.totalNumbers = totalNumbers;
-    //    this.appId = appId;
-    //    //this.questionnaireVsSubjects = questionnaireVsSubjects;
-    //}
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -116,14 +106,23 @@ public class QuestionnaireModel implements java.io.Serializable {
 		this.appId = appId;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "questionnaireModel")
-	//public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
-	//	return this.questionnaireVsSubjects;
-	//}
-    //
-	//public void setQuestionnaireVsSubjects(
-	//		Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
-	//	this.questionnaireVsSubjects = questionnaireVsSubjects;
-	//}
 
+    @JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "questionnaireModel")
+	public Set<QuestionnaireVsSubject> getQuestionnaireVsSubjects() {
+		return this.questionnaireVsSubjects;
+	}
+
+	public void setQuestionnaireVsSubjects(
+			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
+		this.questionnaireVsSubjects = questionnaireVsSubjects;
+	}
+    @Transient
+    public String getSubIds() {
+        return subIds;
+    }
+
+    public void setSubIds(String subIds) {
+        this.subIds = subIds;
+    }
 }

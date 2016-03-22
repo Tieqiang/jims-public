@@ -1,81 +1,63 @@
 package com.jims.wx.entity;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import org.codehaus.jackson.annotate.JsonBackReference;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * QuestionnaireVsSubject entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "QUESTIONNAIRE_VS_SUBJECT", schema = "WX", uniqueConstraints = @UniqueConstraint(columnNames = {
-		"QUESTIONNAIRE_ID", "SUBJECT_ID", "SERIA_NO" }))
+@Table(name = "QUESTIONNAIRE_VS_SUBJECT", schema = "WX")
 public class QuestionnaireVsSubject implements java.io.Serializable {
+    @JsonBackReference
+    private QuestionnaireModel questionnaireModel;
+    @JsonBackReference(value="subject")
+    private Subject subject;
+    private String seriaNo;
 
-	// Fields
+    public QuestionnaireVsSubject() {
+    }
 
-	private QuestionnaireVsSubjectId id;
-	private QuestionnaireModel questionnaireModel;
-	private Subject subject;
+    public QuestionnaireVsSubject(QuestionnaireModel questionnaireModel, Subject subject, String seriaNo) {
+        this.questionnaireModel = questionnaireModel;
+        this.subject = subject;
+        this.seriaNo = seriaNo;
+    }
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "QUESTIONNAIRE_ID")
+    public QuestionnaireModel getQuestionnaireModel() {
+        return questionnaireModel;
+    }
 
-	// Constructors
+    public void setQuestionnaireModel(QuestionnaireModel questionnaireModel) {
+        this.questionnaireModel = questionnaireModel;
+    }
 
-	/** default constructor */
-	public QuestionnaireVsSubject() {
-	}
 
-	/** minimal constructor */
-	public QuestionnaireVsSubject(QuestionnaireVsSubjectId id) {
-		this.id = id;
-	}
+    @JsonBackReference(value="subject")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "SUBJECT_ID")
+    public Subject getSubject() {
+        return this.subject;
+    }
 
-	/** full constructor */
-	public QuestionnaireVsSubject(QuestionnaireVsSubjectId id,
-			QuestionnaireModel questionnaireModel, Subject subject) {
-		this.id = id;
-		this.questionnaireModel = questionnaireModel;
-		this.subject = subject;
-	}
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
 
-	// Property accessors
-	@EmbeddedId
-	@AttributeOverrides({
-			@AttributeOverride(name = "questionnaireId", column = @Column(name = "QUESTIONNAIRE_ID", length = 64)),
-			@AttributeOverride(name = "subjectId", column = @Column(name = "SUBJECT_ID", length = 64)),
-			@AttributeOverride(name = "seriaNo", column = @Column(name = "SERIA_NO", precision = 22, scale = 0)) })
-	public QuestionnaireVsSubjectId getId() {
-		return this.id;
-	}
+    @GenericGenerator(name = "generator", strategy = "uuid.hex")
+    @Id
+    @GeneratedValue(generator = "generator")
+    @Column(name = "SERIA_NO",unique = true, nullable = false, length = 64)
+    public String getSeriaNo() {
+        return this.seriaNo;
+    }
 
-	public void setId(QuestionnaireVsSubjectId id) {
-		this.id = id;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "QUESTIONNAIRE_ID", insertable = false, updatable = false)
-	public QuestionnaireModel getQuestionnaireModel() {
-		return this.questionnaireModel;
-	}
-
-	public void setQuestionnaireModel(QuestionnaireModel questionnaireModel) {
-		this.questionnaireModel = questionnaireModel;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "SUBJECT_ID", insertable = false, updatable = false)
-	public Subject getSubject() {
-		return this.subject;
-	}
-
-	public void setSubject(Subject subject) {
-		this.subject = subject;
-	}
+    public void setSeriaNo(String seriaNo) {
+        this.seriaNo = seriaNo;
+    }
 
 }
