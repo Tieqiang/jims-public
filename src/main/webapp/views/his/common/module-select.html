@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>选择登录信息</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+<!-- 模块-->
+<!--<div style="width: 600px;margin-left: 400px;margin-top:150px ">-->
+    <!--&lt;!&ndash;&lt;!&ndash; 模块 上部分&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<div style="">&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/OAbg.png"></a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/rlzy.png" style="margin-left: 2px;"></a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/zlkh.png" style="margin-left: 2px;"></a>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+    <!--&lt;!&ndash;&lt;!&ndash; 模块 下部分&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<div style="padding-top: 5px">&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/jxkh.png"></a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/wzgl.png" style="margin-left: 2px;"></a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/hqgl.png" style="margin-left: 2px;"></a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#"><img src="/assert/images/yyjc.png" style="margin-left: 2px;"></a>&ndash;&gt;-->
+    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+<!--</div>-->
+
+<div id="win" class="easyui-window">
+    <form id="easyui-form" style="margin-top: 20px;padding: 20px;">
+        <div style="margin: 10px;">
+            <label for="hospital">&nbsp;医院：</label>
+            <input type="text" class="easyui-combobox" id="hospital" style="width:200px;" />
+        </div>
+        <div id="modualDiv" style="margin:10px;display:none;">
+            <label for="modual">子系统：</label>
+            <input type="text" class="easyui-combobox" id="modual" style="width: 200px;"/>
+        </div>
+        <div id="stockDiv" style="margin:10px;display:none;">
+            <label for="stock">&nbsp;库房：</label>
+            <input type="text" class="easyui-combobox" id="stock" style="width: 200px;"/>
+        </div>
+    </form>
+</div>
+
+<div style="padding:5px;text-align:right;" id="ft">
+    <a href="#" id="saveItemBtn" class="easyui-linkbutton" icon="icon-ok">下一步</a>
+    <a href="#" id="cancelItemBtn" class="easyui-linkbutton" icon="icon-cancel">取消登录</a>
+</div>
+
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+<script type="text/javascript" src="/javascript/common/module-select.js"></script>
+<script type="text/javascript" src="/javascript/common/module-select.js"></script>
+</body>
+</html>

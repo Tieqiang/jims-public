@@ -1,17 +1,17 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * RoleDict entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "ROLE_DICT", schema = "JIMS")
+@Table(name = "ROLE_DICT", schema = "WX")
 public class RoleDict implements java.io.Serializable {
 
 	// Fields

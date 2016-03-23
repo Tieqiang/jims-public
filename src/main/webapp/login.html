@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<HTML>
+<HEAD>
+    <META content="IE=11.0000" http-equiv="X-UA-Compatible">
+    <META http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <META name="GENERATOR" content="MSHTML 11.00.9600.17496">
+    <TITLE>登录页面</TITLE>
+    <SCRIPT src="assert/easyui/jquery.min.js" type="text/javascript"></SCRIPT>
+    <SCRIPT src="assert/easyui/jquery.easyui.min.js" type="text/javascript"></SCRIPT>
+    <link href="/style/login.css" type="text/css" rel="stylesheet"/>
+    <SCRIPT type="text/javascript">
+        $(function () {
+            var MANY_ZEROS = "000000000000000000";
+
+            function leftZeroPad(val, minLength) {
+                if (typeof(val) != "string")
+                    val = String(val);
+                return (MANY_ZEROS.substring(0, minLength - val.length)) + val;
+            }
+
+            //得到焦点
+            $("#password").focus(function () {
+                $("#left_hand").animate({
+                    left: "150",
+                    top: " -38"
+                }, {
+                    step: function () {
+                        if (parseInt($("#left_hand").css("left")) > 140) {
+                            $("#left_hand").attr("class", "left_hand");
+                        }
+                    }
+                }, 2000);
+                $("#right_hand").animate({
+                    right: "-64",
+                    top: "-38px"
+                }, {
+                    step: function () {
+                        if (parseInt($("#right_hand").css("right")) > -70) {
+                            $("#right_hand").attr("class", "right_hand");
+                        }
+                    }
+                }, 2000);
+            });
+
+            $("#password").on('keydown',function(e){
+                if(e.keyCode==13){
+                    $("#loginBtn").trigger('click');
+                }
+                console.log(e) ;
+            })
+            //失去焦点
+            $("#password").blur(function () {
+                $("#left_hand").attr("class", "initial_left_hand");
+                $("#left_hand").attr("style", "left:100px;top:-12px;");
+                $("#right_hand").attr("class", "initial_right_hand");
+                $("#right_hand").attr("style", "right:-112px;top:-12px");
+            });
+
+
+            $("#loginBtn").on('click',function(){
+                var userName = $("#userName").val() ;
+                var password = $("#password").val() ;
+                if(!userName){
+                    alert("用户名不能为空")
+                    return ;
+                }
+
+                if(!password){
+                    alert("密码不能为空")
+                    return ;
+                }
+                userName = leftZeroPad(userName,6) ;
+                password = leftZeroPad(password,6) ;
+                $.post("/api/login/check-login?loginName="+userName+"&password="+password,function(data){
+                    console.log(data) ;
+                    if(data.errorMessage){
+                        alert(data.errorMessage) ;
+                    }else{
+                        location.href="/views/his/common/module-select.html" ;
+                    }
+                },'json')
+            }) ;
+
+        });
+    </SCRIPT>
+
+
+</HEAD>
+<BODY>
+<DIV class="top_div"></DIV>
+<DIV class="wrapbg">
+    <DIV class="tophidden">
+        <DIV class="tou"></DIV>
+        <DIV class="initial_left_hand" id="left_hand"></DIV>
+        <DIV class="initial_right_hand" id="right_hand"></DIV>
+    </DIV>
+    <p class="tile-p">
+    <h1><img src="/assert/images/logo.png" width="85" height="32" style="vertical-align:bottom;"/>&nbsp;医院信息管理系统</h1>
+    </p>
+    <P class="tile-p">
+        <SPAN class="u_logo"></SPAN> <INPUT id="userName" class="ipt" type="text" placeholder="请输入用户名" value="">
+    </P>
+    <P style="position: relative;"><SPAN class="p_logo"></SPAN>
+        <INPUT class="ipt" id="password" type="password" placeholder="请输入密码" value="">
+    </P>
+    <DIV class="forp-wrap">
+        <P class="forp-mar">
+			<SPAN style="float: left;">
+				<A style="color: rgb(204, 204, 204);" href="index.html">忘记密码?</A>
+			</SPAN>
+			<SPAN style="float: right;">
+				<A style="color: rgb(204, 204, 204); margin-right: 10px;" href="#">注册</A>
+				<A class="login-btn"  href="#" id="loginBtn">登录</A>
+			</SPAN>
+        </P>
+    </DIV>
+    <div style="color:#aaa; ">© 2013 北京极目云软件有限公司&nbsp;&nbsp;网站备案：京ICP备13045463号</div>
+</DIV>
+</BODY>
+</HTML>
+

@@ -1,29 +1,20 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * MenuDict entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "MENU_DICT", schema = "JIMS")
+@Table(name = "MENU_DICT", schema = "WX")
 public class MenuDict implements java.io.Serializable {
 
     // Fields
-
     private String id;
     private String parentId;
     private String parentIds;

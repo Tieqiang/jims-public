@@ -1,17 +1,17 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * ModulDict entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "MODUL_DICT", schema = "JIMS")
+@Table(name = "MODUL_DICT", schema = "WX")
 public class ModulDict implements java.io.Serializable {
 
 	// Fields

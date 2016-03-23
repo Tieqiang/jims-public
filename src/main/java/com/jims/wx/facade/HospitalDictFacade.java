@@ -13,7 +13,7 @@ import java.util.List;
 
 
 /**
- * Created by Dt on 2016/3/3.
+ * Created by heren on 2015/9/8.
  */
 public class HospitalDictFacade extends BaseFacade {
     private final Logger LOGGER = LoggerFactory.getLogger(HospitalDictFacade.class);
@@ -21,7 +21,7 @@ public class HospitalDictFacade extends BaseFacade {
     private EntityManager entityManager ;
 
     @Inject
-    public HospitalDictFacade(EntityManager entityManager){
+    public  HospitalDictFacade(EntityManager entityManager){
         this.entityManager = entityManager ;
     }
 
@@ -54,11 +54,11 @@ public class HospitalDictFacade extends BaseFacade {
     }
 
     /**
-     * 根据医院Id查询医院
+     * 根据ID获取医院的信息
      * @param hospitalId
      * @return
      */
-    public HospitalDict findHospitalDictById(String hospitalId){
-        return (HospitalDict)entityManager.createQuery("from HospitalDict a where a.id = '"+hospitalId+"'").getResultList().get(0);
+    public HospitalDict findHospitalDictById(String hospitalId) {
+        return super.get(HospitalDict.class,hospitalId);
     }
 }

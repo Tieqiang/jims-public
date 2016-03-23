@@ -1,20 +1,14 @@
 package com.jims.wx.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * ModuleVsMenu entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "MODULE_VS_MENU", schema = "JIMS")
+@Table(name = "MODULE_VS_MENU", schema = "WX")
 public class ModuleVsMenu implements java.io.Serializable {
 
 	// Fields

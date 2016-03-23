@@ -6,6 +6,8 @@ import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.StaffDict;
 import com.jims.wx.entity.StaffVsRole;
 import com.jims.wx.util.PinYin2Abbreviation;
+import com.jims.wx.util.reps.EnscriptAndDenScript;
+
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -151,8 +153,8 @@ public class StaffDictFacade extends BaseFacade {
     @Transactional
     public StaffDict editPasswordByLoginId(String hospitalId, String loginId, String password) {
         StaffDict staffDict=findByLoginId(hospitalId, loginId);
-//        EnscriptAndDenScript eads = new EnscriptAndDenScript();
-//        staffDict.setPassword(eads.enScript(password));
+        EnscriptAndDenScript eads = new EnscriptAndDenScript();
+        staffDict.setPassword(eads.enScript(password));
         merge(staffDict);
         return staffDict;
     }

@@ -1,0 +1,103 @@
+ body {
+            background: #ebebeb;
+            font-family: "Helvetica Neue", "Hiragino Sans GB", "Microsoft YaHei", "\9ED1\4F53", Arial, sans-serif;
+            color: #222;
+            font-size: 12px;
+        }
+
+        * {
+            padding: 0px;
+            margin: 0px;
+        }
+
+        .top_div {
+            background: #008ead;
+            width: 100%;
+            height: 400px;
+        }
+
+        .ipt {
+            border: 1px solid #d3d3d3;
+            padding: 10px 10px;
+            width: 290px;
+            border-radius: 4px;
+            padding-left: 35px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+        }
+
+        .ipt:focus {
+            border-color: #66afe9;
+            outline: 0;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+        }
+
+        .u_logo {
+            background: url("images/username.png") no-repeat;
+            padding: 10px 10px;
+            position: absolute;
+            top: 43px;
+            left: 40px;
+
+        }
+
+        .p_logo {
+            background: url("images/password.png") no-repeat;
+            padding: 10px 10px;
+            position: absolute;
+            top: 12px;
+            left: 40px;
+        }
+
+        a {
+            text-decoration: none;
+        }
+		.wrapbg
+		{
+			background: rgb(255, 255, 255); 
+			margin: -200px auto auto; 
+			border: 1px solid rgb(231, 231, 231); 
+			border-image: none; 
+			width: 400px; 
+			height: 300px; 
+			text-align: center;
+		}
+		.tophidden
+		{
+			width: 165px; 
+			height: 96px; 
+			position: absolute;  
+			visibility: hidden;
+		}
+		.tile-p
+		{
+			padding: 30px 0px 10px; 
+			position: relative;
+		}
+		.forp-wrap
+		{
+			height: 100px; 
+			line-height: 50px; 
+			margin-top: 30px; 
+			border-top-color: rgb(231, 231, 231); 
+			border-top-width: 1px; 
+			border-top-style: solid;
+		}
+		.forp-mar
+		{
+			margin: 0px 35px 20px 45px;
+		}
+		.login-btn
+		{
+			background: rgb(0, 142, 173); 
+			padding: 7px 10px; 
+			border-radius: 4px;
+			border: 1px solid rgb(26, 117, 152); 
+			border-image: none; 
+			color: rgb(255, 255, 255); 
+			font-weight: bold;
+		}

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>登陆</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+<div style="padding:10px 60px 20px 60px">
+    <form id="login" method="post">
+        <table cellpadding="5">
+            <tr>
+                <td>用户名:</td>
+                <td><input class="easyui-textbox" type="text" id="loginName" data-options="required:true"/></td>
+            </tr>
+            <tr>
+                <td>密码:</td>
+                <td><input class="easyui-textbox" type="password" id="password" data-options="required:true,validType:'password'"/></td>
+            </tr>
+            <tr>
+                <td>验证码:</td>
+                <td><input class="easyui-textbox" type="text" id="validateCode" data-options="required:true"/>
+                    <img id="code" border="1" title="看不清，请单击图片" src="/api/login/code"/>
+                </td>
+            </tr>
+            <tr>
+                <td>医院:</td>
+                <td>
+                    <select class="easyui-combobox" id="hospitalId" data-options="required:true">
+                    </select>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <div id="tb" style="padding:2px 5px;">
+        <a href="#" id="loginBtn" class="easyui-linkbutton" iconCls="" plain="true">登陆</a>
+        <a href="#" id="clearBtn" class="easyui-linkbutton" iconCls="" plain="true">重置</a>
+    </div>
+</div>
+<div id="moduleDialog" class="easyui-dialog" style="width:500px;height:300px;">
+    <div id="module">
+
+    </div>
+    <div id="stock">
+
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+<script type="text/javascript" src="/javascript/common/login.js"></script>
+</body>
+</html>

@@ -1,17 +1,17 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.*;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * StaffDict entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "STAFF_DICT", schema = "JIMS")
+@Table(name = "STAFF_DICT", schema = "WX")
 public class StaffDict implements java.io.Serializable {
 
 	// Fields
@@ -30,14 +30,14 @@ public class StaffDict implements java.io.Serializable {
     private String inputCode;
 	private Set<StaffVsRole> staffVsRoles = new HashSet<StaffVsRole>(0);
     private String acctDeptId ;
-
+    private String idNo ;
 	// Constructors
 
 	/** default constructor */
 	public StaffDict() {
 	}
     /** full constructor */
-    public StaffDict(String id, DeptDict deptDict, String loginName, String password, String job, String title, String roleIds, String roleNames, String hospitalId, String name, String empNo, String inputCode, Set<StaffVsRole> staffVsRoles, String acctDeptId) {
+    public StaffDict(String id, DeptDict deptDict, String loginName, String password, String job, String title, String roleIds, String roleNames, String hospitalId, String name, String empNo, String inputCode, Set<StaffVsRole> staffVsRoles, String acctDeptId, String idNo) {
         this.id = id;
         this.deptDict = deptDict;
         this.loginName = loginName;
@@ -52,6 +52,7 @@ public class StaffDict implements java.io.Serializable {
         this.inputCode = inputCode;
         this.staffVsRoles = staffVsRoles;
         this.acctDeptId = acctDeptId;
+        this.idNo = idNo;
     }
 
 
@@ -187,5 +188,14 @@ public class StaffDict implements java.io.Serializable {
 
     public void setEmpNo(String empNo) {
         this.empNo = empNo;
+    }
+
+    @Column(name="id_no")
+    public String getIdNo() {
+        return idNo;
+    }
+
+    public void setIdNo(String idNo) {
+        this.idNo = idNo;
     }
 }

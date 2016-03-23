@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>医院管理</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+<table id="dg" class="easyui-datagrid">
+</table>
+
+
+<div id="tb" style="padding:2px 5px;">
+    参数名称：<input type="text" class="easyui-textbox" id="name">
+    <a href="#" id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+    <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加</a>
+    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改</a>
+    <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>
+</div>
+<div id="ft" style="padding:2px 5px;">
+
+</div>
+<div id="dialogDiv" class="easyui-dialog" closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">配置参数</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>应用名:</label>
+            <input id="appName" name="appName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>适用科室:</label>
+            <input id="deptCode" name="deptCode" class="easyui-combobox" required="true">
+        </div>
+        <div class="fitem">
+            <label>适用人</label>
+            <input name="empNo" id="empNo" class="easyui-combobox" >
+        </div>
+        <div class="fitem">
+            <label>参数名称</label>
+            <input name="parameterName" id="parameterName" class="easyui-textbox" >
+        </div>
+        <div class="fitem">
+            <label>参数初始化</label>
+            <input name="parameterValue" id="parameterValue" class="easyui-textbox"/>
+        </div>
+        <div class="fitem">
+            <label>位置</label>
+            <input name="position" id="position" class="easyui-textbox"/>
+        </div>
+        <div class="fitem">
+            <input name="id" id="id" type="hidden">
+            <input id="hospitalId" name="hospitalId"  type="hidden">
+        </div>
+        <div id="dlg-buttons">
+            <a href="javascript:void(0)" id="saveBtn" class="easyui-linkbutton c6" iconCls="icon-ok"  style="width:90px">保存</a>
+            <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dialogDiv').dialog('close')" style="width:90px">关闭</a>
+        </div>
+    </form>
+</div>
+
+
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/javascript/common/app-configer-parameter.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>

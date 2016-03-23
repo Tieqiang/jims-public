@@ -1,27 +1,19 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
-
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * HospitalDict entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "HOSPITAL_DICT", schema = "JIMS")
-//@XmlRootElement
+@Table(name = "HOSPITAL_DICT", schema = "WX")
+@XmlRootElement
 public class HospitalDict implements java.io.Serializable {
 
 	// Fields
@@ -127,7 +119,6 @@ public class HospitalDict implements java.io.Serializable {
     //@JsonManagedReference
     @JsonIgnore
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "hospitalDict")
-//    @XmlTransient
 	public Set<DeptDict> getDeptDicts() {
 		return this.deptDicts;
 	}
