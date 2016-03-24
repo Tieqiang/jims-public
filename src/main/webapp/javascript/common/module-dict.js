@@ -25,7 +25,7 @@ $(function () {
             width: "20%",
             editor: {
                 type: 'validatebox', options: {
-                    required: true, validType: 'length[0,128]', missingMessage: '请输入64个以内的汉字'
+                    //required: true, validType: 'length[0,128]', missingMessage: '请输入64个以内的汉字'
                 }
             }
         },{
@@ -35,7 +35,6 @@ $(function () {
             editor: {
                 type: 'textbox'
             }
-            //hidden:true
         },{
             title:'输入码',
             field:'inputCode',
@@ -50,7 +49,6 @@ $(function () {
             editor: {
                 type: 'textbox'
             }
-            //hidden:true
         }]]
     });
 
@@ -63,24 +61,22 @@ $(function () {
     });
 
     $("#addBtn").on('click', function () {
-
+        console.log(editRowIndex) ;
+        if(editRowIndex||editRowIndex==0){
+            console.log("wocha")
+            $("#dg").datagrid('endEdit',editRowIndex) ;
+        }
         $("#dg").datagrid('appendRow', {});
         var rows = $("#dg").datagrid('getRows');
-        var row = rows[rows.length - 1];
-        var index = $("#dg").datagrid('getRowIndex', row);
+        if(rows.length>0){
+            var rowIndex = $("#dg").datagrid('getRowIndex',rows[rows.length - 1]);
+            if(rowIndex||rowIndex==0){
+                editRowIndex = rowIndex ;
+                $("#dg").datagrid("beginEdit",editRowIndex) ;
+            }
+        }
 
-        $("#dg").datagrid('selectRow', index);
-        if (editRowIndex == index) {
-            $("#dg").datagrid('beginEdit', editRowIndex);
-        }
-        if (editRowIndex == undefined) {
-            $("#dg").datagrid('beginEdit', index);
-            editRowIndex = index;
-        } else {
-            $("#dg").datagrid('endEdit', editRowIndex);
-            $("#dg").datagrid('beginEdit', index);
-            editRowIndex = index;
-        }
+
     });
 
     $("#delBtn").on('click', function () {
@@ -135,7 +131,8 @@ $(function () {
      * 基础字典的维护只能在基础数据维护的时候使用。
      */
     $("#saveBtn").on('click', function () {
-        if (editRowIndex) {
+        console.log(editRowIndex)
+        if (editRowIndex||editRowIndex==0) {
             $("#dg").datagrid('endEdit', editRowIndex);
             editRowIndex = undefined;
         }
@@ -306,31 +303,7 @@ $(function () {
 
     });
 
-    ////树定义
-    //$("#staff").tree({
-    //    cascadeCheck: true,
-    //    checkbox: true
-    //});
-    //var loadStaffData = function () {
-    //    var promise = $.get("/api/staff-dict/list", function (data) {
-    //        $.each(data, function (index, item) {
-    //            var staff = {};
-    //            staff.id = item.id;
-    //            staff.text = item.name;
-    //            staff.state = "open";
-    //
-    //            staffs.push(staff);
-    //        })
-    //
-    //        for (var i = 0; i < staffs.length; i++) {
-    //            staffTreeData.push(staffs[i]);
-    //        }
-    //    });
-    //
-    //    promise.done(function () {
-    //        $("#staff").tree('loadData', staffTreeData);
-    //    })
-    //}
+
 
     $("#checkStaffWin").window({
         title: '设置模块医生',
@@ -391,15 +364,7 @@ $(function () {
             width: '55%'
         }]]
     });
-    //var loadStaff = function () {
-    //    var staffs = [];
-    //    var loadPromise = $.get("/api/staff-dict/list", function (data) {
-    //        staffs = data;
-    //    });
-    //    loadPromise.done(function () {
-    //        $("#dg").datagrid('loadData', staffs);
-    //    })
-    //}
+
     $("#staffAddBtn").on('click', function () {
         var row = $("#dg").datagrid('getSelected');
         if (!row) {
@@ -407,9 +372,7 @@ $(function () {
             return;
         }
         $("#checkStaffWin").window('open');
-        //if (!row.staffIds) {
-        //    return;
-        //}
+
         var staffIds = new Array;
         staffIds= row.staffIds.split(",");
         var selectStaffs=[];
@@ -428,16 +391,6 @@ $(function () {
                 }
                 flag=true;
             }
-            //console.log(selectStaffs.length);
-            //console.log(staffs.length);
-
-            //$.each(data, function (index, row) {
-            //    if(staffIds.indexOf(row.id)>-1){
-            //        selectStaffs.push(row);
-            //    }else{
-            //        staffs.push(row);
-            //    }
-            //});
         });
 
         loadPromise.done(function () {

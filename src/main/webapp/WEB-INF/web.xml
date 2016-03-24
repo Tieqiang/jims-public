@@ -6,7 +6,7 @@
          version="2.5">
 
     <welcome-file-list>
-        <welcome-file>login1.html</welcome-file>
+        <welcome-file>login.html</welcome-file>
     </welcome-file-list>
 
     <!-- 激活Tomcat的defaultServlet来处理静态文件 -->

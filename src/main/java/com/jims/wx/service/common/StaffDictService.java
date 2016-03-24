@@ -68,6 +68,7 @@ public class StaffDictService {
             StaffDict staffDict1 = staffDictFacade.saveStaffDict(staffDict);
             return Response.status(Response.Status.OK).entity(staffDict1).build();
         }catch (Exception e){
+            e.printStackTrace();
             ErrorException errorException = new ErrorException();
             errorException.setMessage(e);
             if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {

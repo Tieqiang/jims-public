@@ -74,6 +74,7 @@ public class ModuleDictService {
             moduleDictFacade.save(modulDictBeanChangeVo) ;
             return Response.status(Response.Status.OK).entity(modulDictBeanChangeVo).build() ;
         }catch(Exception e){
+            e.printStackTrace();
             ErrorException errorException = new ErrorException();
             errorException.setMessage(e);
             if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
@@ -83,7 +84,7 @@ public class ModuleDictService {
             } else {
                 errorException.setErrorMessage("保存失败！");
             }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+            return Response.status(Response.Status.OK).entity(errorException).build();
         }
     }
 
