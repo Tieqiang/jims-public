@@ -32,7 +32,7 @@ public class SubjectFacade extends BaseFacade {
     }
 
     /**
-     * 保存增
+     * 保存增和修改
      *
      * @param sub
      */
@@ -40,11 +40,9 @@ public class SubjectFacade extends BaseFacade {
     public Subject save(Subject sub) {
         //对象有ID修改,否则新增
         if(sub.getId() != null && !sub.getId().trim().equals("")){
-
-            Set<SubjectOptions> subjectOptions = sub.getSubjectOptionses();
             //首先删除此题目多有的选项
-            sub = get(Subject.class, sub.getId());
-            Set<SubjectOptions> deleteData = sub.getSubjectOptionses();
+            Subject old = get(Subject.class, sub.getId());
+            Set<SubjectOptions> deleteData = old.getSubjectOptionses();
             if(deleteData != null && deleteData.size() > 0){
                 List<String> ids = new ArrayList<>();
                 for (SubjectOptions obj : deleteData) {
@@ -52,8 +50,6 @@ public class SubjectFacade extends BaseFacade {
                 }
                 super.removeByStringIds(SubjectOptions.class, ids);
             }
-
-            sub.setSubjectOptionses(subjectOptions);
 
         }
 
@@ -66,7 +62,6 @@ public class SubjectFacade extends BaseFacade {
      * @param id
      * @return
      */
-    @Transactional
     public Subject getById(String id){
         //通过主键获取问题
         Subject obj = get(Subject.class, id);
@@ -90,6 +85,12 @@ public class SubjectFacade extends BaseFacade {
         }
         return obj;
     }
+
+    /**
+     * 删除
+     * @param beanChangeVo
+     * @return
+     */
     @Transactional
     public List<Subject> delete(BeanChangeVo<Subject> beanChangeVo) {
 
