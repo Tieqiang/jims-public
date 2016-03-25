@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>菜单管理</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+    <style type="text/css">
+
+    </style>
+</head>
+<body>
+    <table id="tt" class="easyui-treegrid" style="width:600px;height:400px">
+    </table>
+
+    <div id="dlg" class="easyui-dialog" style="width:400px;height:280px;padding:10px 20px"
+         closed="true" buttons="#dlg-buttons">
+        <div class="ftitle">菜单信息</div>
+        <form id="fm" method="post" novalidate>
+            <div class="fitem">
+                <label>菜单名称:</label>
+                <input id="menuName" name="menuName" class="easyui-textbox" required="true">
+            </div>
+            <div class="fitem">
+                <label>路径:</label>
+                <input id="href" name="href" class="easyui-textbox">
+            </div>
+            <div class="fitem">
+                <label>父菜单</label>
+                <input name="parentName" id="parentName" class="easyui-textbox" disabled>
+            </div>
+            <div class="fitem">
+                <label>父菜单ID</label>
+                <input name="parentId" id="parentId" class="easyui-textbox" disabled>
+            </div>
+            <div class="fitem">
+                <label>层级</label>
+                <input name="position" id="position" class="easyui-textbox">
+            </div>
+            <div class="fitem">
+                <input name="id" id="id" type="hidden">
+            </div>
+
+        </form>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" id="saveBtn" class="easyui-linkbutton c6" iconCls="icon-ok"  style="width:90px">保存</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">关闭</a>
+    </div>
+
+
+    <div id="tb">
+        <a href="#" id="addSameLevelBtn" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加同级菜单</a>
+        <a href="#" id="addNextLevelBtn" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加下级菜单</a>
+        <a href="#" id="removeBtn" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">移除菜单</a>
+        <a href="#" id="updateBtn" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true">菜单修改</a>
+        <a href="#" id="allMenuClose" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true">全部合并</a>
+        <a href="#" id="allMenuOpen" class="easyui-linkbutton" data-options="iconCls:'icon-redo',plain:true">全部展开</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-help',plain:true">帮助</a>
+    </div>
+
+    <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/javascript/menu-manager.js"></script>
+    <script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>
