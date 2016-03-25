@@ -1,90 +1,252 @@
-/**
- * Created by wei on 2016/3/16.
- */
-var app = angular.module("myApp", []);
-app.controller("buttonCtrl",function($scope, $http){
-
-
-});
-
-app.controller('tableCtrl',function ($scope, $http) {
-
-    $scope.check=function(questionContent){
-        console.log($scope.contextSearch);
-        $http.get("/api/subject/find-by-questionContent?questionContent="+$scope.contextSearch)
-            .success(function (data) {
-                $scope.names = data;
-            })
+$(function () {
+    var editIndex;
+    var stopEdit = function () {
+        if (editIndex || editIndex == 0) {
+            $("#dgOption").datagrid('endEdit', editIndex);
+            editIndex = undefined;
+        }
     }
 
+    $("#dgOption").datagrid({
+        singleSelect: true,
+        columns: [[{
+            title: '编号',
+            field: 'id',
+            hidden: 'true'
+        },{
+            title: 'sub编号',
+            field: 'subjectId',
+            hidden: 'true'
+        }, {
+            title: '选项',
+            field: 'optContent',
+            width: "100%",
+            editor: 'text'
+        }]],
+        onClickRow: function (index, row) {
+            stopEdit();
+            $(this).datagrid('beginEdit', index);
+            editIndex = index;
+        }
+    });
 
 
+    $("#dgOptionShow").datagrid({
+        singleSelect: true,
+        columns: [[{
+            title: '编号',
+            field: 'id',
+            hidden: 'true'
+        },{
+            title: 'sub编号',
+            field: 'subjectId',
+            hidden: 'true'
+        }, {
+            title: '选项',
+            field: 'optContent',
+            width: "100%",
+            editor: 'text'
+        }]]
+    });
 
 
-    $scope.delMulti=function(){
-
-        $scope.ids='1465565656;3265655676';
-
-        $http.post("/api/subject/del-subjects?ids="+$scope.ids)
-            .success(function (data) {
-
-                alert("delete成功！");
-            })
+    var editIndexDg;
+    var stopEditDg = function () {
+        if (editIndexDg || editIndexDg == 0) {
+            $("#dg").datagrid('endEdit', editIndexDg);
+            editIndexDg = undefined;
+        }
     }
-    $http.get("/api/subject/list-sub")
-        .success(function (data) {  console.log(data);
-            $scope.names = data;
+    $("#dg").datagrid({
+        title: '问题管理',
+        fit: true,//让#dg数据创铺满父类容器
+        footer: '#tb',
+        singleSelect: true,
+        columns: [[{
+            title: '编号',
+            field: 'id',
+            hidden: 'true'
+        }, {
+            title: '题目列表',
+            field: 'questionContent',
+            width: "30%"
+
+        }, {
+            title: '题目类型',
+            field: 'questionType',
+            width: "30%"
+
+        }, {
+            title: '答案',
+            field: 'preAnswer',
+            width: "40%"
+
+        }]],
+        onClickRow: function (index, row) {
+            stopEditDg();
+            $(this).datagrid('beginEdit', index);
+            editIndexDg = index;
+        }
+    });
+
+    var loadDict = function () {
+        $.get("/api/subject/list" , function (data) {
+            $("#dg").datagrid('loadData', data);
         });
-
-          $scope.get= function(id){
-                  $http.get("/api/subject/find-by-id?id="+id)
-                      .success(function (data) {  console.log(data);
-                          console.log(data.options);
-                          $scope.name = data;
-                          $scope.options = data.options;
-                      });
     }
 
-    $scope.delOption=function(id){
-        var index=-1;
-        angular.forEach($scope.options,function(x,key){
-            if(x.id===id){
-                index=key;
+    loadDict();
+
+    var reset = function(){
+        $("#questionContent").textbox('setValue',"");
+        $("#questionType").textbox('setValue',"");
+        $("#preAnswer").textbox('setValue',"");
+        $("#subId").textbox('setValue',"");
+        var data=[];
+        $("#dgOption").datagrid("loadData",data);
+    }
+
+    $("#searchBtn").on("click", function () {
+        loadDict();
+    });
+    $("#addBtn").on('click', function () {
+        reset();
+        $('#dlg').dialog('open').dialog('center').dialog('setTitle', '添加问题选项');
+    });
+
+    $("#editBtn").on('click', function () {
+        var row = $("#dg").datagrid('getSelected');
+        if (row) {
+            $.get('/api/subject/find-by-id?id='+row.id, function (node) {
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle', '修改问题');
+                $("#subId").textbox('setValue', node.id);
+                $("#questionContent").textbox('setValue', node.questionContent);
+                $("#questionType").textbox('setValue', node.questionType);
+                $("#preAnswer").textbox('setValue', node.preAnswer);
+                $("#dgOption").datagrid('loadData', node.options);
+            })
+        } else{
+            $.messager.alert('系统提示', "请选择要编辑的行", 'info');
+        }
+    });
+    //增加修改提交
+    $("#submitBtn").on('click', function () {
+
+        if (editIndex || editIndex == 0) {
+            $("#dgOption").datagrid("endEdit", editIndex);
+        }
+        if ($("#fm").form('validate')) {
+            var menuDict = {};
+            menuDict.questionContent = $("#questionContent").textbox('getValue');
+            menuDict.questionType = $("#questionType").textbox('getValue');
+            menuDict.preAnswer = $("#preAnswer").textbox('getValue');
+            menuDict.id = $("#subId").val();
+
+            var data =$("#dgOption").datagrid("getRows");
+            menuDict.subjectOptionses = data;
+
+            console.log(menuDict);
+
+            $.postJSON("/api/subject/save", menuDict, function (data) {
+                $('#dlg').dialog('close');
+                $.messager.alert("系统提示", "保存成功", "info");
+                loadDict();
+                reset();
+            }, function (data, status) {
+            })
+        }
+
+    });
+    //删除
+    $("#delBtn").on('click', function () {
+        var row = $("#dg").datagrid('getSelected');
+        if (row) {
+            var rowIndex = $("#dg").datagrid('getRowIndex', row);
+            $("#dg").datagrid('deleteRow', rowIndex);
+            if (editIndexDg == rowIndex) {
+                editIndexDg = undefined;
             }
-        });
-        if(index !==-1){
-            $scope.options.splice(index,1);
-
-        }
-    }
-
-    $scope.updateSubject=function(id){
-
-        console.log($scope.name.options);
-        console.log($scope.name);
-        $http.post("/api/subject/save-sub", $scope.name)
-            .success(function (data) {
-
-                alert("update成功！");
-            })
-    }
-});
-app.controller('formCtrl', function ($scope, $http) {
-    $scope.save = function () {
-        //获取到表单是否验证通过
-        if ($scope.form.$valid) {
-            $http.post("/api/subject/save-sub", $scope.sub)
-                .success(function (data) {
-
-                    alert("增加成功！");
-                })
         } else {
-            alert("表单没有通过验证");
+            $.messager.alert('系统提示', "请选择要删除的行", 'info');
         }
+    });
+    $("#saveBtn").on('click', function () {
+        if (editIndexDg || editIndexDg == 0) {
+            $("#dg").datagrid("endEdit", editIndexDg);
+        }
+        var deleteDate = $("#dg").datagrid("getChanges", "deleted");
+
+        var beanChangeVo = {};
+
+        beanChangeVo.deleted = deleteDate;
+
+
+
+        if (beanChangeVo) {
+            $.postJSON("/api/subject/delete", beanChangeVo, function (data, status) {
+
+                $.messager.alert("系统提示", "删除成功", "info");
+                loadDict();
+            }, function (data) {
+                $.messager.alert('提示', data.responseJSON.errorMessage, "error");
+            })
+        }
+    });
+
+
+
+    $("#findByIdBtn").on('click', function () {
+        var row = $("#dg").treegrid('getSelected');
+
+        if (row){
+            $.get('/api/subject/find-by-id?id='+row.id, function (node) {
+                $('#dlg-detail').dialog('open').dialog('center').dialog('setTitle', '问题详情');
+                $("#questionContentShow").textbox('setValue', node.questionContent);
+                $("#questionTypeShow").textbox('setValue', node.questionType);
+                $("#preAnswerShow").textbox('setValue', node.preAnswer);
+                $("#dgOptionShow").datagrid('loadData', node.options);
+            })
+        }else{
+            $.messager.alert("系统提示", "请选择要查看的行");
+            return;
+        }
+    });
+
+
+
+    $("#addOptionBtn").on("click",function(){
+        $("#dgOption").datagrid('appendRow', {});
+    });
+
+    $("#delOptionBtn").on("click",function(){
+        var row = $("#dgOption").datagrid('getSelected');
+        if (row) {
+            var rowIndex = $("#dgOption").datagrid('getRowIndex', row);
+            $("#dgOption").datagrid('deleteRow', rowIndex);
+            if (editIndex == rowIndex) {
+                editIndex = undefined;
+            }
+        } else {
+            $.messager.alert('系统提示', "请选择要删除的行", 'info');
+        }
+    });
+
+
+
+
+
+
+
+
+
+
+
+    var loadDict = function () {
+        $.get("/api/subject/list" , function (data) {
+            $("#dg").datagrid('loadData', data);
+        });
     }
 
 
 
-
-});
-
+})

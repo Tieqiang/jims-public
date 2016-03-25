@@ -1,13 +1,6 @@
 package com.jims.wx.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonManagedReference;
@@ -27,7 +20,8 @@ public class SubjectOptions implements java.io.Serializable {
 	private Subject subject;
 	private String optContent;
 	private String optStatus;
-
+    @Transient
+private String subjectId;
 	// Constructors
 
 	/** default constructor */
@@ -83,4 +77,12 @@ public class SubjectOptions implements java.io.Serializable {
 		this.optStatus = optStatus;
 	}
 
+    @Transient
+    public String getSubjectId() {
+        return subjectId;
+    }
+
+    public void setSubjectId(String subjectId) {
+        this.subjectId = subjectId;
+    }
 }
