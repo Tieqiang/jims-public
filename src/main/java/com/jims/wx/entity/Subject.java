@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.*;
 
+import com.jims.wx.vo.BeanChangeVo;
 import com.jims.wx.vo.SubjectOptionsVo;
 import org.codehaus.jackson.annotate.JsonBackReference;
+import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -16,6 +18,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "SUBJECT", schema = "WX")
+//@JsonIgnoreProperties(value={"hibernateLazyInitializer","handler","subjectOptionses"})
 public class Subject implements java.io.Serializable {
 
 	// Fields
@@ -34,7 +37,8 @@ public class Subject implements java.io.Serializable {
 
     @Transient
     private List<SubjectOptionsVo> options= new ArrayList<SubjectOptionsVo>();
-
+    @Transient
+    private BeanChangeVo<SubjectOptionsVo> beanChangeVo;
 
 	/** default constructor */
 	public Subject() {
@@ -129,5 +133,14 @@ public class Subject implements java.io.Serializable {
 
     public void setOptions(List<SubjectOptionsVo> options) {
         this.options = options;
+    }
+
+    @Transient
+    public BeanChangeVo<SubjectOptionsVo> getBeanChangeVo() {
+        return beanChangeVo;
+    }
+
+    public void setBeanChangeVo(BeanChangeVo<SubjectOptionsVo> beanChangeVo) {
+        this.beanChangeVo = beanChangeVo;
     }
 }
