@@ -29,7 +29,7 @@
     <form id="fm" method="post" novalidate>
         <div class="fitem">
             <label>编号</label>
-            <input name="id" id="subId" style="display:none" class="easyui-textbox"  disabled="true">
+            <input name="id" id="subId"  class="easyui-textbox"  disabled="true">
         </div>
         <div class="fitem">
             <label>题目</label>
@@ -37,11 +37,11 @@
         </div>
         <div class="fitem">
             <label>类型</label>
-            <input  id="questionType" name="questionType" class="easyui-textbox">
+            <input  id="questionType" name="questionType" required="true" class="easyui-combobox" data-options="valueField:'value',textField:'text',data:[{'value':'0','text':'单选'},{'value':'1','text':'多选'}]"/>
         </div>
         <div class="fitem">
             <label>预知答案</label>
-            <input name="preAnswer" id="preAnswer" class="easyui-textbox" >
+            <input name="preAnswer" id="preAnswer" class="easyui-textbox" required="true"  >
         </div>
         <div class="fitem">
             <table id="dgOption" class="easyui-datagrid">
@@ -56,7 +56,7 @@
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:60px">关闭</a>
 </div>
 
-<div id="dlg-detail" class="easyui-dialog" style="width:400px;height:500px;padding:10px 20px"
+<div id="dlg-detail" class="easyui-dialog" style="width:400px;height:600px;padding:10px 20px"
      closed="true" buttons="#dlg-detail-buttons">
     <div class="ftitle">问题详情</div>
         <div class="fitem">
@@ -65,11 +65,11 @@
         </div>
         <div class="fitem">
             <label>类型</label>
-            <input  id="questionTypeShow" name="questionType" class="easyui-textbox" disabled="true">
+            <input  id="questionTypeShow" name="questionType" required="true" class="easyui-combobox" data-options="valueField:'value',textField:'text',data:[{'value':'0','text':'单选'},{'value':'1','text':'多选'}]" disabled="true">
         </div>
         <div class="fitem">
             <label>预知答案</label>
-            <input   name="preAnswer" id="preAnswerShow" class="easyui-textbox"  disabled="true">
+            <input   name="preAnswer" id="preAnswerShow" required="true" class="easyui-textbox"  disabled="true">
         </div>
         <div class="fitem">
             <input name="id" id="idShow" type="hidden" disabled="true">
