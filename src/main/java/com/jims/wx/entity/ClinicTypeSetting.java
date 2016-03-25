@@ -26,9 +26,9 @@ public class ClinicTypeSetting implements java.io.Serializable {
 	private String clinicType;
 	private String hospitalId;
 	private String appId;
-	private Set<ClinicTypeCharge> clinicTypeCharges = new HashSet<ClinicTypeCharge>(
-			0);
-	private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
+	//private Set<ClinicTypeCharge> clinicTypeCharges = new HashSet<ClinicTypeCharge>(
+	//		0);
+	//private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
 
 	// Constructors
 
@@ -36,16 +36,15 @@ public class ClinicTypeSetting implements java.io.Serializable {
 	public ClinicTypeSetting() {
 	}
 
-	/** full constructor */
-	public ClinicTypeSetting(String clinicType, String hospitalId,
-			String appId, Set<ClinicTypeCharge> clinicTypeCharges,
-			Set<ClinicIndex> clinicIndexes) {
-		this.clinicType = clinicType;
-		this.hospitalId = hospitalId;
-		this.appId = appId;
-		this.clinicTypeCharges = clinicTypeCharges;
-		this.clinicIndexes = clinicIndexes;
-	}
+
+
+    /** full constructor */
+    public ClinicTypeSetting(String id, String clinicType, String hospitalId, String appId) {
+        this.id = id;
+        this.clinicType = clinicType;
+        this.hospitalId = hospitalId;
+        this.appId = appId;
+    }
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -87,22 +86,22 @@ public class ClinicTypeSetting implements java.io.Serializable {
 		this.appId = appId;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicTypeSetting")
-	public Set<ClinicTypeCharge> getClinicTypeCharges() {
-		return this.clinicTypeCharges;
-	}
-
-	public void setClinicTypeCharges(Set<ClinicTypeCharge> clinicTypeCharges) {
-		this.clinicTypeCharges = clinicTypeCharges;
-	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicTypeSetting")
-	public Set<ClinicIndex> getClinicIndexes() {
-		return this.clinicIndexes;
-	}
-
-	public void setClinicIndexes(Set<ClinicIndex> clinicIndexes) {
-		this.clinicIndexes = clinicIndexes;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicTypeSetting")
+	//public Set<ClinicTypeCharge> getClinicTypeCharges() {
+	//	return this.clinicTypeCharges;
+	//}
+    //
+	//public void setClinicTypeCharges(Set<ClinicTypeCharge> clinicTypeCharges) {
+	//	this.clinicTypeCharges = clinicTypeCharges;
+	//}
+    //
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicTypeSetting")
+	//public Set<ClinicIndex> getClinicIndexes() {
+	//	return this.clinicIndexes;
+	//}
+    //
+	//public void setClinicIndexes(Set<ClinicIndex> clinicIndexes) {
+	//	this.clinicIndexes = clinicIndexes;
+	//}
 
 }
