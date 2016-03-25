@@ -3,12 +3,14 @@ package com.jims.wx.service;
 import com.jims.wx.entity.Subject;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.SubjectFacade;
+import com.jims.wx.vo.BeanChangeVo;
 
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,30 +27,46 @@ public class SubjectService {
             this.subjectFacade=subjectFacade;
     }
 
-    /**
-     * 查询问题列表
-     * @return
-     */
+
     @GET
-    @Path("list-sub")
-    @Produces({MediaType.APPLICATION_JSON})
-    public List<Subject> listAll(){
-        return subjectFacade.findAll(Subject.class);
+    @Path("list")
+    public List<Subject> expExpCodingRule(@QueryParam("name") String name){
+        return subjectFacade.findAll(name);
     }
 
     /**
-     * 保存问题
+     * 保存增改
+     *
      * @param sub
      * @return
      */
     @POST
-    @Path("save-sub")
-    public Response save(Subject sub){
+    @Path("save")
+    public Response save(Subject sub) {
         try {
-            if (null != sub) {
-                subjectFacade.save(sub);
-            }
+           sub = subjectFacade.save(sub);
             return Response.status(Response.Status.OK).entity(sub).build();
+        } catch (Exception e) {
+            ErrorException errorException = new ErrorException();
+            errorException.setMessage(e);
+            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+                errorException.setErrorMessage("输入数据超过长度！");
+            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
+                errorException.setErrorMessage("数据已存在，保存失败！");
+            } else {
+                errorException.setErrorMessage("保存失败！");
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+        }
+
+    }
+    @POST
+    @Path("delete")
+    public Response delete(BeanChangeVo<Subject> beanChangeVo) {
+        try {
+            List<Subject> newUpdateDict = new ArrayList<>();
+            newUpdateDict = subjectFacade.delete(beanChangeVo);
+            return Response.status(Response.Status.OK).entity(newUpdateDict).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
             e.printStackTrace();
@@ -56,14 +74,14 @@ public class SubjectService {
             if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
                 errorException.setErrorMessage("输入数据超过长度！");
             } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，提交失败！");
+                errorException.setErrorMessage("数据已存在，保存失败！");
             } else {
-                errorException.setErrorMessage("提交失败！");
+                errorException.setErrorMessage("保存失败！");
             }
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
-    }
 
+    }
     /**
      * 根据ID查询问题
      * @param id
@@ -75,13 +93,8 @@ public class SubjectService {
         return subjectFacade.getById(id);
     }
 
-    /**
-     * 根据id删除问题
-     * @param ids
-     */
-    @POST
-    @Path("del-subjects")
-    public void delSubjects(@QueryParam("ids") String ids){
-        subjectFacade.delSubjects(ids);
-    }
+
+
+
+
 }
