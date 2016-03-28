@@ -27,7 +27,12 @@ public class SubjectService {
             this.subjectFacade=subjectFacade;
     }
 
-
+    /**
+     * 查询全部
+     *
+     * @param name
+     * @return
+     */
     @GET
     @Path("list")
     public List<Subject> expExpCodingRule(@QueryParam("name") String name){
@@ -60,6 +65,11 @@ public class SubjectService {
         }
 
     }
+    /**
+     * 删除
+     * @param beanChangeVo
+     * @return
+     */
     @POST
     @Path("delete")
     public Response delete(BeanChangeVo<Subject> beanChangeVo) {

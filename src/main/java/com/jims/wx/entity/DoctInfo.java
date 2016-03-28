@@ -27,7 +27,7 @@ public class DoctInfo implements java.io.Serializable {
 	private String hospitalId;
 	private String headUrl;
 	private String description;
-	private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
+	//private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
 	// Constructors
 	/** default constructor */
 	public DoctInfo() {
@@ -38,16 +38,17 @@ public class DoctInfo implements java.io.Serializable {
 		this.name = name;
 	}
 
-	/** full constructor */
-	public DoctInfo(String name, String title, String hospitalId,
-			String headUrl, String description, Set<ClinicIndex> clinicIndexes) {
-		this.name = name;
-		this.title = title;
-		this.hospitalId = hospitalId;
-		this.headUrl = headUrl;
-		this.description = description;
-		this.clinicIndexes = clinicIndexes;
-	}
+
+
+    /** full constructor */
+    public DoctInfo(String id, String name, String title, String hospitalId, String headUrl, String description) {
+        this.id = id;
+        this.name = name;
+        this.title = title;
+        this.hospitalId = hospitalId;
+        this.headUrl = headUrl;
+        this.description = description;
+    }
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -107,13 +108,13 @@ public class DoctInfo implements java.io.Serializable {
 		this.description = description;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "doctInfo")
-	public Set<ClinicIndex> getClinicIndexes() {
-		return this.clinicIndexes;
-	}
-
-	public void setClinicIndexes(Set<ClinicIndex> clinicIndexes) {
-		this.clinicIndexes = clinicIndexes;
-	}
+	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "doctInfo")
+	//public Set<ClinicIndex> getClinicIndexes() {
+	//	return this.clinicIndexes;
+	//}
+    //
+	//public void setClinicIndexes(Set<ClinicIndex> clinicIndexes) {
+	//	this.clinicIndexes = clinicIndexes;
+	//}
 
 }
