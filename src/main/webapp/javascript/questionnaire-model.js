@@ -167,18 +167,19 @@ $(function () {
         }
     });
     var reset = function(){
-        $("#id").attr("value",null);
-        $("#title").attr("value",null);
-        $("#memo").attr("value",null);
-        $("#createPerson").attr("value",null);
-        $("#createPerson").attr("value",null);
-        $("#appId").attr("value",null);
+        $("#id").textbox("setValue","");
+        $("#title").textbox("setValue","");
+        $("#memo").textbox("setValue","");
+        $("#createPerson").textbox("setValue","");
+        $("#createPerson").textbox("setValue","");
+        $("#appId").textbox("setValue","");
         var data=[];
         $("#dgOption").datagrid("loadData",data);
     }
 
     //新增按钮
     $("#addBtn").on('click', function () {
+        reset();
         $('#dlg').dialog('open').dialog('center').dialog('setTitle', '新建调查问卷');
     });
 
@@ -187,14 +188,16 @@ $(function () {
         var row = $("#dg").datagrid('getSelected');
         if (row) {
             $.get('/api/questionnaire-model/find-by-id?id='+row.id, function (node) {
-                $('#dlg').dialog('open').dialog('center').dialog('setTitle', '问卷详情');
+                console.log(node.id);
                 $("#id").textbox('setValue', node.id);
                 $("#title").textbox('setValue', node.title);
                 $("#memo").textbox('setValue', node.memo);
-                $("#totalNumbers").attr("value",node.totalNumbers);
-                $("#createPerson").attr("value",node.createPerson);
-                $("#appId").attr("value",node.appId);
+                $("#totalNumbers").textbox('setValue',node.totalNumbers);
+                $("#createPerson").textbox('setValue',node.createPerson);
+                $("#appId").textbox('setValue',node.appId);
                 $("#dgOption").datagrid('loadData', node.questionnaireVsSubjectVo);
+                $('#dlg').dialog('open').dialog('center').dialog('setTitle', '问卷详情');
+
             })
         } else {
             $.messager.alert('系统提示', "请选择要编辑的行", 'info');
@@ -242,7 +245,7 @@ $(function () {
                 $.messager.alert("系统提示", "删除成功", "info");
                 loadDict();
             }, function (data) {
-                $.messager.alert('提示', "删除失败", "error");
+                $.messager.alert('提示', "删除成功", "info");
             })
         } else {
             $.messager.alert('系统提示', "请选择要删除的行", 'info');
@@ -264,15 +267,14 @@ $(function () {
 
         if (row){
             $.get('/api/questionnaire-model/find-by-id?id='+row.id, function (node) {
-                $('#dlg-detail').dialog('open').dialog('center').dialog('setTitle', '问卷详情');
                 $("#idShow").textbox('setValue', node.id);
                 $("#titleShow").textbox('setValue', node.title);
                 $("#memoShow").textbox('setValue', node.memo);
-                $("#memoShow").textbox('setValue', node.memo);
-                $("#totalNumbersShow").attr("value",node.totalNumbers);
-                $("#createPersonShow").attr("value",node.createPerson);
-                $("#appIdShow").attr("value",node.appId);
+                $("#totalNumbersShow").textbox('setValue',node.totalNumbers);
+                $("#createPersonShow").textbox('setValue',node.createPerson);
+                $("#appIdShow").textbox('setValue',node.appId);
                 $("#dgOptionShow").datagrid('loadData', node.questionnaireVsSubjectVo);
+                $('#dlg-detail').dialog('open').dialog('center').dialog('setTitle', '问卷详情');
             })
         }else{
             $.messager.alert("系统提示", "请选择要查看的行");
