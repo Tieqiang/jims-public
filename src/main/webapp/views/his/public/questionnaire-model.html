@@ -42,10 +42,6 @@
             <input type="text" id="createPerson" name="createPerson" class="easyui-textbox">
         </div>
         <div class="fitem">
-            <label>总题数：</label>
-            <input type="text" id="totalNumbers" name="totalNumbers" class="easyui-textbox">
-        </div>
-        <div class="fitem">
             <label>所属微信号：</label>
             <input type="text" id="appId" name="appId" class="easyui-textbox">
         </div>
@@ -58,10 +54,10 @@
 
 </div>
 <div id="dlg-buttons">
-    <a href="javascript:void(0)" id="addOptionBtn" class="easyui-linkbutton c6" iconCls="icon-add"  style="width:60px">追加</a>
-    <a href="javascript:void(0)" id="delOptionBtn" class="easyui-linkbutton c6" iconCls="icon-remove"  style="width:60px">删除</a>
-    <input type="button" id="okBtn" style="background-color: #31b0d5;" class="easyui-linkbutton c6" value="确定">
-    <a href="javascript:void(0)" class="easyui-linkbutton" id="dlgClose" iconCls="icon-cancel" style="width:60px">关闭</a>
+    <a href="javascript:void(0)" id="addOptionBtn" class="easyui-linkbutton " iconCls="icon-add">追加</a>
+    <a href="javascript:void(0)" id="delOptionBtn" class="easyui-linkbutton " iconCls="icon-remove"  >删除</a>
+    <a href="javascript:void(0)" id="okBtn" class="easyui-linkbutton" iconCls="icon-save" >保存</a>
+    <a href="javascript:void(0)" id="dlgClose" class="easyui-linkbutton" iconCls="icon-cancel" >关闭</a>
 </div>
 
 <div id="dlg-detail" class="easyui-dialog" style="width:600px;height:500px;padding:10px 20px"
@@ -69,27 +65,27 @@
     <div class="ftitle">信息</div>
         <div class="fitem">
             <label>编号：</label>
-            <input type="text" id="idShow" name="id" value="" class="easyui-textbox" disabled="true">
+            <input type="text" id="idShow" name="idShow" value="" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <label>问卷名：</label>
-            <input type="text" id="titleShow" name="title" value="" class="easyui-textbox" disabled="true">
+            <input type="text" id="titleShow" name="titleShow" value="" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <label>问卷描述：</label>
-            <input type="text" id="memoShow" name="memo" class="easyui-textbox" disabled="true">
+            <input type="text" id="memoShow" name="memoShow" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <label>创建人：</label>
-            <input type="text" id="createPersonShow" name="createPerson" class="easyui-textbox" disabled="true">
+            <input type="text" id="createPersonShow" name="createPersonShow" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <label>总题数：</label>
-            <input type="text" id="totalNumbersShow" name="totalNumbers" class="easyui-textbox" disabled="true">
+            <input type="text" id="totalNumbersShow" name="totalNumbersShow" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <label>所属微信号：</label>
-            <input type="text" id="appIdShow" name="appId" class="easyui-textbox" disabled="true">
+            <input type="text" id="appIdShow" name="appIdShow" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
             <table id="dgOptionShow" class="easyui-datagrid">
@@ -97,7 +93,7 @@
         </div>
 </div>
 <div id="dlg-detail-buttons">
-    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-detail').dialog('close')" style="width:60px">关闭</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-detail').dialog('close')" >关闭</a>
 </div>
 
 
