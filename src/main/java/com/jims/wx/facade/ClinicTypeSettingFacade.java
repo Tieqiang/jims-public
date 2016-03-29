@@ -4,76 +4,54 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.ClinicTypeSetting;
+import com.jims.wx.vo.BeanChangeVo;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by wangjing on 2016/3/21.
- */
 public class ClinicTypeSettingFacade extends BaseFacade {
-    private EntityManager entityManager;
-
-    @Inject
-    public ClinicTypeSettingFacade(EntityManager entityManager) {
-        this.entityManager = entityManager;
-    }
-
     /**
-     * 保存对象内容
-     * @param saveData
+     * 名称模糊查询
+     * @param name
      * @return
      */
-    public List<ClinicTypeSetting> save(List<ClinicTypeSetting> saveData) {
-        List<ClinicTypeSetting> newUpdateDict = new ArrayList<>();
-        if (saveData.size() > 0) {
-            for (ClinicTypeSetting obj : saveData) {
-                ClinicTypeSetting merge = merge(obj);
-                newUpdateDict.add(merge);
-            }
+    public List<ClinicTypeSetting> findAll(String name) {
+        String hql = "from  ClinicTypeSetting cs where 1=1";
+        if (null != name && !name.trim().equals("")) {
+            hql += " and cs.id like '%" + name.trim() + "%'";
         }
-        return newUpdateDict;
+        return entityManager.createQuery(hql).getResultList();
     }
 
     /**
-     * 修改对象内容
+     * 保存增删改
      *
-     * @param updateData
-     * @return
+     * @param beanChangeVo
      */
     @Transactional
-    public List<ClinicTypeSetting> update(List<ClinicTypeSetting> updateData) {
-
+    public List<ClinicTypeSetting> save(BeanChangeVo<ClinicTypeSetting> beanChangeVo) {
         List<ClinicTypeSetting> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
-            for (ClinicTypeSetting obj : updateData) {
-                ClinicTypeSetting merge = merge(obj);
-                newUpdateDict.add(merge);
-
-            }
+        List<ClinicTypeSetting> inserted = beanChangeVo.getInserted();
+        List<ClinicTypeSetting> updated = beanChangeVo.getUpdated();
+        List<ClinicTypeSetting> deleted = beanChangeVo.getDeleted();
+        for (ClinicTypeSetting dict : inserted) {
+            ClinicTypeSetting merge = merge(dict);
+            newUpdateDict.add(merge);
         }
-        return newUpdateDict;
-    }
 
-    /**
-     * 删除对象
-     *
-     * @param deleteData
-     * @return
-     */
-    @Transactional
-    public List<ClinicTypeSetting> delete(List<ClinicTypeSetting> deleteData) {
-
-        List<ClinicTypeSetting> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
-            List<String> ids = new ArrayList<>();
-            for (ClinicTypeSetting obj : deleteData) {
-                ids.add(obj.getId());
-            }
-            super.removeByStringIds(ClinicTypeSetting.class, ids);
-            newUpdateDict.addAll(deleteData);
+        for (ClinicTypeSetting dict : updated) {
+            ClinicTypeSetting merge = merge(dict);
+            newUpdateDict.add(merge);
         }
+
+        List<String> ids = new ArrayList<>();
+
+        for (ClinicTypeSetting dict : deleted) {
+            ids.add(dict.getId());
+            newUpdateDict.add(dict);
+        }
+        this.removeByStringIds(ClinicTypeSetting.class, ids);
         return newUpdateDict;
     }
 }
