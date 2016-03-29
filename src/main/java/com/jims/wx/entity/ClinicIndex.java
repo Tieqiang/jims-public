@@ -1,19 +1,9 @@
 package com.jims.wx.entity;
 
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+
 
 /**
  * ClinicIndex entity. @author MyEclipse Persistence Tools
@@ -21,30 +11,22 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name = "CLINIC_INDEX", schema = "WX", uniqueConstraints = @UniqueConstraint(columnNames = "DOCTOR_ID"))
 public class ClinicIndex implements java.io.Serializable {
-
 	// Fields
-
 	private String id;
-	private ClinicTypeSetting clinicTypeSetting;
-	private DoctInfo doctInfo;
 	private String clinicLabel;
 	private String clinicDept;
-	//private Set<ClinicSchedule> clinicSchedules = new HashSet<ClinicSchedule>(0);
-	//private Set<ClinicForRegist> clinicForRegists = new HashSet<ClinicForRegist>(
-	//		0);
-
-	// Constructors
+    private String clinicTypeId;
+    private String doctorId;
 
 	/** default constructor */
 	public ClinicIndex() {
 	}
 
-
     /** full constructor */
-    public ClinicIndex(String id, ClinicTypeSetting clinicTypeSetting, DoctInfo doctInfo, String clinicLabel, String clinicDept) {
+    public ClinicIndex(String id, String clinicTypeId, String doctorId, String clinicLabel, String clinicDept) {
         this.id = id;
-        this.clinicTypeSetting = clinicTypeSetting;
-        this.doctInfo = doctInfo;
+        this.clinicTypeId = clinicTypeId;
+        this.doctorId = doctorId;
         this.clinicLabel = clinicLabel;
         this.clinicDept = clinicDept;
     }
@@ -60,26 +42,6 @@ public class ClinicIndex implements java.io.Serializable {
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CLINIC_TYPE_ID")
-	public ClinicTypeSetting getClinicTypeSetting() {
-		return this.clinicTypeSetting;
-	}
-
-	public void setClinicTypeSetting(ClinicTypeSetting clinicTypeSetting) {
-		this.clinicTypeSetting = clinicTypeSetting;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "DOCTOR_ID", unique = true)
-	public DoctInfo getDoctInfo() {
-		return this.doctInfo;
-	}
-
-	public void setDoctInfo(DoctInfo doctInfo) {
-		this.doctInfo = doctInfo;
 	}
 
 	@Column(name = "CLINIC_LABEL", length = 20)
@@ -100,22 +62,22 @@ public class ClinicIndex implements java.io.Serializable {
 		this.clinicDept = clinicDept;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicIndex")
-	//public Set<ClinicSchedule> getClinicSchedules() {
-	//	return this.clinicSchedules;
-	//}
-    //
-	//public void setClinicSchedules(Set<ClinicSchedule> clinicSchedules) {
-	//	this.clinicSchedules = clinicSchedules;
-	//}
-    //
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "clinicIndex")
-	//public Set<ClinicForRegist> getClinicForRegists() {
-	//	return this.clinicForRegists;
-	//}
-    //
-	//public void setClinicForRegists(Set<ClinicForRegist> clinicForRegists) {
-	//	this.clinicForRegists = clinicForRegists;
-	//}
+    @Column(name = "CLINIC_TYPE_ID",length = 20)
+    public String getClinicTypeId() {
+        return clinicTypeId;
+    }
+
+    public void setClinicTypeId(String clinicTypeId) {
+        this.clinicTypeId = clinicTypeId;
+    }
+
+    @Column(name = "DOCTOR_ID", unique = true,length = 64)
+    public String getDoctorId() {
+        return doctorId;
+    }
+
+    public void setDoctorId(String doctorId) {
+        this.doctorId = doctorId;
+    }
 
 }

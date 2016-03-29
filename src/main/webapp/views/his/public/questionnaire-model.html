@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>产品编码描述字典维护</title>
+    <link rel="stylesheet" href="../../../assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="../../../assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="../../../assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="../../../style/common.css">
+</head>
+<body>
+<table id="dg" class="easyui-datagrid">
+</table>
+
+
+<div id="tb" style="padding:2px 5px;">
+    <!--编码级名称：<input type="text" class="easyui-textbox" id="name">-->
+    <!--<a href="#" id="searchBtn" class="easyui-linkbutton" iconCls="icon-search"></a>&nbsp;&nbsp;-->
+    <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加</a>
+    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改</a>
+    <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>
+    <a href="#" id="detailBtn" class="easyui-linkbutton" iconCls="icon-search">详情</a>
+</div>
+<div id="dlg" class="easyui-dialog" style="width:600px;height:500px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons">
+    <div class="ftitle">信息</div>
+    <form id="fm" method="post" novalidate>
+    <div class="fitem">
+        <label>编号：</label>
+        <input type="text" id="id" name="id" value="" class="easyui-textbox" disabled="true">
+    </div>
+        <div class="fitem">
+            <label>问卷名：</label>
+           <input type="text" id="title" name="title" value="" class="easyui-textbox">
+        </div>
+        <div class="fitem">
+            <label>问卷描述：</label>
+            <input type="text" id="memo" name="memo" class="easyui-textbox">
+        </div>
+        <div class="fitem">
+            <label>创建人：</label>
+            <input type="text" id="createPerson" name="createPerson" class="easyui-textbox">
+        </div>
+        <div class="fitem">
+            <label>所属微信号：</label>
+            <input type="text" id="appId" name="appId" class="easyui-textbox">
+        </div>
+        <div class="fitem">
+            <table id="dgOption" class="easyui-datagrid">
+            </table>
+        </div>
+    </form>
+
+
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" id="addOptionBtn" class="easyui-linkbutton " iconCls="icon-add">追加</a>
+    <a href="javascript:void(0)" id="delOptionBtn" class="easyui-linkbutton " iconCls="icon-remove"  >删除</a>
+    <a href="javascript:void(0)" id="okBtn" class="easyui-linkbutton" iconCls="icon-save" >保存</a>
+    <a href="javascript:void(0)" id="dlgClose" class="easyui-linkbutton" iconCls="icon-cancel" >关闭</a>
+</div>
+
+<div id="dlg-detail" class="easyui-dialog" style="width:600px;height:500px;padding:10px 20px"
+     closed="true" buttons="#dlg-detail-buttons">
+    <div class="ftitle">信息</div>
+        <div class="fitem">
+            <label>编号：</label>
+            <input type="text" id="idShow" name="idShow" value="" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>问卷名：</label>
+            <input type="text" id="titleShow" name="titleShow" value="" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>问卷描述：</label>
+            <input type="text" id="memoShow" name="memoShow" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>创建人：</label>
+            <input type="text" id="createPersonShow" name="createPersonShow" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>总题数：</label>
+            <input type="text" id="totalNumbersShow" name="totalNumbersShow" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>所属微信号：</label>
+            <input type="text" id="appIdShow" name="appIdShow" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <table id="dgOptionShow" class="easyui-datagrid">
+            </table>
+        </div>
+</div>
+<div id="dlg-detail-buttons">
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-detail').dialog('close')" >关闭</a>
+</div>
+
+
+
+<script type="text/javascript" src="../../../assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="../../../assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="../../../assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../../javascript/questionnaire-model.js"></script>
+<script type="text/javascript" src="../../../javascript/tool.js"></script>
+</body>
+</html>

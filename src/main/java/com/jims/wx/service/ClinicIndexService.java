@@ -4,12 +4,12 @@ import com.google.inject.Inject;
 import com.jims.wx.entity.ClinicIndex;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.ClinicIndexFacade;
+import com.jims.wx.facade.ClinicTypeSettingFacade;
+import com.jims.wx.facade.DoctInfoFacade;
+import com.jims.wx.vo.BeanChangeVo;
 
-
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +21,39 @@ import java.util.List;
 @Produces("application/json")
 public class ClinicIndexService {
     private ClinicIndexFacade clinicIndexFacade;
+    private DoctInfoFacade doctInfoFacade;
+    private ClinicTypeSettingFacade clinicTypeSettingFacade;
 
     @Inject
     public ClinicIndexService(ClinicIndexFacade clinicIndexFacade) {
         this.clinicIndexFacade = clinicIndexFacade;
     }
 
-
     @GET
     @Path("list-all")
+    @Produces({MediaType.APPLICATION_JSON})
     public List<ClinicIndex> listAll() {
         return clinicIndexFacade.findAll(ClinicIndex.class);
     }
 
+    @GET
+    @Path("findByTypeId")
+    public List<ClinicIndex> findById(@QueryParam("typeId")String typeId){
+        return clinicIndexFacade.findByTypeId(typeId);
+    }
+
+    /**
+     * 保存增删改
+     *
+     * @param beanChangeVo
+     * @return
+     */
     @POST
-    @Path("save")
-    public Response saveRequestMsg(List<ClinicIndex> updateList) {
+    @Path("merge")
+    public Response save(BeanChangeVo<ClinicIndex> beanChangeVo) {
         try {
             List<ClinicIndex> newUpdateDict = new ArrayList<>();
-            if (updateList != null) {
-                newUpdateDict = clinicIndexFacade.save(updateList);
-            }
+            newUpdateDict = clinicIndexFacade.save(beanChangeVo);
             return Response.status(Response.Status.OK).entity(newUpdateDict).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
@@ -49,9 +61,9 @@ public class ClinicIndexService {
             if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
                 errorException.setErrorMessage("输入数据超过长度！");
             } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，提交失败！");
+                errorException.setErrorMessage("医生重复，保存失败！");
             } else {
-                errorException.setErrorMessage("提交失败！");
+                errorException.setErrorMessage("保存失败！");
             }
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
