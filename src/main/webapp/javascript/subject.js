@@ -75,7 +75,6 @@ $(function () {
             title: '题目类型',
             field: 'questionType',
             width: "30%"
-
         }, {
             title: '答案',
             field: 'preAnswer',
@@ -121,7 +120,7 @@ $(function () {
                 $('#dlg').dialog('open').dialog('center').dialog('setTitle', '修改问题');
                 $("#subId").textbox('setValue', node.id);
                 $("#questionContent").textbox('setValue', node.questionContent);
-                $("#questionType").textbox('setValue', node.questionType);
+                $("#questionType").combobox('setValue', node.questionType);
                 $("#preAnswer").textbox('setValue', node.preAnswer);
                 $("#dgOption").datagrid('loadData', node.options);
             })
@@ -138,7 +137,7 @@ $(function () {
         if ($("#fm").form('validate')) {
             var menuDict = {};
             menuDict.questionContent = $("#questionContent").textbox('getValue');
-            menuDict.questionType = $("#questionType").textbox('getValue');
+            menuDict.questionType = $("#questionType").combobox('getValue');
             menuDict.preAnswer = $("#preAnswer").textbox('getValue');
             menuDict.id = $("#subId").val();
 
@@ -180,8 +179,6 @@ $(function () {
 
         beanChangeVo.deleted = deleteDate;
 
-
-
         if (beanChangeVo) {
             $.postJSON("/api/subject/delete", beanChangeVo, function (data, status) {
 
@@ -189,7 +186,7 @@ $(function () {
                 loadDict();
             }, function (data) {
                 $.messager.alert('提示', data.responseJSON.errorMessage, "error");
-            })
+            });
         }
     });
 
@@ -202,10 +199,10 @@ $(function () {
             $.get('/api/subject/find-by-id?id='+row.id, function (node) {
                 $('#dlg-detail').dialog('open').dialog('center').dialog('setTitle', '问题详情');
                 $("#questionContentShow").textbox('setValue', node.questionContent);
-                $("#questionTypeShow").textbox('setValue', node.questionType);
+                $("#questionTypeShow").combobox('setValue', node.questionType);
                 $("#preAnswerShow").textbox('setValue', node.preAnswer);
                 $("#dgOptionShow").datagrid('loadData', node.options);
-            })
+            });
         }else{
             $.messager.alert("系统提示", "请选择要查看的行");
             return;
@@ -231,22 +228,4 @@ $(function () {
         }
     });
 
-
-
-
-
-
-
-
-
-
-
-    var loadDict = function () {
-        $.get("/api/subject/list" , function (data) {
-            $("#dg").datagrid('loadData', data);
-        });
-    }
-
-
-
-})
+});
