@@ -90,7 +90,7 @@ $(function () {
     var loadDict = function () {
         //var name = $("#name").textbox("getValue");
 
-        $.get("/api/clinic-type-setting/list?" , function (data) {
+        $.get("/api/clinic-type-setting/list?hospitalId="+config.hospitalId , function (data) {
             $("#dg").datagrid('loadData', data);
         });
     }
