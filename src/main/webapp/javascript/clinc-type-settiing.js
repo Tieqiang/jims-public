@@ -26,11 +26,13 @@ $(function () {
         }, {
             title: '医院编号',
             field: 'hospitalId',
-            width: "30%"
+            width: "30%",
+            hidden: 'true'
         }, {
             title: '所属公众号',
             field: 'appId',
-            width: "40%"
+            width: "40%",
+            hidden: 'true'
         }]],
         onClickRow: function (index, row) {
             stopEdit();
