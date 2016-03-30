@@ -36,7 +36,7 @@ $(function () {
                     idField: 'id',
                     textField: 'name',
                     loadMsg: '数据正在加载',
-                    url: "/api/doc-info/list-doc",
+                    url: "/api/doct-info/get-list",
                     mode: 'listDoc',
                     method: 'GET',
                     columns: [[
@@ -105,10 +105,6 @@ $(function () {
         });
     };
 
-    $("#searchDoc").on('click',function(){
-        $("#docList").dialog('open').dialog('center').dialog('setTitle', '医生列表');
-    })
-
     $("#addBtn").on('click', function () {
         if(null!=clinicTypeSettingId){
             $("#dg").datagrid('appendRow', {clinicTypeId:clinicTypeSettingId});
@@ -132,25 +128,6 @@ $(function () {
             }
         } else {
             $.messager.alert('系统提示', "请选择要删除的行", 'info');
-        }
-    });
-
-    $("#editBtn").on('click', function () {
-        var row = $("#dg").datagrid("getSelected");
-        var index = $("#dg").datagrid("getRowIndex", row);
-
-        if (index == -1) {
-            $.messager.alert("提示", "请选择要修改的行！", "info");
-            return;
-        }
-
-        if (editIndex == undefined) {
-            $("#dg").datagrid("beginEdit", index);
-            editIndex = index;
-        } else {
-            $("#dg").datagrid("endEdit", editIndex);
-            $("#dg").datagrid("beginEdit", index);
-            editIndex = index;
         }
     });
 
