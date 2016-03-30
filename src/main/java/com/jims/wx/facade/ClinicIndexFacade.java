@@ -20,7 +20,10 @@ public class ClinicIndexFacade extends BaseFacade {
 
     //find by typeId
     public List<ClinicIndex> findByTypeId(String typeId){
-        String sqls = "from ClinicIndex where clinicTypeId=" +"'" +typeId+ "'";
+        String sqls = "from ClinicIndex where 1=1";
+        if(null != typeId && !typeId.trim().equals("")){
+            sqls +=" and clinicTypeId='" +typeId+ "'";
+        }
         return entityManager.createQuery(sqls).getResultList();
     }
     /**
