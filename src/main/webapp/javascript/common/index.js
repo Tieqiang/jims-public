@@ -192,7 +192,7 @@ $(function(){
 
         //var url = "api/menu/list-login-module?moduleId=402886f350a6bd4f0150a6c0c4830001&loginName=000WL2"
 
-        var menuPromise = $.get(url,function(data){
+        var menuPromise = $.get(lisAll,function(data){
             $.each(data,function(index,item){
                 var menu ={} ;
                 menu.attributes={} ;
@@ -237,7 +237,7 @@ $(function(){
         //    fit:true
         //}) ;
         $("#uName").html(config.staffName) ;
-        if(config.moduleName=="消耗品管理系统"){
+        if(config.moduleName=="微信公众平台系统"){
             $("#storageName").html(config.storageName + "-");
         }
         //初始化菜单
