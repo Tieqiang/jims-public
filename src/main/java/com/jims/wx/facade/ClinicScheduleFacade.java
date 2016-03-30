@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.ClinicSchedule;
+import com.jims.wx.vo.BeanChangeVo;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -13,67 +14,45 @@ import java.util.List;
  * Created by wangjing on 2016/3/21.
  */
 public class ClinicScheduleFacade extends BaseFacade {
-    private EntityManager entityManager;
-
     @Inject
-    public ClinicScheduleFacade(EntityManager entityManager) {
-        this.entityManager = entityManager;
+    public ClinicScheduleFacade(EntityManager entityManager){
+        this.entityManager=entityManager;
+    }
+
+    //find by typeId
+    public List<ClinicSchedule> findByTypeId(String id){
+        String sqls = "from ClinicSchedule where clinicIndexId=" +"'" +id+ "'";
+        return entityManager.createQuery(sqls).getResultList();
     }
 
     /**
-     * 保存对象内容
-     * @param saveData
-     * @return
-     */
-    public List<ClinicSchedule> save(List<ClinicSchedule> saveData) {
-        List<ClinicSchedule> newUpdateDict = new ArrayList<>();
-        if (saveData.size() > 0) {
-            for (ClinicSchedule obj : saveData) {
-                ClinicSchedule merge = merge(obj);
-                newUpdateDict.add(merge);
-            }
-        }
-        return newUpdateDict;
-    }
-
-    /**
-     * 修改对象内容
+     * 保存增删改
      *
-     * @param updateData
-     * @return
+     * @param beanChangeVo
      */
     @Transactional
-    public List<ClinicSchedule> update(List<ClinicSchedule> updateData) {
-
+    public List<ClinicSchedule> save(BeanChangeVo<ClinicSchedule> beanChangeVo) {
         List<ClinicSchedule> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
-            for (ClinicSchedule obj : updateData) {
-                ClinicSchedule merge = merge(obj);
-                newUpdateDict.add(merge);
-
-            }
+        List<ClinicSchedule> inserted = beanChangeVo.getInserted();
+        List<ClinicSchedule> updated = beanChangeVo.getUpdated();
+        List<ClinicSchedule> deleted = beanChangeVo.getDeleted();
+        for (ClinicSchedule dict : inserted) {
+            ClinicSchedule merge = merge(dict);
+            newUpdateDict.add(merge);
         }
-        return newUpdateDict;
-    }
 
-    /**
-     * 删除对象
-     *
-     * @param deleteData
-     * @return
-     */
-    @Transactional
-    public List<ClinicSchedule> delete(List<ClinicSchedule> deleteData) {
-
-        List<ClinicSchedule> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
-            List<String> ids = new ArrayList<>();
-            for (ClinicSchedule obj : deleteData) {
-                ids.add(obj.getId());
-            }
-            super.removeByStringIds(ClinicSchedule.class, ids);
-            newUpdateDict.addAll(deleteData);
+        for (ClinicSchedule dict : updated) {
+            ClinicSchedule merge = merge(dict);
+            newUpdateDict.add(merge);
         }
+
+        List<String> ids = new ArrayList<>();
+
+        for (ClinicSchedule dict : deleted) {
+            ids.add(dict.getId());
+            newUpdateDict.add(dict);
+        }
+        this.removeByStringIds(ClinicSchedule.class, ids);
         return newUpdateDict;
     }
 }
