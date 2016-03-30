@@ -4,11 +4,10 @@ import com.google.inject.Inject;
 import com.jims.wx.entity.ClinicSchedule;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.ClinicScheduleFacade;
+import com.jims.wx.vo.BeanChangeVo;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,25 +21,36 @@ public class ClinicScheduleService {
     private ClinicScheduleFacade clinicScheduleFacade;
 
     @Inject
-    public ClinicScheduleService(ClinicScheduleFacade ClinicScheduleFacade) {
+    public ClinicScheduleService(ClinicScheduleFacade clinicScheduleFacade) {
         this.clinicScheduleFacade = clinicScheduleFacade;
+    }
+//根据id查询
+    @GET
+    @Path("find-By-Id")
+    public List<ClinicSchedule> findById(@QueryParam("id")String id){
+        return clinicScheduleFacade.findByTypeId(id);
     }
 
 
+//查询全部
     @GET
-    @Path("list-all")
+    @Path("list")
+    @Produces(MediaType.APPLICATION_JSON)
     public List<ClinicSchedule> listAll() {
         return clinicScheduleFacade.findAll(ClinicSchedule.class);
     }
-
+    /**
+     * 保存增删改
+     *
+     * @param beanChangeVo
+     * @return
+     */
     @POST
-    @Path("save")
-    public Response saveRequestMsg(List<ClinicSchedule> updateList) {
+    @Path("merge")
+    public Response save(BeanChangeVo<ClinicSchedule> beanChangeVo) {
         try {
             List<ClinicSchedule> newUpdateDict = new ArrayList<>();
-            if (updateList != null) {
-                newUpdateDict = clinicScheduleFacade.save(updateList);
-            }
+            newUpdateDict = clinicScheduleFacade.save(beanChangeVo);
             return Response.status(Response.Status.OK).entity(newUpdateDict).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
@@ -48,11 +58,13 @@ public class ClinicScheduleService {
             if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
                 errorException.setErrorMessage("输入数据超过长度！");
             } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，提交失败！");
+                errorException.setErrorMessage("数据已存在，保存失败！");
             } else {
-                errorException.setErrorMessage("提交失败！");
+                errorException.setErrorMessage("保存失败！");
             }
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
+
     }
+
 }
