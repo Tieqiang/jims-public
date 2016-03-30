@@ -25,12 +25,13 @@ public class Config implements Serializable {
     private String reportServerName;
     private String defaultReportPath;
     private String acctDeptId ;//核算单元
+    private String appId;//公众号
 
 
     public Config() {
     }
 
-    public Config(String loginName, String staffName, String hospitalId, String hospitalName, String storageCode, String storageName, String loginId, String moduleId, String moduleName, String exportClass, String reportServerIp, String reportServerPort, String reportServerResourcePath, String defaultSupplier, String reportServerName, String defaultReportPath, String acctDeptId) {
+    public Config(String loginName, String staffName, String hospitalId, String hospitalName, String storageCode, String storageName, String loginId, String moduleId, String moduleName, String exportClass, String reportServerIp, String reportServerPort, String reportServerResourcePath, String defaultSupplier, String reportServerName, String defaultReportPath, String acctDeptId, String appId) {
         this.loginName = loginName;
         this.staffName = staffName;
         this.hospitalId = hospitalId;
@@ -48,6 +49,7 @@ public class Config implements Serializable {
         this.reportServerName = reportServerName;
         this.defaultReportPath = defaultReportPath;
         this.acctDeptId = acctDeptId;
+        this.appId = appId;
     }
 
     public String getDefaultReportPath() {
@@ -188,6 +190,14 @@ public class Config implements Serializable {
 
     public void setAcctDeptId(String acctDeptId) {
         this.acctDeptId = acctDeptId;
+    }
+
+    public String getAppId() {
+        return appId;
+    }
+
+    public void setAppId(String appId) {
+        this.appId = appId;
     }
 }
 
