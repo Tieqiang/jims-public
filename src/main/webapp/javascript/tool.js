@@ -373,8 +373,9 @@ var common = function () {
 
 var config = new common();
 //
-config.authentication = 'YWRtaW46YWRtaW4='
-config.defaultSupplier = "供应室"
+config.authentication = 'YWRtaW46YWRtaW4=';
+config.defaultSupplier = "供应室";
+config.appId = "appId123456";
 config.hospitalId = "4028862d4fcf2590014fcf9aef480016";
 config.hospitalName = "双滦区人民医院";
 config.storage = "五金库";
