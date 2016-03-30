@@ -37,7 +37,7 @@ public class ClinicIndexService {
     }
 
     @GET
-    @Path("findByTypeId")
+    @Path("find-by-type-id")
     public List<ClinicIndex> findById(@QueryParam("typeId")String typeId){
         return clinicIndexFacade.findByTypeId(typeId);
     }
