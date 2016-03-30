@@ -153,7 +153,7 @@ $(function(){
     /**
      * 修改门诊号类收费
      */
-    $("#editBtn").on('click', function () {
+    /*$("#editBtn").on('click', function () {
         var row = $("#sf").datagrid("getSelected");     //指定行
         var index = $("#sf").datagrid("getRowIndex", row);  //指定行索引
 
@@ -170,7 +170,7 @@ $(function(){
             $("#sf").datagrid("beginEdit", index);
             editIndex = index;
         }
-    });
+    });*/
 
     /**
      * 保存改动的内容
