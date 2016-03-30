@@ -1,12 +1,11 @@
 package com.jims.wx.entity;
 
-import java.math.BigDecimal;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
@@ -21,9 +20,9 @@ public class ClinicSchedule implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private ClinicIndex clinicIndex;
+	private String clinicIndexId;
 	private String dayOfWeek;
-	private BigDecimal registrationLimits;
+	private Double registrationLimits;
 
 	// Constructors
 
@@ -32,9 +31,9 @@ public class ClinicSchedule implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ClinicSchedule(ClinicIndex clinicIndex, String dayOfWeek,
-			BigDecimal registrationLimits) {
-		this.clinicIndex = clinicIndex;
+	public ClinicSchedule(String clinicIndexId, String dayOfWeek,
+			Double registrationLimits) {
+		this.clinicIndexId = clinicIndexId;
 		this.dayOfWeek = dayOfWeek;
 		this.registrationLimits = registrationLimits;
 	}
@@ -52,14 +51,13 @@ public class ClinicSchedule implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CLINIC_INDEX_ID")
-	public ClinicIndex getClinicIndex() {
-		return this.clinicIndex;
+	@Column(name = "CLINIC_INDEX_ID")
+	public String  getClinicIndexId() {
+		return this.clinicIndexId;
 	}
 
-	public void setClinicIndex(ClinicIndex clinicIndex) {
-		this.clinicIndex = clinicIndex;
+	public void setClinicIndexId(String clinicIndexId) {
+		this.clinicIndexId = clinicIndexId;
 	}
 
 	@Column(name = "DAY_OF_WEEK", length = 10)
@@ -72,11 +70,11 @@ public class ClinicSchedule implements java.io.Serializable {
 	}
 
 	@Column(name = "REGISTRATION_LIMITS", precision = 22, scale = 0)
-	public BigDecimal getRegistrationLimits() {
+	public Double getRegistrationLimits() {
 		return this.registrationLimits;
 	}
 
-	public void setRegistrationLimits(BigDecimal registrationLimits) {
+	public void setRegistrationLimits(Double registrationLimits) {
 		this.registrationLimits = registrationLimits;
 	}
 
