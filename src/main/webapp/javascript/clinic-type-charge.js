@@ -96,7 +96,15 @@ $(function(){
                 title: '费用',
                 field: 'price',
                 width:'20%',
-                editor:'numberbox'
+                editor: {
+                    type: 'numberbox',
+                    options: {
+                        max: 99999.99,
+                        size: 8,
+                        maxlength: 8,
+                        precision: 2
+                    }
+                }
             },{
                 title: '所属号类',
                 field: 'clinicTypeId',
@@ -125,13 +133,17 @@ $(function(){
      * 增加门诊号类收费
      */
     $("#addBtn").on('click',function(){
-        stopEdit();
-        $('#sf').datagrid('appendRow',{clinicTypeId:clinicTypeSettingId});
-        var rows = $("#sf").datagrid('getRows');
-        var addRowIndex = $("#sf").datagrid('getRowIndex', rows[rows.length - 1]);
-        editIndex = addRowIndex;
-        $("#sf").datagrid('selectRow', editIndex);  //选择新增加的一行
-        $("#sf").datagrid('beginEdit', editIndex);  //开始编辑新增加的行数据
+        if (null != clinicTypeSettingId) {
+            stopEdit();
+            $('#sf').datagrid('appendRow', {clinicTypeId: clinicTypeSettingId});
+            var rows = $("#sf").datagrid('getRows');
+            var addRowIndex = $("#sf").datagrid('getRowIndex', rows[rows.length - 1]);
+            editIndex = addRowIndex;
+            $("#sf").datagrid('selectRow', editIndex);  //选择新增加的一行
+            $("#sf").datagrid('beginEdit', editIndex);  //开始编辑新增加的行数据
+        } else {
+            $.messager.alert("系统警告", "请选择号类", "error");
+        }
     });
 
     /**
@@ -153,7 +165,7 @@ $(function(){
     /**
      * 修改门诊号类收费
      */
-    $("#editBtn").on('click', function () {
+    /*$("#editBtn").on('click', function () {
         var row = $("#sf").datagrid("getSelected");     //指定行
         var index = $("#sf").datagrid("getRowIndex", row);  //指定行索引
 
@@ -170,7 +182,7 @@ $(function(){
             $("#sf").datagrid("beginEdit", index);
             editIndex = index;
         }
-    });
+    });*/
 
     /**
      * 保存改动的内容

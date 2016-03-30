@@ -27,13 +27,14 @@ public class AppUserGroups implements java.io.Serializable {
 
 	private String id;
 	private String name;
-	private BigDecimal count;
+	private Double count;
 	private String groupStatus;
 	private String appId;
 	private Date createTime;
 	private String operator;
 	private Date updateTime;
 	private String updateOperator;
+    private String groupId;
 	//private Set<AppUser> appUsers = new HashSet<AppUser>(0);
 
 	// Constructors
@@ -43,9 +44,9 @@ public class AppUserGroups implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AppUserGroups(String name, BigDecimal count, String groupStatus,
+	public AppUserGroups(String name, Double count, String groupStatus,
 			String appId, Date createTime, String operator, Date updateTime,
-			String updateOperator) {
+			String updateOperator,String groupId) {
 		this.name = name;
 		this.count = count;
 		this.groupStatus = groupStatus;
@@ -54,6 +55,7 @@ public class AppUserGroups implements java.io.Serializable {
 		this.operator = operator;
 		this.updateTime = updateTime;
 		this.updateOperator = updateOperator;
+        this.groupId = groupId;
 		//this.appUsers = appUsers;
 	}
 
@@ -80,11 +82,11 @@ public class AppUserGroups implements java.io.Serializable {
 	}
 
 	@Column(name = "COUNT", precision = 22, scale = 0)
-	public BigDecimal getCount() {
+	public Double getCount() {
 		return this.count;
 	}
 
-	public void setCount(BigDecimal count) {
+	public void setCount(Double count) {
 		this.count = count;
 	}
 
@@ -144,7 +146,16 @@ public class AppUserGroups implements java.io.Serializable {
 		this.updateOperator = updateOperator;
 	}
 
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUserGroups")
+    @Column(name = "GROUP_ID", length = 64)
+    public String getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
+
+//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUserGroups")
 	//public Set<AppUser> getAppUsers() {
 	//	return this.appUsers;
 	//}

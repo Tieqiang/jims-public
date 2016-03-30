@@ -185,16 +185,28 @@ public class LoginService {
     public Config getLoginInfo(){
         Config config = new Config() ;
         HttpSession session = request.getSession();
-        config.setHospitalId((String) session.getAttribute("hospitalId"));
-        config.setHospitalName((String)session.getAttribute("hospitalName"));
-        config.setModuleName((String)session.getAttribute("moduleName"));
-        config.setModuleId((String)session.getAttribute("moduleId"));
-        config.setLoginId((String)session.getAttribute("loginId"));
-        config.setLoginName((String)session.getAttribute("loginName"));
-        config.setStaffName((String) session.getAttribute("staffName"));
-        config.setStorageCode((String) session.getAttribute("storageCode"));
-        config.setStorageName((String) session.getAttribute("storageName"));
-        config.setAcctDeptId((String)session.getAttribute("acctDeptId"));
+        //config.setHospitalId((String) session.getAttribute("hospitalId"));
+        //config.setHospitalName((String)session.getAttribute("hospitalName"));
+        //config.setModuleName((String)session.getAttribute("moduleName"));
+        //config.setModuleId((String)session.getAttribute("moduleId"));
+        //config.setLoginId((String)session.getAttribute("loginId"));
+        //config.setLoginName((String)session.getAttribute("loginName"));
+        //config.setStaffName((String) session.getAttribute("staffName"));
+        //config.setStorageCode((String) session.getAttribute("storageCode"));
+        //config.setStorageName((String) session.getAttribute("storageName"));
+        //config.setAcctDeptId((String)session.getAttribute("acctDeptId"));
+        //config.setDefaultReportPath("http://192.168.6.68:8080/webReport/ReportServer?reportlet=");
+        config.setAppId("appId123456");
+        config.setHospitalId("4028862d4fcf2590014fcf9aef480016");
+        config.setHospitalName("双滦区人民医院");
+        config.setModuleName("微信公众平台系统");
+        config.setModuleId("402886f350a6bd4f0150a6c0c47c0000");
+        config.setLoginId("11");
+        config.setLoginName("登陆者");
+        config.setStaffName("开发者");
+        config.setStorageCode("1503");
+        config.setStorageName("开发库房");
+        config.setAcctDeptId("654321");
         config.setDefaultReportPath("http://192.168.6.68:8080/webReport/ReportServer?reportlet=");
         return config ;
     }

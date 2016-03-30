@@ -62,7 +62,7 @@ public class ClinicIndex implements java.io.Serializable {
 		this.clinicDept = clinicDept;
 	}
 
-    @Column(name = "CLINIC_TYPE_ID",length = 20)
+    @Column(name = "CLINIC_TYPE_ID",length = 64)
     public String getClinicTypeId() {
         return clinicTypeId;
     }

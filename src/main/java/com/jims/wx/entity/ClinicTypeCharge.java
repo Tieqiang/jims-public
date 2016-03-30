@@ -1,14 +1,9 @@
 package com.jims.wx.entity;
 
 import java.math.BigDecimal;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
+
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
@@ -21,12 +16,14 @@ public class ClinicTypeCharge implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private ClinicTypeSetting clinicTypeSetting;
+   /* @JsonBackReference
+	private ClinicTypeSetting clinicTypeSetting;*/
 	private String clinicTypeName;
 	private String clinicTypeCode;
 	private String chargeItem;
 	private String priceItem;
-	private BigDecimal price;
+	private Double price;
+    private String clinicTypeId;
 
 	// Constructors
 
@@ -35,10 +32,8 @@ public class ClinicTypeCharge implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ClinicTypeCharge(ClinicTypeSetting clinicTypeSetting,
-			String clinicTypeName, String clinicTypeCode, String chargeItem,
-			String priceItem, BigDecimal price) {
-		this.clinicTypeSetting = clinicTypeSetting;
+	public ClinicTypeCharge(String clinicTypeName, String clinicTypeCode, String chargeItem,
+			String priceItem, Double price) {
 		this.clinicTypeName = clinicTypeName;
 		this.clinicTypeCode = clinicTypeCode;
 		this.chargeItem = chargeItem;
@@ -59,15 +54,16 @@ public class ClinicTypeCharge implements java.io.Serializable {
 		this.id = id;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "CLINIC_TYPE_ID")
-	public ClinicTypeSetting getClinicTypeSetting() {
+//    @JsonBackReference
+//	@ManyToOne(fetch = FetchType.LAZY)
+//	@JoinColumn(name = "CLINIC_TYPE_ID")
+	/*public ClinicTypeSetting getClinicTypeSetting() {
 		return this.clinicTypeSetting;
 	}
 
 	public void setClinicTypeSetting(ClinicTypeSetting clinicTypeSetting) {
 		this.clinicTypeSetting = clinicTypeSetting;
-	}
+	}*/
 
 	@Column(name = "CLINIC_TYPE_NAME", length = 100)
 	public String getClinicTypeName() {
@@ -106,12 +102,21 @@ public class ClinicTypeCharge implements java.io.Serializable {
 	}
 
 	@Column(name = "PRICE", precision = 22, scale = 0)
-	public BigDecimal getPrice() {
+	public Double getPrice() {
 		return this.price;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 
+//    @Transient
+    @Column(name = "CLINIC_TYPE_ID", length = 64)
+    public String getClinicTypeId() {
+        return clinicTypeId;
+    }
+
+    public void setClinicTypeId(String clinicTypeId) {
+        this.clinicTypeId = clinicTypeId;
+    }
 }

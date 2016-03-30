@@ -29,7 +29,7 @@ public class ClinicTypeChargeFacade extends BaseFacade {
      * @return
      */
     public List<ClinicTypeCharge> findById(String id){
-        String sqls = "from ClinicTypeCharge where clinic_type_id=" + id;
+        String sqls = "from ClinicTypeCharge where clinicTypeId='" + id + "'";
         return entityManager.createQuery(sqls).getResultList();
     }
 

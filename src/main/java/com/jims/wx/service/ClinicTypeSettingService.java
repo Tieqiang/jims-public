@@ -51,6 +51,8 @@ public class ClinicTypeSettingService {
                 errorException.setErrorMessage("输入数据超过长度！");
             } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
                 errorException.setErrorMessage("数据已存在，保存失败！");
+            } else if (errorException.getErrorMessage().toString().indexOf("违反完整约束") != -1) {
+                errorException.setErrorMessage("数据存在关联数据，保存失败！");
             } else {
                 errorException.setErrorMessage("保存失败！");
             }
