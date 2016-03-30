@@ -10,7 +10,6 @@ $(function () {
     $("#dg").datagrid({
         title: '号别',
         fit: true,
-        footer: '#tb',
         singleSelect: true,
         columns: [[{
             title: '编号',
@@ -104,7 +103,6 @@ $(function () {
             $("#left").datagrid('loadData', data);
         });
     };
-
     $("#addBtn").on('click', function () {
         if(null!=clinicTypeSettingId){
             $("#dg").datagrid('appendRow', {clinicTypeId:clinicTypeSettingId});
@@ -169,8 +167,5 @@ $(function () {
             })
         }
     });
-
-
-
 
 })
