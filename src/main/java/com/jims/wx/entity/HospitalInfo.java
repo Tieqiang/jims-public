@@ -8,6 +8,7 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
+ * update string->byte[] for column content
  * HospitalInfo entity. @author MyEclipse Persistence Tools
  */
 @Entity
@@ -20,7 +21,7 @@ public class HospitalInfo implements java.io.Serializable {
 	private String hospitalId;
 	private String appId;
 	private String infoUrl;
-	private String content;
+	private byte[] content;
 
 	// Constructors
 
@@ -30,7 +31,7 @@ public class HospitalInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public HospitalInfo(String hospitalId, String appId, String infoUrl,
-			String content) {
+			byte[] content) {
 		this.hospitalId = hospitalId;
 		this.appId = appId;
 		this.infoUrl = infoUrl;
@@ -78,12 +79,13 @@ public class HospitalInfo implements java.io.Serializable {
 	}
 
 	@Column(name = "CONTENT")
-	public String getContent() {
+	public byte[] getContent() {
 		return this.content;
 	}
 
-	public void setContent(String content) {
+	public void setContent(byte[] content) {
 		this.content = content;
 	}
+
 
 }

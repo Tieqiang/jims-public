@@ -1,8 +1,8 @@
 package com.jims.wx.service;
 
 import com.jims.wx.entity.HospitalInfo;
+import com.jims.wx.vo.HospitalInfoDTO;
 import com.jims.wx.facade.HospitalInfoFacade;
-import com.jims.wx.vo.HospInfoDictVo;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -34,6 +34,17 @@ public class HospitalInfoService {
         return hospitalDicts ;
     }
 
+    /**
+     * created by chenxy
+     * @return
+     */
+    @Path("find-hospitalId")
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<HospitalInfoDTO> findHospitalId(){
+       List<HospitalInfoDTO>  list=hospitalInfoFacade.findHospitalDTO();
+       return list;
+    }
 
 
 

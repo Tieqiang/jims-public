@@ -1,11 +1,12 @@
 package com.jims.wx.entity;
 
+import com.jims.wx.vo.QuestionnaireVsSubjectVo;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -21,7 +22,7 @@ public class QuestionnaireModel implements java.io.Serializable {
 	private String title;
 	private String memo;
 	private String createPerson;
-	private BigDecimal totalNumbers;
+	private Double totalNumbers;
 	private String appId;
 
     @JsonManagedReference
@@ -29,6 +30,8 @@ public class QuestionnaireModel implements java.io.Serializable {
 			0);
     @Transient
     private String subIds;
+    @Transient
+    private List<QuestionnaireVsSubjectVo> questionnaireVsSubjectVo;
 
 	// Constructors
 
@@ -38,7 +41,7 @@ public class QuestionnaireModel implements java.io.Serializable {
 
 	/** full constructor */
 	public QuestionnaireModel(String title, String memo, String createPerson,
-			BigDecimal totalNumbers, String appId,
+			Double totalNumbers, String appId,
 			Set<QuestionnaireVsSubject> questionnaireVsSubjects) {
 		this.title = title;
 		this.memo = memo;
@@ -89,11 +92,11 @@ public class QuestionnaireModel implements java.io.Serializable {
 	}
 
 	@Column(name = "TOTAL_NUMBERS", precision = 22, scale = 0)
-	public BigDecimal getTotalNumbers() {
+	public Double getTotalNumbers() {
 		return this.totalNumbers;
 	}
 
-	public void setTotalNumbers(BigDecimal totalNumbers) {
+	public void setTotalNumbers(Double totalNumbers) {
 		this.totalNumbers = totalNumbers;
 	}
 
@@ -124,5 +127,14 @@ public class QuestionnaireModel implements java.io.Serializable {
 
     public void setSubIds(String subIds) {
         this.subIds = subIds;
+    }
+
+    @Transient
+    public List<QuestionnaireVsSubjectVo> getQuestionnaireVsSubjectVo() {
+        return questionnaireVsSubjectVo;
+    }
+
+    public void setQuestionnaireVsSubjectVo(List<QuestionnaireVsSubjectVo> questionnaireVsSubjectVo) {
+        this.questionnaireVsSubjectVo = questionnaireVsSubjectVo;
     }
 }

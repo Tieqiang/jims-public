@@ -3,6 +3,7 @@ package com.jims.wx.facade;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.HospitalInfo;
+import com.jims.wx.vo.HospitalInfoDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +34,8 @@ public class HospitalInfoFacade extends BaseFacade {
      */
     @Transactional
     public HospitalInfo addHospitalInfo(HospitalInfo hospitalInfo){
-       return  super.merge(hospitalInfo) ;
+
+        return  super.merge(hospitalInfo) ;
     }
     @Transactional
     public HospitalInfo updateHospitalInfo(HospitalInfo hospitalInfo){
@@ -51,5 +53,26 @@ public class HospitalInfoFacade extends BaseFacade {
         List<String>  ids = new ArrayList<>() ;
         ids.add(id) ;
         super.removeByStringIds(HospitalInfo.class,ids);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<HospitalInfoDTO> findHospitalDTO() {
+            List<HospitalInfoDTO> listDTO=new ArrayList<HospitalInfoDTO>();
+            List<HospitalInfo> list=findAll(HospitalInfo.class);
+            if (list!=null&&list.size()>0){
+                 for(int i=0;i<list.size();i++){
+                     HospitalInfoDTO hospitalInfoDTO=new HospitalInfoDTO();
+                     hospitalInfoDTO.setId(list.get(i).getHospitalId());
+                     hospitalInfoDTO.setText(list.get(i).getHospitalId());
+                     listDTO.add(hospitalInfoDTO);
+                 }
+                return listDTO;
+            }else{
+                return null;
+            }
+
     }
 }
