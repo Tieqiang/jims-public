@@ -26,13 +26,11 @@ $(function () {
         }, {
             title: '医院编号',
             field: 'hospitalId',
-            width: "30%",
-            editor: 'numberbox'
+            width: "30%"
         }, {
             title: '所属公众号',
             field: 'appId',
-            width: "40%",
-            editor: 'text'
+            width: "40%"
         }]],
         onClickRow: function (index, row) {
             stopEdit();
@@ -47,7 +45,7 @@ $(function () {
 
     $("#addBtn").on('click', function () {
         stopEdit();
-        $("#dg").datagrid('appendRow', {});
+        $("#dg").datagrid('appendRow', {"hospitalId":config.hospitalId,"appId":config.appId});
         var rows = $("#dg").datagrid('getRows');
         var addRowIndex = $("#dg").datagrid('getRowIndex', rows[rows.length - 1]);
         editIndex = addRowIndex;
@@ -64,7 +62,7 @@ $(function () {
                 editIndex = undefined;
             }
         } else {
-            $.messager.alert('系统提示', "请选择要删除的行", 'info');
+            $.messager.alert('系统警告', "请选择要删除的行", 'error');
         }
     });
 
@@ -73,7 +71,7 @@ $(function () {
         var index = $("#dg").datagrid("getRowIndex", row);
 
         if (index == -1) {
-            $.messager.alert("提示", "请选择要修改的行！", "info");
+            $.messager.alert("系统警告", "请选择要修改的行！", "error");
             return;
         }
 
@@ -121,10 +119,10 @@ $(function () {
         if (beanChangeVo) {
             $.postJSON("/api/clinic-type-setting/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
-                loadDict();
             }, function (data) {
-                $.messager.alert('提示', data.responseJSON.errorMessage, "error");
+                $.messager.alert('系统警告', data.responseJSON.errorMessage, "error");
             })
+            loadDict();
         }
     });
 })
