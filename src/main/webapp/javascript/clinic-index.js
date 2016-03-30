@@ -81,7 +81,7 @@ $(function () {
         ]],
         onClickRow: function (rowIndex, rowData) {
             clinicTypeSettingId = rowData.id;
-            $.get("/api/clinic-index/findByTypeId", {typeId: rowData.id}, function (data) {
+            $.get("/api/clinic-index/find-by-type-id", {typeId: rowData.id}, function (data) {
                 $("#dg").datagrid('loadData', data);
             });
         }
@@ -126,11 +126,12 @@ $(function () {
     });
 
     var loadDict = function () {
-         $.get("/api/clinic-index/list-all" , function (data) {
+         $.get("/api/clinic-index/find-by-type-id?typeId="+ clinicTypeSettingId , function (data) {
+             console.log(data)
              $("#dg").datagrid('loadData', data);
         });
     }
-    loadDict();
+
 
     /**
      * 保存修改的内容
@@ -155,7 +156,10 @@ $(function () {
                 loadDict();
             }, function (data) {
                 $.messager.alert('提示', data.responseJSON.errorMessage, "error");
+                loadDict();
             })
+
         }
+
     });
 })
