@@ -64,8 +64,8 @@ $(function () {
     $("#typeList").datagrid({
         title: '门诊号类',
         width:'250px',
-        url: "/api/clinic-type-setting/list",
-        mode: 'typeListAll',
+        url: "/api/clinic-type-setting/list?hospitalId="+config.hospitalId,
+        mode: 'remote',
         method: 'GET',
         singleSelect: true,
         columns: [[
