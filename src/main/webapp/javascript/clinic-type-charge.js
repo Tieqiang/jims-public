@@ -21,7 +21,7 @@ $(function(){
      * 加载数据表格。查询所有号类记录
      */
     var loadClinicType = function (data) {
-        $.get("/api/clinic-type-charge/findAllClinicType" , function (data) {
+        $.get("/api/clinic-type-setting/list?hospitalId=" + config.hospitalId , function (data) {
             $("#dg").datagrid('loadData', data);
         });
     };
@@ -54,7 +54,7 @@ $(function(){
             //用户点击一行时触发事件加载此号类下的所有收费列表
             onClickRow: function (rowIndex, rowData) {
                 clinicTypeSettingId = rowData.id;   //号类ID赋值
-                $.get("/api/clinic-type-charge/findById", {id: rowData.id}, function (data) {
+                $.get("/api/clinic-type-charge/find-by-id", {id: rowData.id}, function (data) {
                     $("#sf").datagrid('loadData', data);
                 });
             }
