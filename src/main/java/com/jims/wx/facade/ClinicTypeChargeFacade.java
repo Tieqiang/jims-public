@@ -29,7 +29,10 @@ public class ClinicTypeChargeFacade extends BaseFacade {
      * @return
      */
     public List<ClinicTypeCharge> findById(String id){
-        String sqls = "from ClinicTypeCharge where clinicTypeId='" + id + "'";
+        String sqls = "from ClinicTypeCharge c where 1=1";
+        if(null != id && !id.trim().equals("")){
+            sqls +=" and c.clinicTypeId='" + id.trim() + "'";
+        }
         return entityManager.createQuery(sqls).getResultList();
     }
 
@@ -64,60 +67,4 @@ public class ClinicTypeChargeFacade extends BaseFacade {
         return lists;
     }
 
-    /**
-     * 保存对象内容
-     * @param saveData
-     * @return
-     */
-    public List<ClinicTypeCharge> save(List<ClinicTypeCharge> saveData) {
-        List<ClinicTypeCharge> newUpdateDict = new ArrayList<>();
-        if (saveData.size() > 0) {
-            for (ClinicTypeCharge obj : saveData) {
-                ClinicTypeCharge merge = merge(obj);
-                newUpdateDict.add(merge);
-            }
-        }
-        return newUpdateDict;
-    }
-
-    /**
-     * 修改对象内容
-     *
-     * @param updateData
-     * @return
-     */
-    @Transactional
-    public List<ClinicTypeCharge> update(List<ClinicTypeCharge> updateData) {
-
-        List<ClinicTypeCharge> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
-            for (ClinicTypeCharge obj : updateData) {
-                ClinicTypeCharge merge = merge(obj);
-                newUpdateDict.add(merge);
-
-            }
-        }
-        return newUpdateDict;
-    }
-
-    /**
-     * 删除对象
-     *
-     * @param deleteData
-     * @return
-     */
-    @Transactional
-    public List<ClinicTypeCharge> delete(List<ClinicTypeCharge> deleteData) {
-
-        List<ClinicTypeCharge> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
-            List<String> ids = new ArrayList<>();
-            for (ClinicTypeCharge obj : deleteData) {
-                ids.add(obj.getId());
-            }
-            super.removeByStringIds(ClinicTypeCharge.class, ids);
-            newUpdateDict.addAll(deleteData);
-        }
-        return newUpdateDict;
-    }
 }
