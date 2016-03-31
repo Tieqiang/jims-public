@@ -3,11 +3,15 @@ package com.jims.wx.facade;
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
+import com.jims.wx.entity.ClinicIndex;
 import com.jims.wx.entity.ClinicSchedule;
+import com.jims.wx.entity.ClinicTypeSetting;
 import com.jims.wx.vo.BeanChangeVo;
+import com.jims.wx.vo.ClinicTypeIndexVo;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -54,5 +58,52 @@ public class ClinicScheduleFacade extends BaseFacade {
         }
         this.removeByStringIds(ClinicSchedule.class, ids);
         return newUpdateDict;
+    }
+
+
+    public List<ClinicTypeIndexVo> listTree(String hospitalId){
+        List<ClinicTypeIndexVo> result = new ArrayList<ClinicTypeIndexVo>();
+
+        String hql = "from ClinicTypeSetting as type where 1=1";
+        if(null != hospitalId && !hospitalId.trim().equals("")){
+             hql +=" and type.hospitalId='" + hospitalId + "'";
+        }
+        List<ClinicTypeSetting> settings = entityManager.createQuery(hql).getResultList();
+        if(null != settings && settings.size() > 0){
+            Iterator settingIte = settings.iterator();
+
+            while(settingIte.hasNext()){
+                ClinicTypeSetting type = (ClinicTypeSetting)settingIte.next();
+
+                ClinicTypeIndexVo vo = new ClinicTypeIndexVo();
+                vo.setId(type.getId());
+                vo.setAppId(type.getAppId());
+                vo.setClinicName(type.getClinicType());
+                vo.setHospitalId(type.getHospitalId());
+                vo.setParentFlag("Y");
+
+                hql = "from ClinicIndex as index where 1=1";
+                if(null != type && !type.getId().trim().equals("")){
+                    hql +=" and index.clinicTypeId='" + type.getId() + "'";
+                }
+                List<ClinicIndex> indexes = entityManager.createQuery(hql).getResultList();
+                if(null != indexes && indexes.size()>0){
+                    List<ClinicTypeIndexVo> indexVos = new ArrayList<ClinicTypeIndexVo>();
+                    for(ClinicIndex index:indexes){
+                        ClinicTypeIndexVo indexVo = new ClinicTypeIndexVo();
+                        indexVo.setId(index.getId());
+                        indexVo.setClinicName(index.getClinicLabel());
+                        indexVo.setParentFlag("N");
+                        indexVo.setClinicDept(index.getClinicDept());
+
+                        indexVos.add(indexVo);
+                    }
+
+                    vo.setClinicIndex(indexVos);
+                }
+                result.add(vo);
+            }
+        }
+        return result;
     }
 }

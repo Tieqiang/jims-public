@@ -7,6 +7,7 @@ import com.jims.wx.facade.ClinicTypeSettingFacade;
 import com.jims.wx.vo.BeanChangeVo;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +24,20 @@ public class ClinicTypeSettingService {
     public ClinicTypeSettingService( ClinicTypeSettingFacade clinicTypeSettingFacade) {
         this.clinicTypeSettingFacade =clinicTypeSettingFacade;
     }
+    //根据id查询
+    @GET
+    @Path("find-By-Id")
+    public List<ClinicTypeSetting> findById(@QueryParam("id")String id){
+        return clinicTypeSettingFacade.findById(id);
+    }
 
 
+    //查询全部
     @GET
     @Path("list")
-    public List<ClinicTypeSetting> findAll(@QueryParam("name") String name, @QueryParam("hospitalId") String hospitalId){
-        return clinicTypeSettingFacade.findAll(name, hospitalId) ;
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ClinicTypeSetting> listAll() {
+        return clinicTypeSettingFacade.findAll(ClinicTypeSetting.class);
     }
     /**
      * 保存增删改
