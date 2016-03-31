@@ -18,6 +18,35 @@ $(function () {
         }
     }
 
+    //保暂存增删改数据
+    var addData = function(){
+        if (editIndex || editIndex == 0) {
+            $("#dg").datagrid("endEdit", editIndex);
+        }
+        //保存刷新之前的右侧datagrid里面的增删改数据倒数组里面
+        if ($("#dg").datagrid("getChanges").length > 0) {
+
+            var insertData = $("#dg").datagrid("getChanges", "inserted");
+            var updateData = $("#dg").datagrid("getChanges", "updated");
+            var deleteData = $("#dg").datagrid("getChanges", "deleted");
+
+            if (insertData && insertData.length > 0) {
+                for (var i = 0; i < insertData.length; i++) {
+                    inserted.push(insertData[i]);
+                }
+            }
+            if (updateData && updateData.length > 0) {
+                for (var i = 0; i < updateData.length; i++) {
+                    updated.push(updateData[i]);
+                }
+            }
+            if (deleteData && deleteData.length > 0) {
+                for (var i = 0; i < deleteData.length; i++) {
+                    deleted.push(deleteData[i]);
+                }
+            }
+        }
+    }
 
     $("#dg").datagrid({
         title: '出诊安排维护',
@@ -41,7 +70,7 @@ $(function () {
             title: '剩余号数',
             field: 'registrationLimits',
             width: "40%",
-            editor: 'text'
+            editor: 'numberbox'
         }]],
         onClickRow: function (index, row) {
             stopEdit();
@@ -79,33 +108,8 @@ $(function () {
             }else{
                 clinicIndexId = null;   //号类ID赋值
             }
-            if (editIndex || editIndex == 0) {
-                $("#dg").datagrid("endEdit", editIndex);
-            }
-            //保存刷新之前的右侧datagrid里面的增删改数据倒数组里面
-            if($("#dg").datagrid("getChanges").length>0){
 
-                var insertData = $("#dg").datagrid("getChanges", "inserted");
-                var updateData = $("#dg").datagrid("getChanges", "updated");
-                var deleteData = $("#dg").datagrid("getChanges", "deleted");
-
-                if(insertData && insertData.length >0){
-                    for(var i =0;i<insertData.length;i++){
-                        inserted.push(insertData[i]);
-                    }
-                }
-                if(updateData && updateData.length >0){
-                    for(var i =0;i<updateData.length;i++){
-                        updated.push(updateData[i]);
-                    }
-                }
-                if(deleteData && deleteData.length >0){
-                    for(var i =0;i<deleteData.length;i++){
-                        deleted.push(deleteData[i]);
-                    }
-                }
-            }
-
+            addData();
 
             $.get("/api/clinic-schedule/find-by-id", {id: row.id}, function (data) {
                 $("#dg").datagrid('loadData', data);
@@ -133,10 +137,7 @@ $(function () {
                 obj.children = item.clinicIndex;
 
                 depts.push(obj);
-
-
             });
-
         });
 
         loadPromise.done(function () {
@@ -202,29 +203,7 @@ $(function () {
     });
 
     $("#saveBtn").on('click', function () {
-        if (editIndex || editIndex == 0) {
-            $("#dg").datagrid("endEdit", editIndex);
-        }
-
-        var insertData = $("#dg").datagrid("getChanges", "inserted");
-        var updateData = $("#dg").datagrid("getChanges", "updated");
-        var deleteData = $("#dg").datagrid("getChanges", "deleted");
-
-        if(insertData && insertData.length >0){
-            for(var i =0;i<insertData.length;i++){
-                inserted.push(insertData[i]);
-            }
-        }
-        if(updateData && updateData.length >0){
-            for(var i =0;i<updateData.length;i++){
-                updated.push(updateData[i]);
-            }
-        }
-        if(deleteData && deleteData.length >0){
-            for(var i =0;i<deleteData.length;i++){
-                deleted.push(deleteData[i]);
-            }
-        }
+        addData();
         //提交右侧刷新过的多个datagrid的增删改数据
         var beanChangeVo = {};
 
