@@ -1,7 +1,7 @@
 package com.jims.wx.service;
 
 import com.jims.wx.entity.HospitalInfo;
-import com.jims.wx.vo.HospitalInfoDTO;
+import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.HospitalInfoFacade;
 
 import javax.inject.Inject;
@@ -23,61 +23,39 @@ public class HospitalInfoService {
         this.hospitalInfoFacade = hospitalInfoFacade;
     }
 
-    @Path("list")
+    @Path("list-all")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<HospitalInfo> findAllHospital(){
-        List<HospitalInfo> hospitalDicts = hospitalInfoFacade.findAll(HospitalInfo.class) ;
-        for (HospitalInfo dict :hospitalDicts){
-            System.out.println(dict.getAppId());
-        }
-        return hospitalDicts ;
+        return hospitalInfoFacade.findAll(HospitalInfo.class) ;
     }
 
     /**
-     * created by chenxy
+     * 保存修改
+     *
+     * @param hospitalInfo
      * @return
      */
-    @Path("find-hospitalId")
     @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<HospitalInfoDTO> findHospitalId(){
-       List<HospitalInfoDTO>  list=hospitalInfoFacade.findHospitalDTO();
-       return list;
-    }
-
-
-
-    @Path("add")
-    @POST
-    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public Response addHospitalInfo(HospitalInfo dict){
-
-        HospitalInfo merge = hospitalInfoFacade.addHospitalInfo(dict);
-        System.out.println(merge.getAppId());
-
-        return Response.status(Response.Status.OK).entity(dict).build() ;
-    }
-   
-
-    @Path("update")
-    @PUT
-    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public Response updateHospitalInfo(HospitalInfo dict){
-
-        HospitalInfo merge = hospitalInfoFacade.updateHospitalInfo(dict);
-        System.out.println(merge.getAppId());
-
-        return Response.status(Response.Status.OK).entity("success").build() ;
-    }
-
-    @Path("delete/{id}")
-    @DELETE
-    @Consumes({MediaType.APPLICATION_JSON,MediaType.APPLICATION_XML})
-    public Response deleteHospitalInfo(@PathParam("id")String id){
-
-        hospitalInfoFacade.deleteHospitalInfo(id);
-
-        return Response.status(Response.Status.OK).build() ;
+    @Path("merge")
+    public Response save(@QueryParam("tranContent") String tranContent, HospitalInfo hospitalInfo ) {
+        try {
+            if (null != hospitalInfo) {
+                hospitalInfo.setContent(tranContent.getBytes("UTF-8"));
+                hospitalInfo = hospitalInfoFacade.save(hospitalInfo);
+            }
+            return Response.status(Response.Status.OK).entity(hospitalInfo).build();
+        } catch (Exception e) {
+            ErrorException errorException = new ErrorException();
+            errorException.setMessage(e);
+            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+                errorException.setErrorMessage("输入数据超过长度！");
+            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
+                errorException.setErrorMessage("数据重复，保存失败！");
+            } else {
+                errorException.setErrorMessage("保存失败！");
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+        }
     }
 }
