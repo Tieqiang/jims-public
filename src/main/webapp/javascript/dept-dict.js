@@ -62,7 +62,7 @@ $(function () {
         }, {
             title: '门诊住院',
             field: 'deptOutpInp',
-            width: "5%",
+            width: "10%",
             formatter: function(value,row,index){
                 if (row.deptOutpInp == 1){
                     return "门诊";
@@ -77,7 +77,7 @@ $(function () {
         }, {
             title: '分科属性',
             field: 'deptDevideAttr',
-            width: "10%"
+            hidden: true
         }, {
             title: '科室位置',
             field: 'deptLocation',
@@ -93,7 +93,7 @@ $(function () {
         }, {
             title: '是否停止',
             field: 'deptStopFlag',
-            width: "5%",
+            width: "10%",
             formatter: function(value,row,index){
                 if (row.deptStopFlag == 1){
                     return "否";
