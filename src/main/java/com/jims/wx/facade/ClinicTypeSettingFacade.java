@@ -11,16 +11,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ClinicTypeSettingFacade extends BaseFacade {
-    /**
-     * 名称模糊查询
-     * @param name
-     * @return
-     */
-    public List<ClinicTypeSetting> findAll(String name) {
-        String hql = "from  ClinicTypeSetting cs where 1=1";
-        if (null != name && !name.trim().equals("")) {
-            hql += " and cs.id like '%" + name.trim() + "%'";
-        }
+
+    @Inject
+    public ClinicTypeSettingFacade(EntityManager entityManager){
+        this.entityManager=entityManager;
+    }
+
+    //find by typeId
+    public List<ClinicTypeSetting> findById(String id){
+        String hql = "from ClinicTypeSetting where id='" +id+ "'";
         return entityManager.createQuery(hql).getResultList();
     }
 
