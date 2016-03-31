@@ -121,10 +121,12 @@ $(function () {
         if (beanChangeVo) {
             $.postJSON("/api/clinic-type-setting/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
+                loadDict();
             }, function (data) {
                 $.messager.alert('系统警告', data.responseJSON.errorMessage, "error");
+                loadDict();
             })
-            loadDict();
+
         }
     });
 })
