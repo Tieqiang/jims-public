@@ -5,6 +5,7 @@ import com.jims.wx.entity.ClinicSchedule;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.ClinicScheduleFacade;
 import com.jims.wx.vo.BeanChangeVo;
+import com.jims.wx.vo.ClinicTypeIndexVo;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -26,7 +27,7 @@ public class ClinicScheduleService {
     }
 //根据id查询
     @GET
-    @Path("find-By-Id")
+    @Path("find-by-id")
     public List<ClinicSchedule> findById(@QueryParam("id")String id){
         return clinicScheduleFacade.findByTypeId(id);
     }
@@ -65,6 +66,12 @@ public class ClinicScheduleService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
 
+    }
+
+    @GET
+    @Path("list-tree")
+    public List<ClinicTypeIndexVo> listTree(@QueryParam("hospitalId")String hospitalId){
+        return clinicScheduleFacade.listTree(hospitalId);
     }
 
 }
