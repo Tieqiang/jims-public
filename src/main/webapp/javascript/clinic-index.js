@@ -47,7 +47,6 @@ $(function () {
                     rowNumber: true,
                     autoRowHeight: false
                 }
-
             }
         }, {
             title: '所属号类',
@@ -63,8 +62,10 @@ $(function () {
 
     //门诊号类数据表格
     $("#typeList").datagrid({
-        url: "/api/clinic-type-setting/list",
-        mode: 'typeListAll',
+        title: '门诊号类',
+        width:'250px',
+        url: "/api/clinic-type-setting/list?hospitalId="+config.hospitalId,
+        mode: 'remote',
         method: 'GET',
         singleSelect: true,
         columns: [[
@@ -76,11 +77,11 @@ $(function () {
                 title: '号类名称',
                 field: 'clinicType',
                 width:'100%'
-            }]],
-
+            }
+        ]],
         onClickRow: function (rowIndex, rowData) {
             clinicTypeSettingId = rowData.id;
-            $.get("/api/clinic-index/findByTypeId", {typeId: rowData.id}, function (data) {
+            $.get("/api/clinic-index/find-by-type-id", {typeId: rowData.id}, function (data) {
                 $("#dg").datagrid('loadData', data);
             });
         }
@@ -93,18 +94,13 @@ $(function () {
 
     $('#cc').layout('panel', 'north').panel('resize', {height: 'auto'});
     $('#cc').layout('panel', 'south').panel('resize', {height: 'auto'});
-
     $("#cc").layout({
         fit: true
     });
 
-    var loadGroup = function () {
-        $.get("/api/app-user-group/list-all", function (data) {
-            $("#left").datagrid('loadData', data);
-        });
-    };
     $("#addBtn").on('click', function () {
         if(null!=clinicTypeSettingId){
+            stopEdit();
             $("#dg").datagrid('appendRow', {clinicTypeId:clinicTypeSettingId});
             var rows = $("#dg").datagrid('getRows');
             var addRowIndex = $("#dg").datagrid('getRowIndex', rows[rows.length - 1]);
@@ -130,14 +126,11 @@ $(function () {
     });
 
     var loadDict = function () {
-        //var name = $("#name").textbox("getValue");
-
-        $.get("/api/clinic-index/list-all" , function (data) {
-            $("#dg").datagrid('loadData', data);
+         $.get("/api/clinic-index/find-by-type-id?typeId="+ clinicTypeSettingId , function (data) {
+             console.log(data)
+             $("#dg").datagrid('loadData', data);
         });
     }
-
-    loadDict();
 
 
     /**
@@ -157,15 +150,16 @@ $(function () {
         beanChangeVo.deleted = deleteDate;
         beanChangeVo.updated = updateDate;
 
-
         if (beanChangeVo) {
             $.postJSON("/api/clinic-index/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
                 loadDict();
             }, function (data) {
                 $.messager.alert('提示', data.responseJSON.errorMessage, "error");
+                loadDict();
             })
-        }
-    });
 
+        }
+
+    });
 })

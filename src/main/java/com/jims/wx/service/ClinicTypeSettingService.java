@@ -27,9 +27,8 @@ public class ClinicTypeSettingService {
 
     @GET
     @Path("list")
-    public List<ClinicTypeSetting> findAll(@QueryParam("name") String name){
-        System.out.print(name);
-        return clinicTypeSettingFacade.findAll(name) ;
+    public List<ClinicTypeSetting> findAll(@QueryParam("name") String name, @QueryParam("hospitalId") String hospitalId){
+        return clinicTypeSettingFacade.findAll(name, hospitalId) ;
     }
     /**
      * 保存增删改

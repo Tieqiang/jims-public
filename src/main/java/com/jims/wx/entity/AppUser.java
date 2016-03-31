@@ -28,11 +28,11 @@ public class AppUser implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private AppUserGroups appUserGroups;
-	private BigDecimal subscribe;
+	private String groupId;
+	private Integer subscribe;
 	private String openId;
 	private String nickName;
-	private BigDecimal sex;
+	private Integer sex;
 	private String city;
 	private String country;
 	private String province;
@@ -49,58 +49,56 @@ public class AppUser implements java.io.Serializable {
 	public AppUser() {
 	}
 
-	/** full constructor */
-	public AppUser(AppUserGroups appUserGroups, BigDecimal subscribe,
-			String openId, String nickName, BigDecimal sex, String city,
-			String country, String province, String language,
-			String headImgUrl, String subscrbeTime, String remark,
-			String appId, Set<PatVsUser> patVsUsers) {
-		this.appUserGroups = appUserGroups;
-		this.subscribe = subscribe;
-		this.openId = openId;
-		this.nickName = nickName;
-		this.sex = sex;
-		this.city = city;
-		this.country = country;
-		this.province = province;
-		this.language = language;
-		this.headImgUrl = headImgUrl;
-		this.subscrbeTime = subscrbeTime;
-		this.remark = remark;
-		this.appId = appId;
-		this.patVsUsers = patVsUsers;
-	}
+    /**
+     * full constructor
+     */
+    public AppUser(String id, String groupId, Integer subscribe, String openId, String nickName, Integer sex, String city, String country, String province, String language, String headImgUrl, String subscrbeTime, String remark, String appId, Set<PatVsUser> patVsUsers) {
+        this.id = id;
+        this.groupId = groupId;
+        this.subscribe = subscribe;
+        this.openId = openId;
+        this.nickName = nickName;
+        this.sex = sex;
+        this.city = city;
+        this.country = country;
+        this.province = province;
+        this.language = language;
+        this.headImgUrl = headImgUrl;
+        this.subscrbeTime = subscrbeTime;
+        this.remark = remark;
+        this.appId = appId;
+        this.patVsUsers = patVsUsers;
+    }
+
 
 	// Property accessors
-	@GenericGenerator(name = "generator", strategy = "uuid.hex")
-	@Id
-	@GeneratedValue(generator = "generator")
-	@Column(name = "ID", unique = true, nullable = false, length = 64)
-	public String getId() {
-		return this.id;
-	}
+    @GenericGenerator(name = "generator", strategy = "uuid.hex")
+    @Id
+    @GeneratedValue(generator = "generator")
+    @Column(name = "ID", unique = true, nullable = false, length = 64)
+    public String getId() {
+        return this.id;
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-    @JsonIgnore
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "GROUP_ID")
-	public AppUserGroups getAppUserGroups() {
-		return this.appUserGroups;
-	}
+    @Column(name = "GROUP_ID", length = 64)
+    public String getGroupId() {
+        return groupId;
+    }
 
-	public void setAppUserGroups(AppUserGroups appUserGroups) {
-		this.appUserGroups = appUserGroups;
-	}
+    public void setGroupId(String groupId) {
+        this.groupId = groupId;
+    }
 
-	@Column(name = "SUBSCRIBE", precision = 22, scale = 0)
-	public BigDecimal getSubscribe() {
+    @Column(name = "SUBSCRIBE", precision = 22, scale = 0)
+	public Integer getSubscribe() {
 		return this.subscribe;
 	}
 
-	public void setSubscribe(BigDecimal subscribe) {
+	public void setSubscribe(Integer subscribe) {
 		this.subscribe = subscribe;
 	}
 
@@ -123,11 +121,11 @@ public class AppUser implements java.io.Serializable {
 	}
 
 	@Column(name = "SEX", precision = 22, scale = 0)
-	public BigDecimal getSex() {
+	public Integer getSex() {
 		return this.sex;
 	}
 
-	public void setSex(BigDecimal sex) {
+	public void setSex(Integer sex) {
 		this.sex = sex;
 	}
 

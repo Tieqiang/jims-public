@@ -26,22 +26,12 @@ public class ClinicTypeChargeService {
     }
 
     /**
-     * 查询所有号类
-     * @return
-     */
-    @GET
-    @Path("findAllClinicType")
-    public List<ClinicTypeSetting> findAllClinicType(){
-        return clinicTypeChargeFacade.findAll(ClinicTypeSetting.class);
-    }
-
-    /**
      * 根据号类ID查询该号类下属所有收费列表
      * @param id
      * @return
      */
     @GET
-    @Path("findById")
+    @Path("find-by-id")
     public List<ClinicTypeCharge> findById(@QueryParam("id")String id){
         return clinicTypeChargeFacade.findById(id);
     }
@@ -72,26 +62,4 @@ public class ClinicTypeChargeService {
         }
     }
 
-    @POST
-    @Path("save")
-    public Response saveRequestMsg(List<ClinicTypeCharge> updateList) {
-        try {
-            List<ClinicTypeCharge> newUpdateDict = new ArrayList<>();
-            if (updateList != null) {
-                newUpdateDict = clinicTypeChargeFacade.save(updateList);
-            }
-            return Response.status(Response.Status.OK).entity(newUpdateDict).build();
-        } catch (Exception e) {
-            ErrorException errorException = new ErrorException();
-            errorException.setMessage(e);
-            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
-                errorException.setErrorMessage("输入数据超过长度！");
-            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，提交失败！");
-            } else {
-                errorException.setErrorMessage("提交失败！");
-            }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
-        }
-    }
 }

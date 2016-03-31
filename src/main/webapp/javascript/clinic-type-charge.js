@@ -17,22 +17,14 @@ $(function(){
         }
     }
 
-    /**
-     * 加载数据表格。查询所有号类记录
-     */
-    var loadClinicType = function (data) {
-        $.get("/api/clinic-type-charge/findAllClinicType" , function (data) {
-            $("#dg").datagrid('loadData', data);
-        });
-    };
-
-    loadClinicType();
-
     //门诊号类数据表格
     $("#dg").datagrid({
         singleSelect: true,
         title:'门诊号类',
         fit:true,
+        url:"/api/clinic-type-setting/list?hospitalId=" +config.hospitalId,
+        method:"GET",
+        mode: 'remote',
         columns: [[
             {
                 title: 'ID',
@@ -54,7 +46,7 @@ $(function(){
             //用户点击一行时触发事件加载此号类下的所有收费列表
             onClickRow: function (rowIndex, rowData) {
                 clinicTypeSettingId = rowData.id;   //号类ID赋值
-                $.get("/api/clinic-type-charge/findById", {id: rowData.id}, function (data) {
+                $.get("/api/clinic-type-charge/find-by-id", {id: rowData.id}, function (data) {
                     $("#sf").datagrid('loadData', data);
                 });
             }
@@ -183,7 +175,12 @@ $(function(){
             editIndex = index;
         }
     });*/
-
+    //刷新右侧数据
+    var loadCharge = function () {
+        $.get("/api/clinic-type-charge/find-by-id?id=" + clinicTypeSettingId, function (data) {
+            $("#sf").datagrid('loadData', data);
+        });
+    };
     /**
      * 保存改动的内容
      */
@@ -204,10 +201,12 @@ $(function(){
         if (beanChangeVo) {
             $.postJSON("/api/clinic-type-charge/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
-                loadClinicType();
+                loadCharge();
             }, function (data) {
                 $.messager.alert('系统警告', data.responseJSON.errorMessage, "error");
+                loadCharge();
             })
+
         }
     });
 });

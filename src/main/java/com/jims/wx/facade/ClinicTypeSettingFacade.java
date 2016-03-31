@@ -13,13 +13,16 @@ import java.util.List;
 public class ClinicTypeSettingFacade extends BaseFacade {
     /**
      * 名称模糊查询
-     * @param name
+     * @param name,hospitalId
      * @return
      */
-    public List<ClinicTypeSetting> findAll(String name) {
+    public List<ClinicTypeSetting> findAll(String name, String hospitalId) {
         String hql = "from  ClinicTypeSetting cs where 1=1";
         if (null != name && !name.trim().equals("")) {
-            hql += " and cs.id like '%" + name.trim() + "%'";
+            hql += " and cs.clinicType like '%" + name.trim() + "%'";
+        }
+        if (null != hospitalId && !hospitalId.trim().equals("")) {
+            hql += " and cs.hospitalId ='" + hospitalId.trim() + "'";
         }
         return entityManager.createQuery(hql).getResultList();
     }
