@@ -1,11 +1,9 @@
 package com.jims.wx.entity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.io.UnsupportedEncodingException;
 
 /**
  * update string->byte[] for column content
@@ -22,6 +20,9 @@ public class HospitalInfo implements java.io.Serializable {
 	private String appId;
 	private String infoUrl;
 	private byte[] content;
+
+    @Transient
+    private String tranContent;
 
 	// Constructors
 
@@ -87,5 +88,21 @@ public class HospitalInfo implements java.io.Serializable {
 		this.content = content;
 	}
 
+    @Transient
+    public String getTranContent() {
+        if (this.content != null && !"".equals(this.content)) {
+            String s = "";
+            try {
+                s = new String(this.content, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+        return null;
+    }
 
+    public void setTranContent(String tranContent) {
+        this.tranContent = tranContent;
+    }
 }
