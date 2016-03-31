@@ -59,13 +59,12 @@ $(function () {
         }, {
             title: '号别编号',
             field: 'clinicIndexId',
-            width: "30%"
-
+            hidden: 'true'
         }, {
             title: '出诊时间',
             field: 'dayOfWeek',
-            width: "30%",
-            editor: 'text'
+            width: "50%",
+            editor: {type: 'textbox', options: {}}
         }, {
             title: '剩余号数',
             field: 'registrationLimits',
@@ -207,11 +206,12 @@ $(function () {
         //提交右侧刷新过的多个datagrid的增删改数据
         var beanChangeVo = {};
 
-        beanChangeVo.inserted =inserted;// inserted;
-        beanChangeVo.deleted =deleted; //deleted;
-        beanChangeVo.updated =updated; //updated;
+        beanChangeVo.inserted = inserted;// inserted;
+        beanChangeVo.deleted = deleted; //deleted;
+        beanChangeVo.updated = updated; //updated;
 
         console.log(beanChangeVo);
+
         if (beanChangeVo) {
             $.postJSON("/api/clinic-schedule/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
@@ -221,6 +221,7 @@ $(function () {
                 loadDict();
             })
         }
+
     });
 
 });
