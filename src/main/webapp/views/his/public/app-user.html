@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>用户管理</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+    <style type="text/css">
+
+    </style>
+</head>
+
+<body>
+    <div class="easyui-layout" id="dg">
+        <div region="north" title="用户管理" border="false">
+            <table id="top" class="easyui-datagrid" style="width:100%"></table>
+        </div>
+        <div region="south" border="false">
+            <table id="bottom" class="easyui-datagrid" style="width:100%"></table>
+        </div>
+        <div region="west" border="false" style="width:250px;">
+            <table id="left" class="easyui-datagrid"></table>
+        </div>
+        <div region="center" border="false">
+            <table id="right" class="easyui-datagrid"></table>
+        </div>
+    </div>
+    <div id="ft">
+        用户名称：<input id="expName" class="easyui-searchbox" prompt="请输入查询内容" style="width:250px"/>
+    </div>
+    <div id="tb">
+        <a href="#" id="syncDataBtn" class="easyui-linkbutton" iconCls="icon-filter">同步数据</a>
+        <a href="#" id="addGroupBtn" class="easyui-linkbutton" iconCls="icon-add">新建标签</a>
+        <a href="#" id="modGroupBtn" class="easyui-linkbutton" iconCls="icon-edit">重命名标签</a>
+        <a href="#" id="delGroupBtn" class="easyui-linkbutton" iconCls="icon-remove">删除标签</a>
+        <a href="#" id="moveBtn" class="easyui-linkbutton" iconCls="icon-reload">打标签</a>
+        <a href="#" id="tipBtn" class="easyui-linkbutton" iconCls="icon-tip">添加备注名</a>
+        <a href="#" id="blackListBtn" class="easyui-linkbutton" iconCls="">加入黑名单</a>
+    </div>
+    <!--新建标签-->
+    <div id="dlg" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
+         closed="true" buttons="#dlg-buttons">
+        <div class="fitem">
+            <label>编号</label>
+            <input name="groupId" id="groupId" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            标签名称：<input id="name" class="easyui-textbox" required="true">
+        </div>
+    </div>
+    <div id="dlg-buttons">
+        <a href="javascript:void(0)" id="addBtn" class="easyui-linkbutton c6" iconCls="icon-add"
+           style="width:60px">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg').dialog('close')" style="width:60px">关闭</a>
+    </div>
+    <!--打标签-->
+    <div id="dlg-move" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
+         closed="true" buttons="#dlg-move-buttons">
+        <div class="fitem">
+            <table id="groupDg" class="easyui-datagrid">
+            </table>
+        </div>
+    </div>
+    <div id="dlg-move-buttons">
+
+    </div>
+    <!--添加备注名-->
+    <div id="dlg-tip" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
+         closed="true" buttons="#dlg-tip-buttons">
+        <div class="fitem">
+            <label>id</label>
+            <input name="userId" id="userId" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            <label>编号</label>
+            <input name="openId" id="openId" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            备注：<input id="remark" class="easyui-textbox" required="true">
+        </div>
+    </div>
+    <div id="dlg-tip-buttons">
+        <a href="javascript:void(0)" id="addRemBtn" class="easyui-linkbutton c6" iconCls="icon-add"
+           style="width:60px">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg-tip').dialog('close')" style="width:60px">关闭</a>
+    </div>
+    <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/javascript/app-user.js"></script>
+    <script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>
