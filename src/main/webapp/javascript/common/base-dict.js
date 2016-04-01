@@ -15,7 +15,7 @@ $(function(){
     $("#baseDictDg").datagrid({
         title:'基础字典维护',
         fit:true,
-        rownumbers:true,
+        //rownumbers:true,
         footer:"#tb",
         url:'/api/base-dict/list-by-type',
         method:'GET',
@@ -123,7 +123,7 @@ $(function(){
     /**
      * 查询操作
      */
-    $("#searchBtn").on('click',function(){
+    /*$("#searchBtn").on('click',function(){
         var dictType = $("#baseName").textbox('getValue');
 
         $("#baseDictDg").datagrid(
@@ -131,7 +131,16 @@ $(function(){
                 baseType:dictType
             }
         ) ;
-    }) ;
+    }) ;*/
+
+    /**
+     * 加载基础信息表
+     */
+    var loadDict = function () {
+        $.get("/api/base-dict/list", function (data) {
+            $("#baseDictDg").datagrid('loadData', data);
+        });
+    }
 
     /**
      * 保存修改内容
@@ -153,10 +162,12 @@ $(function(){
 
         $.postJSON("/api/base-dict/merge",baseDictBeanChangeVo,function(data,status){
             $.messager.alert("系统提示","保存成功","info");
+            loadDict();
         },function(error){
             $.messager.alert("系统提示","保存失败","error");
+            loadDict();
         })
-        $("#searchBtn").click();
+        //$("#searchBtn").click();
     }) ;
 
 })
