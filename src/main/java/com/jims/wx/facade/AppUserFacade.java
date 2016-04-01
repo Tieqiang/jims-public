@@ -27,6 +27,16 @@ public class AppUserFacade extends BaseFacade {
      */
     @Transactional
     public void save(List<AppUser> obj) {
+        //删除所有同步前的数据
+        List<AppUser> deleteData = super.findAll(AppUser.class);
+        if (deleteData != null && deleteData.size() > 0) {
+            List<String> ids = new ArrayList<>();
+            for (AppUser temp : deleteData) {
+                ids.add(temp.getId());
+            }
+            super.removeByStringIds(AppUser.class, ids);
+        }
+        //保存新同步来的数据
         if(obj != null && obj.size() > 0){
             for (AppUser user:obj) {
                 super.merge(user);
@@ -35,16 +45,28 @@ public class AppUserFacade extends BaseFacade {
     }
 
     /**
+     * 修改备注名
+     * @param user
+     */
+    @Transactional
+    public AppUser updateTip(AppUser user) {
+        AppUser old = get(AppUser.class,user.getId());
+        old.setRemark(user.getRemark());
+        user = super.merge(old);
+        return user;
+    }
+    /**
      * 根据分组groupId查找用户
      * @param groupId
      * @return
      */
     public List<AppUser> findByGroupId(String groupId){
-        String sql = "SELECT * FROM app_user WHERE 1=1";
-        if(groupId != null && !groupId.equals("")){
-            sql += " and group_id = '" + groupId +"'";
+        String hql = "FROM AppUser u WHERE 1=1";
+        if (groupId != null && !groupId.equals("")) {
+            hql += " and u.groupId = '" + groupId + "'";
         }
-        List<AppUser> result = super.createNativeQuery(sql, new ArrayList<Object>(), AppUser.class);
+
+        List<AppUser> result = entityManager.createQuery(hql).getResultList();
         return result;
     }
 }
