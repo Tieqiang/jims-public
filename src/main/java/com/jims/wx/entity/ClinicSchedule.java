@@ -22,6 +22,7 @@ public class ClinicSchedule implements java.io.Serializable {
 	private String id;
 	private String clinicIndexId;
 	private String dayOfWeek;
+    private String timeOfDay;
 	private Double registrationLimits;
 
 	// Constructors
@@ -31,10 +32,11 @@ public class ClinicSchedule implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public ClinicSchedule(String clinicIndexId, String dayOfWeek,
+	public ClinicSchedule(String clinicIndexId, String dayOfWeek,String timeOfDay,
 			Double registrationLimits) {
 		this.clinicIndexId = clinicIndexId;
 		this.dayOfWeek = dayOfWeek;
+        this.timeOfDay = timeOfDay;
 		this.registrationLimits = registrationLimits;
 	}
 
@@ -78,4 +80,12 @@ public class ClinicSchedule implements java.io.Serializable {
 		this.registrationLimits = registrationLimits;
 	}
 
+    @Column(name = "TIME_OF_DAY", length = 10)
+    public String getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public void setTimeOfDay(String timeOfDay) {
+        this.timeOfDay = timeOfDay;
+    }
 }
