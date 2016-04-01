@@ -85,13 +85,29 @@ $(function () {
         }, {
             title: '科室类别',
             field: 'deptClass',
-            width: "10%"
+            width: "10%",
+            formatter: function(value,row,index){
+                if(row.deptClass == 1){
+                    return "经营科室";
+                }else{
+                    return "其他";
+                }
+            }
         }, {
             title: '科室类型',
             field: 'deptType',
-            width: "10%"
+            width: "10%",
+            formatter: function(value,row,index){
+                if (row.deptType == 1){
+                    return "医疗技术类科室";
+                } else if(row.deptType == 2){
+                    return "医疗辅助类科室";
+                }else{
+                    return "管理类科室";
+                }
+            }
         }, {
-            title: '是否停止',
+            title: '是否停用',
             field: 'deptStopFlag',
             width: "10%",
             formatter: function(value,row,index){
@@ -99,6 +115,17 @@ $(function () {
                     return "否";
                 } else {
                     return "是";
+                }
+            }
+        }, {
+            title: '是否末级科室',
+            field: 'endDept',
+            hidden: true,
+            formatter: function(value,row,index){
+                if (row.endDept == 1){
+                    return "是";
+                } else {
+                    return "否";
                 }
             }
         }]]
@@ -170,6 +197,51 @@ $(function () {
         });
     });
 
+    $("#deptStopFlag").combobox({       //科室是否停用
+        panelHeight: 'auto',
+        valueField: 'baseCode',
+        textField: 'baseName',
+        url: "/api/base-dict/list-by-type?baseType=STOP_FLAG",
+        mode: 'remote',
+        method: 'GET'
+    })
+
+    $("#deptOutpInp").combobox({        //门诊或住院
+        panelHeight: 'auto',
+        valueField: 'baseCode',
+        textField: 'baseName',
+        url: "/api/base-dict/list-by-type?baseType=CLINIC_FLAG",
+        mode: 'remote',
+        method: 'GET'
+    });
+
+    $("#endDept").combobox({        //是否末级科室
+        panelHeight: 'auto',
+        valueField: 'baseCode',
+        textField: 'baseName',
+        url: "/api/base-dict/list-by-type?baseType=END_DEPT_FLAG",
+        mode: 'remote',
+        method: 'GET'
+    });
+
+    $("#deptType").combobox({       //科室部门类型
+        panelHeight: 'auto',
+        valueField: 'baseCode',
+        textField: 'baseName',
+        url: "/api/base-dict/list-by-type?baseType=DEPT_TYPE_FLAG",
+        mode: 'remote',
+        method: 'GET'
+    });
+
+    $("#deptClass").combobox({      //科室部门类别
+        panelHeight: 'auto',
+        valueField: 'baseCode',
+        textField: 'baseName',
+        url: "/api/base-dict/list-by-type?baseType=DEPT_CLASS_FLAG",
+        mode: 'remote',
+        method: 'GET'
+    });
+
     /**
      * 添加科室
      */
@@ -212,7 +284,13 @@ $(function () {
         $("#deptDevideAttr").textbox('setValue', node.deptDevideAttr);
         $("#deptLocation").textbox('setValue', node.deptLocation);
         $("#deptStopFlag").combobox('setValue', node.deptStopFlag);
+console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptType);console.log(node.deptClass);
+        $("#endDept").combobox('setValue', node.endDept);
+        $("#deptType").combobox('setValue', node.deptType);
+        $("#deptClass").combobox('setValue', node.deptClass);
         $("#parentId").textbox('setValue', node.parentId);
+
+
 
         $("#dlg").dialog('open').dialog('setTitle', "科室修改");
 

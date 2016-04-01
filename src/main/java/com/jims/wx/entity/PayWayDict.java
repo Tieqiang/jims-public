@@ -23,7 +23,7 @@ public class PayWayDict implements java.io.Serializable {
 
 	private String id;
 	private String payWayName;
-	private Set<ClinicMaster> clinicMasters = new HashSet<ClinicMaster>(0);
+//	private Set<ClinicMaster> clinicMasters = new HashSet<ClinicMaster>(0);
 
 	// Constructors
 
@@ -32,9 +32,8 @@ public class PayWayDict implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public PayWayDict(String payWayName, Set<ClinicMaster> clinicMasters) {
+	public PayWayDict(String payWayName) {
 		this.payWayName = payWayName;
-		this.clinicMasters = clinicMasters;
 	}
 
 	// Property accessors
@@ -59,13 +58,13 @@ public class PayWayDict implements java.io.Serializable {
 		this.payWayName = payWayName;
 	}
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "payWayDict")
+	/*@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "payWayDict")
 	public Set<ClinicMaster> getClinicMasters() {
 		return this.clinicMasters;
 	}
 
 	public void setClinicMasters(Set<ClinicMaster> clinicMasters) {
 		this.clinicMasters = clinicMasters;
-	}
+	}*/
 
 }

@@ -10,10 +10,45 @@
 $(function(){
     var editIndex;
     var clinicTypeSettingId;    //号类ID
+
+    //定义右侧多个操作的增删改数据
+    var inserted = [];
+    var updated = [];
+    var deleted = [];
     var stopEdit = function () {
         if (editIndex || editIndex == 0) {
             $("#sf").datagrid('endEdit', editIndex);
             editIndex = undefined;
+        }
+    }
+
+    //保暂存增删改数据
+    var addData = function(){
+        if (editIndex || editIndex == 0) {
+            $("#sf").datagrid("endEdit", editIndex);
+        }
+        //保存刷新之前的右侧datagrid里面的增删改数据倒数组里面
+        if ($("#sf").datagrid("getChanges").length > 0) {
+
+            var insertData = $("#sf").datagrid("getChanges", "inserted");
+            var updateData = $("#sf").datagrid("getChanges", "updated");
+            var deleteData = $("#sf").datagrid("getChanges", "deleted");
+
+            if (insertData && insertData.length > 0) {
+                for (var i = 0; i < insertData.length; i++) {
+                    inserted.push(insertData[i]);
+                }
+            }
+            if (updateData && updateData.length > 0) {
+                for (var i = 0; i < updateData.length; i++) {
+                    updated.push(updateData[i]);
+                }
+            }
+            if (deleteData && deleteData.length > 0) {
+                for (var i = 0; i < deleteData.length; i++) {
+                    deleted.push(deleteData[i]);
+                }
+            }
         }
     }
 
@@ -46,6 +81,7 @@ $(function(){
             //用户点击一行时触发事件加载此号类下的所有收费列表
             onClickRow: function (rowIndex, rowData) {
                 clinicTypeSettingId = rowData.id;   //号类ID赋值
+                addData();
                 $.get("/api/clinic-type-charge/find-by-id", {id: rowData.id}, function (data) {
                     $("#sf").datagrid('loadData', data);
                 });
@@ -121,6 +157,18 @@ $(function(){
         fit: true
     });
 
+    var loadDict = function () {
+        //var name = $("#name").textbox("getValue");
+        //提交成功后刷新右侧datagrid
+        $.get("/api/clinic-type-charge/find-by-id?id="+ clinicTypeSettingId, function (data) {
+            $("#sf").datagrid('loadData', data);
+        });
+        //提交完成后重置增删改数据
+        inserted = [];
+        updated=[];
+        deleted=[];
+    }
+
     /**
      * 增加门诊号类收费
      */
@@ -175,36 +223,25 @@ $(function(){
             editIndex = index;
         }
     });*/
-    //刷新右侧数据
-    var loadCharge = function () {
-        $.get("/api/clinic-type-charge/find-by-id?id=" + clinicTypeSettingId, function (data) {
-            $("#sf").datagrid('loadData', data);
-        });
-    };
     /**
      * 保存改动的内容
      */
     $("#saveBtn").on('click', function () {
-        if (editIndex || editIndex == 0) {
-            $("#sf").datagrid("endEdit", editIndex);
-        }
-
-        var insertData = $("#sf").datagrid("getChanges", "inserted");
-        var updateDate = $("#sf").datagrid("getChanges", "updated");
-        var deleteDate = $("#sf").datagrid("getChanges", "deleted");
-
+        addData();
+        //提交右侧刷新过的多个datagrid的增删改数据
         var beanChangeVo = {};
-        beanChangeVo.inserted = insertData;
-        beanChangeVo.deleted = deleteDate;
-        beanChangeVo.updated = updateDate;
+
+        beanChangeVo.inserted = inserted;// inserted;
+        beanChangeVo.deleted = deleted; //deleted;
+        beanChangeVo.updated = updated; //updated;
         console.log(beanChangeVo);
         if (beanChangeVo) {
             $.postJSON("/api/clinic-type-charge/merge", beanChangeVo, function (data, status) {
                 $.messager.alert("系统提示", "保存成功", "info");
-                loadCharge();
+                loadDict();
             }, function (data) {
                 $.messager.alert('系统警告', data.responseJSON.errorMessage, "error");
-                loadCharge();
+                loadDict();
             })
 
         }
