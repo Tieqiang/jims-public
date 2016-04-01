@@ -5,7 +5,10 @@ package com.jims.wx.vo;
  */
 public class QuestionnaireVsSubjectVo implements java.io.Serializable {
     private String id;
-    private String subjectId;
+
+
+
+    private String questionVsSubId;
     private String questModelId;
     private String questionContent;
     private String questionType;
@@ -14,9 +17,9 @@ public class QuestionnaireVsSubjectVo implements java.io.Serializable {
     public QuestionnaireVsSubjectVo() {
     }
 
-    public QuestionnaireVsSubjectVo(String id, String subjectId, String questModelId, String questionContent, String questionType, String preAnswer) {
+    public QuestionnaireVsSubjectVo(String id,String questionVsSubId, String questModelId, String questionContent, String questionType, String preAnswer) {
         this.id = id;
-        this.subjectId = subjectId;
+        this.questionVsSubId=questionVsSubId;
         this.questModelId = questModelId;
         this.questionContent = questionContent;
         this.questionType = questionType;
@@ -55,12 +58,12 @@ public class QuestionnaireVsSubjectVo implements java.io.Serializable {
         this.preAnswer = preAnswer;
     }
 
-    public String getSubjectId() {
-        return subjectId;
+    public String getQuestionVsSubId() {
+        return questionVsSubId;
     }
 
-    public void setSubjectId(String subjectId) {
-        this.subjectId = subjectId;
+    public void setQuestionVsSubId(String questionVsSubId) {
+        this.questionVsSubId = questionVsSubId;
     }
 
     public String getQuestModelId() {
