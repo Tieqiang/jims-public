@@ -2,6 +2,7 @@ package com.jims.wx.service;
 
 import com.google.inject.Inject;
 import com.jims.wx.entity.AppUser;
+import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.AppUserFacade;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
@@ -9,8 +10,8 @@ import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Response;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import java.util.List;
  * Created by wangjing on 2016/3/14.
  */
 @Path("app-user")
+@Produces("application/json")
 public class AppUserService {
 
     private AppUserFacade appUserFacade;
@@ -57,7 +59,7 @@ public class AppUserService {
                     if (jsonArray != null && jsonArray.length() > 0) {
                         String id = "";
                         String info = "";
-                        AppUser obj = new AppUser();
+                        AppUser user;
                         List<AppUser> result = new ArrayList<AppUser>();
                         //根据OPENID逐个获取关注人基本信息,并保存在对象里面
                         for (int i = 0; i < jsonArray.length(); i++) {
@@ -69,13 +71,58 @@ public class AppUserService {
                             response = httpClient.GET(uri);
                             info = response.getContentAsString();
                             System.out.println("info" + info);
-                            //......
-                            //result.add(obj);
+                            //将公众平台获取到的用户信息转化成本地数据库对象集合
+                            JSONObject jsonUserObj = new JSONObject(info);
+                            if (jsonUserObj != null) {
+                                user = new AppUser();
+
+                                if (null != jsonUserObj.get("openid")) {
+                                    user.setOpenId(jsonUserObj.get("openid").toString());
+                                }
+                                if (null != jsonUserObj.get("nickname")) {
+                                    user.setNickName(jsonUserObj.get("nickname").toString());
+                                }
+                                if (null != jsonUserObj.get("subscribe")) {
+                                    user.setSubscribe(Integer.parseInt(jsonUserObj.get("subscribe").toString()));
+                                }
+                                if (null != jsonUserObj.get("sex")) {
+                                    user.setSex(Integer.parseInt(jsonUserObj.get("sex").toString()));
+                                }
+                                if (null != jsonUserObj.get("subscribe_time")) {
+                                    user.setSubscrbeTime(jsonUserObj.get("subscribe_time").toString());
+                                }
+                                if (null != jsonUserObj.get("headimgurl")) {
+                                    user.setHeadImgUrl(jsonUserObj.get("headimgurl").toString());
+                                }
+                                if (null != jsonUserObj.get("language")) {
+                                    user.setLanguage(jsonUserObj.get("language").toString());
+                                }
+                                if (null != jsonUserObj.get("city")) {
+                                    user.setCity(jsonUserObj.get("city").toString());
+                                }
+                                if (null != jsonUserObj.get("country")) {
+                                    user.setCountry(jsonUserObj.get("country").toString());
+                                }
+                                if (null != jsonUserObj.get("province")) {
+                                    user.setProvince(jsonUserObj.get("province").toString());
+                                }
+                                if (null != jsonUserObj.get("remark")) {
+                                    user.setRemark(jsonUserObj.get("remark").toString());
+                                }
+                                if (null != jsonUserObj.get("groupid")) {
+                                    user.setGroupId(jsonUserObj.get("groupid").toString());
+                                }
+                                user.setAppId(id);
+
+                                result.add(user);
+                            }
+
+
                             //获取了关注人的基本信息以后，获取他所在分组
 
                         }
                         //把关注人存在数据库
-                        //appUserFacade.save(result);
+                        appUserFacade.save(result);
                     }
                 }
 
@@ -96,5 +143,39 @@ public class AppUserService {
     @Path("list-all")
     public List<AppUser> listAll() {
         return appUserFacade.findAll(AppUser.class);
+    }
+
+    /**
+     * 根据分组groupId查找用户
+     *
+     * @param groupId
+     * @return
+     */
+    @GET
+    @Path("get-user-by-id")
+    public List<AppUser> listUserByGroupId(@QueryParam("groupId") String groupId) {
+        return appUserFacade.findByGroupId(groupId);
+    }
+
+    @POST
+    @Path("update-tip")
+    public Response save(AppUser user) {
+        try {
+
+            user = appUserFacade.updateTip(user);
+            return Response.status(Response.Status.OK).entity(user).build();
+        } catch (Exception e) {
+            ErrorException errorException = new ErrorException();
+            errorException.setMessage(e);
+            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+                errorException.setErrorMessage("输入数据超过长度！");
+            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
+                errorException.setErrorMessage("数据已存在，保存失败！");
+            } else {
+                errorException.setErrorMessage("保存失败！");
+            }
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+        }
+
     }
 }
