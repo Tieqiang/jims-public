@@ -3,6 +3,7 @@ package com.jims.wx.service;
 import com.jims.wx.entity.ResponseMessage;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.ResponseMessageFacade;
+import com.jims.wx.util.XmlUtil;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -46,6 +47,7 @@ public class ResponseMessageService {
         try {
             if (null != msg) {
                 msg = responseMessageFacade.save(msg);
+                //String xmlStr = XmlUtil.beanToXmlString(msg);
             }
             return Response.status(Response.Status.OK).entity(msg).build();
         } catch (Exception e) {
