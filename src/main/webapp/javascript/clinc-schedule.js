@@ -61,14 +61,37 @@ $(function () {
             field: 'clinicIndexId',
             hidden: 'true'
         }, {
-            title: '出诊时间',
+            title: '出诊星期',
             field: 'dayOfWeek',
-            width: "50%",
-            editor: {type: 'textbox', options: {}}
+            width: "40%",
+            editor: {
+                type: 'combobox', options: {
+                    panelHeight: 'auto',
+                    valueField: 'baseCode',
+                    textField: 'baseName',
+                    url: "/api/base-dict/list-by-type?baseType=DAY_FLAG",
+                    mode: 'remote',
+                    method: 'GET'
+                }
+            }
+        }, {
+            title: '出诊时间',
+            field: 'timeOfDay',
+            width: "40%",
+            editor: {
+                type: 'combobox', options: {
+                    panelHeight: 'auto',
+                    valueField: 'baseCode',
+                    textField: 'baseName',
+                    url: "/api/base-dict/list-by-type?baseType=TIME_FLAG",
+                    mode: 'remote',
+                    method: 'GET'
+                }
+            }
         }, {
             title: '剩余号数',
             field: 'registrationLimits',
-            width: "40%",
+            width: "20%",
             editor: 'numberbox'
         }]],
         onClickRow: function (index, row) {
@@ -86,7 +109,7 @@ $(function () {
         idField: "id",
         treeField: "clinicName",
         fitColumns: true,
-        title: parent.config.hospitalName + "--维护",
+        title: "门诊号别",
         columns: [[{
             title: 'id',
             field: 'id',
