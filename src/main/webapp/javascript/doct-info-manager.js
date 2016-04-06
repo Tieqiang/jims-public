@@ -114,7 +114,9 @@ $(function () {
             doctInfo.title = $("#title").val();
             doctInfo.hospitalId = getValue();
             doctInfo.headUrl = $("#headUrl").val();
-            var description = $("#description").val();
+            var oEditor = CKEDITOR.instances.description;
+            var description =oEditor.getData();
+//            alert(description);
         }
         $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
             $('#dlg').dialog('close');
