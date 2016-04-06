@@ -166,7 +166,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @description 通过号别id统计已经生成的号表
      */
     private Long countHaveRegistedRecord(String id) {
-        return (Long) entityManager.createQuery("select count(id) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
+        return (Long) entityManager.createQuery("select count(*) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
     }
 
     /**
@@ -357,7 +357,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         String sql = null;
 //        ClinicForRegist
         try {
-            sql = "select count(id) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
+            sql = "select count(*) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
         } catch (Exception e) {
             e.printStackTrace();
         }
