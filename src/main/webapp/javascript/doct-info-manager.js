@@ -116,16 +116,19 @@ $(function () {
             doctInfo.headUrl = $("#headUrl").val();
             var oEditor = CKEDITOR.instances.description;
             var description =oEditor.getData();
-//            alert(description);
+         }
+        if($("#headUrl").val()==""){
+            $.messager.alert("系统提示", "请上传图片！","error");
+        }else{
+            $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
+                $('#dlg').dialog('close');
+                $.messager.alert("系统提示", "操作成功！","info");
+                loadDict();
+                $("#fm").get(0).reset();
+            }, function (data, status) {
+            })
         }
-        $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
-            $('#dlg').dialog('close');
-            $.messager.alert("系统提示", "操作成功！");
-            loadDict();
-            $("#fm").get(0).reset();
-        }, function (data, status) {
-        })
-    });
+     });
     /**
      * button of edit click
      */
@@ -212,7 +215,36 @@ $(function () {
     //    }
     //})
     /**
-     * button ofclearbtn
-     */
+//     * button ofclearbtn
+//     */
+      $("#uploadBtn").on('click',function(){
+              var fileToUpload=document.getElementById("fileToUpload");
+              var suffer=fileToUpload.value.substring(fileToUpload.value.indexOf(".")+1);
+              if(suffer!="jpg"&&suffer!="png"&&suffer!="gif"&&suffer!="jpeg"&&suffer!="bmp"&&suffer!="swf"){
+                  $.messager.alert("系统提示", "请选择正确格式的图片","error");
+              }else{
+                  ajaxUpload();
+              }
+        });
+     /**
+     * ajax 上传
+     * */
+     var ajaxUpload=function ajaxUpload(){
+        $.ajaxFileUpload({
+            url : '/img-upload-servlet',
+            secureuri : false,
+            fileElementId : 'fileToUpload',
+            dataType : 'json',
+            data : {username : $("#username").val()},
+             success: function(data, status) {
+                 $('#uploadSpan').append("<span><font color='red'> 上传成功 ✔</font></span>");
+                 $('#headUrl').attr('value',data.picUrl);
+            },
+            error : function(data, status, e) {
+                 $.messager.alert('系统提示','上传出错','error');
+            }
+        })
+    }
 
 });
+
