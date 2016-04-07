@@ -16,7 +16,7 @@
     <!--E:\workspace\jims-public\src\main\webapp\assert\plugins\fckeditor\ckeditor.js-->
     <!--http://localhost/views/his/public/assert/plugins/fckeditor/samples/css/samples.css-->
     <link rel="stylesheet" href="/assert/plugins/fckeditor/samples/css/samples.css">
-    <!--<link rel="stylesheet" href="sss/lib/codemirror/neo.css">-->
+
     <script type="text/javascript">
         window.onload = function()
         {
@@ -32,7 +32,7 @@
     </div>
 </div>
 
-<div id="dlg" modal="true" draggable="false" class="easyui-dialog" style="width:700px;height:600px;padding:10px 20px"
+<div id="dlg" modal="true" draggable="false" class="easyui-dialog" style="width:700px;height:500px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons" data-options="modal:true">
     <div class="ftitle">医生信息维护</div>
     <form id="fm" method="post" novalidate>
@@ -53,9 +53,17 @@
             <select id="cc" name="hospitalId" class="easyui-combobox"></select>
         </div>
         <div class="fitem">
+            <label>上传头像</label>
+            <input id="fileToUpload" type="file" size="45" name="fileToUpload">
+            <a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >上传</a>
+            <span id="uploadSpan"></span>
+         </div>
+
+        <div class="fitem" style="display:none;">
             <label>头像地址：</label>
-            <input name="headUrl" id="headUrl" class="easyui-textbox" value="" required="true">
+            <input id="headUrl" name="headUrl" class="easyui-textbox" value="" disabled="disabled">
         </div>
+
         <div class="fitem">
             <label>个人描述：</label>
             <textarea id="description" style="width: 160px;height:200px;" name="description"></textarea>
@@ -82,6 +90,7 @@
 <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/javascript/common/ajaxfileupload.js/swfupload/ajaxfileupload.js"></script>
 <script type="text/javascript" src="/javascript/doct-info-manager.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/javascript/tool.js"></script>
  </body>
