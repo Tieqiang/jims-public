@@ -8,7 +8,14 @@
     <welcome-file-list>
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
-
+    <servlet>
+        <servlet-name>imgUploadServlet</servlet-name>
+        <servlet-class>com.jims.wx.servlet.ImgUploadServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imgUploadServlet</servlet-name>
+        <url-pattern>/img-upload-servlet</url-pattern>
+    </servlet-mapping>
     <!-- 激活Tomcat的defaultServlet来处理静态文件 -->
     <servlet-mapping>
         <servlet-name>default</servlet-name>
