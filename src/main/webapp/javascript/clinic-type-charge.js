@@ -114,7 +114,12 @@ $(function(){
                 title: '收费项目名称',
                 field: 'chargeItem',
                 width:'20%',
-                editor:'text'
+                editor:{
+                    type: 'textbox',
+                    options:{
+                        required: true
+                    }
+                }
             },{
                 title: '收费项目代码',
                 field: 'priceItem',
@@ -130,7 +135,8 @@ $(function(){
                         max: 99999.99,
                         size: 8,
                         maxlength: 8,
-                        precision: 2
+                        precision: 2,
+                        required: true
                     }
                 }
             },{
