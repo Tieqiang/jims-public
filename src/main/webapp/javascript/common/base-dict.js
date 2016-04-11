@@ -9,8 +9,6 @@ $(function(){
             $("#baseDictDg").datagrid('endEdit',editIndex) ;
             editIndex = undefined ;
         }
-
-
     }
     $("#baseDictDg").datagrid({
         title:'基础字典维护',
@@ -28,17 +26,17 @@ $(function(){
             title:'键值',
             field:'baseCode',
             width:"20%",
-            editor:'textbox'
+            editor:'text'
         },{
             title:'键名',
             field:'baseName',
             width:'30%',
-            editor:'textbox'
+            editor: {type: 'textbox', options: {required: true}}
         },{
             title:'字典名称',
             field:'baseType',
             width:'30%',
-            editor:'textbox'
+            editor: {type: 'textbox', options: {required: true}}
         },{
             title:'输入码',
             field:'inputCode',
@@ -111,13 +109,9 @@ $(function(){
             if(editIndex ==rowIndex){
                 editIndex = undefined ;
             }
-
         }else{
             $.messager.alert('系统提示',"请选择要删除的行",'info') ;
         }
-
-
-
     }) ;
 
     /**
@@ -167,7 +161,6 @@ $(function(){
             $.messager.alert("系统提示","保存失败","error");
             loadDict();
         })
-        //$("#searchBtn").click();
     }) ;
 
 })
