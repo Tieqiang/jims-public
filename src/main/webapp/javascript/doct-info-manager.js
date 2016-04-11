@@ -2,6 +2,16 @@
  * created by chenxiaoyang on 2016.03.29
  */
 $(function () {
+    //头衔长度验证
+    $.extend($.fn.validatebox.defaults.rules, {
+        maxLength: {
+            validator: function(value, param){
+                return value.length <= param[0];
+            },
+            message: '最多可以输入7位!!'
+        }
+    });
+
     var flag;
 
     /**
@@ -40,22 +50,22 @@ $(function () {
             title: '编号',
             hidden:'true'
         }, {
+            field: 'hospitalId',
+            title: '所在医院编号',
+            width: "20%"
+        }, {
             field: 'name',
             title: '医生姓名',
             width: "20%"
 
         }, {
             field: 'title',
-            title: '所属科室',
+            title: '头衔',
             width: "20%"
 
         }, {
             field: 'headUrl',
             title: '头像地址',
-            width: "20%"
-        }, {
-            field: 'hospitalId',
-            title: '所在医院编号',
             width: "20%"
         }, {
             field: 'tranDescription',
@@ -67,7 +77,7 @@ $(function () {
      * button of add click
      */
     $("#addBtn").on('click', function () {
-        reset();
+        //reset();
         flag = "add";
         $("#fm").get(0).reset();
         $('#dlg').dialog('open').dialog('center').dialog('setTitle', '添加医生信息');
