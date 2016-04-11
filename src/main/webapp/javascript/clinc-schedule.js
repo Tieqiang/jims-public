@@ -92,7 +92,15 @@ $(function () {
             title: '剩余号数',
             field: 'registrationLimits',
             width: "20%",
-            editor: 'numberbox'
+            editor: {
+                type: 'numberbox',
+                options: {
+                    max: 40,
+                    size: 2,
+                    maxlength: 2,
+                    minlength: 0
+                }
+            }
         }]],
         onClickRow: function (index, row) {
             stopEdit();
