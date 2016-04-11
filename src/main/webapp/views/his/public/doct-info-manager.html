@@ -28,16 +28,17 @@
             <input id="name" name="name" class="easyui-textbox" required="true" value="">
         </div>
         <div class="fitem">
-            <label>所属科室：</label>
-            <input id="title" name="title" class="easyui-textbox" required="true" value="">
+            <label>医院编号：</label>
+            <select id="cc" name="hospitalId" class="easyui-combobox" required="true"></select>
         </div>
         <div class="fitem">
-            <label>医院编号：</label>
-            <select id="cc" name="hospitalId" class="easyui-combobox"></select>
+            <label>头衔：</label>
+            <input id="title" name="title" class="easyui-validatebox" value=""data-options="validType:'maxLength[7]'">
         </div>
+
         <div class="fitem">
             <label>头像地址：</label>
-            <input name="headUrl" id="headUrl" class="easyui-textbox" value="" required="true">
+            <input name="headUrl" id="headUrl" class="easyui-textbox" value="">
         </div>
         <div class="fitem">
             <label>个人描述：</label>
@@ -46,9 +47,9 @@
     </form>
 </div>
 <div id="dlg-buttons">
-    <a href="javascript:void(0)" id="submitBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >确定</a>
+    <a href="javascript:void(0)" id="submitBtn" class="easyui-linkbutton c6" iconCls="icon-ok" style="width:90px">保存</a>
     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
-       onclick="javascript:$('#dlg').dialog('close')" >关闭</a>
+       onclick="javascript:$('#dlg').dialog('close')" style="width:90px">关闭</a>
 </div>
 
 <div id="tb" style="padding:2px 5px;">
