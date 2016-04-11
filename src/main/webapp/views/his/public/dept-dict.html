@@ -7,6 +7,14 @@
     <link rel="stylesheet" href="/assert/easyui/themes/color.css">
     <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
     <link rel="stylesheet" href="/style/common.css">
+
+    <script type="text/javascript">
+        window.onload =
+                function()
+                {
+                    CKEDITOR.replace( 'deptInfo' );
+                };
+    </script>
 </head>
 <body>
 <table id="tt" class="easyui-treegrid">
@@ -26,63 +34,64 @@
 </div>
 
 
-<div id="dlg" class="easyui-dialog" style="width:400px;height:500px;padding:10px 20px"
+<div id="dlg" class="easyui-dialog" style="width:800px;height:500px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons" data-options="modal:true">
-    <div class="ftitle">医院信息维护</div>
+    <div class="ftitle">科室信息维护</div>
     <form id="fm" method="post" novalidate>
-        <div class="fitem">
-            <label>科室编码:</label>
-            <input id="deptCode" name="deptCode" class="easyui-textbox" required="true">
-        </div>
-        <div class="fitem">
-            <label>科室名称:</label>
-            <input id="deptName" name="deptName" class="easyui-textbox">
-        </div>
-        <div class="fitem">
-            <label>科室别名</label>
-            <input name="deptAlis" id="deptAlis" class="easyui-textbox">
-        </div>
-        <div class="fitem">
-            <label>科室临床属性</label>
-            <input name="deptAttr" id="deptAttr" class="easyui-textbox" data-options="validType:'length[1,2]'" >
-        </div>
-        <div class="fitem">
-            <label>门诊住院</label>
-            <select id="deptOutpInp" class="easyui-combobox" name="deptOutpInp" style="width: 160px">
-            </select>
-            <!--<input name="deptOutpInp" id="deptOutpInp" class="easyui-textbox" >-->
-        </div>
-        <div class="fitem">
-            <label>科室位置</label>
-            <input name="deptLocation" id="deptLocation" class="easyui-textbox">
-        </div>
-        <div class="fitem">
-            <label>是否停用</label>
-            <select style="width: 160px" class="easyui-combobox" name="deptStopFlag" id="deptStopFlag">
-            </select>
-        </div>
-        <div class="fitem">
-            <label>是否末级</label>
-            <select style="width: 160px" class="easyui-combobox" name="endDept" id="endDept">
-            </select>
-        </div>
-        <div class="fitem">
-            <label>部门类型</label>
-            <select style="width: 160px" class="easyui-combobox" name="deptType" id="deptType">
-            </select>
-        </div>
+
+        <table class="fitem">
+            <tr>
+                <td>&nbsp;&nbsp;<label>科室编码:</label></td>
+                <td><input id="deptCode" name="deptCode" class="easyui-textbox" required="true"></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室名称:</label>
+                <input id="deptName" name="deptName" class="easyui-textbox" required="true"></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;<label>科室别名:</label></td>
+                <td><input name="deptAlis" id="deptAlis" class="easyui-textbox"></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>临床属性:</label>
+                <input name="deptAttr" id="deptAttr" class="easyui-textbox" data-options="validType:'length[1,2]'" ></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;<label>门诊住院:</label></td>
+                <td><select id="deptOutpInp" class="easyui-combobox" name="deptOutpInp" style="width: 160px"></select></td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室位置:</label>
+                <input name="deptLocation" id="deptLocation" class="easyui-textbox"></td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;<label>是否停用:</label></td>
+                <td>
+                    <select style="width: 160px" class="easyui-combobox" name="deptStopFlag" id="deptStopFlag" required="true">
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>是否末级:</label>
+                    <select style="width: 160px" class="easyui-combobox" name="endDept" id="endDept" required="true">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;<label>部门类型:</label></td>
+                <td>
+                    <select style="width: 160px" class="easyui-combobox" name="deptType" id="deptType" required="true">
+                    </select>
+                </td>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>部门类别:</label>
+                    <select style="width: 160px" class="easyui-combobox" name="deptClass" id="deptClass" required="true">
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>&nbsp;&nbsp;<label>上级科室:</label></td>
+                <td><input name="parentId" id="parentId" class="easyui-textbox" disabled></td>
+            </tr>
+        </table>
 
         <div class="fitem">
-            <label>部门类别</label>
-            <select style="width: 160px" class="easyui-combobox" name="deptClass" id="deptClass">
-            </select>
+            <!--<div style="height:100px;float:left;">科室简介</div>-->
+            <span><h4>科室简介:</h4>
+            <textarea id="deptInfo" name="deptInfo"></textarea>
+            <script type="text/javascript">CKEDITOR.replace('deptInfo');</script></span>
         </div>
-
-        <div class="fitem">
-            <label>上级科室</label>
-            <input name="parentId" id="parentId" class="easyui-textbox" disabled>
-        </div>
-
         <div class="fitem">
             <input name="id" id="id" type="hidden">
         </div>
@@ -99,7 +108,10 @@
 <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="/javascript/dept-dict.js"></script>
 <script type="text/javascript" src="/javascript/tool.js"></script>
+<!--富文本编辑器-->
+<script src="/assert/plugins/ckeditor/ckeditor.js"></script>
+<!--引入自己的js-->
+<script type="text/javascript" src="/javascript/dept-dict.js"></script>
 </body>
 </html>
