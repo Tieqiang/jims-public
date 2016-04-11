@@ -22,7 +22,12 @@ $(function () {
             title: '号类名称',
             field: 'clinicType',
             width: "30%",
-            editor: 'text'
+            editor: {
+                type: 'textbox',
+                options: {
+                    required: true
+                }
+            }
         }, {
             title: '医院编号',
             field: 'hospitalId',
@@ -97,7 +102,6 @@ $(function () {
 
     loadDict();
 
-
     /**
      * 保存修改的内容
      * 基础字典的改变，势必会影响其他的统计查询
@@ -113,10 +117,10 @@ $(function () {
         var deleteDate = $("#dg").datagrid("getChanges", "deleted");
 
         var beanChangeVo = {};
+
         beanChangeVo.inserted = insertData;
         beanChangeVo.deleted = deleteDate;
         beanChangeVo.updated = updateDate;
-
 
         if (beanChangeVo) {
             $.postJSON("/api/clinic-type-setting/merge", beanChangeVo, function (data, status) {
@@ -126,7 +130,6 @@ $(function () {
                 $.messager.alert('系统警告', data.responseJSON.errorMessage, "error");
                 loadDict();
             })
-
         }
     });
 })
