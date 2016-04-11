@@ -54,7 +54,7 @@ $(function () {
         }, {
             title: '科室别名',
             field: 'deptAlis',
-            width: "10%"
+            hidden: true
         }, {
             title: '科室临床属性',
             field: 'deptAttr',
@@ -65,9 +65,9 @@ $(function () {
             width: "10%",
             formatter: function(value,row,index){
                 if (row.deptOutpInp == 1){
-                    return "门诊";
+                    return '门诊';
                 } else {
-                    return "住院";
+                    return '住院';
                 }
             }
         }, {
@@ -128,6 +128,10 @@ $(function () {
                     return "否";
                 }
             }
+        }, {
+            title: '科室简介',
+            field: 'deptInfo',
+            width: "10%"
         }]]
     });
 
@@ -156,6 +160,7 @@ $(function () {
                 obj.deptType = item.deptType;
                 obj.deptClass = item.deptClass;
                 obj.endDept = item.endDept;
+                obj.deptInfo = item.deptInfo;
                 obj.children = [];
 
                 depts.push(obj);
@@ -210,7 +215,7 @@ $(function () {
         panelHeight: 'auto',
         valueField: 'baseCode',
         textField: 'baseName',
-        url: "/api/base-dict/list-by-type?baseType=CLINIC_FLAG",
+        url: "/api/base-dict/list-by-type?baseType=DEPT_OUTP_INP_FLAG",
         mode: 'remote',
         method: 'GET'
     });
@@ -284,15 +289,16 @@ $(function () {
         $("#deptDevideAttr").textbox('setValue', node.deptDevideAttr);
         $("#deptLocation").textbox('setValue', node.deptLocation);
         $("#deptStopFlag").combobox('setValue', node.deptStopFlag);
-console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptType);console.log(node.deptClass);
+//console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptType);console.log(node.deptClass);
         $("#endDept").combobox('setValue', node.endDept);
         $("#deptType").combobox('setValue', node.deptType);
         $("#deptClass").combobox('setValue', node.deptClass);
         $("#parentId").textbox('setValue', node.parentId);
+        $("#deptInfo").val( node.deptInfo);
 
 
 
-        $("#dlg").dialog('open').dialog('setTitle', "科室修改");
+        $("#dlg").dialog('open').dialog('setTitle', "修改科室");
 
     });
 
@@ -300,7 +306,6 @@ console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptTy
      * 保存信息
      */
     $("#saveBtn").on('click', function () {
-
         var deptDict = {};
         deptDict.hospitalDict = {};
         deptDict.id = $("#id").val();
@@ -317,6 +322,10 @@ console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptTy
         deptDict.deptType = $("#deptType").combobox('getValue');
         deptDict.endDept = $("#endDept").combobox('getValue');
 
+        var oEditor = CKEDITOR.instances.deptInfo;
+        deptDict.deptInfo = oEditor.getData();
+
+        //alert(oEditor.getData());
 
         deptDict.hospitalDict.id = parent.config.hospitalId;
 
@@ -347,7 +356,8 @@ console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptTy
         $("#deptLocation").textbox('setValue', "");
         $("#deptStopFlag").combobox('setValue', "");
         $("#parentId").textbox('setValue', "");
-
+        var oEditor = CKEDITOR.instances.deptInfo;
+        oEditor.setData("");
     }
     /**
      * 删除
