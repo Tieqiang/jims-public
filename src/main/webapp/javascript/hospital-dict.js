@@ -2,7 +2,6 @@
  * Created by heren on 2015/9/14.
  */
 $(function () {
-
     //设置列
     $("#tt").treegrid({
         fit: true,
@@ -77,17 +76,6 @@ $(function () {
     }
 
     loadHospital();
-    /**
-     * 查询
-     */
-    $("#searchBtn").on("click", function () {
-        var name = $("#name").textbox("getValue");
-        var rows = $("#tt").treegrid('getData');
-        console.log(rows);
-        $.each(rows, function (index, item) {
-
-        });
-    });
 
     /**
      * 添加医院
@@ -120,7 +108,6 @@ $(function () {
      * 修改医院信息
      *
      */
-
     $("#editBtn").on('click', function () {
         var node = $("#tt").treegrid("getSelected");
         if (!node) {
@@ -150,23 +137,30 @@ $(function () {
         hospitalDict.organizationFullCode = $("#organizationFullCode").textbox('getValue');
         hospitalDict.parentHospital = $("#parentHospital").textbox('getValue');
 
-        if ($("#fm").form('validate')) {
-            $.postJSON("/api/hospital-dict/add", hospitalDict, function (data) {
-                $.messager.alert("系统提示", "保存成功");
-                loadHospital();
-                $("#id").val("");
-                $("#hospitalName").textbox('setValue', "");
-                $("#unitCode").textbox('setValue', "");
-                $("#location").textbox('setValue', "");
-                $("#zipCode").textbox('setValue', "");
-                $("#organizationFullCode").textbox('setValue', "");
-                $("#parentHospital").textbox('setValue', "");
-                $("#dlg").dialog('close');
-            }, function (data) {
-                $.messager.alert("系统提示", "保存失败");
-            })
+        var postcode = hospitalDict.zipCode;
+        if (postcode != "") {   //验证邮编
+            var pattern = /^[0-9]{6}$/;
+            flag = pattern.test(postcode);
+            if (!flag) {
+                alert("邮编非法！！")
+                document.getElementById("zipCode").focus();
+            }else if ($("#fm").form('validate')) {      //邮编验证通过
+                $.postJSON("/api/hospital-dict/add", hospitalDict, function (data) {
+                    $.messager.alert("系统提示", "保存成功");
+                    loadHospital();
+                    $("#id").val("");
+                    $("#hospitalName").textbox('setValue', "");
+                    $("#unitCode").textbox('setValue', "");
+                    $("#location").textbox('setValue', "");
+                    $("#zipCode").textbox('setValue', "");
+                    $("#organizationFullCode").textbox('setValue', "");
+                    $("#parentHospital").textbox('setValue', "");
+                    $("#dlg").dialog('close');
+                }, function (data) {
+                    $.messager.alert("系统提示", "保存失败");
+                })
+            }
         }
-
     });
 
     /**
@@ -175,7 +169,7 @@ $(function () {
     $("#delBtn").on('click', function () {
         var node = $("#tt").treegrid("getSelected");
         if (!node) {
-            $.messager.alert("系统提示", "请选择要修改的医院");
+            $.messager.alert("系统提示", "请选择要删除的医院");
             return;
         }
 
