@@ -32,7 +32,25 @@ $(function () {
             title: '所属科室',
             field: 'clinicDept',
             width: "30%",
-            editor: 'text'
+            editor: {
+                type: 'combogrid', options:{
+                    panelWidth: 350,    //下拉面板宽度
+                    idField: 'deptCode',
+                    textField: 'deptName',
+                    loadMsg: '数据正在加载',
+                    url: "/api/dept-dict/list?hospitalId="+config.hospitalId,   //一个URL从远程站点请求数据
+                    mode: 'listDoc',
+                    method: 'GET',
+                    columns: [[
+                        {field: 'deptCode', title: '科室代码', width: 145, align: 'center'},
+                        {field: 'deptName', title: '科室名称', width: 145, align: 'center'},
+                    ]],
+                    pagination: false,  //控件底部不显示分页工具栏
+                    fitColumns: true,   //自动展开/收缩列的大小，以适应网格的宽度，防止水平滚动。
+                    rowNumber: true,
+                    autoRowHeight: false
+                }
+            }
         }, {
             title: '所属医生',
             field: 'doctorId',
