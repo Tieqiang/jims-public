@@ -30,14 +30,16 @@ $(function(){
         columns: [[
             {title: 'ID',
                 field: 'id',
-                width: '60%'
+                hidden: true
             },{
                 title: '支付方式',
                 field: 'payWayName',
-                width:'40%',
+                width:'30%',
                 editor:{
-                    type:'text',
-                    required:true
+                    type:'textbox',
+                    options: {
+                        required: true
+                    }
                 }
             }]],
         //用户点击一行时触发
