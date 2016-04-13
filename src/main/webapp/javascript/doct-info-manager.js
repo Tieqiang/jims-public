@@ -46,7 +46,7 @@ $(function () {
 
         }, {
             field: 'title',
-            title: '所属科室',
+            title: '医生头衔',
             width: "20%"
 
         }, {
@@ -71,8 +71,12 @@ $(function () {
         flag = "add";
         $("#fm").get(0).reset();
         $('#dlg').dialog('open').dialog('center').dialog('setTitle', '添加医生信息');
-
-    });
+        var oEditor = CKEDITOR.instances.description;
+        oEditor.setData("");
+        $("#viewImg").attr("src","");
+        $("#headDiv").hide();
+        $("#uploadDiv").show();
+     });
 
     /**
      * init combobox
@@ -113,11 +117,11 @@ $(function () {
             doctInfo.name = $("#name").val();
             doctInfo.title = $("#title").val();
             doctInfo.hospitalId = getValue();
-            doctInfo.headUrl = $("#headUrl").val();
+            doctInfo.headUrl =$("#headUrl").attr('value');
             var oEditor = CKEDITOR.instances.description;
             var description =oEditor.getData();
          }
-        if($("#headUrl").val()==""){
+        if($("#headUrl").attr('value')==""){
             $.messager.alert("系统提示", "请上传图片！","error");
         }else{
             $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
@@ -144,10 +148,9 @@ $(function () {
             });
             $("#dlg").dialog('open');
             $("#fm").get(0).reset();
-
             loadSelectedRowData(arr);
-
-
+            $("#headDiv").show();
+            $("#uploadDiv").show();
             setValue(arr[0].hospitalId)
         }
     });
@@ -156,17 +159,16 @@ $(function () {
      * load selectedRowData
      */
     var loadSelectedRowData = function (arr) {
+        var oEditor = CKEDITOR.instances.description;
+        oEditor.setData(arr[0].tranDescription);
         $('#fm').form('load', {
             id: arr[0].id,
             name: arr[0].name,
             title: arr[0].title,
-
-            headUrl: arr[0].headUrl,
-            description: arr[0].tranDescription
-        });
-    }
-
-    /**
+            headUrl: arr[0].headUrl
+         });
+     }
+     /**
      * button of delete click
      */
     $("#delBtn").on('click', function () {
@@ -238,7 +240,10 @@ $(function () {
             data : {username : $("#username").val()},
              success: function(data, status) {
                  $('#uploadSpan').append("<span><font color='red'> 上传成功 ✔</font></span>");
+//                 $('#headUrl').val("");
                  $('#headUrl').attr('value',data.picUrl);
+                 $("#viewImg").attr("src",data.picUrl);
+ //                 alert($('#headUrl').attr('value'));
             },
             error : function(data, status, e) {
                  $.messager.alert('系统提示','上传出错','error');
