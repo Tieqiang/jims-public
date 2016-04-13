@@ -19,14 +19,13 @@ $(function () {
                 {
                     title: '编号',
                     field: 'id',
-
-                    checkbox: true
-                },
-                {
-                    title: 'ok',
-                    field: 'clinicTypeId',
                     hidden: true
-                },
+                 },
+//                {
+//                    title: 'ok',
+//                    field: 'clinicTypeId',
+//                    hidden: true
+//                },
                 {
                     title: '号别名称',
                     field: 'clinicType',
@@ -51,11 +50,6 @@ $(function () {
                     title: '限约号数',
                     field: 'appointmentLimits',
                     align: "center",
-                    formatter: function (value, record, index) {
-                        if (value == "" || value == null) {
-                            return 0;
-                        }
-                    },
                     width: "7%"
 
                 },
@@ -69,19 +63,18 @@ $(function () {
                     title: '当日已经挂号数',
                     field: 'registrationNum',
                     align: "center",
-                    width: "10%",
-                    formatter: function (value, record, index) {
-                        if (value == "" || value == null) {
-                            return 0;
-                        }
-                    }
+                    width: "10%"
+//                    formatter: function (value, record, index) {
+//                        if (value == "" || value == null) {
+//                            return 0;
+//                        }
+//                    }
                 },
                 {
                     title: '时间描述',
-                    align: "center",
-
                     field: 'timeDesc',
-                    width: "40%"
+                    width: "40%",
+                    align: 'center'
 
                 }
             ]
@@ -130,6 +123,7 @@ $(function () {
             $("#i_registrationLimits1").textbox("setValue", arr[0].registrationLimits);
             $("#i_appointmentLimits1").textbox("setValue", arr[0].appointmentLimits==null?0:arr[0].appointmentLimits);
             $("#i_description1").textbox("setValue", arr[0].timeDesc);
+//            loadRegistData();
         }
     });
      $("#btn_ok2").on("click", function () {
@@ -165,14 +159,18 @@ $(function () {
         });
     })
      $("#btn_ok1").on('click', function () {
-        var date = $("#date").datebox("getValue");
-        var date1 = $("#date1").datebox("getValue");
-        var clinicIndexId = getclinicLabel();
-        var desc = $("#desc").val();
-        var id = $("#id").val();
-         regist(date,clinicIndexId,date1,desc,id);
-
-    })
+             var date = $("#date").datebox("getValue");
+             var date1 = $("#date1").datebox("getValue");
+             var clinicIndexId = getclinicLabel();
+             var desc = $("#desc").val();
+             var id = $("#id").val();
+//         alert(date);
+         if(date=="" || date1=="" || clinicIndexId==""){
+             $.messager.alert("系统提示","请选择必填项","error");
+         }else{
+             regist(date,clinicIndexId,date1,desc,id);
+         }
+      })
      $("#delBtn").on('click', function () {
         var arr = $('#regist').datagrid('getSelections');
         if (arr.length <= 0) {
@@ -197,6 +195,7 @@ $(function () {
                             loadRegistData();
                             $('#regist').datagrid('unselectAll');
                             $.messager.alert("系统提示", "删除成功", "info");
+                            loadRegistData();
                         }
                     });
                 } else {
