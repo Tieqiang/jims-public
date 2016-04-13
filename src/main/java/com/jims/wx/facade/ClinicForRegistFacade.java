@@ -126,7 +126,7 @@ public class ClinicForRegistFacade extends BaseFacade {
                 System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
-                    saveRecord(new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                    saveRecord(dayTimes.get(i)[2].toString(),new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
                 }
             }
             map.put("isRegist", true);
@@ -144,16 +144,17 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
-    private void saveRecord(Date parse, ClinicIndex byId, String desc) {
+    private void saveRecord(String  limits,Date parse, ClinicIndex byId, String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
-        String limits = clinicScheduleFacade.findLimitsByClinicIndexId(byId.getId()).toString();
+//        String limits = clinicScheduleFacade.findLimitsByClinicIndexId(byId.getId()).toString();
         if (limits.contains(".")) {
             limits = limits.substring(0, limits.indexOf("."));
         }
         c.setRegistrationLimits(Integer.parseInt(limits));
         c.setRegistrationNum(0);
+        c.setAppointmentLimits(0);
         Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
         c.setCurrentNo(preNo + 1);
         c.setTimeDesc(desc);
