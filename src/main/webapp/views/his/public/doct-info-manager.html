@@ -10,9 +10,7 @@
     <link rel="stylesheet" href="/style/common.css">
     <!--<script src="../ckeditor.js"></script>-->
     <!--http://localhost/views/his/public/assert/plugins/fckeditor/samples/js/sample.js-->
-    <script src="/assert/plugins/fckeditor/samples/js/sample.js"></script>
-    <!--E:\workspace\jims-public\src\main\webapp\assert\plugins\fckeditor\ckeditor.js-->
-    <script src="/assert/plugins/fckeditor/ckeditor.js"></script>
+
     <!--E:\workspace\jims-public\src\main\webapp\assert\plugins\fckeditor\ckeditor.js-->
     <!--http://localhost/views/his/public/assert/plugins/fckeditor/samples/css/samples.css-->
     <link rel="stylesheet" href="/assert/plugins/fckeditor/samples/css/samples.css">
@@ -45,21 +43,22 @@
             <input id="name" name="name" class="easyui-textbox" required="true" value="">
         </div>
         <div class="fitem">
-            <label>所属科室：</label>
+            <label>医生头衔：</label>
             <input id="title" name="title" class="easyui-textbox" required="true" value="">
         </div>
         <div class="fitem">
             <label>医院编号：</label>
             <select id="cc" name="hospitalId" class="easyui-combobox"></select>
         </div>
-        <div class="fitem">
-            <label>上传头像</label>
+        <div class="fitem" id="uploadDiv">
+            <label>上传头像：</label>
             <input id="fileToUpload" type="file" size="45" name="fileToUpload">
             <a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >上传</a>
-            <span id="uploadSpan"></span>
+             <br/>
+            <img src="" id="viewImg"/>
          </div>
 
-        <div class="fitem" style="display:none;">
+        <div class="fitem" style="display:none;" id="headDiv">
             <label>头像地址：</label>
             <input id="headUrl" name="headUrl" class="easyui-textbox" value="" disabled="disabled">
         </div>
@@ -93,5 +92,8 @@
 <script type="text/javascript" src="/javascript/common/ajaxfileupload.js"></script>
 <script type="text/javascript" src="/javascript/doct-info-manager.js" charset="UTF-8"></script>
 <script type="text/javascript" src="/javascript/tool.js"></script>
+<script src="/assert/plugins/fckeditor/samples/js/sample.js"></script>
+<!--E:\workspace\jims-public\src\main\webapp\assert\plugins\fckeditor\ckeditor.js-->
+<script src="/assert/plugins/fckeditor/ckeditor.js"></script>
  </body>
 </html>
