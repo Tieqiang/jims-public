@@ -1,19 +1,9 @@
 package com.jims.wx.entity;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
+import java.util.Date;
 
 /**
  * AnswerSheet entity. @author MyEclipse Persistence Tools
@@ -29,7 +19,7 @@ public class AnswerSheet implements java.io.Serializable {
 	private String patId;
 	private String questionnaireId;
 	private Date createTime;
-	//private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
+
 
 	// Constructors
 
@@ -46,14 +36,7 @@ public class AnswerSheet implements java.io.Serializable {
 		this.createTime = createTime;
 	}
 
-    //public AnswerSheet(String openId, String patId, String questionnaireId,
-    //                   Date createTime, Set<AnswerResult> answerResults) {
-    //    this.openId = openId;
-    //    this.patId = patId;
-    //    this.questionnaireId = questionnaireId;
-    //    this.createTime = createTime;
-    //    this.answerResults = answerResults;
-    //}
+
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -104,14 +87,5 @@ public class AnswerSheet implements java.io.Serializable {
 	public void setCreateTime(Date createTime) {
 		this.createTime = createTime;
 	}
-
-	//@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "answerSheet")
-	//public Set<AnswerResult> getAnswerResults() {
-	//	return this.answerResults;
-	//}
-    //
-	//public void setAnswerResults(Set<AnswerResult> answerResults) {
-	//	this.answerResults = answerResults;
-	//}
 
 }

@@ -1,5 +1,6 @@
 package com.jims.wx.entity;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ public class AnswerResult implements java.io.Serializable {
 
 	// Fields
 	private String id;
+    @JsonBackReference
 	private Subject subject;
 	private AnswerSheet answerSheet;
 	private String answer;
@@ -44,7 +46,8 @@ public class AnswerResult implements java.io.Serializable {
 	}
 
 
-	@ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "SUBJECT_ID")
 	public Subject getSubject() {
 		return this.subject;
@@ -64,7 +67,7 @@ public class AnswerResult implements java.io.Serializable {
 		this.answerSheet = answerSheet;
 	}
 
-	@Column(name = "ANSWER", length = 20)
+	@Column(name = "ANSWER", length = 64)
 	public String getAnswer() {
 		return this.answer;
 	}
