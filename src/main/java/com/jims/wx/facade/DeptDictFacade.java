@@ -96,4 +96,20 @@ public class DeptDictFacade extends BaseFacade {
         Query query = entityManager.createQuery(hql);
         return query.getResultList();
     }
+
+    /**
+     *
+     * @param deptId
+     * @return
+     */
+    public DeptDict findById(String deptId) {
+        if(deptId=="" || deptId==null){
+            return null;
+        }
+        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id="+deptId+"").getSingleResult();
+        if(d==null){
+            return null;
+        }
+        return d;
+     }
 }
