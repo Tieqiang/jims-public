@@ -2,16 +2,15 @@ package com.jims.wx.facade;
 
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
-
 import com.jims.wx.entity.Subject;
 import com.jims.wx.entity.SubjectOptions;
 import com.jims.wx.vo.BeanChangeVo;
 import com.jims.wx.vo.SubjectOptionsVo;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by wei on 2016/3/16.
@@ -120,7 +119,14 @@ public class SubjectFacade extends BaseFacade {
         return newUpdateDict;
     }
 
-
+    /**
+     *
+     * @param subjectId
+     * @return
+     */
+    public Subject findById(String subjectId) {
+        return  (Subject)entityManager.createQuery("from Subject where id='"+subjectId+"'").getSingleResult();
+    }
 }
 
 
