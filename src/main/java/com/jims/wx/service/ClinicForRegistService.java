@@ -134,7 +134,7 @@ public class ClinicForRegistService {
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
             errorException.setMessage(e);
-            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1 ) {
                 errorException.setErrorMessage("输入数据超过长度！");
             } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
                 errorException.setErrorMessage("数据已存在，提交失败！");
