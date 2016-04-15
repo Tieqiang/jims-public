@@ -27,25 +27,10 @@ import java.util.*;
 @Path("clinic-for-regist")
 @Produces("application/json")
 public class ClinicForRegistService {
-
     private ClinicTypeChargeFacade clinicTypeChargeFacade;
-
     private ClinicForRegistFacade clinicForRegistFacade;
-
     private ClinicIndexFacade clinicIndexFacade;
-
     private ClinicTypeSettingFacade clinicTypeSettingFacade;
-
-
-//    find-clinic-setting-type
-
-    @POST
-    @Path("find-clinic-setting-type")
-    public List<ComboboxVo> findSettingType() {
-        List<ComboboxVo> list = clinicTypeSettingFacade.findComboxData();
-        return list;
-    }
-
     @Inject
     public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
@@ -53,7 +38,11 @@ public class ClinicForRegistService {
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
         this.clinicTypeSettingFacade = clinicTypeSettingFacade;
     }
-
+     /**
+     * 根据id查询号表详细信息
+     * @param id
+     * @return
+     */
     @GET
     @Path("find-info")
     public ClinicForRegistVO findInfo(@QueryParam("id") String id) {
@@ -61,17 +50,31 @@ public class ClinicForRegistService {
         return c;
     }
 
+    /**
+     * 加载号类数据
+     * @return
+     */
+    @POST
+    @Path("find-clinic-setting-type")
+    public List<ComboboxVo> findSettingType() {
+        List<ComboboxVo> list = clinicTypeSettingFacade.findComboxData();
+        return list;
+    }
+     /**
+     * 号表查询
+     * @param clinicIndexName
+     * @param date
+     * @return
+     */
     @GET
     @Path("list-all")
     public List<ClinicForRegist> listAll(@QueryParam("likeName") String clinicIndexName, @QueryParam("likeDate") String date) {
         List<ClinicForRegist> list = this.clinicForRegistFacade.findAllData(ClinicForRegist.class, clinicIndexName, date);
         return list;
     }
-
-    /**
+     /**
      * 查询号别信息
-     *
-     * @return
+      * @return
      */
     @POST
     @Path("find-clinic-index-type")
@@ -80,6 +83,13 @@ public class ClinicForRegistService {
         return list;
     }
 
+    /**
+     * 判断是否可以生成号表
+     * @param date
+     * @param clinicIndexId
+     * @param date1
+     * @return
+     */
     @GET
     @Path("judge-is-regist")
     public Map<String, Object> judgeIsRegist(@QueryParam("date") String date, @QueryParam("clinicIndexId") String clinicIndexId, @QueryParam("date1") String date1) {
@@ -91,11 +101,9 @@ public class ClinicForRegistService {
         }
         return map;
     }
-
-    /**
+     /**
      * 生成号表
-     *
-     * @param date
+      * @param date
      * @param clinicIndexId
      * @return
      */
@@ -114,6 +122,13 @@ public class ClinicForRegistService {
         return map;
     }
 
+    /**
+     * 保存号表
+     * @param clinicTypeId
+     * @param date
+     * @param clinicForRegist
+     * @return
+     */
     @POST
     @Path("save")
     public Response saveRequestMsg(@QueryParam("clinicTypeId") String clinicTypeId, @QueryParam("date") String date, ClinicForRegist clinicForRegist) {
@@ -145,7 +160,11 @@ public class ClinicForRegistService {
         }
     }
 
-
+    /**
+     * 批量删除
+     * @param ids
+     * @return
+     */
     @POST
     @Path("delete")
     public Response delete(@QueryParam("ids") String ids) {
@@ -163,7 +182,13 @@ public class ClinicForRegistService {
 
     }
 
-
+    /**
+     * 修改号表
+     * @param clinicIndexId
+     * @param date
+     * @param clinicForRegist
+     * @return
+     */
     @POST
     @Path("update")
     public Response update(@QueryParam("clinicIndexId") String clinicIndexId, @QueryParam("date") String date, ClinicForRegist clinicForRegist) {
