@@ -29,7 +29,6 @@ public class ClinicForRegistFacade extends BaseFacade {
     private ClinicTypeChargeFacade clinicTypeChargeFacade;
     private ClinicScheduleFacade clinicScheduleFacade;
     private ThreadLocal<Integer> shareData = new ThreadLocal<Integer>();
-
     @Inject
     public ClinicForRegistFacade(EntityManager entityManager, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicScheduleFacade clinicScheduleFacade) {
         this.entityManager = entityManager;
@@ -37,22 +36,18 @@ public class ClinicForRegistFacade extends BaseFacade {
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
         this.clinicScheduleFacade = clinicScheduleFacade;
     }
-
-    /**
+     /**
      * 保存对象内容
-     *
-     * @param saveData
+      * @param saveData
      * @return
      */
     @Transactional
     public ClinicForRegist save(ClinicForRegist saveData) {
         return merge(saveData);
     }
-
-    /**
+     /**
      * 修改对象内容
-     *
-     * @param updateData
+      * @param updateData
      * @return
      */
     @Transactional
@@ -67,11 +62,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return newUpdateDict;
     }
-
-    /**
+     /**
      * 批量删除
-     *
-     * @param clazz
+      * @param clazz
      * @param ids
      * @return
      */
@@ -86,11 +79,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         super.removeByStringIds(clazz, list);
         return list;
     }
-
-    /**
+     /**
      * 判断是否能生成号表
-     *
-     * @param date
+      * @param date
      * @param clinicIndexId
      * @return
      */
@@ -110,8 +101,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return map;
     }
-
-    /**
+     /**
      * @param date
      * @param clinicIndexId
      * @return
@@ -136,8 +126,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return map;
     }
-
-    /**
+     /**
      * @param parse clinicDate
      * @param byId  号别
      * @param desc  描述
@@ -160,8 +149,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         c.setTimeDesc(desc);
         save(c);
     }
-
-    /**
+     /**
      * @param id
      * @return
      * @description 通过号别id统计已经生成的号表
@@ -169,8 +157,7 @@ public class ClinicForRegistFacade extends BaseFacade {
     private Long countHaveRegistedRecord(String id) {
         return (Long) entityManager.createQuery("select count(*) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
     }
-
-    /**
+     /**
      * @param startTime yyyy-MM-dd HH:mm:ss
      * @param endTime   yyyy-MM-dd HH:mm:ss
      * @param dayOfWeek 星期(1/2/3...)
@@ -211,8 +198,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return list;
     }
-
-    /**
+     /**
      * @param dayForWeek
      * @return
      * @description 装换成字符串
@@ -234,11 +220,9 @@ public class ClinicForRegistFacade extends BaseFacade {
             return DayOfWeek.星期日.toString();
         }
     }
-
-    /**
+     /**
      * 判断当前日期是星期几
-     *
-     * @param pTime 修要判断的时间
+      * @param pTime 修要判断的时间
      * @return dayForWeek 判断结果
      * @Exception 发生异常
      */
@@ -254,8 +238,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return dayForWeek;
     }
-
-    /**
+     /**
      * @param dateFrom 开始时间  yyyy-MM-dd HH:mm:ss
      * @param dateEnd  结束时间   yyyy-MM-dd HH:mm:ss
      * @param weekDays 星期
@@ -291,13 +274,21 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return dateList;
     }
-
+     /**
+     * 判断一个日期周几
+     * @param date
+     * @return
+     */
     public static Integer dayForWeek(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
-
+     /**
+     *获取当前是低级周
+     * @param weekDays
+     * @return
+     */
     public static String weekForNum(String weekDays) {
         String weekNumber = "";
         if (weekDays.indexOf("|") != -1) {//多个星期数
@@ -310,8 +301,8 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return weekNumber;
     }
-
-    /**
+     /**
+     * 字符串与整型互相转换
      * @param strWeek
      * @return
      */
@@ -336,11 +327,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return number;
     }
-
-    /**
+     /**
      * 根据id 查询号表对象
-     *
-     * @param id
+      * @param id
      * @return
      */
     private ClinicForRegist findById(String id) {
@@ -349,15 +338,12 @@ public class ClinicForRegistFacade extends BaseFacade {
 
     /**
      * 查找当前挂号人数
-     *
-     * @param dayOfWeek
+      * @param dayOfWeek
      * @return
      */
     private Long findcurrentGuaHaoPs(String dayOfWeek) {
-//        ClinicForRegist
-        String sql = null;
-//        ClinicForRegist
-        try {
+         String sql = null;
+         try {
             sql = "select count(*) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
         } catch (Exception e) {
             e.printStackTrace();
@@ -365,8 +351,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         Long count = (Long) entityManager.createQuery(sql).getSingleResult();
         return count;
     }
-
-    /**
+     /**
      * @param id
      * @param flag
      * @return
@@ -380,11 +365,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return list.get(0);
     }
-
-    /**
+     /**
      * 更新当日挂号人数
-     *
-     * @param id
+      * @param id
      * @param i
      */
     @Transactional
@@ -413,11 +396,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         c.setDescription(cc.getTimeDesc());
         return c;
     }
-
-    /**
+     /**
      * 判断号表约束是否存在
-     *
-     * @param clinicTypeId
+      * @param clinicTypeId
      * @param clinicDate
      * @param i
      * @return
@@ -432,11 +413,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return true;
     }
-
-    /**
+     /**
      * 条件查询
-     *
-     * @param clinicForRegistClass
+      * @param clinicForRegistClass
      * @return
      */
     public List<ClinicForRegist> findAllData(Class<ClinicForRegist> clinicForRegistClass, String clinicIndexName, String date) {
