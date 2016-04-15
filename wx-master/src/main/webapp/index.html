@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>极目云-医院信息管理系系统</title>
+    <link id="easyuiTheme" rel="stylesheet" href="assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="assert/easyui/portal.css">
+    <link rel="stylesheet" href="assert/easyui/common.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+
+<body class="easyui-layout">
+<noscript>
+    <div style="position:absolute; z-index:100000; height:246px;top:0px;left:0px; width:100%; background:white; text-align:center;">
+        <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！'/>
+    </div>
+</noscript>
+<div data-options="region:'north',border:false" style="height:60px;background:#35a8df;padding:0px">
+    <div class="site_title"></div>
+    <div id="sessionInfoDiv" style="position: absolute;right: 5px;top:10px; color:#fff;">
+        [<strong><span id="uName"></span></strong>]，<span id="storageName"></span>欢迎你！您使用！
+    </div>
+    <div style="position: absolute; right: 0px; bottom: 0px; ">
+        <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_pfMenu',iconCls:'icon-ok'">更换皮肤</a>
+        <a href="javascript:void(0);" class="easyui-menubutton" data-options="menu:'#layout_north_zxMenu',iconCls:'icon-back'">操作</a>
+    </div>
+    <div id="layout_north_pfMenu" style="width: 120px; display: none;">
+        <div onclick="changeTheme('default');">default</div>
+        <div onclick="changeTheme('gray');">gray</div>
+        <div onclick="changeTheme('bootstrap');">bootstrap</div>
+        <div onclick="changeTheme('metro');">metro</div>
+        <div onclick="changeTheme('metro-blue');">metro-blue</div>
+        <div onclick="changeTheme('metro-green');">metro-green</div>
+    </div>
+    <div id="layout_north_kzmbMenu" style="width: 100px; display: none;">
+        <div onclick="userInfoFun();">个人信息</div>
+        <div onclick="userInfoFun();">退出登录</div>
+    </div>
+    <div id="layout_north_zxMenu" style="width: 100px; display: none;color:#0000ff">
+        <!--<div id="lockWindow">锁定窗口</div>-->
+        <div class="menu-sep"></div>
+        <div id="reLogin">重新登录</div>
+        <div id="changeLogin">切换信息</div>
+        <div id="changePassWord">修改密码</div>
+        <!--<div id="logout">退出系统</div>-->
+    </div>
+
+</div>
+
+<div id="mm" class="easyui-menu" style="width:120px;">
+    <div id="close" data-options="name:1">关闭</div>
+    <div id="closeall" data-options="name:2">全部关闭</div>
+    <div id="closeother" data-options="name:3">除此之外全部关闭</div>
+    <div class="menu-sep"></div>
+    <div id="closeright" data-options="name:4">当前页右侧全部关闭</div>
+    <div id="closeleft" data-options="name:5">当前页左侧全部关闭</div>
+</div>
+<!--west begin -->
+
+<div data-options="region:'west',split:true,title:'导航菜单'" style="width:250px;">
+    <div class="easyui-accordion sider" data-options="fit:true,border:false">
+        <!--//左侧菜单导航-->
+        <div title="基础功能" data-options="iconCls:'icon-mini-add'" style="padding:10px;">
+            <ul id="menuTree" class="easyui-tree">
+
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div id="mainContent" class="easyui-tabs" data-options="region:'center'">
+
+</div>
+
+
+
+<div data-options="region:'south',border:false">
+    <div id="footer">
+        Copyright &copy; 2013 by 极目云软件.&nbsp;&nbsp;&nbsp;&nbsp;
+        All Rights Reserved<br>
+    </div>
+</div>
+
+
+
+<script type="text/javascript" src="assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="assert/easyui/jquery.portal.js"></script>
+<script type="text/javascript" src="assert/easyui/jquery.cookie.js"></script>
+<script type="text/javascript" src="javascript/jeasyui.common.js"></script>
+<script type="text/javascript" src="javascript/tool.js"></script>
+<script type="text/javascript" src="javascript/common/index.js"></script>
+<div id="dlg" class="easyui-dialog" style="padding:10px 20px"
+        >
+    <div class="ftitle">修改密码</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>原密码:</label>
+            <input type="password" name="password" id="password" class="easyui-textbox"
+                   required="true" style="width: 100px">
+        </div>
+    </form>
+</div>
+<div id="dlgNew" class="easyui-dialog" style="padding:10px 20px">
+    <div class="ftitle">修改密码</div>
+    <form id="fm1" method="post" novalidate>
+        <div class="fitem">
+            <label>新密码:</label>
+            <input type="password" name="new_password" id="new_password" class="easyui-textbox"
+                   style="width: 100px" required="true">
+        </div>
+        <div class="fitem">
+            <label>确认密码:</label>
+            <input type="password" name="confirm_password" id="confirm_password" class="easyui-textbox"
+                   style="width: 100px" required="true">
+        </div>
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" id="saveBtn" class="easyui-linkbutton c6" iconCls="icon-ok" style="width:90px">保存</a>
+    <a href="javascript:void(0)" id="closeDlgNew" class="easyui-linkbutton" iconCls="icon-cancel"
+       style="width:90px">关闭</a>
+</div>
+<div id="dlgNew-buttons">
+    <a href="javascript:void(0)" id="saveBtnNew" class="easyui-linkbutton c6" iconCls="icon-ok"
+       style="width:90px">下一步</a>
+    <a href="javascript:void(0)" id="closeDlg" class="easyui-linkbutton" iconCls="icon-cancel"
+       style="width:90px">关闭</a>
+</div>
+</body>
+</html>

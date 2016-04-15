@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html ng-app="openAccountSetApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>公众号设置</title>
+    <link href="/assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assert/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <script src="/assert/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="/assert/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/assert/angular/angular.js" type="text/javascript"></script>
+    <script src="/javascript/app-set.js" type="text/javascript"></script>
+</head>
+<body class="container-fluid" ng-controller="openAccountSetCtrl">
+    <div class="row">
+        <div class="col-md-6">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label for="hospitalName" class="col-sm-2 control-label">医院名称</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="hospitalName" placeholder="医院名称" ng-model="appInfo.hospitalName">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="openName">
+                        公众号名称
+                    </label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="openName" placeholder="公众号名称"  ng-model="appInfo.openName"/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appId" class="col-sm-2 control-label">公众号ID</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="appId" placeholder="公众号ID" ng-model="appInfo.appId">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appSecret" class="col-sm-2 control-label">公众号Secret</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="appSecret" placeholder="公众号Secret" ng-model="appInfo.appSecret">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="appToken" class="col-sm-2 control-label">公众号Token</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="appToken" placeholder="公众号Token" ng-model="appInfo.appToken">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="infoUrl" class="col-sm-2 control-label">简介地址</label>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control" id="infoUrl" placeholder="简介地址" ng-model="appInfo.infoUrl">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button type="submit" class="btn btn-primary" ng-click="save()">保存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

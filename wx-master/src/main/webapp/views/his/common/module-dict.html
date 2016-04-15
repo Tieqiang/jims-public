@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>系统模块维护</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+<table id="dg" class="easyui-datagrid">
+</table>
+
+<div id="dlg"  class="easyui-dialog" style="width:450px;height:350px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons" data-options="modal:true">
+    <ul id="tt" class="easyui-tree">
+    </ul>
+</div>
+
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" id="selectAllMenuBtn" class="easyui-linkbutton c6" iconCls="icon-ok"  style="width:90px" >全选</a>
+    <a href="javascript:void(0)" id="selectNoMenuBtn" class="easyui-linkbutton c6" iconCls="icon-clear"  style="width:90px">全不选</a>
+    <a href="javascript:void(0)" id="saveMenuBtn" class="easyui-linkbutton c6" iconCls="icon-save"  style="width:90px">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">关闭</a>
+</div>
+
+
+<div id="tb" style="padding:2px 5px;">
+    模块名称：<input type="text" class="easyui-textbox" id="name">
+    <a href="#" id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>&nbsp;&nbsp;
+    <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加模块</a>
+    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改模块</a>
+    <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除模块</a>
+    <a href="#" id="saveBtn" class="easyui-linkbutton" iconCls="icon-save">保存</a>
+    <a href="#" id="menuAddBtn" class="easyui-linkbutton" iconCls="icon-edit">分配模块菜单</a>
+    <a href="#" id="staffAddBtn" class="easyui-linkbutton" iconCls="icon-edit">分配用户权限</a>
+</div>
+<div id="ft" style="padding:2px 5px;">
+
+</div>
+
+<div id="waitTb">
+    过滤：<input id="staffName" class="easyui-searchbox" prompt="请输入查询内容" style="width:150px"/>
+</div>
+
+<div id="checkStaffWin" class="easyui-window" closed="true">
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'west'" style="height: 500px;width:300px;">
+            <table  id="checkedStaff" class="easyui-datagrid">
+            </table>
+        </div>
+        <div class="easyui-panel" data-options="region:'center',title:'操作'" style="height: 500px;width:100px">
+            <br/><br/><br/><br/><br/><br/>
+            &nbsp;<a href="#" id="selectAllStaffBtn" class="easyui-linkbutton" style="align:center;padding:1px;margin:2px;">添加全部</a><br/>
+            &nbsp;<a href="#" id="addStaffBtn" class="easyui-linkbutton" style="align:center;padding:1px;margin:2px;">添加所选</a><br/>
+            &nbsp;<a href="#" id="delStaffBtn" class="easyui-linkbutton" style="align:center;padding:1px;margin:2px;">删除所选</a><br/>
+            &nbsp;<a href="#" id="selectNoStaffBtn" class="easyui-linkbutton" style="align:center;padding:1px;margin:2px;">删除全部</a><br/>
+            &nbsp;<a href="#" id="saveStaffBtn" class="easyui-linkbutton" iconCls="icon-save"
+                     style="align:center;padding:1px;margin:2px;">保存</a>
+        </div>
+        <div data-options="region:'east'" style="height: 500px;width:300px;">
+            <table id="waitCheckStaff" class="easyui-datagrid" data-options="region:'east'">
+            </table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/javascript/common/module-dict.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>

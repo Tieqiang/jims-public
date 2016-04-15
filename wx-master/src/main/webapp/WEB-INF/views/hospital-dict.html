@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>平台医院管理</title>
+    <link href="assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assert/bootstrap/css/bootstrap.min.css">
+
+</head>
+
+<body>
+<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title">平台医院信息</h3>
+    </div>
+    <!-- /.box-header -->
+    <div class="box-body">
+        <!--<form role="form">-->
+            <!-- text input -->
+            <div id="hospitalDictDiv">
+                <div class="form-group">
+                    <label>医院名称：</label>
+                    <input type="text" class="form-control" id="hospitalName" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院编码：</label>
+                    <input type="text" class="form-control" id="unitCode" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院位置：</label>
+                    <input type="text" class="form-control" id="location" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院邮编：</label>
+                    <input type="text" class="form-control" id="zipCode" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院组织结构完整编码：</label>
+                    <input type="text" class="form-control" id="organizationFullCode" placeholder="请输入...">
+                </div>
+
+                <div class="form-group">
+                    <label>上级医院：</label>
+                    <select class="form-control select2" id="parentHospital" multiple="multiple"
+                            data-placeholder="  请选择..." style="width: 100%;">
+                        <option>Alabama</option>
+                        <option>Alaska</option>
+                        <option>California</option>
+                        <option>Delaware</option>
+                        <option>Tennessee</option>
+                        <option>Texas</option>
+                        <option>Washington</option>
+                    </select>
+                </div>
+                <div class="box-footer">
+                    <button class="btn btn-default">取消</button>
+                    <button  class="btn btn-info pull-right" id="btnSubmit">下一步</button>
+                </div>
+            </div>
+
+
+            <div id="hospitalInfoDiv" style="display: none">
+                <!-- text input -->
+                <div class="form-group">
+                    <label>应用ID：</label>
+                    <input type="text" class="form-control" id="appId" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院网址：</label>
+                    <input type="text" class="form-control" id="infoUrl" placeholder="请输入...">
+                </div>
+                <div class="form-group">
+                    <label>医院简介：</label>
+
+                    <div class="box-body pad">
+                        <textarea id="content" name="content" rows="10" cols="80"></textarea>
+                    </div>
+                </div>
+
+                <div class="box-footer">
+                    <button class="btn btn-default" onclick="history.go(-1);">上一步</button>
+                    <button  id="btnSubmit1" class="btn btn-info pull-right">提交</button>
+                </div>
+            </div>
+        <!--</form>-->
+    </div>
+    <!-- /.box-body -->
+</div>
+
+
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+<script src="javascript/hospital-dict.js" type="text/javascript"></script>
+<script type="text/javascript" src="../../../assert/plugins/ckeditor/ckeditor.js"></script>
+
+
+</body>
+</html>

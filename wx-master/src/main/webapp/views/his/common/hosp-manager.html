@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>医院管理</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+<table id="tt" class="easyui-treegrid">
+
+
+
+</table>
+
+
+<div id="tb" style="padding:2px 5px;">
+    <!--医院名称：<input type="text" class="easyui-textbox" id="name">
+    <a href="#" id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>&nbsp;&nbsp;-->
+    <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加</a>
+    <a href="#" id="addChildBtn" class="easyui-linkbutton" iconCls="icon-add">添加分院</a>
+    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">编辑</a>
+    <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>
+</div>
+<div id="ft" style="padding:2px 5px;">
+
+</div>
+
+
+
+<div id="dlg" class="easyui-dialog" style="width:400px;height:350px;padding:10px 20px"
+     closed="true" buttons="#dlg-buttons" data-options="modal:true">
+    <div class="ftitle">医院信息维护</div>
+    <form id="fm" method="post" novalidate>
+        <div class="fitem">
+            <label>医院名称:</label>
+            <input id="hospitalName" name="hospitalName" class="easyui-textbox" required="true">
+        </div>
+        <div class="fitem">
+            <label>医院编码:</label>
+            <input id="unitCode" name="unitCode" class="easyui-textbox">
+        </div>
+        <div class="fitem">
+            <label>详细地址</label>
+            <input name="location" id="location" class="easyui-textbox" >
+        </div>
+        <div class="fitem">
+            <label>邮编</label>
+            <input name="zipCode" id="zipCode" class="easyui-textbox" >
+        </div>
+        <div class="fitem">
+            <label>完整编码</label>
+            <input name="organizationFullCode" id="organizationFullCode" class="easyui-textbox" >
+        </div>
+        <div class="fitem">
+            <label>上级医院</label>
+            <input name="parentHospital" id="parentHospital" class="easyui-textbox" disabled>
+        </div>
+
+        <div class="fitem">
+            <input name="id" id="id" type="hidden">
+        </div>
+
+    </form>
+</div>
+<div id="dlg-buttons">
+    <a href="javascript:void(0)" id="saveBtn" class="easyui-linkbutton c6" iconCls="icon-ok"  style="width:90px">保存</a>
+    <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg').dialog('close')" style="width:90px">关闭</a>
+</div>
+
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/javascript/hosp-manager.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>

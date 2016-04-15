@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>门诊号类收费维护</title>
+    <!--引入easyui样式-->
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+</head>
+<body>
+    <div class="easyui-layout" id="cc">
+        <div region="south" border="false">
+            <table id="bottom" class="easyui-datagrid" style="width:100%"></table>
+        </div>
+        <div region="west" border="false" style="width:250px;">
+            <table id="dg" class="easyui-datagrid"></table>
+        </div>
+        <div region="center" border="false">
+            <table id="sf" class="easyui-datagrid" ></table>
+        </div>
+    </div>
+    <div id="ft" style="height:30px;">
+        <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加</a>
+        <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>
+        <a href="#" id="saveBtn" class="easyui-linkbutton" iconCls="icon-save">保存</a>
+    </div>
+
+    <!--引入jQuery标签库和easyui标签库-->
+    <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="/javascript/tool.js"></script>
+    <!--引入自己的js-->
+    <script type="text/javascript" src="/javascript/clinic-type-charge.js"></script>
+</body>
+</html>
