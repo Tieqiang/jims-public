@@ -5,6 +5,7 @@ import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.ClinicTypeSetting;
 import com.jims.wx.vo.BeanChangeVo;
+import com.jims.wx.vo.ComboboxVo;
 
 import javax.persistence.EntityManager;
 import java.util.ArrayList;
@@ -22,7 +23,24 @@ public class ClinicTypeSettingFacade extends BaseFacade {
         String hql = "from ClinicTypeSetting where id='" +id+ "'";
         return entityManager.createQuery(hql).getResultList();
     }
+    /**
+     *
+     * @return
+     */
+    public List<ComboboxVo> findComboxData() {
+        List<ComboboxVo> comboboxVolist=new ArrayList<ComboboxVo>();
+        List<ClinicTypeSetting> list= entityManager.createQuery("from ClinicTypeSetting").getResultList();
+        for(int i=0;i<list.size();i++){
+            ClinicTypeSetting c=list.get(0);
+            ComboboxVo v=new ComboboxVo();
+            v.setId(c.getId());
+            v.setText(c.getClinicType());
+            comboboxVolist.add(v);
+        }
 
+        return comboboxVolist;
+
+    }
     /**
      * 保存增删改
      *
