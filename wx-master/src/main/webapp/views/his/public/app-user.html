@@ -35,7 +35,7 @@
         <a href="#" id="addGroupBtn" class="easyui-linkbutton" iconCls="icon-add">新建标签</a>
         <a href="#" id="modGroupBtn" class="easyui-linkbutton" iconCls="icon-edit">重命名标签</a>
         <a href="#" id="delGroupBtn" class="easyui-linkbutton" iconCls="icon-remove">删除标签</a>
-        <a href="#" id="moveBtn" class="easyui-linkbutton" iconCls="icon-reload">打标签</a>
+        <a href="#" id="moveBtn" class="easyui-linkbutton" iconCls="icon-reload">修改分组</a>
         <a href="#" id="tipBtn" class="easyui-linkbutton" iconCls="icon-tip">添加备注名</a>
         <a href="#" id="blackListBtn" class="easyui-linkbutton" iconCls="">加入黑名单</a>
     </div>
@@ -60,12 +60,18 @@
     <div id="dlg-move" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
          closed="true" buttons="#dlg-move-buttons">
         <div class="fitem">
-            <table id="groupDg" class="easyui-datagrid">
-            </table>
+            <label>当前分组：</label>
+            <input name="currentGroupId" id="currentGroupId" class="easyui-textbox" disabled="true">
+        </div>
+        <div class="fitem">
+            目标分组：<input id="targetGroupId" name="targetGroupId" class="easyui-textbox" required="true">
         </div>
     </div>
     <div id="dlg-move-buttons">
-
+        <a href="javascript:void(0)" id="moveGroupBtn" class="easyui-linkbutton c6" iconCls="icon-add"
+           style="width:60px">确定</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+           onclick="javascript:$('#dlg-move').dialog('close')" style="width:60px">关闭</a>
     </div>
     <!--添加备注名-->
     <div id="dlg-tip" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"

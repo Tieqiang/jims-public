@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.Date;
+
 /**
  * RequestMessage entity. @author MyEclipse Persistence Tools
  */
@@ -19,7 +21,7 @@ public class RequestMessage implements java.io.Serializable {
 	private String id;
 	private String toUserName;
 	private String fromUserName;
-	private String createTime;
+	private Integer createTime;
 	private String msgType;
 	private String msgId;
 	private String content;
@@ -51,7 +53,7 @@ public class RequestMessage implements java.io.Serializable {
 
 	/** full constructor */
 	public RequestMessage(String toUserName, String fromUserName,
-			String createTime, String msgType, String msgId, String content,
+                          Integer createTime, String msgType, String msgId, String content,
 			String picUrl, String mediaId, String format, String locationX,
 			String locationY, String scale, String label, String title,
 			String description, String url, String thumbMediaId, String appId,
@@ -116,11 +118,11 @@ public class RequestMessage implements java.io.Serializable {
 	}
 
 	@Column(name = "CREATE_TIME", length = 0)
-	public String getCreateTime() {
+	public Integer getCreateTime() {
 		return this.createTime;
 	}
 
-	public void setCreateTime(String createTime) {
+	public void setCreateTime(Integer createTime) {
 		this.createTime = createTime;
 	}
 
