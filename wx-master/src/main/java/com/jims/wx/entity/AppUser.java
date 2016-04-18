@@ -28,7 +28,6 @@ public class AppUser implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private String groupId;
 	private Integer subscribe;
 	private String openId;
 	private String nickName;
@@ -38,9 +37,9 @@ public class AppUser implements java.io.Serializable {
 	private String province;
 	private String language;
 	private String headImgUrl;
-	private String subscrbeTime;
+	private Integer subscrbeTime;
 	private String remark;
-	private String appId;
+    private Integer groupId ;
 	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
 
 	// Constructors
@@ -52,9 +51,8 @@ public class AppUser implements java.io.Serializable {
     /**
      * full constructor
      */
-    public AppUser(String id, String groupId, Integer subscribe, String openId, String nickName, Integer sex, String city, String country, String province, String language, String headImgUrl, String subscrbeTime, String remark, String appId, Set<PatVsUser> patVsUsers) {
+    public AppUser(String id, Integer subscribe, String openId, String nickName, Integer sex, String city, String country, String province, String language, String headImgUrl, Integer subscrbeTime, String remark, Integer groupId, Set<PatVsUser> patVsUsers) {
         this.id = id;
-        this.groupId = groupId;
         this.subscribe = subscribe;
         this.openId = openId;
         this.nickName = nickName;
@@ -66,7 +64,7 @@ public class AppUser implements java.io.Serializable {
         this.headImgUrl = headImgUrl;
         this.subscrbeTime = subscrbeTime;
         this.remark = remark;
-        this.appId = appId;
+        this.groupId = groupId;
         this.patVsUsers = patVsUsers;
     }
 
@@ -84,14 +82,8 @@ public class AppUser implements java.io.Serializable {
         this.id = id;
     }
 
-    @Column(name = "GROUP_ID", length = 64)
-    public String getGroupId() {
-        return groupId;
-    }
 
-    public void setGroupId(String groupId) {
-        this.groupId = groupId;
-    }
+
 
     @Column(name = "SUBSCRIBE", precision = 22, scale = 0)
 	public Integer getSubscribe() {
@@ -175,11 +167,11 @@ public class AppUser implements java.io.Serializable {
 	}
 
 	@Column(name = "SUBSCRBE_TIME", length = 0)
-	public String getSubscrbeTime() {
+	public Integer getSubscrbeTime() {
 		return this.subscrbeTime;
 	}
 
-	public void setSubscrbeTime(String subscrbeTime) {
+	public void setSubscrbeTime(Integer subscrbeTime) {
 		this.subscrbeTime = subscrbeTime;
 	}
 
@@ -192,14 +184,7 @@ public class AppUser implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	@Column(name = "APP_ID", length = 64)
-	public String getAppId() {
-		return this.appId;
-	}
 
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUser")
 	public Set<PatVsUser> getPatVsUsers() {
@@ -210,4 +195,12 @@ public class AppUser implements java.io.Serializable {
 		this.patVsUsers = patVsUsers;
 	}
 
+    @Column(name="group_id")
+    public Integer getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(Integer groupId) {
+        this.groupId = groupId;
+    }
 }

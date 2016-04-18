@@ -27,7 +27,7 @@ public class AppUserGroups implements java.io.Serializable {
 
 	private String id;
 	private String name;
-	private Double count;
+	private Integer count;
 	private String groupStatus;
 	private String appId;
 	private Date createTime;
@@ -35,7 +35,6 @@ public class AppUserGroups implements java.io.Serializable {
 	private Date updateTime;
 	private String updateOperator;
     private String groupId;
-	//private Set<AppUser> appUsers = new HashSet<AppUser>(0);
 
 	// Constructors
 
@@ -44,7 +43,7 @@ public class AppUserGroups implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public AppUserGroups(String name, Double count, String groupStatus,
+	public AppUserGroups(String name, Integer count, String groupStatus,
 			String appId, Date createTime, String operator, Date updateTime,
 			String updateOperator,String groupId) {
 		this.name = name;
@@ -82,11 +81,11 @@ public class AppUserGroups implements java.io.Serializable {
 	}
 
 	@Column(name = "COUNT", precision = 22, scale = 0)
-	public Double getCount() {
+	public Integer getCount() {
 		return this.count;
 	}
 
-	public void setCount(Double count) {
+	public void setCount(Integer count) {
 		this.count = count;
 	}
 
