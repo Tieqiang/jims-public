@@ -28,7 +28,18 @@ public class ClinicScheduleFacade extends BaseFacade {
         String sqls = "from ClinicSchedule where clinicIndexId=" +"'" +id+ "'";
         return entityManager.createQuery(sqls).getResultList();
     }
-
+    /**
+     * @param clinicIndexId 号别ID
+     * @return List<String[]>
+     * @description / 通过所选择的号别  查询出诊安排
+     * @author created by chenxiaoyang
+     */
+//    ClinicSchedule
+    public List<Object[]> queryDayAndTime(String clinicIndexId) {
+        String hql = "select c.dayOfWeek,c.timeOfDay,c.registrationLimits from ClinicSchedule as c where c.clinicIndexId='" + clinicIndexId + "'";
+        List<Object[]> list = entityManager.createQuery(hql).getResultList();
+        return list;
+    }
     /**
      * 保存增删改
      *

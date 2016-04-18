@@ -2,11 +2,14 @@ package com.jims.wx.service;
 
 
 
+import com.jims.wx.entity.PatInfo;
+import com.jims.wx.facade.PatInfoFacade;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import org.springframework.web.bind.annotation.RequestBody;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.xmlmessage.XMLMessage;
@@ -37,6 +40,8 @@ public class WxService {
 
     private HttpServletRequest request ;
     private HttpServletResponse response ;
+    //用户绑卡facade
+    private PatInfoFacade patInfoFacade;
 
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
@@ -45,6 +50,18 @@ public class WxService {
         this.request = request;
         this.response = response;
     }
+     /**
+     * @description 用户绑卡
+     * @author chenxy
+     * @createTime 04-17
+      */
+    @POST
+    @Path("user-bankger")
+    public void userBangker(@RequestBody String patInfo){
+         System.out.println(patInfo);
+    }
+
+
 
     @Path("check")
     @Produces("text/html")
@@ -62,52 +79,52 @@ public class WxService {
 
     @POST
     @Path("check")
-    @Produces("text/html")
+    @Produces("text/xml")
     public void postMsg() throws IOException {
-        ServletInputStream inputStream = request.getInputStream();
-        ServletOutputStream outputStream = response.getOutputStream();
-        String signature = request.getParameter("signature");
-        String timestamp = request.getParameter("timestamp");
-        String nonce = request.getParameter("nonce");
-        String echostr = request.getParameter("echostr");
-
-        //首次请求申请验证,返回echostr
-        if(echostr!=null){
-            outputStreamWrite(outputStream,echostr);
-            return;
-        }
-
-        //验证请求签名
-        //if(!signature.equals(SignatureUtil.generateEventMessageSignature(TokenManager.getDefaultToken(), timestamp, nonce))){
-        //    System.out.println("The request signature is invalid");
-        //    return;
-        //}
-
-        if(inputStream!=null){
-            //转换XML
-            EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, inputStream);
-            String key = eventMessage.getFromUserName() + "__"
-                    + eventMessage.getToUserName() + "__"
-                    + eventMessage.getMsgId() + "__"
-                    + eventMessage.getCreateTime();
-            System.out.println(eventMessage.getContent());
-            if(expireKey.exists(key)){
-                //重复通知不作处理
-                return;
-            }else{
-                expireKey.add(key);
-            }
-
-            //创建回复
-            XMLMessage xmlTextMessage = new XMLTextMessage(
-                    eventMessage.getFromUserName(),
-                    eventMessage.getToUserName(),
-                    "这个世界很美好，请你按照你所说的内容写一个信息");
-            //回复
-            xmlTextMessage.outputStreamWrite(outputStream);
-            return;
-        }
-        outputStreamWrite(outputStream,"");
+//        ServletInputStream inputStream = request.getInputStream();
+//        ServletOutputStream outputStream = response.getOutputStream();
+//        String signature = request.getParameter("signature");
+//        String timestamp = request.getParameter("timestamp");
+//        String nonce = request.getParameter("nonce");
+//        String echostr = request.getParameter("echostr");
+//
+//        //首次请求申请验证,返回echostr
+//        if(echostr!=null){
+//            outputStreamWrite(outputStream,echostr);
+//            return;
+//        }
+//
+//        //验证请求签名
+//        //if(!signature.equals(SignatureUtil.generateEventMessageSignature(TokenManager.getDefaultToken(), timestamp, nonce))){
+//        //    System.out.println("The request signature is invalid");
+//        //    return;
+//        //}
+//
+//        if(inputStream!=null){
+//            //转换XML
+//            EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, inputStream);
+//            String key = eventMessage.getFromUserName() + "__"
+//                    + eventMessage.getToUserName() + "__"
+//                    + eventMessage.getMsgId() + "__"
+//                    + eventMessage.getCreateTime();
+//            System.out.println(eventMessage.getContent());
+//            if(expireKey.exists(key)){
+//                //重复通知不作处理
+//                return;
+//            }else{
+//                expireKey.add(key);
+//            }
+//
+//            //创建回复
+//            XMLMessage xmlTextMessage = new XMLTextMessage(
+//                    eventMessage.getFromUserName(),
+//                    eventMessage.getToUserName(),
+//                    "这个世界很美好，请你按照你所说的内容写一个信息");
+//            //回复
+//            xmlTextMessage.outputStreamWrite(outputStream);
+//            return;
+//        }
+//        outputStreamWrite(outputStream,"");
     }
     /**
      * 数据流输出
