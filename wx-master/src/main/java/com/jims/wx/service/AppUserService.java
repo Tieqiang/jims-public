@@ -36,102 +36,102 @@ public class AppUserService {
      * @param accessToken
      */
     public void getUsers(String accessToken){
-        String url = " https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + accessToken;
-        SslContextFactory sslContextFactory = new SslContextFactory();
-        HttpClient httpClient = new HttpClient(sslContextFactory);
-        try {
-            httpClient.start();
-            URL url1 = new URL(url);
-            URI uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
-            ContentResponse response = httpClient.GET(uri);
-            String json = response.getContentAsString();
-            System.out.println("String content:" + json);
-
-
-            JSONObject jsonObj = new JSONObject(json);
-            JSONObject data = jsonObj.getJSONObject("data");
-            System.out.println(data);
-            //获取所有关注人的openid，
-            if (data != null) {
-                if (data != null && !data.equals("")) {
-                    JSONArray jsonArray = data.getJSONArray("openid");
-                    System.out.println(jsonArray);
-                    if (jsonArray != null && jsonArray.length() > 0) {
-                        String id = "";
-                        String info = "";
-                        AppUser user;
-                        List<AppUser> result = new ArrayList<AppUser>();
-                        //根据OPENID逐个获取关注人基本信息,并保存在对象里面
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            id = (String) jsonArray.get(i);
-                            System.out.println(i + "==" + id);
-                            url = " https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + accessToken + "&openid=" + id + "&lang=zh_CN";
-                            url1 = new URL(url);
-                            uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
-                            response = httpClient.GET(uri);
-                            info = response.getContentAsString();
-                            System.out.println("info" + info);
-                            //将公众平台获取到的用户信息转化成本地数据库对象集合
-                            JSONObject jsonUserObj = new JSONObject(info);
-                            if (jsonUserObj != null) {
-                                user = new AppUser();
-
-                                if (null != jsonUserObj.get("openid")) {
-                                    user.setOpenId(jsonUserObj.get("openid").toString());
-                                }
-                                if (null != jsonUserObj.get("nickname")) {
-                                    user.setNickName(jsonUserObj.get("nickname").toString());
-                                }
-                                if (null != jsonUserObj.get("subscribe")) {
-                                    user.setSubscribe(Integer.parseInt(jsonUserObj.get("subscribe").toString()));
-                                }
-                                if (null != jsonUserObj.get("sex")) {
-                                    user.setSex(Integer.parseInt(jsonUserObj.get("sex").toString()));
-                                }
-                                if (null != jsonUserObj.get("subscribe_time")) {
-                                    user.setSubscrbeTime(jsonUserObj.get("subscribe_time").toString());
-                                }
-                                if (null != jsonUserObj.get("headimgurl")) {
-                                    user.setHeadImgUrl(jsonUserObj.get("headimgurl").toString());
-                                }
-                                if (null != jsonUserObj.get("language")) {
-                                    user.setLanguage(jsonUserObj.get("language").toString());
-                                }
-                                if (null != jsonUserObj.get("city")) {
-                                    user.setCity(jsonUserObj.get("city").toString());
-                                }
-                                if (null != jsonUserObj.get("country")) {
-                                    user.setCountry(jsonUserObj.get("country").toString());
-                                }
-                                if (null != jsonUserObj.get("province")) {
-                                    user.setProvince(jsonUserObj.get("province").toString());
-                                }
-                                if (null != jsonUserObj.get("remark")) {
-                                    user.setRemark(jsonUserObj.get("remark").toString());
-                                }
-                                if (null != jsonUserObj.get("groupid")) {
-                                    user.setGroupId(jsonUserObj.get("groupid").toString());
-                                }
-                                user.setAppId(id);
-
-                                result.add(user);
-                            }
-
-
-                            //获取了关注人的基本信息以后，获取他所在分组
-
-                        }
-                        //把关注人存在数据库
-                        appUserFacade.save(result);
-                    }
-                }
-
-            }
-
-            System.out.println(response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        //String url = " https://api.weixin.qq.com/cgi-bin/user/get?access_token=" + accessToken;
+        //SslContextFactory sslContextFactory = new SslContextFactory();
+        //HttpClient httpClient = new HttpClient(sslContextFactory);
+        //try {
+        //    httpClient.start();
+        //    URL url1 = new URL(url);
+        //    URI uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
+        //    ContentResponse response = httpClient.GET(uri);
+        //    String json = response.getContentAsString();
+        //    System.out.println("String content:" + json);
+        //
+        //
+        //    JSONObject jsonObj = new JSONObject(json);
+        //    JSONObject data = jsonObj.getJSONObject("data");
+        //    System.out.println(data);
+        //    //获取所有关注人的openid，
+        //    if (data != null) {
+        //        if (data != null && !data.equals("")) {
+        //            JSONArray jsonArray = data.getJSONArray("openid");
+        //            System.out.println(jsonArray);
+        //            if (jsonArray != null && jsonArray.length() > 0) {
+        //                String id = "";
+        //                String info = "";
+        //                AppUser user;
+        //                List<AppUser> result = new ArrayList<AppUser>();
+        //                //根据OPENID逐个获取关注人基本信息,并保存在对象里面
+        //                for (int i = 0; i < jsonArray.length(); i++) {
+        //                    id = (String) jsonArray.get(i);
+        //                    System.out.println(i + "==" + id);
+        //                    url = " https://api.weixin.qq.com/cgi-bin/user/info?access_token=" + accessToken + "&openid=" + id + "&lang=zh_CN";
+        //                    url1 = new URL(url);
+        //                    uri = new URI(url1.getProtocol(), url1.getHost(), url1.getPath(), url1.getQuery(), null);
+        //                    response = httpClient.GET(uri);
+        //                    info = response.getContentAsString();
+        //                    System.out.println("info" + info);
+        //                    //将公众平台获取到的用户信息转化成本地数据库对象集合
+        //                    JSONObject jsonUserObj = new JSONObject(info);
+        //                    if (jsonUserObj != null) {
+        //                        user = new AppUser();
+        //
+        //                        if (null != jsonUserObj.get("openid")) {
+        //                            user.setOpenId(jsonUserObj.get("openid").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("nickname")) {
+        //                            user.setNickName(jsonUserObj.get("nickname").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("subscribe")) {
+        //                            user.setSubscribe(Integer.parseInt(jsonUserObj.get("subscribe").toString()));
+        //                        }
+        //                        if (null != jsonUserObj.get("sex")) {
+        //                            user.setSex(Integer.parseInt(jsonUserObj.get("sex").toString()));
+        //                        }
+        //                        if (null != jsonUserObj.get("subscribe_time")) {
+        //                            user.setSubscrbeTime(jsonUserObj.get("subscribe_time").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("headimgurl")) {
+        //                            user.setHeadImgUrl(jsonUserObj.get("headimgurl").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("language")) {
+        //                            user.setLanguage(jsonUserObj.get("language").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("city")) {
+        //                            user.setCity(jsonUserObj.get("city").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("country")) {
+        //                            user.setCountry(jsonUserObj.get("country").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("province")) {
+        //                            user.setProvince(jsonUserObj.get("province").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("remark")) {
+        //                            user.setRemark(jsonUserObj.get("remark").toString());
+        //                        }
+        //                        if (null != jsonUserObj.get("groupid")) {
+        //                            user.setGroupId(jsonUserObj.get("groupid").toString());
+        //                        }
+        //                        user.setAppId(id);
+        //
+        //                        result.add(user);
+        //                    }
+        //
+        //
+        //                    //获取了关注人的基本信息以后，获取他所在分组
+        //
+        //                }
+        //                //把关注人存在数据库
+        //                appUserFacade.save(result);
+        //            }
+        //        }
+        //
+        //    }
+        //
+        //    System.out.println(response);
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+        //}
     }
 
     /**
