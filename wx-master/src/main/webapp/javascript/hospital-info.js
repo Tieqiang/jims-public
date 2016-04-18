@@ -34,12 +34,15 @@ $(function (){
         hospitalInfo.hospitalId = $("#hospitalId").val();
         hospitalInfo.appId = $("#appId").val();
         hospitalInfo.infoUrl = $("#infoUrl").val();
-        var tranContent = $("#tranContent").val();
+        //var tranContent = $("#tranContent").val();
 
-        console.log(hospitalInfo.infoUrl);
+        var oEditor = CKEDITOR.instances.tranContent;
+        hospitalInfo.tranContent = oEditor.getData();
+
+        console.log("tranContent:" + hospitalInfo.tranContent);
 
         if(re.test(hospitalInfo.infoUrl)){
-            $.postJSON("/api/hospital-info/merge?tranContent="+tranContent, hospitalInfo, function (data) {
+            $.postJSON("/api/hospital-info/merge?tranContent="+ hospitalInfo.tranContent, hospitalInfo, function (data) {
                 $.messager.alert("系统提示", "保存成功", "info");
                 show();
             });
