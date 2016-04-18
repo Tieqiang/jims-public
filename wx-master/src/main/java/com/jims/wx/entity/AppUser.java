@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
@@ -23,6 +24,7 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "APP_USER", schema = "WX", uniqueConstraints = @UniqueConstraint(columnNames = "OPEN_ID"))
+@XmlRootElement
 public class AppUser implements java.io.Serializable {
 
 	// Fields

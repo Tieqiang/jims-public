@@ -57,14 +57,19 @@
            onclick="javascript:$('#dlg').dialog('close')" style="width:60px">关闭</a>
     </div>
     <!--打标签-->
-    <div id="dlg-move" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
+    <div id="dlg-move" class="easyui-dialog" style="width:300px;height:200px;padding:10px 20px"
          closed="true" buttons="#dlg-move-buttons">
+        <div class="fitem">
+            <label>选择人员：</label>
+            <input name="opId" id="opId" class="easyui-combobox" disabled="true">
+        </div>
         <div class="fitem">
             <label>当前分组：</label>
             <input name="currentGroupId" id="currentGroupId" class="easyui-textbox" disabled="true">
         </div>
         <div class="fitem">
-            目标分组：<input id="targetGroupId" name="targetGroupId" class="easyui-textbox" required="true">
+            <label>目标分组：</label>
+            <input id="targetGroupId" name="targetGroupId" class="easyui-textbox" required="true">
         </div>
     </div>
     <div id="dlg-move-buttons">
@@ -74,18 +79,28 @@
            onclick="javascript:$('#dlg-move').dialog('close')" style="width:60px">关闭</a>
     </div>
     <!--添加备注名-->
-    <div id="dlg-tip" class="easyui-dialog" style="width:300px;height:150px;padding:10px 20px"
+    <div id="dlg-tip" class="easyui-dialog" style="width:400px;height:200px;padding:10px 20px"
          closed="true" buttons="#dlg-tip-buttons">
         <div class="fitem">
             <label>id</label>
             <input name="userId" id="userId" class="easyui-textbox" disabled="true">
         </div>
+
         <div class="fitem">
             <label>编号</label>
             <input name="openId" id="openId" class="easyui-textbox" disabled="true">
         </div>
+
         <div class="fitem">
-            备注：<input id="remark" class="easyui-textbox" required="true">
+            <label>昵称</label>
+            <input name="openId" id="nickName" class="easyui-textbox" disabled="true">
+        </div>
+
+        <div class="fitem">
+            <label>
+                备注
+            </label>
+            <input id="remark" class="easyui-textbox" required="true">
         </div>
     </div>
     <div id="dlg-tip-buttons">
