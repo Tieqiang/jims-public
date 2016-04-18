@@ -35,4 +35,12 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Make dialogs simpler.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+
+    config.image_previewText = ' '; //预览区域显示内容
+    config.filebrowserImageUploadUrl = "/img-upload"; //待会要上传的action或servlet
+
+    config.width = 600;
+    config.height = 200;
+    config.toolbarCanCollapse = true;   //工具栏可以收缩
+    config.toolbarStartupExpanded = false;  //工具栏默认收缩
 };
