@@ -55,6 +55,7 @@
         <class>com.jims.wx.entity.PayWayDict</class>
         <class>com.jims.wx.entity.QuestionnaireModel</class>
         <class>com.jims.wx.entity.ClinicForRegist</class>
+        <class>com.jims.wx.entity.AppUserVsGroup</class>
 
 
         <properties>

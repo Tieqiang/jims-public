@@ -11,15 +11,7 @@ $(function () {
 
     $("#expName").searchbox({
         searcher: function (value, name) {
-            //var url = '';
-            //if ($(".radios:checked").val() == 0) {
-            //    url='/api/buy-exp-plan/list-low?storageCode=' + parent.config.storageCode;
-            //}
-            ////全部
-            //if ($(".radios:checked").val() == 1) {
-            //    url='/api/buy-exp-plan/list-all?storageCode=' + parent.config.storageCode;
-            //}
-            //$("#left").datagrid("load",url);
+
             var rows = $("#left").datagrid("getRows");
             for (var i = 0; i < rows.length; i++) {
                 if (rows[i].nickName == value) {
@@ -85,13 +77,6 @@ $(function () {
             field: 'remark',
             width: "25%"
         }]]
-        //,
-        //onClickRow: function (index, row) {
-        //    stopEdit();
-        //
-        //    $(this).datagrid('beginEdit', index);
-        //    editIndex = index;
-        //}
     });
 
     $("#top").datagrid({
@@ -120,12 +105,9 @@ $(function () {
     //同步数据按钮功能
     $("#syncDataBtn").on('click', function () {
         stopEdit();
-        $.get("/api/wx-service/check", function (data) {
-            $("#left").datagrid('loadData', data);
+        $.post("/api/app-user-group/syn", function (data) {
+            loadGroup();
         });
-
-        alert("sync data");
-
     });
     var resetGroup = function(){
         $("#groupId").textbox('setValue', "");
@@ -152,15 +134,16 @@ $(function () {
         var row = $("#left").datagrid("getSelected");
         if (row) {
             var groupId = row.groupId;
-            var groupJson = {"group": {"id": groupId}};
+            if(groupId=="1"||groupId=='0'||groupId=='2'){
+                $.messager.alert("系统提示","系统默认的分组不能删除","error");
+                return ;
+            }
             $.messager.confirm("系统提示", "删除标签后，该标签下的所有用户将失去该标签属性。是否确定删除？", function (r) {
                 if (r) {
-                    //var rowIndex = $("#left").datagrid('getRowIndex', row);
-                    //$("#left").datagrid('deleteRow', rowIndex);
-                    var post = {data: JSON.stringify(groupJson)};//JSON.stringify(json)把json转化成字符串
-
-                    $.post("/api/app-user-group/del", post, function (data) {
+                    $.post("/api/app-user-group/del", groupId, function (data) {
                         $.messager.alert("系统提示", "删除标签成功", "info");
+                        loadGroup();
+                        resetGroup();
                     }, function (data, status) {
                     });
                 } else {
@@ -177,30 +160,23 @@ $(function () {
         if (true) {
             var groupId = $("#groupId").textbox('getValue');
             var name = $("#name").textbox('getValue');
-            var groupJson
             if(groupId){
-                groupJson = {"group": {"id":groupId,"name": name}};
-                var post = {data: JSON.stringify(groupJson)};//JSON.stringify(json)把json转化成字符串
-
-                $.post("/api/app-user-group/modify", post, function (data) {
+                $.post("/api/app-user-group/modify?id="+groupId+"&groupName="+name,function (data) {
                     $('#dlg').dialog('close');
                     $.messager.alert("系统提示", "修改标签成功", "info");
+                    loadGroup();
+                    resetGroup();
                 }, function (data, status) {
                 });
             }else{
-                groupJson = {"group": {"name": name}};
-                var post = {data: JSON.stringify(groupJson)};//JSON.stringify(json)把json转化成字符串
-
-                $.post("/api/app-user-group/add", post, function (data) {
+                $.post("/api/app-user-group/add", name, function (data) {
                     $('#dlg').dialog('close');
                     $.messager.alert("系统提示", "新建标签成功", "info");
+                    loadGroup();
+                    resetGroup();
                 }, function (data, status) {
                 });
             }
-
-            console.log(groupJson);
-            resetGroup();
-            loadGroup();
         }
 
     });
@@ -210,22 +186,15 @@ $(function () {
         var openIds;
 
         if (rows.length==0) {
-            $.messager.alert("系统警告", "请选择打标签的行", "error");
+            $.messager.alert("系统警告", "修改分组", "error");
         } else {
-
             $.each(rows, function (index, item) {
                 openIds +=item.openId+";";
             });
             openIds = openIds.substr(0,openIds.length-1);
-            console.log(openIds);
-            $('#dlg-move').dialog('open').dialog('center').dialog('setTitle', '打标签');
-            //$.get("/api//?=" + rows, function (data) {
-            //    if (data.length > 0) {
-            //        $.messager.alert("提示", "移动成功！", "info");
-            //    } else {
-            //        $.messager.alert("提示", "FAIL！", "info");
-            //    }
-            //})
+
+            $('#dlg-move').dialog('open').dialog('center').dialog('setTitle', '修改分组');
+
         }
     });
     //修改备注名
@@ -241,13 +210,7 @@ $(function () {
             $("#openId").textbox('setValue', row.openId);
 
             $('#dlg-tip').dialog('open').dialog('center').dialog('setTitle', '添加备注名');
-            //var user = {};
-            //user.openId = rows.openId;
-            //$.post("/api/app-user/update-tip", post, function (data) {
-            //    $('#dlg').dialog('close');
-            //    $.messager.alert("系统提示", "新建标签成功", "info");
-            //}, function (data, status) {
-            //});
+
         }
     });
 
@@ -260,9 +223,6 @@ $(function () {
             user.id = id;
             user.openId = openId;
             user.remark = remark;
-            //var remarkJson = {"openId": openId, "remark": remark};
-            //
-            //var post = {data: JSON.stringify(remarkJson)};//JSON.stringify(json)把json转化成字符串
 
             $.post("/api/app-user/update-tip", user, function (data) {
                 $('#dlg-tip').dialog('close');
@@ -287,12 +247,7 @@ $(function () {
         } else {
             $.messager.confirm("系统提示", "加入黑名单后，你将无法接收粉丝发来的消息，且该粉丝无法接收到群发消息。确认加入黑名单？", function (r) {
                 if (r) {
-                    //var post = {data: JSON.stringify(groupJson)};//JSON.stringify(json)把json转化成字符串
-                    //
-                    //$.post("/api/app-user-group/del", post, function (data) {
-                    //    $.messager.alert("系统提示", "删除标签成功", "info");
-                    //}, function (data, status) {
-                    //});
+
                 } else {
                     resetGroup();
                 }
@@ -302,39 +257,50 @@ $(function () {
 
 
     var checkValidate = function (rows) {
-        //for (var i = 0; i < rows.length; i++) {
-        //    //删除空行
-        //    if (rows[i].expCode == undefined || rows[i].expName == undefined || rows[i].firmId == undefined || rows[i].units == undefined) {
-        //        $.messager.alert("系统提示", "第" + (i + 1) + "行为空请删除", 'error');
-        //        $("#right").datagrid('selectRow', i);
-        //        return false;
-        //    }
-        //    if (rows[i].wantNumber == undefined || rows[i].wantNumber <= 0) {
-        //        $.messager.alert("系统提示", "第" + (i + 1) + "行:计划数量不能小于0 请重新填写", 'error');
-        //        $("#right").datagrid('selectRow', i);
-        //        //$("#right").datagrid('beginEdit', i);
-        //        return false;
-        //    }
-        //    //if (rows[i].planNumber == undefined || rows[i].planNumber <= 0) {
-        //    //    $.messager.alert("系统提示", "第" + (i + 1) + "行:计划金额不能小于0 请重新填写", 'error');
-        //    //    $("#right").datagrid('selectRow', i);
-        //    //    //$("#right").datagrid('beginEdit', i);
-        //    //    return false;
-        //    //}
-        //    if (rows[i].exportquantityRef == undefined || rows[i].exportquantityRef <= 0) {
-        //        $.messager.alert("系统提示", "第" + (i + 1) + "行:消耗量不能小于0 请重新填写", 'error');
-        //        $("#right").datagrid('selectRow', i);
-        //        //$("#right").datagrid('beginEdit', i);
-        //        return false;
-        //    }
-        //    //if (rows[i].retailPrice == undefined || rows[i].retailPrice <= 0) {
-        //    //    $.messager.alert("系统提示", "第" + (i + 1) + "行:零售价不能小于0 请重新填写", 'error');
-        //    //    $("#right").datagrid('selectRow', i);
-        //    //    //$("#right").datagrid('beginEdit', i);
-        //    //    return false;
-        //    //}
-        //}
-        //return true;
+
     }
+
+
+    //修改分组名称
+    $("#dlg-move").window({
+        modal:true,
+        width:400,
+        height:150,
+        onBeforeOpen:function(){
+            var row = $("#left").datagrid('getSelected');
+            if(row){
+                $("#currentGroupId").combobox('setValue',row.groupId);
+            }
+        }
+    });
+
+    //目标分组显示所有的分组
+    $("#targetGroupId").combobox({
+        textField:'name',
+        valueField:'groupId',
+        method:'GET',
+        url:'/api/app-user-group/list-all'
+    });
+
+    $("#currentGroupId").combobox({
+        textField:'name',
+        valueField:'groupId',
+        method:'GET',
+        url:'/api/app-user-group/list-all'
+    })
+
+    $("#moveGroupBtn").on('click',function(){
+        var currentGroupId = $("#currentGroupId").combobox('getValue') ;
+        var targetGroupId = $("#targetGroupId").combobox('getValue') ;
+        if(targetGroupId==null ||targetGroupId==undefined){
+            $.messager.alert("系统提示","目标分组不能为空",'error');
+            return ;
+        }
+
+        $.post("/api/app-user-group/move-group/"+currentGroupId+"/"+targetGroupId,function(data){
+            $.messager.alert("系统提示","移动用户成功",'info');
+            resetGroup() ;
+        })
+    })
 
 });

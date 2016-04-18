@@ -3,6 +3,7 @@ package com.jims.wx.facade;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.AppUser;
+import weixin.popular.bean.user.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -68,5 +69,31 @@ public class AppUserFacade extends BaseFacade {
 
         List<AppUser> result = entityManager.createQuery(hql).getResultList();
         return result;
+    }
+
+    @Transactional
+    public void createUser(User user) {
+        String hql = "from AppUser as user where user.openId = '"+user.getOpenid()+"'" ;
+        AppUser appUser =null ;
+        List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
+        if(appUsers.size()>0){
+            appUser = appUsers.get(0) ;
+        }else{
+            appUser = new AppUser() ;
+        }
+
+        appUser.setCity(user.getCity());
+        appUser.setCountry(user.getCountry());
+        appUser.setGroupId(user.getGroupid());
+        appUser.setHeadImgUrl(user.getHeadimgurl());
+        appUser.setLanguage(user.getLanguage());
+        appUser.setNickName(user.getNickname());
+        appUser.setOpenId(user.getOpenid());
+        appUser.setProvince(user.getProvince());
+        appUser.setSex(user.getSex());
+        appUser.setRemark(user.getRemark());
+        appUser.setSubscribe(user.getSubscribe());
+        appUser.setSubscrbeTime(user.getSubscribe_time());
+        merge(appUser) ;
     }
 }
