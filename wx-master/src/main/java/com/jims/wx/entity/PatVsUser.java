@@ -1,15 +1,8 @@
 package com.jims.wx.entity;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 /**
  * PatVsUser entity. @author MyEclipse Persistence Tools
@@ -21,7 +14,7 @@ public class PatVsUser implements java.io.Serializable {
 
 	// Fields
 
-	private PatVsUserId id;
+	private String id;
 	private PatInfo patInfo;
 	private AppUser appUser;
 
@@ -32,27 +25,27 @@ public class PatVsUser implements java.io.Serializable {
 	}
 
 	/** minimal constructor */
-	public PatVsUser(PatVsUserId id) {
+	public PatVsUser(String id) {
 		this.id = id;
 	}
 
 	/** full constructor */
-	public PatVsUser(PatVsUserId id, PatInfo patInfo, AppUser appUser) {
+	public PatVsUser(String id, PatInfo patInfo, AppUser appUser) {
 		this.id = id;
 		this.patInfo = patInfo;
 		this.appUser = appUser;
 	}
 
 	// Property accessors
-	@EmbeddedId
-	@AttributeOverrides({
-			@AttributeOverride(name = "patId", column = @Column(name = "PAT_ID", length = 64)),
-			@AttributeOverride(name = "userId", column = @Column(name = "USER_ID", length = 64)) })
-	public PatVsUserId getId() {
+    @GenericGenerator(name = "generator", strategy = "uuid.hex")
+    @Id
+    @GeneratedValue(generator = "generator")
+    @Column(name = "ID", unique = true, nullable = false, length = 64)
+	public String getId() {
 		return this.id;
 	}
 
-	public void setId(PatVsUserId id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

@@ -29,6 +29,20 @@ public class DoctInfoService {
     public DoctInfoService(DoctInfoFacade doctInfoFacade) {
         this.doctInfoFacade = doctInfoFacade;
     }
+     /**
+     * 根据科室查询医生集合
+     * @return
+     */
+    @GET
+    @Path("find-by-dept-id")
+    public List<DoctInfo> findByDeptId(@QueryParam("deptId") String deptId) {
+         return doctInfoFacade.findAll(DoctInfo.class);
+    }
+
+
+
+
+
 
     /**
      * 查询全部医生信息

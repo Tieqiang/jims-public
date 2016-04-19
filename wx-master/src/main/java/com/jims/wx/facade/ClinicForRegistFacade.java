@@ -446,4 +446,12 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return list;
     }
+
+    /**
+     *查找号别新消息
+     * @return
+     */
+    public List<ClinicIndex> findClinicIndexAll() {
+          return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
+     }
 }

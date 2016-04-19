@@ -1,15 +1,9 @@
 package com.jims.wx.service;
 
 import com.google.inject.Inject;
-import com.jims.wx.entity.ClinicForRegist;
-import com.jims.wx.entity.ClinicIndex;
-import com.jims.wx.entity.DoctInfo;
-import com.jims.wx.entity.Subject;
+import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
-import com.jims.wx.facade.ClinicForRegistFacade;
-import com.jims.wx.facade.ClinicIndexFacade;
-import com.jims.wx.facade.ClinicTypeChargeFacade;
-import com.jims.wx.facade.ClinicTypeSettingFacade;
+import com.jims.wx.facade.*;
 import com.jims.wx.vo.BeanChangeVo;
 import com.jims.wx.vo.ClinicForRegistVO;
 import com.jims.wx.vo.ComboboxVo;
@@ -31,12 +25,35 @@ public class ClinicForRegistService {
     private ClinicForRegistFacade clinicForRegistFacade;
     private ClinicIndexFacade clinicIndexFacade;
     private ClinicTypeSettingFacade clinicTypeSettingFacade;
+    private DeptDictFacade deptDictFacade;
+    private DoctInfoFacade doctInfoFacade;
     @Inject
-    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade) {
+    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade,DeptDictFacade deptDictFacade,DoctInfoFacade doctInfoFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
         this.clinicTypeSettingFacade = clinicTypeSettingFacade;
+        this.deptDictFacade=deptDictFacade;
+        this.doctInfoFacade=doctInfoFacade;
+    }
+
+//    find-by-dept-id?deptId="+deptId
+    @GET
+    @Path("find-by-dept-id")
+    public Set<DoctInfo> findByDeptId(@QueryParam("deptId") String deptId){
+//        DeptDict
+        Set<DoctInfo> doctInfos=new HashSet<DoctInfo>();
+        String deptName=this.deptDictFacade.findDeptDictByDeptId(deptId);
+        List<ClinicIndex> list=clinicForRegistFacade.findClinicIndexAll();
+        for(ClinicIndex clinicIndex:list){
+            //一个号别只有一个doct
+            if(deptName.equals(clinicIndex.getClinicDept())){
+                String doctId=clinicIndex.getDoctorId();
+                DoctInfo doctInfo=this.doctInfoFacade.findById(doctId);
+                doctInfos.add(doctInfo);
+            }
+        }
+        return doctInfos;
     }
     /**
      * 根据id查询号表详细信息

@@ -43,6 +43,75 @@ public class MenuAPI extends BaseAPI{
 		return menuCreate(access_token,str);
 	}
 
+    /**
+     * {
+     "button": [
+     {
+     "type": "click",
+     "name": "今日歌曲",
+     "key": "V1001_TODAY_MUSIC"
+     },
+     {
+     "name": "菜单",
+     "sub_button": [
+     {
+     "type": "view",
+     "name": "首页",
+     "url": "https://open.weixin.qq.com/connect/oauth2/authorize?wx1b3cf470d135a830
+     &redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/test&response_type=code&scope=snsapi_base&state=1#wechat_redirect"
+     },
+     {
+     "type": "view",
+     "name": "视频",
+     "url": "http://v.qq.com/"
+     },
+     {
+     "type": "click",
+     "name": "赞一下我们",
+     "key": "V1001_GOOD"
+     }
+     ]
+     }
+     ]
+     }
+     */
+
+    public static void main(String[] args){
+        String menu="{\n" +
+                "    \"button\": [\n" +
+                "        {\n" +
+                "            \"type\": \"click\", \n" +
+                "            \"name\": \"今日歌曲\", \n" +
+                "            \"key\": \"V1001_TODAY_MUSIC\"\n" +
+                "        }, \n" +
+                "        {\n" +
+                "            \"name\": \"菜单\", \n" +
+                "            \"sub_button\": [\n" +
+                "                {\n" +
+                "                    \"type\": \"view\", \n" +
+                "                    \"name\": \"首页\", \n" +
+                "                    \"url\":\n" +
+                " \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/user-bangker&response_type" +
+                "                               =code&scope=snsapi_base&state=1#wechat_redirect\"\n" +
+                "                }, \n" +
+                "                {\n" +
+                "                    \"type\": \"view\", \n" +
+                "                    \"name\": \"视频\", \n" +
+                "                    \"url\": \"http://v.qq.com/\"\n" +
+                "                }, \n" +
+                "                {\n" +
+                "                    \"type\": \"click\", \n" +
+                "                    \"name\": \"赞一下我们\", \n" +
+                "                    \"key\": \"V1001_GOOD\"\n" +
+                "                }\n" +
+                "            ]\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
+        String str="IC-Tf7sRP-c6Bv3t06q2gMseWxMUdNYEYoJgapKk8GnNwqt4kujHJrd4FeUirnIAOvPWh0dn3li9Rf-gqECGBqBHoCK565ZyJ2myb-eOa7uFjFJL7GYUu6iaPnOMRdf6HTZbAAAXJP";
+        menuCreate(str,menu);
+
+    }
 	/**
 	 * 获取菜单
 	 * @param access_token

@@ -1,14 +1,18 @@
 package com.jims.wx.service;
 import com.google.inject.Inject;
 import com.jims.wx.entity.AppUser;
+import com.jims.wx.entity.PatVsUser;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.AppUserFacade;
+import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONObject;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.net.URI;
@@ -35,10 +39,17 @@ public class PatInfoService {
 
     private PatInfoFacade patInfoFacade;
 
+    private AppUserFacade appUserFacade;
+    private HttpServletRequest request ;
+    private HttpServletResponse response ;
+
     @Inject
-    public PatInfoService(PatInfoFacade patInfoFacade){
+    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response){
+        this.appUserFacade=appUserFacade;
         this.patInfoFacade=patInfoFacade;
-    }
+        this.request=request;
+        this.response=response;
+     }
 
     /**
 //     * 保存增改
@@ -46,26 +57,27 @@ public class PatInfoService {
      * @return
 //     */
 //    data:{name:name,idCard:idCard,cellphone:cellphone},
-    @POST
+    @GET
     @Path("save")
-    public Response save(PatInfo patInfo){
+    public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone) {
         try {
-            System.out.println(1);
-            System.out.println(1);
-            System.out.println(patInfo);
-//            patInfo = patInfoFacade.save(patInfo);
-            return Response.status(Response.Status.OK).entity(null).build();
-        } catch (Exception e) {
-            ErrorException errorException = new ErrorException();
-            errorException.setMessage(e);
-            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
-                errorException.setErrorMessage("输入数据超过长度！");
-            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，保存失败！");
-            } else {
-                errorException.setErrorMessage("保存失败！");
+            PatInfo patInfo = new PatInfo();
+            patInfo.setCellphone(cellphone);
+            patInfo.setIdCard(idCard);
+            patInfo.setName(name);
+            patInfo = patInfoFacade.save(patInfo);
+            if (StringUtils.isNotBlank(openId)) {
+                AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+                PatVsUser patVsUser = new PatVsUser();
+                patVsUser.setAppUser(appUser);
+                patVsUser.setPatInfo(patInfo);
+                appUserFacade.savePatVsUser(patVsUser);
             }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+            response.sendRedirect("/views/his/public/user-bangker-success.html");
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-     }
+    }
+
  }
+

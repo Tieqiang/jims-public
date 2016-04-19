@@ -35,6 +35,7 @@ $(function () {
         striped: true,
         loadMsg: '数据正在加载,请耐心的等待...',
         remoteSort: true,
+//        pa
         columns: [[{
             field: 'id',
             title: '编号',

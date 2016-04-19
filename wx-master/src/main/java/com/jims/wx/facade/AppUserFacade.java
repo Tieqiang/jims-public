@@ -3,6 +3,7 @@ package com.jims.wx.facade;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.AppUser;
+import com.jims.wx.entity.PatVsUser;
 import weixin.popular.bean.user.User;
 
 import javax.inject.Inject;
@@ -96,4 +97,20 @@ public class AppUserFacade extends BaseFacade {
         appUser.setSubscrbeTime(user.getSubscribe_time());
         merge(appUser) ;
     }
+
+    /*
+    * 根据openId 查询appUser
+     */
+    public AppUser findAppUserByOpenId(String openId) {
+         return (AppUser)entityManager.createQuery("from AppUser where openId='"+openId+"'").getSingleResult();
+     }
+
+    /**
+     *
+     * @param patVsUser
+     */
+    @Transactional
+    public void savePatVsUser(PatVsUser patVsUser) {
+        entityManager.merge(patVsUser);
+     }
 }

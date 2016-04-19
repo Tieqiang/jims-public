@@ -150,6 +150,31 @@ public class DoctInfo implements java.io.Serializable {
         }
         return null;
     }
+    @Transient
+    public String getTranDescription2() {
+        if (this.description != null && !"".equals(this.description)) {
+            String s = "";
+            try {
+                s = new String(this.description, "UTF-8");
+
+                s = s.replaceAll("@\"<[^>]*>\"", "");
+//                int len = str.length();
+//                if (len <= length) {
+//                    return str;
+//                } else {
+//                    str = str.substring(0, length);
+//                    str += "......";
+//                }
+//                return str;
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+        return null;
+    }
 
 
 }
+
+//}

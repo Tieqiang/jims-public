@@ -40,7 +40,7 @@ public class AppUser implements java.io.Serializable {
 	private Integer subscrbeTime;
 	private String remark;
     private Integer groupId ;
-	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
+//	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
 
 	// Constructors
 
@@ -51,7 +51,7 @@ public class AppUser implements java.io.Serializable {
     /**
      * full constructor
      */
-    public AppUser(String id, Integer subscribe, String openId, String nickName, Integer sex, String city, String country, String province, String language, String headImgUrl, Integer subscrbeTime, String remark, Integer groupId, Set<PatVsUser> patVsUsers) {
+    public AppUser(String id, Integer subscribe, String openId, String nickName, Integer sex, String city, String country, String province, String language, String headImgUrl, Integer subscrbeTime, String remark, Integer groupId/*, Set<PatVsUser> patVsUsers*/) {
         this.id = id;
         this.subscribe = subscribe;
         this.openId = openId;
@@ -65,7 +65,7 @@ public class AppUser implements java.io.Serializable {
         this.subscrbeTime = subscrbeTime;
         this.remark = remark;
         this.groupId = groupId;
-        this.patVsUsers = patVsUsers;
+//        this.patVsUsers = patVsUsers;
     }
 
 
@@ -185,15 +185,15 @@ public class AppUser implements java.io.Serializable {
 	}
 
 
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUser")
-	public Set<PatVsUser> getPatVsUsers() {
-		return this.patVsUsers;
-	}
-
-	public void setPatVsUsers(Set<PatVsUser> patVsUsers) {
-		this.patVsUsers = patVsUsers;
-	}
+//
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "appUser")
+//	public Set<PatVsUser> getPatVsUsers() {
+//		return this.patVsUsers;
+//	}
+//
+//	public void setPatVsUsers(Set<PatVsUser> patVsUsers) {
+//		this.patVsUsers = patVsUsers;
+//	}
 
     @Column(name="group_id")
     public Integer getGroupId() {
