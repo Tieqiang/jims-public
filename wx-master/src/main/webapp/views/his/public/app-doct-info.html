@@ -6,42 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>选择医生</title>
     <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
-    <!--<style type="text/css">-->
-        <!--div{-->
-            <!--margin:0;-->
-         <!--}-->
-        <!--.btn{-->
-            <!--border: none;-->
-            <!--margin: 0px auto;-->
-            <!--margin: 1px;-->
-            <!--background: url(/assert/easyui/themes/icons/search.png) no-repeat;-->
-        <!--}-->
-        <!--div,form, input, button, select, textarea {margin:0; padding:0;-->
-            <!--}-->
-<!--/*<img src="/assert/easyui/themes/icons/search.png" style="float:left;"/>*/-->
-        <!--/*#text1{ background:url(/assert/easyui/themes/icons/search.png) no-repeat left center; width:200px; height:30px;}*/-->
-
-
-
-    <!--</style>-->
-
-</head>
+ </head>
 <body>
-
-
-
-     <div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">
-         <input id="text1" class="weui_input"  type="number" pattern="" placeholder="科室、医生姓名或拼音首字母"/></div>
-      <!--<div class="weui_cells weui_cells_access" style="margin-top:opx;">-->
-         <!--<a class="weui_cell" href="javascript:;">-->
-            <!--<div class="weui_cell_hd"><img src="/assert/images/wdsc.png" alt="" style="width:20px;margin-right:5px;display:block"></div>-->
-            <!--<div class="weui_cell_bd weui_cell_primary">-->
-                <!--<p>我的收藏</p>-->
-            <!--</div>-->
-         <!--</a>-->
-     <!--</div>-->
-   <div ng-app="myApp">
-    <div ng-controller="tableCtrl" id="doctList">
+      <div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">
+         <input id="text1" class="weui_input" disabled="disabled"  type="number" pattern="" placeholder=""/></div>
+ <div ng-app="myApp">
+   <div ng-controller="tableCtrl" id="doctList">
         <input type="hidden" name="deptId" id="deptId" value=""/>
         <div ng-repeat="x in names">
              <div class="weui_cells weui_cells_access">
@@ -52,30 +22,37 @@
                 <div class="weui_cell_bd weui_cell_primary">
                     <span style="display:none" class="span">{{x.id}}</span>
                     <div>
-                        <!--<script type="text/javascript">-->
-                            <!--$(".imgCls").attr("src",{{x.headUrl}});-->
-                         <!--</script>-->
-                        <table style="width:100%;">
+                         <table style="width:100%;">
                             <tr >
-                                <td rowspan="2" style="width:60%"><img src="{{x.headUrl}}" class="imgCls" /></td>
-                                <td style="width:40%">{{x.name}}</td>
+                                <td rowspan="2" style="width:60%"><img src="{{x.headUrl}}" class="imgCls" width="50%"/></td>
+                                <td style="width:40%">姓名：{{x.name}}</td>
                             </tr>
                             <tr>
-                                  <td>{{x.title}}</td>
+                                  <td>职务：{{x.title}}</td>
                             </tr>
+                             <tr >
+                                 <td colspan="2"><font color="#A9A9A9">{{x.description}}</font></td>
+                             </tr>
+                             <!--<hr style="color:#ccc;">-->
+                             <tr >
+                                 <td colspan="2">{{x.timeDesc}}</td>
+                             </tr>
+                             <tr>
+                                 <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
+                                 <td>剩余号：{{x.enabledNum}}</td>
+                             </tr>
                         </table>
                       </div>
-                      <p>{{x.tranDescription}}</p>
-                 </div>
+                      <p></p>
+                  </div>
+                 <!--<p>{{x.timeDesc}}--已挂号：{{x.currentNum}}--剩余号：{{x.enabledNum}}</p>-->
             </a>
         </div>
         </div>
     </div>
+     <a href="javascript:history.go(-1)" class="weui_btn weui_btn_primary" id="return" >返回</a>
 </div>
-
-
-
-</div>
+ </div>
 </div>
 </body>
 <script src="../../../assert/angular/angular.min.js"></script>
