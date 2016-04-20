@@ -9,9 +9,12 @@ import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.persistence.*;
 import javax.persistence.Transient;
 
+import com.sun.scenario.effect.impl.sw.java.JSWBlend_SRC_OUTPeer;
 import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -156,17 +159,8 @@ public class DoctInfo implements java.io.Serializable {
             String s = "";
             try {
                 s = new String(this.description, "UTF-8");
-
-                s = s.replaceAll("@\"<[^>]*>\"", "");
-//                int len = str.length();
-//                if (len <= length) {
-//                    return str;
-//                } else {
-//                    str = str.substring(0, length);
-//                    str += "......";
-//                }
-//                return str;
-            } catch (UnsupportedEncodingException e) {
+                s = s.replaceAll("<[A-z/ =']*>", "").replace("<h1>","").replace("</h1>","");
+             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             return s;
@@ -174,6 +168,25 @@ public class DoctInfo implements java.io.Serializable {
         return null;
     }
 
+    /**
+     *
+     * @param args
+     */
+    public static void main(String[] args){
+//        JSWBlend_SRC_OUTPeer.
+//        String regexstr = "@"<(?!br).\\\\*?>"";   //去除所有标签，只剩br
+        String s="<span><a>你好</a></span>";
+//        String regex="<[^>]*>";
+//        Pattern pattern= Pattern.compile(regex);
+//        Matcher matcher=pattern.matcher(s);
+//
+////        String all=s.replace(regex, s);
+//        System.out.println( matcher.group());
+        s = s.replaceAll("<[A-z/ =']*>", "");
+        System.out.println(s);
+
+
+    }
 
 }
 
