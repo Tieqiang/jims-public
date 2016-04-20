@@ -13,6 +13,7 @@ import javax.persistence.EntityManager;
  */
 public class PatInfoFacade extends BaseFacade {
     private EntityManager entityManager;
+//    private PatVsUserFacade
 
     @Inject
     public PatInfoFacade(EntityManager entityManager){
@@ -23,4 +24,6 @@ public class PatInfoFacade extends BaseFacade {
     public PatInfo save(PatInfo patInfo) {
          return entityManager.merge(patInfo);
     }
+
+
 }
