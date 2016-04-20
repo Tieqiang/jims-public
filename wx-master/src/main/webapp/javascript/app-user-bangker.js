@@ -29,7 +29,7 @@ function getUrlParameter(name){
 //        if(r!=null)return  unescape(r[2]); return null;
 //    }
 var v=getUrlParameter('param');
-alert("openId="+v);
+//alert("openId="+v);
 $("#openId").val(v);
 var clickFun=function() {
 //    var patInfo = {};
@@ -37,14 +37,16 @@ var clickFun=function() {
     var idCard = $("#idCard").val();
     var cellphone = $("#cellphone").val();
     var openId=$("#openId").val();
-//    patInfo.name = $("#name").val();
-//    patInfo.idCard = $("#idCard").val();
-//    patInfo.cellphone = $("#cellphone").val();
-//   var openId = $("#openId").val();
-    window.location.href="/api/pat-info/save?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&openId="+openId;
-//    $.postJSON("/api/pat-info/save?openId="+openId, patInfo, function (data) {
-//        alert("success!");
-//    }, function (data, status) {
-//    })
-}
+    if(name.trim()=="" || name.trim()==null){
+        alert("姓名不能为空！");
+    }else if(idCard.trim()=="" || idCard.trim()==null){
+        alert("省份证不能为空！");
+    }else if(cellphone.trim()=="" || cellphone.trim()==null){
+        alert("手机号不能为空！");
+    }else if(openId.trim()==""|| openId.trim()==null ){
+        alert("暂时不能绑卡！");
+    }else{
+         window.location.href="/api/pat-info/save?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&openId="+openId;
+     }
+ }
 

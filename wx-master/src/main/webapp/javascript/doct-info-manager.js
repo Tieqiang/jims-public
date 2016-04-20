@@ -118,13 +118,25 @@ $(function () {
             doctInfo.name = $("#name").val();
             doctInfo.title = $("#title").val();
             doctInfo.hospitalId = getValue();
-            doctInfo.headUrl =$("#headUrl").attr('value');
+            doctInfo.headUrl =$("#headUrl").val();
             var oEditor = CKEDITOR.instances.description;
             var description =oEditor.getData();
         }
-        if($("#headUrl").attr('value')==""){
-            $.messager.alert("系统提示", "请上传图片！","error");
-        }else{
+//        alert("headUrl"+$("#headUrl").val());
+         if($("#headUrl").attr('value')==""){
+            if(flag="edit"){
+                $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
+                    $('#dlg').dialog('close');
+                    $.messager.alert("系统提示", "操作成功！","info");
+                    loadDict();
+                    $("#fm").get(0).reset();
+                }, function (data, status) {
+                })
+            }else{
+                $.messager.alert("系统提示", "请上传图片！","error");
+            }
+         }else{
+
             $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
                 $('#dlg').dialog('close');
                 $.messager.alert("系统提示", "操作成功！","info");
@@ -152,6 +164,7 @@ $(function () {
             loadSelectedRowData(arr);
             $("#headDiv").show();
             $("#uploadDiv").show();
+//            alert(arr[0].hospitalId);
             setValue(arr[0].hospitalId)
         }
     });
@@ -242,7 +255,8 @@ $(function () {
             success: function(data, status) {
                 $('#uploadSpan').append("<span><font color='red'> 上传成功 ✔</font></span>");
 //                 $('#headUrl').val("");
-                $('#headUrl').attr('value',data.picUrl);
+//                alert(data.picUrl);
+                $('#headUrl').val(data.picUrl);
                 $("#viewImg").attr("src",data.picUrl);
                 //                 alert($('#headUrl').attr('value'));
             },

@@ -12,8 +12,19 @@ $("#deptId").val([v]);
 var deptId=$("#deptId").val();
 //alert("deptId="+deptId)
 var app = angular.module("myApp", []);
+///**
+// * 获取当前日期
+// */
+//var  getCurrentDate=function(){
+//
+//}
 app.controller('tableCtrl',function ($scope, $http) {
     $http.get("/api/clinic-for-regist/find-by-dept-id?deptId="+v)
         .success(function (data) {
+//            alert(data.length);
+            if(data.length>0){
+//                placeholder
+                $("#text1").attr("placeholder",data[0].deptName+":"+data.length+"人");
+            }
             $scope.names = data;});
 });
