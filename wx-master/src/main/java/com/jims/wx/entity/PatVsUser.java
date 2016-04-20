@@ -50,7 +50,7 @@ public class PatVsUser implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "PAT_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "PAT_ID")
 	public PatInfo getPatInfo() {
 		return this.patInfo;
 	}
@@ -60,7 +60,7 @@ public class PatVsUser implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "USER_ID", insertable = false, updatable = false)
+	@JoinColumn(name = "USER_ID")
 	public AppUser getAppUser() {
 		return this.appUser;
 	}
