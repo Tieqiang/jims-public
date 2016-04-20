@@ -95,7 +95,7 @@ public class AnswerSheet implements java.io.Serializable {
 		this.questionnaireId = questionnaireId;
 	}
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "CREATE_TIME", length = 7)
 	public Date getCreateTime() {
 		return this.createTime;
