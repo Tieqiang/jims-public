@@ -1,24 +1,21 @@
 package com.jims.wx.service;
 
 
-
+import com.jims.wx.entity.AppUser;
 import com.jims.wx.facade.AppUserFacade;
+import com.jims.wx.facade.HospitalInfoFacade;
 import com.jims.wx.facade.RequestMessageFacade;
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import weixin.popular.api.TokenAPI;
+import com.jims.wx.vo.AppSetVo;
+import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.TokenManager;
 import weixin.popular.support.expirekey.DefaultExpireKey;
-import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.inject.Inject;
@@ -27,10 +24,10 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by heren on 2016/2/24.
@@ -43,15 +40,17 @@ public class WxService {
     private AppUserFacade appUserFacade ;
     private HttpServletRequest request ;
     private HttpServletResponse response ;
+    private HospitalInfoFacade hospitalInfoFacade;
 
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
     @Inject
-    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response) {
+    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response,HospitalInfoFacade hospitalInfoFacade) {
         this.requestMessageFacade = requestMessageFacade;
         this.appUserFacade = appUserFacade;
         this.request = request;
         this.response = response;
+        this.hospitalInfoFacade=hospitalInfoFacade;
     }
 
     @Path("check")
@@ -112,6 +111,34 @@ public class WxService {
             if("unsubscribe".equals(event)&&"event".equals(msgType)){
                 //取消订阅公众号
             }
+//
+//            if("click".equals(event)&&"event".equals(msgType)){
+//                //取消订阅公众号
+//                System.out.println(eventMessage.toString());
+//            }
+
+            //点击二级菜单click按钮获取自动回复功能
+//            if("CLICK".equals(event)&&"event".equals(msgType)&&"V1001_TODAY_MUSIC".equals(eventMessage.getEventKey())){
+//                System.out.println(eventMessage.getFromUserName());
+//                eventMessage.setEventKey("http://wrfih3mge3.proxy.qqbrowser.cc/views/his/public/questionnaire-survey.html?"+eventMessage.getFromUserName());
+//                XMLMessage xmlTextMessage = new XMLTextMessage(
+//                        eventMessage.getFromUserName(),
+//                        eventMessage.getToUserName(),
+//                        eventMessage.getEventKey());
+//                //回复
+//                xmlTextMessage.outputStreamWrite(outputStream);
+//                return;
+////                response.sendRedirect(eventMessage.getEventKey());
+//            }
+            //点击二级菜单按钮
+//            if("VIEW".equals(event)&&"event".equals(msgType)){
+//
+//                System.out.println(eventMessage.getFromUserName());
+//                eventMessage.setEventKey(eventMessage.getEventKey()+"openId="+eventMessage.getFromUserName());
+//
+//                return;
+//            }
+
 
             if("text".equals(msgType)||"image".equals(msgType)||"voice".equals(msgType)
                     ||"video".equals(msgType)||"shortvideo".equals(msgType)){//普通消息
@@ -155,11 +182,23 @@ public class WxService {
         }
         return true;
     }
+
     @GET
     @Path("token")
     public String getToken(){
         return TokenManager.getDefaultToken() ;
     }
 
-
+    @GET
+    @Path("questionnaire-survey")
+    public String test(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patId="";
+        if(appList.size()>0){
+            patId=appList.get(0).getPatId();
+        }
+        response.sendRedirect("/views/his/public/questionnaire-survey.html?openId="+snsToken.getOpenid()+"&patId="+patId);
+        return "http://www.baidu.com/" ;    }
 }

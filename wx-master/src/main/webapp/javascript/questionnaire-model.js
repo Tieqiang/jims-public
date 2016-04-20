@@ -86,7 +86,7 @@ $(function () {
                     }, {
                         title: '题目',
                         field: 'questionContent',
-                        width: "60%"
+                        width: "40%"
                     }, {
                         title: '题目类型',
                         field: 'questionType',
@@ -95,6 +95,10 @@ $(function () {
                         title: '答案',
                         field: 'preAnswer',
                         width: "20%"
+                    },{
+                        title: '图片',
+                        field: 'img',
+                        width: '20%'
                     }]],
                     onClickRow: function (index, row) {
                         $('#dgOption').datagrid('updateRow',{
