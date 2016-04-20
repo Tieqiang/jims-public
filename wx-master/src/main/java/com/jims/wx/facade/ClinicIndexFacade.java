@@ -63,15 +63,15 @@ public class ClinicIndexFacade extends BaseFacade {
     }
 
 
-    /**
-     * 根据id 查询对象
-     * @param clinicIndexId
-     * @return
-     */
-    public ClinicIndex findById(String clinicIndexId) {
-        List<ClinicIndex> list=entityManager.createQuery("from ClinicIndex where id='"+clinicIndexId+"'").getResultList();
-        return list.get(0);
-    }
+//    /**
+//     * 根据id 查询对象
+//     * @param clinicIndexId
+//     * @return
+//     */
+//    public ClinicIndex findById(String clinicIndexId) {
+//        List<ClinicIndex> list=entityManager.createQuery("from ClinicIndex where id='"+clinicIndexId+"'").getResultList();
+//        return list.get(0);
+//    }
 //    //find by typeId
 //    public List<ClinicIndex> findByTypeId(String typeId){
 //        String sqls = "from ClinicIndex where 1=1";
@@ -80,28 +80,28 @@ public class ClinicIndexFacade extends BaseFacade {
 //        }
 //        return entityManager.createQuery(sqls).getResultList();
 //    }
-    /**
-     * 查询号别信息
-     * @return
-     */
-    public List<ComboboxVo> findClinicIndexType(String typeId) {
-        List<ComboboxVo> comboboxVoList=new ArrayList<ComboboxVo>();
-        String sql="from ClinicIndex as c";
-        if(typeId!=null&&!"".equals(typeId)){
-            sql+=" where c.clinicTypeId='"+typeId+"'";
-        }
-        List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
-        if(list!=null&&list.size()>0){
-            for(int i=0;i<list.size();i++){
-                ClinicIndex c=list.get(i);
-                ComboboxVo v=new ComboboxVo();
-                v.setId(c.getId());
-                v.setText(c.getClinicLabel());
-                comboboxVoList.add(v);
-            }
-        }
-        return comboboxVoList;
-    }
+//    /**
+//     * 查询号别信息
+//     * @return
+//     */
+//    public List<ComboboxVo> findClinicIndexType(String typeId) {
+//        List<ComboboxVo> comboboxVoList=new ArrayList<ComboboxVo>();
+//        String sql="from ClinicIndex as c";
+//        if(typeId!=null&&!"".equals(typeId)){
+//            sql+=" where c.clinicTypeId='"+typeId+"'";
+//        }
+//        List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
+//        if(list!=null&&list.size()>0){
+//            for(int i=0;i<list.size();i++){
+//                ClinicIndex c=list.get(i);
+//                ComboboxVo v=new ComboboxVo();
+//                v.setId(c.getId());
+//                v.setText(c.getClinicLabel());
+//                comboboxVoList.add(v);
+//            }
+//        }
+//        return comboboxVoList;
+//    }
     /**
      * 保存增删改
      *

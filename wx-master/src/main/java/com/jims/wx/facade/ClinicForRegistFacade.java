@@ -110,17 +110,23 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     public Map<String, Object> registTable(String date, String clinicIndexId, String date1, String desc, String id) {
         Map<String, Object> map = new HashMap<String, Object>();
+        List<ClinicForRegist> list=new ArrayList<ClinicForRegist>();
         try {
             List<Object[]> dayTimes = clinicScheduleFacade.queryDayAndTime(clinicIndexId);
             for (int i = 0; i < dayTimes.size(); i++) {
                 System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
-                    saveRecord(dayTimes.get(i)[2].toString(),new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                    ClinicForRegist clinicForRegist=saveRecord(dayTimes.get(i)[2].toString(),new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                    list.add(clinicForRegist);
                 }
             }
-            map.put("isRegist", true);
-        } catch (Exception e) {
+            if(!list.isEmpty()){
+                map.put("isRegist", true);
+            }else{
+                map.put("isRegist", false);
+            }
+         } catch (Exception e) {
             e.printStackTrace();
             map.put("isRegist", false);
         }
@@ -133,7 +139,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
-    private void saveRecord(String  limits,Date parse, ClinicIndex byId, String desc) {
+    private ClinicForRegist saveRecord(String  limits,Date parse, ClinicIndex byId, String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
@@ -147,7 +153,8 @@ public class ClinicForRegistFacade extends BaseFacade {
         Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
         c.setCurrentNo(preNo + 1);
         c.setTimeDesc(desc);
-        save(c);
+        ClinicForRegist clinicForRegist=save(c);
+        return clinicForRegist;
     }
     /**
      * @param id
@@ -454,4 +461,41 @@ public class ClinicForRegistFacade extends BaseFacade {
     public List<ClinicIndex> findClinicIndexAll() {
           return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
      }
+
+    /**
+     *@param currentDateStr
+     * @return
+      * 如果这个医生当天有出诊就显示当天
+     * 如果没有就显示里今天最近的一天
+     */
+//    ClinicForRegist
+     public ClinicForRegist findRegistInfo(String currentDateStr) {
+         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
+         ClinicForRegist clinicForRegist = null;
+         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%'";
+         clinicForRegists = entityManager.createQuery(sql).getResultList();
+         if(clinicForRegists.isEmpty()){
+                return findRegistInfo(getNextDayStr(currentDateStr));
+         }else{
+             return clinicForRegists.get(0);
+         }
+        }
+     /**
+     *
+     * @param dateStr
+     * @return
+     */
+    public String getNextDayStr(String dateStr){
+        String nextDayStr="";
+        try {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(sdf.parse(dateStr));
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            Date nextDay = new Date(calendar.getTimeInMillis());
+            nextDayStr=sdf.format(nextDay);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return nextDayStr;
+    }
 }
