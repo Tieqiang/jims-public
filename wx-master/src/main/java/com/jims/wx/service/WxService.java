@@ -219,11 +219,11 @@ public class WxService {
     @GET
     @Path("user-bangker")
     public String userBangker(@QueryParam("code") String code){
-        System.out.println("code="+code);
+//        System.out.println("code="+code);
 //        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo() ;
          SnsToken snsToken=SnsAPI.oauth2AccessToken("wx1b3cf470d135a830", "df933603351f378c54883853e05dd228", code);
          try {
-             System.out.println("snsToken.getOpenid()="+snsToken.getOpenid());
+//             System.out.println("snsToken.getOpenid()="+snsToken.getOpenid());
             response.sendRedirect("/views/his/public/app-user-bangker.html?param="+snsToken.getOpenid());
         } catch (IOException e) {
             e.printStackTrace();
