@@ -20,7 +20,12 @@ $(function () {
         }, {
             title: '选项',
             field: 'optContent',
-            width: "100%",
+            width: "50%",
+            editor: 'text'
+        },{
+            title: '图片路径',
+            field: 'image',
+            width: "50%",
             editor: 'text'
         }]],
         onClickRow: function (index, row) {
@@ -44,7 +49,12 @@ $(function () {
         }, {
             title: '选项',
             field: 'optContent',
-            width: "100%",
+            width: "50%",
+            editor: 'text'
+        },{
+            title: '图片路径',
+            field: 'image',
+            width: "50%",
             editor: 'text'
         }]]
     });
@@ -101,6 +111,7 @@ $(function () {
         $("#questionType").textbox('setValue',"");
         $("#preAnswer").textbox('setValue',"");
         $("#subId").textbox('setValue',"");
+        $("#img").textbox('setValue',"");
         var data=[];
         $("#dgOption").datagrid("loadData",data);
     }
@@ -122,6 +133,7 @@ $(function () {
                 $("#questionContent").textbox('setValue', node.questionContent);
                 $("#questionType").combobox('setValue', node.questionType);
                 $("#preAnswer").textbox('setValue', node.preAnswer);
+                $("#img").textbox('setValue', node.img);
                 $("#dgOption").datagrid('loadData', node.options);
             })
         } else{
@@ -139,6 +151,7 @@ $(function () {
             menuDict.questionContent = $("#questionContent").textbox('getValue');
             menuDict.questionType = $("#questionType").combobox('getValue');
             menuDict.preAnswer = $("#preAnswer").textbox('getValue');
+            menuDict.img = $("#img").textbox('getValue');
             menuDict.id = $("#subId").val();
 
             var data =$("#dgOption").datagrid("getRows");
@@ -201,6 +214,7 @@ $(function () {
                 $("#questionContentShow").textbox('setValue', node.questionContent);
                 $("#questionTypeShow").combobox('setValue', node.questionType);
                 $("#preAnswerShow").textbox('setValue', node.preAnswer);
+                $("#image").textbox('setValue', node.img);
                 $("#dgOptionShow").datagrid('loadData', node.options);
             });
         }else{
