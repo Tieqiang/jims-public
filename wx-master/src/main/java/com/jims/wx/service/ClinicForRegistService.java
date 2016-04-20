@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.*;
+import com.jims.wx.vo.AppDoctInfoVo;
 import com.jims.wx.vo.BeanChangeVo;
 import com.jims.wx.vo.ClinicForRegistVO;
 import com.jims.wx.vo.ComboboxVo;
@@ -27,6 +28,7 @@ public class ClinicForRegistService {
     private ClinicTypeSettingFacade clinicTypeSettingFacade;
     private DeptDictFacade deptDictFacade;
     private DoctInfoFacade doctInfoFacade;
+    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
     @Inject
     public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade,DeptDictFacade deptDictFacade,DoctInfoFacade doctInfoFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
@@ -40,20 +42,42 @@ public class ClinicForRegistService {
 //    find-by-dept-id?deptId="+deptId
     @GET
     @Path("find-by-dept-id")
-    public Set<DoctInfo> findByDeptId(@QueryParam("deptId") String deptId){
+    public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId){
 //        DeptDict
-        Set<DoctInfo> doctInfos=new HashSet<DoctInfo>();
+        List<AppDoctInfoVo> appDoctInfoVos=new ArrayList<AppDoctInfoVo>();
+        /*
+        * 获取当前日期 String
+         */
+        String currentDateStr=sdf.format(new Date());
+
         String deptName=this.deptDictFacade.findDeptDictByDeptId(deptId);
+
         List<ClinicIndex> list=clinicForRegistFacade.findClinicIndexAll();
+
         for(ClinicIndex clinicIndex:list){
             //一个号别只有一个doct
             if(deptName.equals(clinicIndex.getClinicDept())){
                 String doctId=clinicIndex.getDoctorId();
                 DoctInfo doctInfo=this.doctInfoFacade.findById(doctId);
-                doctInfos.add(doctInfo);
-            }
+                 /**
+                 * 如果这个医生当天有出诊就显示当天
+                 * 如果没有就显示里今天最近的一天
+                 */
+                 ClinicForRegist clinicForRegist=clinicForRegistFacade.findRegistInfo(currentDateStr);
+                 AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
+                 appDoctInfoVo.setName(doctInfo.getName());
+                 appDoctInfoVo.setTitle(doctInfo.getTitle());
+                 appDoctInfoVo.setHeadUrl(doctInfo.getHeadUrl());
+                 appDoctInfoVo.setDescription(doctInfo.getTranDescription2());
+                 appDoctInfoVo.setCurrentNum(clinicForRegist.getRegistrationNum());
+                 appDoctInfoVo.setEnabledNum(clinicForRegist.getRegistrationLimits()-clinicForRegist.getRegistrationNum());
+                 appDoctInfoVo.setTimeDesc(clinicForRegist.getTimeDesc());
+                 appDoctInfoVo.setDeptName(deptName);
+                 appDoctInfoVos.add(appDoctInfoVo);
+             }
+//            appDoctInfoVo.setD
         }
-        return doctInfos;
+        return appDoctInfoVos;
     }
     /**
      * 根据id查询号表详细信息
