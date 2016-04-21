@@ -149,10 +149,12 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         c.setRegistrationLimits(Integer.parseInt(limits));
         c.setRegistrationNum(0);
-        c.setAppointmentLimits(0);
-        Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
-        c.setCurrentNo(preNo + 1);
+        c.setAppointmentLimits(Integer.parseInt(limits));
+//        Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
+        c.setCurrentNo(0);
         c.setTimeDesc(desc);
+        Double price=clinicTypeChargeFacade.findPriceByClinicTypeSettingId(byId.getClinicTypeId());
+        c.setRegistPrice(price);
         ClinicForRegist clinicForRegist=save(c);
         return clinicForRegist;
     }
@@ -339,7 +341,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @param id
      * @return
      */
-    private ClinicForRegist findById(String id) {
+    public ClinicForRegist findById(String id) {
         return (ClinicForRegist) entityManager.createQuery("from  ClinicForRegist where id='" + id + "'").getSingleResult();
     }
 
@@ -462,20 +464,19 @@ public class ClinicForRegistFacade extends BaseFacade {
           return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
      }
 
-    /**
-     *@param currentDateStr
+    /*
+     * @description * 如果这个医生当天有出诊就显示当天 如果没有就显示里今天最近的一天
+     * @param  clinicIndexId 号别id
+     * @param currentDateStr
      * @return
-      * 如果这个医生当天有出诊就显示当天
-     * 如果没有就显示里今天最近的一天
      */
-//    ClinicForRegist
-     public ClinicForRegist findRegistInfo(String currentDateStr) {
+      public ClinicForRegist findRegistInfo(String currentDateStr,String clinicIndexId) {
          List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
          ClinicForRegist clinicForRegist = null;
-         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%'";
+         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%' and clinicIndex.id='"+clinicIndexId+"'";
          clinicForRegists = entityManager.createQuery(sql).getResultList();
          if(clinicForRegists.isEmpty()){
-                return findRegistInfo(getNextDayStr(currentDateStr));
+                return findRegistInfo(getNextDayStr(currentDateStr),clinicIndexId);
          }else{
              return clinicForRegists.get(0);
          }
