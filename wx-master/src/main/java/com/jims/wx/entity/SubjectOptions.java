@@ -20,6 +20,7 @@ public class SubjectOptions implements java.io.Serializable {
 	private Subject subject;
 	private String optContent;
 	private String optStatus;
+    private String image;
     @Transient
 private String subjectId;
 	// Constructors
@@ -28,12 +29,14 @@ private String subjectId;
 	public SubjectOptions() {
 	}
 
-	/** full constructor */
-	public SubjectOptions(Subject subject, String optContent, String optStatus) {
-		this.subject = subject;
-		this.optContent = optContent;
-		this.optStatus = optStatus;
-	}
+
+    /** full constructor */
+    public SubjectOptions(Subject subject, String optContent, String optStatus, String image) {
+        this.subject = subject;
+        this.optContent = optContent;
+        this.optStatus = optStatus;
+        this.image = image;
+    }
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -76,6 +79,18 @@ private String subjectId;
 	public void setOptStatus(String optStatus) {
 		this.optStatus = optStatus;
 	}
+
+    @Column(name = "IMAGE", length = 1024)
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+
+
 
     @Transient
     public String getSubjectId() {

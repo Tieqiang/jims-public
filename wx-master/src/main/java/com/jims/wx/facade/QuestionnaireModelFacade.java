@@ -5,6 +5,7 @@ import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.QuestionnaireModel;
 import com.jims.wx.entity.QuestionnaireVsSubject;
 import com.jims.wx.entity.Subject;
+import com.jims.wx.entity.SubjectOptions;
 import com.jims.wx.vo.QuestionnaireVsSubjectVo;
 
 import javax.inject.Inject;
@@ -40,7 +41,6 @@ public class QuestionnaireModelFacade extends BaseFacade {
         }
         if(null != questionnaireModel && !questionnaireModel.getSubIds().trim().equals("")){
             String subIds = questionnaireModel.getSubIds();
-            System.out.println(subIds);
             String[] idsArray = subIds.split(";");
 
             if(idsArray.length > 0){
@@ -76,14 +76,14 @@ public class QuestionnaireModelFacade extends BaseFacade {
     @Transactional
     public void delQuestionnaireModel(String modelId){
         if(null!=modelId){
-                QuestionnaireModel questionnaireModel=get(QuestionnaireModel.class,modelId);
-                Set<QuestionnaireVsSubject>deleteData =questionnaireModel.getQuestionnaireVsSubjects();
-                List<String>qvsIds=new ArrayList<>();
-                for(QuestionnaireVsSubject qvs:deleteData){
-                    qvsIds.add(qvs.getSeriaNo());
-                }
-                super.removeByStringIds(QuestionnaireVsSubject.class,qvsIds);
-                super.remove(questionnaireModel);
+            QuestionnaireModel questionnaireModel=get(QuestionnaireModel.class,modelId);
+            Set<QuestionnaireVsSubject>deleteData =questionnaireModel.getQuestionnaireVsSubjects();
+            List<String>qvsIds=new ArrayList<>();
+            for(QuestionnaireVsSubject qvs:deleteData){
+                qvsIds.add(qvs.getSeriaNo());
+            }
+            super.removeByStringIds(QuestionnaireVsSubject.class,qvsIds);
+            super.remove(questionnaireModel);
         }
     }
 
@@ -98,19 +98,26 @@ public class QuestionnaireModelFacade extends BaseFacade {
 
         //把问题转换成自定义VO的集合
         List<QuestionnaireVsSubjectVo> voList = new ArrayList<QuestionnaireVsSubjectVo>();
+
         Set<QuestionnaireVsSubject> vsSub = obj.getQuestionnaireVsSubjects();
         if(vsSub != null && vsSub.size() > 0){
             QuestionnaireVsSubjectVo vo;
             Iterator ite = vsSub.iterator();
             while(ite.hasNext()){
                 QuestionnaireVsSubject temp = (QuestionnaireVsSubject)ite.next();
+                Subject subject = temp.getSubject() ;
+                String hql = "from SubjectOptions as op where op.subject.id ='"+subject.getId()+"'" ;
+                List<SubjectOptions> optionses = createQuery(SubjectOptions.class,hql,new ArrayList<Object>()).getResultList() ;
+
                 vo = new QuestionnaireVsSubjectVo();
+                vo.setSubjectOptionses(optionses);
                 vo.setQuestionVsSubId(temp.getSeriaNo());
                 vo.setQuestModelId(obj.getId());
                 vo.setQuestionType(temp.getSubject().getQuestionType());
                 vo.setQuestionContent(temp.getSubject().getQuestionContent());
                 vo.setPreAnswer(temp.getSubject().getPreAnswer());
                 vo.setId(temp.getSubject().getId());
+                vo.setPicture(temp.getSubject().getImg());
                 voList.add(vo);
             }
             obj.setQuestionnaireVsSubjectVo(voList);

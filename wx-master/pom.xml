@@ -186,6 +186,11 @@
             <artifactId>sitemesh</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.jims.wx</groupId>
             <artifactId>wx-sdk</artifactId>
             <version>1.0-SNAPSHOT</version>

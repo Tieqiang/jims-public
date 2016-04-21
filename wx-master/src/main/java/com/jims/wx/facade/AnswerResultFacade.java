@@ -23,4 +23,8 @@ public class AnswerResultFacade extends BaseFacade {
         answerResult=super.merge(answerResult);
         return answerResult;
     }
+
+    public AnswerResult findById(String id) {
+        return  (AnswerResult)entityManager.createQuery("from AnswerResult where answerSheetId='"+id+"'").getSingleResult();
+    }
 }

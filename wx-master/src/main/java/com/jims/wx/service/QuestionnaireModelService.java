@@ -30,7 +30,7 @@ public class QuestionnaireModelService {
     public List<QuestionnaireModel> listAll(){
         return questionnaireModelFacade.findAll(QuestionnaireModel.class);
     }
-    
+
     @POST
     @Path("add")
     public Response save(QuestionnaireModel questionnaireModel) {
