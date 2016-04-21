@@ -1,6 +1,7 @@
 package com.jims.wx.service;
 
 
+import com.jims.wx.entity.AppUser;
 
 import com.jims.wx.entity.WxOpenAccountConfig;
 import com.jims.wx.facade.AppUserFacade;
@@ -15,6 +16,8 @@ import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
+import com.jims.wx.vo.AppSetVo;
+import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.sns.SnsToken;
@@ -24,7 +27,6 @@ import weixin.popular.bean.xmlmessage.XMLTextMessage;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.TokenManager;
 import weixin.popular.support.expirekey.DefaultExpireKey;
-import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.inject.Inject;
@@ -37,6 +39,7 @@ import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 /**
  * Created by heren on 2016/2/24.
@@ -51,6 +54,7 @@ public class WxService {
     private HttpServletResponse response ;
     private WxOpenAccountConfigFacade wxOpenAccountConfigFacade ;
     private HospitalInfoFacade hospitalInfoFacade ;
+    private HospitalInfoFacade hospitalInfoFacade;
 
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
@@ -102,6 +106,7 @@ public class WxService {
                     + eventMessage.getToUserName() + "__"
                     + eventMessage.getMsgId() + "__"
                     + eventMessage.getCreateTime();
+            System.out.println(eventMessage.getContent());
             if(expireKey.exists(key)){
                 //重复通知不作处理
                 return;
@@ -169,8 +174,6 @@ public class WxService {
         }
         return true;
     }
-
-
     @GET
     @Path("token")
     public String getToken(){
@@ -188,5 +191,16 @@ public class WxService {
     }
 
 
-
+    @GET
+    @Path("questionnaire-survey")
+    public String test(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patId="";
+        if(appList.size()>0){
+            patId=appList.get(0).getPatId();
+        }
+        response.sendRedirect("/views/his/public/questionnaire-survey.html?openId="+snsToken.getOpenid()+"&patId="+patId);
+        return "http://www.baidu.com/" ;    }
 }

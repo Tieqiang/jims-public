@@ -27,6 +27,7 @@ public class Subject implements java.io.Serializable {
 	private String questionContent;
 	private String questionType;
 	private String preAnswer;
+    private String img;
 	private Set<AnswerResult> answerResults = new HashSet<AnswerResult>(0);
 	private Set<QuestionnaireVsSubject> questionnaireVsSubjects = new HashSet<QuestionnaireVsSubject>(
 			0);
@@ -44,18 +45,26 @@ public class Subject implements java.io.Serializable {
 	public Subject() {
 	}
 
-	/** full constructor */
-	public Subject(String questionContent, String questionType,
-			String preAnswer, Set<AnswerResult> answerResults,
-			Set<QuestionnaireVsSubject> questionnaireVsSubjects,
-			Set<SubjectOptions> subjectOptionses) {
-		this.questionContent = questionContent;
-		this.questionType = questionType;
-		this.preAnswer = preAnswer;
-		this.answerResults = answerResults;
-		this.questionnaireVsSubjects = questionnaireVsSubjects;
-		this.subjectOptionses = subjectOptionses;
-	}
+
+    /** full constructor */
+    public Subject(String id, String questionContent,
+                   String questionType, String preAnswer,
+                   String img, Set<AnswerResult> answerResults,
+                   Set<QuestionnaireVsSubject> questionnaireVsSubjects,
+                   Set<SubjectOptions> subjectOptionses, List<SubjectOptionsVo> options,
+                   BeanChangeVo<SubjectOptionsVo> beanChangeVo) {
+        this.id = id;
+        this.questionContent = questionContent;
+        this.questionType = questionType;
+        this.preAnswer = preAnswer;
+        this.img = img;
+        this.answerResults = answerResults;
+        this.questionnaireVsSubjects = questionnaireVsSubjects;
+        this.subjectOptionses = subjectOptionses;
+        this.options = options;
+        this.beanChangeVo = beanChangeVo;
+    }
+
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -96,6 +105,15 @@ public class Subject implements java.io.Serializable {
 	public void setPreAnswer(String preAnswer) {
 		this.preAnswer = preAnswer;
 	}
+
+    @Column(name = "IMG", length = 1024)
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "subject")
 	public Set<AnswerResult> getAnswerResults() {
@@ -143,4 +161,6 @@ public class Subject implements java.io.Serializable {
     public void setBeanChangeVo(BeanChangeVo<SubjectOptionsVo> beanChangeVo) {
         this.beanChangeVo = beanChangeVo;
     }
+
+
 }

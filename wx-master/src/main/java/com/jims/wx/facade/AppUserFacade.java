@@ -72,6 +72,21 @@ public class AppUserFacade extends BaseFacade {
         return result;
     }
 
+    /**
+     * 根据分组openId查找用户
+     * @param openId
+     * @return
+     */
+    public List<AppUser> findByOpenId(String openId){
+        String hql = "FROM AppUser u WHERE 1=1";
+        if (openId != null && !openId.equals("")) {
+            hql += " and u.openId = '" + openId + "'";
+        }
+
+        List<AppUser> result = entityManager.createQuery(hql).getResultList();
+        return result;
+    }
+
     @Transactional
     public void createUser(User user) {
         String hql = "from AppUser as user where user.openId = '"+user.getOpenid()+"'" ;

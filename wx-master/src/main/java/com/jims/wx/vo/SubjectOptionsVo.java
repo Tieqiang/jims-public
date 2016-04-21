@@ -8,15 +8,17 @@ public class SubjectOptionsVo implements java.io.Serializable  {
     private String subjectId;
     private String optContent;
     private String optStatus;
+    private String image;
 
     public SubjectOptionsVo() {
     }
 
-    public SubjectOptionsVo(String id, String subjectId, String optContent, String optStatus) {
+    public SubjectOptionsVo(String id, String subjectId, String optContent, String optStatus, String image) {
         this.id = id;
         this.subjectId = subjectId;
         this.optContent = optContent;
         this.optStatus = optStatus;
+        this.image = image;
     }
 
     public String getId() {
@@ -49,5 +51,13 @@ public class SubjectOptionsVo implements java.io.Serializable  {
 
     public void setOptStatus(String optStatus) {
         this.optStatus = optStatus;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
