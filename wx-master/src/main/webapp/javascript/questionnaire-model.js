@@ -225,8 +225,9 @@ $(function () {
         if(subIds.length>0){
             subIds = subIds.substr(0,subIds.length-1);
         }
-        console.log(subIds);
+
         questionnaireModel.subIds = subIds;
+        console.log(questionnaireModel);
         $.postJSON("/api/questionnaire-model/add", questionnaireModel, function (data) {
             $('#dlg').dialog('close');
             $.messager.alert("系统提示", "保存成功", "info");
