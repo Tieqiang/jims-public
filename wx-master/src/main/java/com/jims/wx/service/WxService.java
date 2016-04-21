@@ -52,7 +52,7 @@ public class WxService {
     private AppUserFacade appUserFacade ;
     private HttpServletRequest request ;
     private HttpServletResponse response ;
-//    private HospitalInfoFacade hospitalInfoFacade;
+    private HospitalInfoFacade hospitalInfoFacade;
      //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
     @Inject
@@ -230,6 +230,19 @@ public class WxService {
         }
         return "";
      }
-
+    @GET
+    @Path("find-dept")
+    public String findDept(@QueryParam("code") String code){
+//        System.out.println("code="+code);
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo() ;
+        SnsToken snsToken=SnsAPI.oauth2AccessToken("wx1b3cf470d135a830", "df933603351f378c54883853e05dd228", code);
+        try {
+//             System.out.println("snsToken.getOpenid()="+snsToken.getOpenid());
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param="+snsToken.getOpenid());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 
 }
