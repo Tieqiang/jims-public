@@ -15,13 +15,13 @@
         <input type="hidden" name="deptId" id="deptId" value=""/>
         <div ng-repeat="x in names">
              <div class="weui_cells weui_cells_access">
+                 <!--onclick="findDeptInfo($(this).find('span').text());"-->
             <a class="weui_cell" >
                 <div>
-                    <input type="hidden" name="doctId" id="doctId" value=""/>
+                    <input type="hidden" name="openId" id="openId" value=""/>
                 </div>
                 <div class="weui_cell_bd weui_cell_primary">
-                    <span style="display:none" class="span">{{x.id}}</span>
-                    <div>
+                     <div>
                          <table style="width:100%;">
                             <tr >
                                 <td rowspan="2" style="width:60%"><img src="{{x.headUrl}}" class="imgCls" width="50%"/></td>
@@ -37,16 +37,18 @@
                              <tr >
                                  <td colspan="2">{{x.timeDesc}}</td>
                              </tr>
-                             <tr>
-                                 <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
-                                 <td>剩余号：{{x.enabledNum}}</td>
-                             </tr>
-                        </table>
+                             <!--onclick="judgeIsEnabledRegist(this)"-->
+                             <tr  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price)">
+                                  <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
+                                 <td>剩余号：<span class="span">{{x.enabledNum}}</span></td>
+                                 <p style="display:none">{{x.rid}}</p>
+                                 <th  style="display:none">{{x.price}}</th>
+                                 <!--<div style="display:none">{{x.id}}</div>-->
+                              </tr>
+                         </table>
                       </div>
-                      <p></p>
-                  </div>
-                 <!--<p>{{x.timeDesc}}--已挂号：{{x.currentNum}}--剩余号：{{x.enabledNum}}</p>-->
-            </a>
+                   </div>
+             </a>
         </div>
         </div>
     </div>
