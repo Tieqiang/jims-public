@@ -117,7 +117,7 @@ public class QuestionnaireModelFacade extends BaseFacade {
                 vo.setQuestionContent(temp.getSubject().getQuestionContent());
                 vo.setPreAnswer(temp.getSubject().getPreAnswer());
                 vo.setId(temp.getSubject().getId());
-                vo.setPicture(temp.getSubject().getImg());
+                //vo.setPicture(temp.getSubject().getImg());
                 voList.add(vo);
             }
             obj.setQuestionnaireVsSubjectVo(voList);
