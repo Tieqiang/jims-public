@@ -2,6 +2,7 @@ package com.jims.wx.facade;
 
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
+import com.jims.wx.entity.AppUser;
 import com.jims.wx.entity.PatInfo;
 import com.jims.wx.entity.PatVsUser;
 
@@ -38,5 +39,30 @@ public class PatVsUserFacade extends BaseFacade {
         }else{
             return true;
          }
+    }
+
+//    /**
+//     * 根据patInfoId查询身份证号
+//     * @param patInfoId
+//     * @return
+//     */
+////    PatInfo
+//    public String findIdCardById(String patInfoId) {
+//         String sql="select p.idCard from PatInfo as p where p.id='"+patInfoId+"'";
+//         return (String)entityManager.createQuery(sql).getSingleResult();
+//      }
+
+    /**
+     *
+     * @param appuserId
+     * @return
+     */
+    public String findPatIdById(String appuserId) {
+        String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appuserId+"'";
+        PatInfo patinfo=(PatInfo)entityManager.createQuery(sql).getSingleResult();
+        if(patinfo!=null){
+            return patinfo.getIdCard();
+        }else{
+        return "";}
     }
 }
