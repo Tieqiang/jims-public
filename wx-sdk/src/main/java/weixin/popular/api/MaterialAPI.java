@@ -105,7 +105,8 @@ public class MaterialAPI extends BaseAPI{
 		byte[] data = null;
 		try {
 			data = StreamUtils.copyToByteArray(inputStream);
-		} catch (IOException e) {
+            System.out.println(new String(data));
+        } catch (IOException e) {
 			e.printStackTrace();
 		}
         MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create()

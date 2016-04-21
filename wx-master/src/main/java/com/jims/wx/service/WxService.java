@@ -2,16 +2,22 @@ package com.jims.wx.service;
 
 
 
+import com.jims.wx.entity.WxOpenAccountConfig;
 import com.jims.wx.facade.AppUserFacade;
+import com.jims.wx.facade.HospitalInfoFacade;
 import com.jims.wx.facade.RequestMessageFacade;
+import com.jims.wx.facade.WxOpenAccountConfigFacade;
+import com.jims.wx.vo.AppSetVo;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
+import weixin.popular.api.SnsAPI;
 import weixin.popular.api.TokenAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
@@ -43,15 +49,19 @@ public class WxService {
     private AppUserFacade appUserFacade ;
     private HttpServletRequest request ;
     private HttpServletResponse response ;
+    private WxOpenAccountConfigFacade wxOpenAccountConfigFacade ;
+    private HospitalInfoFacade hospitalInfoFacade ;
 
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
     @Inject
-    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response) {
+    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, WxOpenAccountConfigFacade wxOpenAccountConfigFacade, HospitalInfoFacade hospitalInfoFacade) {
         this.requestMessageFacade = requestMessageFacade;
         this.appUserFacade = appUserFacade;
         this.request = request;
         this.response = response;
+        this.wxOpenAccountConfigFacade = wxOpenAccountConfigFacade;
+        this.hospitalInfoFacade = hospitalInfoFacade;
     }
 
     @Path("check")
@@ -92,19 +102,20 @@ public class WxService {
                     + eventMessage.getToUserName() + "__"
                     + eventMessage.getMsgId() + "__"
                     + eventMessage.getCreateTime();
-            System.out.println(eventMessage.getContent());
             if(expireKey.exists(key)){
                 //重复通知不作处理
                 return;
             }else{
                 expireKey.add(key);
             }
+            System.out.println(this.getToken());
             //不同的消息类型有不同处理方式
             String msgType = eventMessage.getMsgType() ;
             String event = eventMessage.getEvent() ;
             if("event".equals(msgType)&&"subscribe".equals(event)){
                 //公众号订阅
                 String fromUser = eventMessage.getFromUserName() ;
+                System.out.println(this.getToken());
                 User user = UserAPI.userInfo(this.getToken(), fromUser) ;
                 appUserFacade.createUser(user) ;
             }
@@ -123,6 +134,9 @@ public class WxService {
             }
             if("link".equals(msgType)){
                 //超链接
+            }
+
+            if("VIEW".equals(event)&&"event".equals(msgType)){
             }
             //创建回复
             XMLMessage xmlTextMessage = new XMLTextMessage(
@@ -155,11 +169,24 @@ public class WxService {
         }
         return true;
     }
+
+
     @GET
     @Path("token")
     public String getToken(){
         return TokenManager.getDefaultToken() ;
     }
+
+    @GET
+    @Path("test")
+    public String test(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo() ;
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(),code) ;
+
+        response.sendRedirect("/login.html?openId="+snsToken.getOpenid());
+        return "http://www.baidu.com/" ;
+    }
+
 
 
 }
