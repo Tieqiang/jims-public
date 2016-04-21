@@ -26,28 +26,27 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "APP_USER", schema = "WX", uniqueConstraints = @UniqueConstraint(columnNames = "OPEN_ID"))
-@XmlRootElement
 public class AppUser implements java.io.Serializable {
 
-    // Fields
+	// Fields
 
-    private String id;
-    private Integer subscribe;
-    private String openId;
-    private String nickName;
-    private Integer sex;
-    private String city;
-    private String country;
-    private String province;
-    private String language;
-    private String headImgUrl;
-    private Integer subscrbeTime;
-    private String remark;
+	private String id;
+	private Integer subscribe;
+	private String openId;
+	private String nickName;
+	private Integer sex;
+	private String city;
+	private String country;
+	private String province;
+	private String language;
+	private String headImgUrl;
+	private Integer subscrbeTime;
+	private String remark;
     private Integer groupId ;
     private String patId;
     private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
 
-    // Constructors
+	// Constructors
 
     /** default constructor */
     public AppUser() {
@@ -75,7 +74,7 @@ public class AppUser implements java.io.Serializable {
     }
 
 
-    // Property accessors
+	// Property accessors
     @GenericGenerator(name = "generator", strategy = "uuid.hex")
     @Id
     @GeneratedValue(generator = "generator")
@@ -168,27 +167,27 @@ public class AppUser implements java.io.Serializable {
         return this.headImgUrl;
     }
 
-    public void setHeadImgUrl(String headImgUrl) {
-        this.headImgUrl = headImgUrl;
-    }
+	public void setHeadImgUrl(String headImgUrl) {
+		this.headImgUrl = headImgUrl;
+	}
 
-    @Column(name = "SUBSCRBE_TIME", length = 0)
-    public Integer getSubscrbeTime() {
-        return this.subscrbeTime;
-    }
+	@Column(name = "SUBSCRBE_TIME", length = 0)
+	public Integer getSubscrbeTime() {
+		return this.subscrbeTime;
+	}
 
-    public void setSubscrbeTime(Integer subscrbeTime) {
-        this.subscrbeTime = subscrbeTime;
-    }
+	public void setSubscrbeTime(Integer subscrbeTime) {
+		this.subscrbeTime = subscrbeTime;
+	}
 
-    @Column(name = "REMARK", length = 100)
-    public String getRemark() {
-        return this.remark;
-    }
+	@Column(name = "REMARK", length = 100)
+	public String getRemark() {
+		return this.remark;
+	}
 
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
 
 
 

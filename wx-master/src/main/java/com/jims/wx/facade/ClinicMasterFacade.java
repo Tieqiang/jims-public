@@ -76,4 +76,14 @@ public class ClinicMasterFacade extends BaseFacade {
         }
         return newUpdateDict;
     }
+
+    /**
+     * 保存单个对象
+     * @param clinicMaster
+     * @return
+     */
+    @Transactional
+    public ClinicMaster saveRecord(ClinicMaster clinicMaster) {
+         return entityManager.merge(clinicMaster);
+    }
 }

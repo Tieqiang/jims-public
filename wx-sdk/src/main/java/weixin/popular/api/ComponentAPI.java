@@ -27,7 +27,7 @@ public class ComponentAPI extends BaseAPI{
 	/**
 	 * 生成授权页 URL 
 	 * @param component_appid
-	 * @param pre_auth_code
+     * @param pre_auth_code
 	 * @param redirect_uri
 	 * @return
 	 */

@@ -22,7 +22,21 @@ public class DeptDictFacade extends BaseFacade {
     public DeptDictFacade(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-
+    /**
+     *
+     * @param deptId
+     * @return
+     */
+    public DeptDict findById(String deptId) {
+        if(deptId=="" || deptId==null){
+            return null;
+        }
+        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id="+deptId+"").getSingleResult();
+        if(d==null){
+            return null;
+        }
+        return d;
+    }
     /**
      * 根据 医院获取该医院的所有科室
      *
@@ -96,4 +110,14 @@ public class DeptDictFacade extends BaseFacade {
         Query query = entityManager.createQuery(hql);
         return query.getResultList();
     }
+
+    /**
+     * 根据deptId 查询deptName
+     * @param deptId
+     * @return
+     */
+    public String findDeptDictByDeptId(String deptId) {
+//        DeptDict
+         return (String)entityManager.createQuery("select d.deptName from DeptDict as d where d.id='"+deptId+"'").getSingleResult();
+     }
 }

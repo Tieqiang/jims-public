@@ -67,4 +67,18 @@ public class ClinicTypeChargeFacade extends BaseFacade {
         return lists;
     }
 
+    /**
+     * 根据号类的id 查询号表的价格
+     * @param clinicTypeId
+     * @return
+     */
+    public Double findPriceByClinicTypeSettingId(String clinicTypeId) {
+        Double priceCount=0.0;
+        String sql="from ClinicTypeCharge where clinicTypeId='"+clinicTypeId+"'";
+        List<ClinicTypeCharge> list=entityManager.createQuery(sql).getResultList();
+        for(ClinicTypeCharge c:list){
+            priceCount=priceCount+c.getPrice();
+        }
+         return priceCount;
+    }
 }

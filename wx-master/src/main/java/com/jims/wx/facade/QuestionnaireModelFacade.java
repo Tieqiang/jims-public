@@ -41,6 +41,7 @@ public class QuestionnaireModelFacade extends BaseFacade {
         }
         if(null != questionnaireModel && !questionnaireModel.getSubIds().trim().equals("")){
             String subIds = questionnaireModel.getSubIds();
+            System.out.println(subIds);
             String[] idsArray = subIds.split(";");
 
             if(idsArray.length > 0){
@@ -98,7 +99,6 @@ public class QuestionnaireModelFacade extends BaseFacade {
 
         //把问题转换成自定义VO的集合
         List<QuestionnaireVsSubjectVo> voList = new ArrayList<QuestionnaireVsSubjectVo>();
-
         Set<QuestionnaireVsSubject> vsSub = obj.getQuestionnaireVsSubjects();
         if(vsSub != null && vsSub.size() > 0){
             QuestionnaireVsSubjectVo vo;
@@ -117,7 +117,7 @@ public class QuestionnaireModelFacade extends BaseFacade {
                 vo.setQuestionContent(temp.getSubject().getQuestionContent());
                 vo.setPreAnswer(temp.getSubject().getPreAnswer());
                 vo.setId(temp.getSubject().getId());
-                //vo.setPicture(temp.getSubject().getImg());
+                vo.setPicture(temp.getSubject().getImg());
                 voList.add(vo);
             }
             obj.setQuestionnaireVsSubjectVo(voList);
