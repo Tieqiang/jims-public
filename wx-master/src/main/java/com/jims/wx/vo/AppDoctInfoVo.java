@@ -6,7 +6,7 @@ package com.jims.wx.vo;
 public class AppDoctInfoVo {
 
 
-    private String id;
+    private String rid;
 
     private String name;
 
@@ -21,7 +21,13 @@ public class AppDoctInfoVo {
     private Integer currentNum;
 
     private Integer enabledNum;
-
+    private Double price;
+    public Double getPrice(){
+        return this.price;
+    }
+    public void setPrice(Double price){
+        this.price=price;
+    }
     public String getDeptName() {
         return deptName;
     }
@@ -52,14 +58,19 @@ public class AppDoctInfoVo {
         this.headUrl = headUrl;
     }
 
-    public String getId() {
-        return id;
+//    public String getId() {
+//        return this.id;
+//    }
+//
+//    public void setId(String id) {
+//        this.id = id;
+//    }
+    public String getRid(){
+        return this.rid;
     }
-
-    public void setId(String id) {
-        this.id = id;
+    public void setRid(String rid){
+        this.rid=rid;
     }
-
     public String getName() {
         return name;
     }
