@@ -23,18 +23,26 @@ app.controller('tableCtrl',function ($scope, $http) {
             $scope.names = data;});
 
 });
+function getUrlParameter(name){
+    name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+    var regexS = "[\\?&]"+name+"=([^&#]*)";
+    var regex = new RegExp( regexS );
+    var results = regex.exec(window.parent.location.href );
+    if( results == null )    return "";  else {
+        return results[1];
+    }
+}
+var openId=getUrlParameter("param");
+//alert("openId="+openId);
+$("#openId").val(openId);
 /**
  * 查找科室下面医生的信息
  * @param deptId
  */
 var findDeptInfo=function findDeptInfo(deptId){
-//    alert(deptId);
-//             $("#deptlist").hide();
-//             $("#deptInfo").show();
-////             $("#return").show();
-//             $("#return").attr("style", "display:block;");
-//             loadDict(deptId);
-    window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId;
+    var openId=$("#openId").val();
+//    alert("openId="+openId);
+     window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
 
 };
 
