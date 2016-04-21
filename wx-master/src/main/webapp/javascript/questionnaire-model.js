@@ -86,7 +86,7 @@ $(function () {
                     }, {
                         title: '题目',
                         field: 'questionContent',
-                        width: "60%"
+                        width: "40%"
                     }, {
                         title: '题目类型',
                         field: 'questionType',
@@ -95,6 +95,10 @@ $(function () {
                         title: '答案',
                         field: 'preAnswer',
                         width: "20%"
+                    },{
+                        title: '图片',
+                        field: 'img',
+                        width: '20%'
                     }]],
                     onClickRow: function (index, row) {
                         $('#dgOption').datagrid('updateRow',{
@@ -221,8 +225,9 @@ $(function () {
         if(subIds.length>0){
             subIds = subIds.substr(0,subIds.length-1);
         }
-        console.log(subIds);
+
         questionnaireModel.subIds = subIds;
+        console.log(questionnaireModel);
         $.postJSON("/api/questionnaire-model/add", questionnaireModel, function (data) {
             $('#dlg').dialog('close');
             $.messager.alert("系统提示", "保存成功", "info");

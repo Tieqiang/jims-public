@@ -11,13 +11,20 @@
     <SCRIPT type="text/javascript">
         $(function () {
             var MANY_ZEROS = "000000000000000000";
-
             function leftZeroPad(val, minLength) {
                 if (typeof(val) != "string")
                     val = String(val);
                 return (MANY_ZEROS.substring(0, minLength - val.length)) + val;
             }
 
+            //获取URL中的路径
+            function GetQueryString(name) {
+                var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if(r!=null)return  unescape(r[2]); return null;
+            }
+
+            alert(GetQueryString("openId"))
             //得到焦点
             $("#password").focus(function () {
                 $("#left_hand").animate({

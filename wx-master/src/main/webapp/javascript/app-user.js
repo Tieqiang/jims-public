@@ -47,10 +47,8 @@ $(function () {
         }]],
         onClickRow: function (index, row) {
             $.get("/api/app-user/get-user-by-id?groupId=" + row.groupId, function (data) {
-                        console.log(data);
                 $("#right").datagrid("loadData", data);
             });
-
         }
     });
 
@@ -208,6 +206,7 @@ $(function () {
             console.log(row);
             $("#userId").textbox("setValue",row.id);
             $("#openId").textbox('setValue', row.openId);
+            $("#nickName").textbox('setValue',row.nickName);
 
             $('#dlg-tip').dialog('open').dialog('center').dialog('setTitle', '添加备注名');
 
@@ -223,17 +222,11 @@ $(function () {
             user.id = id;
             user.openId = openId;
             user.remark = remark;
-
-            $.post("/api/app-user/update-tip", user, function (data) {
+            $.postJSON("/api/app-user/update-tip", user, function (data) {
                 $('#dlg-tip').dialog('close');
                 $.messager.alert("系统提示", "添加备注名成功", "info");
-
             }, function (data, status) {
             });
-
-
-            console.log(groupJson);
-
         }
 
     });
@@ -265,11 +258,20 @@ $(function () {
     $("#dlg-move").window({
         modal:true,
         width:400,
-        height:150,
+        height:200,
         onBeforeOpen:function(){
             var row = $("#left").datagrid('getSelected');
             if(row){
                 $("#currentGroupId").combobox('setValue',row.groupId);
+            }
+            var user  = $("#right").datagrid('getSelected') ;
+            if(user){
+                $("#opId").combobox('setValue',user.openId) ;
+                console.log("user")
+                console.log(user) ;
+            }else{
+                $.messager.alert('系统提示','请选择要移动的人','info') ;
+                return false ;
             }
         }
     });
@@ -287,20 +289,31 @@ $(function () {
         valueField:'groupId',
         method:'GET',
         url:'/api/app-user-group/list-all'
+    }) ;
+
+    $("#opId").combobox({
+        textField:'nickName',
+        valueField:"openId",
+        method:'GET',
+        url:"/api/app-user/list-all"
     })
 
     $("#moveGroupBtn").on('click',function(){
         var currentGroupId = $("#currentGroupId").combobox('getValue') ;
         var targetGroupId = $("#targetGroupId").combobox('getValue') ;
+        var openId = $('#opId').combobox('getValue') ;
         if(targetGroupId==null ||targetGroupId==undefined){
             $.messager.alert("系统提示","目标分组不能为空",'error');
             return ;
         }
 
-        $.post("/api/app-user-group/move-group/"+currentGroupId+"/"+targetGroupId,function(data){
+        $.post("/api/app-user-group/move-group/"+openId+"/"+targetGroupId+"/"+currentGroupId,function(data){
             $.messager.alert("系统提示","移动用户成功",'info');
+            $("#dlg-move").window('close');
+            loadGroup();
             resetGroup() ;
-        })
+        });
+
     })
 
 });

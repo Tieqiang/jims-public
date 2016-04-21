@@ -1,46 +1,39 @@
-/**
- * Created by heren on 2015/9/16.
- */
-/***
- * 消耗品产品编码描述字典维护
- */
 $(function () {
+
     var editIndex;
+    var modelId;
+
+    //定义右侧多个操作的增删改数据
     var stopEdit = function () {
         if (editIndex || editIndex == 0) {
             $("#dg").datagrid('endEdit', editIndex);
             editIndex = undefined;
         }
     }
+
+    //右侧答题记录
     $("#dg").datagrid({
-        title: '调查问卷列表',
-        fit: true,//让#dg数据创铺满父类容器
-        footer: '#tb',
+        title: '号别',
+        fit: true,
         singleSelect: true,
         columns: [[{
             title: '编号',
             field: 'id',
-            width: "20%"
-        }, {
-            title: '答题人微信',
+            width: "30%"
+        },{
+            title: '微信号',
             field: 'openId',
-            width: "20%",
-            editor: 'text'
-        }, {
-            title: '答题人身份证',
+            width: "15%"
+        },{
+            title: '身份证号',
             field: 'patId',
-            width: "20%",
-            editor: 'text'
-        }, {
-            title: '问卷模板',
-            field: 'questionnaireId',
-            width: "20%",
-            editor: 'text'
-        }, {
+            width: "25%"
+        },{
             title: '答题时间',
             field: 'createTime',
-            width: "20%"
-        }]],
+            width: "30%"
+            }
+        ]],
         onClickRow: function (index, row) {
             stopEdit();
             $(this).datagrid('beginEdit', index);
@@ -48,88 +41,128 @@ $(function () {
         }
     });
 
-    $("#searchBtn").on("click", function () {
-        loadDict();
-    });
-
-    $("#addBtn").on('click', function () {
-        stopEdit();
-        $("#dg").datagrid('appendRow', {});
-        var rows = $("#dg").datagrid('getRows');
-        var addRowIndex = $("#dg").datagrid('getRowIndex', rows[rows.length - 1]);
-        editIndex = addRowIndex;
-        $("#dg").datagrid('selectRow', editIndex);
-        $("#dg").datagrid('beginEdit', editIndex);
-    });
-
-    $("#delBtn").on('click', function () {
-        var row = $("#dg").datagrid('getSelected');
-        if (row) {
-            var rowIndex = $("#dg").datagrid('getRowIndex', row);
-            $("#dg").datagrid('deleteRow', rowIndex);
-            if (editIndex == rowIndex) {
-                editIndex = undefined;
+    //左侧问卷列表
+    $("#typeList").datagrid({
+        title: '问卷列表',
+        width:'250px',
+        url: "/api/questionnaire-model/list-all",
+        mode: 'remote',
+        method: 'GET',
+        singleSelect: true,
+        columns: [[
+            {
+                title: 'ID',
+                field: 'id',
+                hidden:true
+            },{
+                title: '问卷名称',
+                field: 'title',
+                width:'100%'
             }
-        } else {
-            $.messager.alert('系统提示', "请选择要删除的行", 'info');
+        ]],
+        onClickRow: function (rowIndex, rowData) {
+            modelId = rowData.id;
+            if (editIndex || editIndex == 0) {
+                $("#dg").datagrid("endEdit", editIndex);
+            }
+            $.get("/api/answer-sheet/find-by-model-id?modelId="+modelId, function (data) {
+                $("#dg").datagrid('loadData', data);
+                console.log(data);
+            });
         }
     });
 
-    $("#editBtn").on('click', function () {
-        var row = $("#dg").datagrid("getSelected");
-        var index = $("#dg").datagrid("getRowIndex", row);
 
-        if (index == -1) {
-            $.messager.alert("提示", "请选择要修改的行！", "info");
-            return;
-        }
 
-        if (editIndex == undefined) {
-            $("#dg").datagrid("beginEdit", index);
-            editIndex = index;
-        } else {
-            $("#dg").datagrid("endEdit", editIndex);
-            $("#dg").datagrid("beginEdit", index);
-            editIndex = index;
+
+
+
+
+    //弹出答题详情
+    $("#dgShow").treegrid({
+        fit: true,
+        idField: "subjectId",
+        treeField: "subjectName",
+        fitColumns: true,
+        title: "问卷",
+        columns: [[{
+            title: 'id',
+            field: 'id',
+            hidden:true
+        },{
+            title: '名称',
+            field: 'preAnswer',
+            width:"60%"
+        },{
+            title: '科室',
+            field: 'subjectId',
+            width:"40%"
+        }]],
+        onClickRow: function (row) {
+
+            if(row.parentFlag!="Y"){
+                clinicIndexId = row.id;   //号类ID赋值
+            }else{
+                clinicIndexId = null;   //号类ID赋值
+            }
+
+            addData();
+
+            $.get("/api/answer-sheet/find-by-model-id", {id: row.id}, function (data) {
+                $("#dg").datagrid('loadData', data);
+            });
+
         }
     });
 
-    var loadDict = function () {
-        $.get("/api/answer-sheet/list-all" , function (data) {
-            $("#dg").datagrid('loadData', data);
-        });
-    }
 
-    loadDict();
-
-
-    /**
-     * 保存修改的内容
-     * 基础字典的改变，势必会影响其他的统计查询
-     * 基础字典的维护只能在基础数据维护的时候使用。
-     */
-    $("#saveBtn").on('click', function () {
-        if (editIndex || editIndex == 0) {
-            $("#dg").datagrid("endEdit", editIndex);
-        }
-
-        var insertData = $("#dg").datagrid("getChanges", "inserted");
-        var updateDate = $("#dg").datagrid("getChanges", "updated");
-        var deleteDate = $("#dg").datagrid("getChanges", "deleted");
-
-        var beanChangeVo = {};
-        beanChangeVo.inserted = insertData;
-        beanChangeVo.deleted = deleteDate;
-        beanChangeVo.updated = updateDate;
+    //弹出答题详情
+    //$("#dgOptionShow").datagrid({
+    //    title: '答题列表',
+    //    width:'100%',
+    //    singleSelect: true,
+    //    columns: [[
+    //        {
+    //            title: '题目',
+    //            field: 'subjectName',
+    //            width:'33%'
+    //        },{
+    //            title: '答题人选择',
+    //            field: 'answerContent',
+    //            width:'33%'
+    //        },{
+    //            title: '默认答案',
+    //            field: 'preAnswer',
+    //            width:'33%'
+    //        }
+    //    ]]
+    //});
 
 
-        if (beanChangeVo) {
-            $.postJSON("/api/answer-sheet/merge", beanChangeVo, function (data, status) {
-                $.messager.alert("系统提示", "保存成功", "info");
-                loadDict();
-            }, function (data) {
-                $.messager.alert('提示', data.responseJSON.errorMessage, "error");
+    $("#bottom").datagrid({
+        footer: '#tb',
+        border: false
+    });
+
+    $('#cc').layout('panel', 'north').panel('resize', {height: 'auto'});
+    $('#cc').layout('panel', 'south').panel('resize', {height: 'auto'});
+    $("#cc").layout({
+        fit: true
+    });
+
+    //详情按钮
+    $("#detailBtn").on('click', function () {
+        var row = $("#dg").datagrid('getSelected');
+        if (row){
+            $.get('/api/answer-sheet/find-by-id?id='+row.id, function (node) {
+                console.log(node);
+
+                $('#dlg-detail').dialog('open').dialog('center').dialog('setTitle', ' 答题详情');
+                console.log(node);
+                $("#dgShow").treegrid('loadData', node);
             })
+        }else{
+            $.messager.alert("系统提示", "请选择要查看的行");
         }
     });
 })

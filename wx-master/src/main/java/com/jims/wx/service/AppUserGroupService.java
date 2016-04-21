@@ -119,9 +119,13 @@ public class AppUserGroupService {
      * @return
      */
     @POST
-    @Path("move-group/{openId}/{targetId}")
-    public Response moveUserGroup(){
-
+    @Path("move-group/{openId}/{targetId}/{currentId}")
+    public Response moveUserGroup(@PathParam("openId")String openId,@PathParam("targetId")String targetId,
+                                  @PathParam("currentId")String currentId){
+        BaseResult baseResult = UserAPI.groupsMembersUpdate(TokenManager.getDefaultToken(), openId, targetId) ;
+        if("0".equals(baseResult.getErrcode())){
+            appUserFacade.updateGroup(openId,targetId,currentId) ;
+        }
         return null ;
     }
 
