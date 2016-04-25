@@ -69,4 +69,12 @@ public class DoctInfoFacade extends BaseFacade {
         super.removeByStringIds(DoctInfo.class, list);
     }
 
+    /**
+     * 根据id 查询医生信息
+     * @param doctId
+     * @return
+     */
+    public DoctInfo findById(String doctId) {
+         return (DoctInfo)entityManager.createQuery("from DoctInfo where id='"+doctId+"'").getSingleResult();
+    }
 }

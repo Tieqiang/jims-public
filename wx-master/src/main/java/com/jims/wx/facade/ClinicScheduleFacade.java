@@ -19,16 +19,27 @@ import java.util.List;
  */
 public class ClinicScheduleFacade extends BaseFacade {
     @Inject
-    public ClinicScheduleFacade(EntityManager entityManager){
-        this.entityManager=entityManager;
+    public ClinicScheduleFacade(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     //find by typeId
-    public List<ClinicSchedule> findByTypeId(String id){
-        String sqls = "from ClinicSchedule where clinicIndexId=" +"'" +id+ "'";
+    public List<ClinicSchedule> findByTypeId(String id) {
+        String sqls = "from ClinicSchedule where clinicIndexId=" + "'" + id + "'";
         return entityManager.createQuery(sqls).getResultList();
     }
-
+    /**
+     * @param clinicIndexId 号别ID
+     * @return List<String[]>
+     * @description / 通过所选择的号别  查询出诊安排
+     * @author created by chenxiaoyang
+     */
+//    ClinicSchedule
+    public List<Object[]> queryDayAndTime(String clinicIndexId) {
+        String hql = "select c.dayOfWeek,c.timeOfDay,c.registrationLimits from ClinicSchedule as c where c.clinicIndexId='" + clinicIndexId + "'";
+        List<Object[]> list = entityManager.createQuery(hql).getResultList();
+        return list;
+    }
     /**
      * 保存增删改
      *
@@ -61,19 +72,19 @@ public class ClinicScheduleFacade extends BaseFacade {
     }
 
 
-    public List<ClinicTypeIndexVo> listTree(String hospitalId){
+    public List<ClinicTypeIndexVo> listTree(String hospitalId) {
         List<ClinicTypeIndexVo> result = new ArrayList<ClinicTypeIndexVo>();
 
         String hql = "from ClinicTypeSetting as type where 1=1";
-        if(null != hospitalId && !hospitalId.trim().equals("")){
-             hql +=" and type.hospitalId='" + hospitalId + "'";
+        if (null != hospitalId && !hospitalId.trim().equals("")) {
+            hql += " and type.hospitalId='" + hospitalId + "'";
         }
         List<ClinicTypeSetting> settings = entityManager.createQuery(hql).getResultList();
-        if(null != settings && settings.size() > 0){
+        if (null != settings && settings.size() > 0) {
             Iterator settingIte = settings.iterator();
 
-            while(settingIte.hasNext()){
-                ClinicTypeSetting type = (ClinicTypeSetting)settingIte.next();
+            while (settingIte.hasNext()) {
+                ClinicTypeSetting type = (ClinicTypeSetting) settingIte.next();
 
                 ClinicTypeIndexVo vo = new ClinicTypeIndexVo();
                 vo.setId(type.getId());
@@ -83,13 +94,13 @@ public class ClinicScheduleFacade extends BaseFacade {
                 vo.setParentFlag("Y");
 
                 hql = "from ClinicIndex as index where 1=1";
-                if(null != type && !type.getId().trim().equals("")){
-                    hql +=" and index.clinicTypeId='" + type.getId() + "'";
+                if (null != type && !type.getId().trim().equals("")) {
+                    hql += " and index.clinicTypeId='" + type.getId() + "'";
                 }
                 List<ClinicIndex> indexes = entityManager.createQuery(hql).getResultList();
-                if(null != indexes && indexes.size()>0){
+                if (null != indexes && indexes.size() > 0) {
                     List<ClinicTypeIndexVo> indexVos = new ArrayList<ClinicTypeIndexVo>();
-                    for(ClinicIndex index:indexes){
+                    for (ClinicIndex index : indexes) {
                         ClinicTypeIndexVo indexVo = new ClinicTypeIndexVo();
                         indexVo.setId(index.getId());
                         indexVo.setClinicName(index.getClinicLabel());
@@ -105,5 +116,31 @@ public class ClinicScheduleFacade extends BaseFacade {
             }
         }
         return result;
+    }
+
+    /**
+     * @param clinicIndexId 号别ID
+     * @return List<String[]>
+     * @description / 通过所选择的号别  查询出诊安排
+     * @author created by chenxiaoyang
+     */
+////    ClinicSchedule
+//    public List<Object[]> queryDayAndTime(String clinicIndexId) {
+//        String hql = "select c.dayOfWeek,c.timeOfDay,c.registrationLimits from ClinicSchedule as c where c.clinicIndexId='" + clinicIndexId + "'";
+//        List<Object[]> list = entityManager.createQuery(hql).getResultList();
+//        return list;
+//    }
+
+    /**
+     * @param id
+     * @return
+     */
+//    ClinicSchedule
+    public Double findLimitsByClinicIndexId(String id) {
+        List<Double> list = (List<Double>) entityManager.createQuery("select c.registrationLimits from ClinicSchedule as c where c.clinicIndexId='" + id + "'").getResultList();
+        if (!list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
     }
 }

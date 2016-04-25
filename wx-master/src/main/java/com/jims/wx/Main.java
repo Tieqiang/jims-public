@@ -57,7 +57,7 @@ public class Main {
         //初始化flyWAy
         //flyway.init();
         //执行版本控制
-        flyway.migrate();
+//        flyway.migrate();
 
     }
 }

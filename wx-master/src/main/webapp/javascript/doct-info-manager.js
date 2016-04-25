@@ -2,16 +2,6 @@
  * created by chenxiaoyang on 2016.03.29
  */
 $(function () {
-    //头衔长度验证
-    $.extend($.fn.validatebox.defaults.rules, {
-        maxLength: {
-            validator: function(value, param){
-                return value.length <= param[0];
-            },
-            message: '最多可以输入7位!!'
-        }
-    });
-
     var flag;
 
     /**
@@ -45,14 +35,11 @@ $(function () {
         striped: true,
         loadMsg: '数据正在加载,请耐心的等待...',
         remoteSort: true,
+//        pa
         columns: [[{
             field: 'id',
             title: '编号',
             hidden:'true'
-        }, {
-            field: 'hospitalId',
-            title: '所在医院编号',
-            width: "20%"
         }, {
             field: 'name',
             title: '医生姓名',
@@ -60,12 +47,16 @@ $(function () {
 
         }, {
             field: 'title',
-            title: '头衔',
+            title: '医生头衔',
             width: "20%"
 
         }, {
             field: 'headUrl',
             title: '头像地址',
+            width: "20%"
+        }, {
+            field: 'hospitalId',
+            title: '所在医院编号',
             width: "20%"
         }, {
             field: 'tranDescription',
@@ -77,11 +68,15 @@ $(function () {
      * button of add click
      */
     $("#addBtn").on('click', function () {
-        //reset();
+        reset();
         flag = "add";
         $("#fm").get(0).reset();
         $('#dlg').dialog('open').dialog('center').dialog('setTitle', '添加医生信息');
-
+        var oEditor = CKEDITOR.instances.description;
+        oEditor.setData("");
+        $("#viewImg").attr("src","");
+        $("#headDiv").hide();
+        $("#uploadDiv").show();
     });
 
     /**
@@ -123,16 +118,33 @@ $(function () {
             doctInfo.name = $("#name").val();
             doctInfo.title = $("#title").val();
             doctInfo.hospitalId = getValue();
-            doctInfo.headUrl = $("#headUrl").val();
-            var description = $("#description").val();
+            doctInfo.headUrl =$("#headUrl").val();
+            var oEditor = CKEDITOR.instances.description;
+            var description =oEditor.getData();
         }
-        $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
-            $('#dlg').dialog('close');
-            $.messager.alert("系统提示", "操作成功！");
-            loadDict();
-            $("#fm").get(0).reset();
-        }, function (data, status) {
-        })
+//        alert("headUrl"+$("#headUrl").val());
+         if($("#headUrl").attr('value')==""){
+            if(flag="edit"){
+                $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
+                    $('#dlg').dialog('close');
+                    $.messager.alert("系统提示", "操作成功！","info");
+                    loadDict();
+                    $("#fm").get(0).reset();
+                }, function (data, status) {
+                })
+            }else{
+                $.messager.alert("系统提示", "请上传图片！","error");
+            }
+         }else{
+
+            $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
+                $('#dlg').dialog('close');
+                $.messager.alert("系统提示", "操作成功！","info");
+                loadDict();
+                $("#fm").get(0).reset();
+            }, function (data, status) {
+            })
+        }
     });
     /**
      * button of edit click
@@ -149,10 +161,10 @@ $(function () {
             });
             $("#dlg").dialog('open');
             $("#fm").get(0).reset();
-
             loadSelectedRowData(arr);
-
-
+            $("#headDiv").show();
+            $("#uploadDiv").show();
+//            alert(arr[0].hospitalId);
             setValue(arr[0].hospitalId)
         }
     });
@@ -161,16 +173,15 @@ $(function () {
      * load selectedRowData
      */
     var loadSelectedRowData = function (arr) {
+        var oEditor = CKEDITOR.instances.description;
+        oEditor.setData(arr[0].tranDescription);
         $('#fm').form('load', {
             id: arr[0].id,
             name: arr[0].name,
             title: arr[0].title,
-
-            headUrl: arr[0].headUrl,
-            description: arr[0].tranDescription
+            headUrl: arr[0].headUrl
         });
     }
-
     /**
      * button of delete click
      */
@@ -220,7 +231,40 @@ $(function () {
     //    }
     //})
     /**
-     * button ofclearbtn
-     */
+     //     * button ofclearbtn
+     //     */
+    $("#uploadBtn").on('click',function(){
+        var fileToUpload=document.getElementById("fileToUpload");
+        var suffer=fileToUpload.value.substring(fileToUpload.value.indexOf(".")+1);
+        if(suffer!="jpg"&&suffer!="png"&&suffer!="gif"&&suffer!="jpeg"&&suffer!="bmp"&&suffer!="swf"){
+            $.messager.alert("系统提示", "请选择正确格式的图片","error");
+        }else{
+            ajaxUpload();
+        }
+    });
+    /**
+     * ajax 上传
+     * */
+    var ajaxUpload=function ajaxUpload(){
+        $.ajaxFileUpload({
+            url : '/img-upload-servlet',
+            secureuri : false,
+            fileElementId : 'fileToUpload',
+            dataType : 'json',
+            data : {username : $("#username").val()},
+            success: function(data, status) {
+                $('#uploadSpan').append("<span><font color='red'> 上传成功 ✔</font></span>");
+//                 $('#headUrl').val("");
+//                alert(data.picUrl);
+                $('#headUrl').val(data.picUrl);
+                $("#viewImg").attr("src",data.picUrl);
+                //                 alert($('#headUrl').attr('value'));
+            },
+            error : function(data, status, e) {
+                $.messager.alert('系统提示','上传出错','error');
+            }
+        })
+    }
 
 });
+
