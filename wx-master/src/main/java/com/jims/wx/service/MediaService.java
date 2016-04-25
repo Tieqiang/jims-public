@@ -47,10 +47,13 @@ public class MediaService {
                                @FormDataParam("file") FormDataContentDisposition fileDetail) throws FileNotFoundException {
 
 
-        //Media media=MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image, inputStream, new Description());
+        Media media=MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image, inputStream, new Description());
         //Media media = MediaAPI.mediaUpload(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image,inputStream);
-        UploadimgResult uploadimgResult =MediaAPI.mediaUploadimg(TokenManager.getDefaultToken(),inputStream) ;
-        System.out.println(uploadimgResult.getUrl());
+        //UploadimgResult uploadimgResult =MediaAPI.mediaUploadimg(TokenManager.getDefaultToken(),inputStream) ;
+        //System.out.println(uploadimgResult.getUrl());
+        System.out.println("mdeia_id:" + media.getMedia_id());
+        System.out.println("type:" + media.getType());
+        System.out.println("created_at:" + media.getCreated_at());
         return Response.status(Response.Status.OK).build();
     }
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html ng-app="messageBuildApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>图文消息创建</title>
+    <link href="/assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assert/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/assert/summernote/summernote.css"/>
+    <link rel="stylesheet" href="/assert/upload/css/fileinput.css"/>
+    <script src="/assert/plugins/jQuery/jQuery-2.1.4.min.js" type="text/javascript"></script>
+    <script src="/assert/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/assert/angular/angular.js" type="text/javascript"></script>
+    <script src="/assert/summernote/summernote.min.js" type="text/javascript"></script>
+    <script src="/assert/summernote/lang/summernote-zh-CN.min.js" type="text/javascript"></script>
+    <script src="/assert/summernote/angular-summernote.js" type="text/javascript"></script>
+    <script src="/assert/upload/js/fileinput.js" type="text/javascript"></script>
+    <script src="/assert/upload/js/fileinput_locale_zh.js" type="text/javascript"></script>
+    <script src="/assert/uploadify/jquery.uploadify.js" type="text/javascript"></script>
+    <script src="/javascript/material-build.js" type="text/javascript"></script>
+</head>
+<body class="container-fluid" ng-controller="materialControl">
+    <div class="panel panel-info">
+        <div class="panel-heading">素材管理</div>
+        <div class="panel-body">
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active"><a href="#img" data-toggle="tab" ng-click="imgToggle()">图片</a></li>
+                <li><a href="#voice" data-toggle="tab" ng-click="voiceToggle()">语音</a></li>
+                <li><a href="#video" data-toggle="tab" ng-click="videoToggle()">视频</a></li>
+            </ul>
+        </div>
+            <div class="row" ng-hide="myImg">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <form enctype="multipart/form-data">
+                                    <input id="myImg" name="file" class="file" type="file" multiple data-min-file-count="1"
+                                           data-upload-url="/api/media/upload">
+                                </form>
+                            </div>
+                            <div class="col-md-4">
+                                <button type="button" class="btn btn-default">从图片库中选择</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  ng-hide="myVoice">
+                <div class="col-md-12">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form enctype="multipart/form-data">
+                                    <input id="myVoice" name="file" class="file" type="file" multiple data-min-file-count="1"
+                                           data-upload-url="/api/media/upload">
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-default">从语音库中选择</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div  ng-hide="myVideo">
+                <div class="col-md-12">
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form enctype="multipart/form-data">
+                                    <input id="myVideo" name="file" class="file" type="file" multiple data-min-file-count="1"
+                                           data-upload-url="/api/media/upload">
+                                </form>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-default">从视频库中选择</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+</body>
+</html>

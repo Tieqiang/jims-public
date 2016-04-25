@@ -14,11 +14,10 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import weixin.popular.api.SnsAPI;
-import weixin.popular.api.TokenAPI;
+import weixin.popular.api.*;
 import com.jims.wx.vo.AppSetVo;
 import weixin.popular.api.SnsAPI;
-import weixin.popular.api.UserAPI;
+import weixin.popular.bean.BaseResult;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
@@ -53,7 +52,6 @@ public class WxService {
     private HttpServletRequest request ;
     private HttpServletResponse response ;
     private WxOpenAccountConfigFacade wxOpenAccountConfigFacade ;
-    private HospitalInfoFacade hospitalInfoFacade ;
     private HospitalInfoFacade hospitalInfoFacade;
 
     //重复通知过滤
@@ -106,21 +104,20 @@ public class WxService {
                     + eventMessage.getToUserName() + "__"
                     + eventMessage.getMsgId() + "__"
                     + eventMessage.getCreateTime();
-            System.out.println(eventMessage.getContent());
             if(expireKey.exists(key)){
                 //重复通知不作处理
                 return;
             }else{
                 expireKey.add(key);
             }
-            System.out.println(this.getToken());
             //不同的消息类型有不同处理方式
             String msgType = eventMessage.getMsgType() ;
             String event = eventMessage.getEvent() ;
+            System.out.println("msgType:" + msgType);
+            System.out.println("event:" + event);
             if("event".equals(msgType)&&"subscribe".equals(event)){
                 //公众号订阅
-                String fromUser = eventMessage.getFromUserName() ;
-                System.out.println(this.getToken());
+                String fromUser = eventMessage.getFromUserName() ;      //fromUserName就是openId
                 User user = UserAPI.userInfo(this.getToken(), fromUser) ;
                 appUserFacade.createUser(user) ;
             }
@@ -179,17 +176,6 @@ public class WxService {
     public String getToken(){
         return TokenManager.getDefaultToken() ;
     }
-
-    @GET
-    @Path("test")
-    public String test(@QueryParam("code")String code) throws IOException {
-        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo() ;
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(),code) ;
-
-        response.sendRedirect("/login.html?openId="+snsToken.getOpenid());
-        return "http://www.baidu.com/" ;
-    }
-
 
     @GET
     @Path("questionnaire-survey")

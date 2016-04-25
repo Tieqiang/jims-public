@@ -1,7 +1,6 @@
 /**
  * Created by heren on 2016/4/18.
  */
-
 var messageBuildApp = angular.module("messageBuildApp",['summernote']) .directive('fileModel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
