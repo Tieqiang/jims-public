@@ -12,6 +12,7 @@ public class TokenManagerListener implements ServletContextListener{
 	public void contextInitialized(ServletContextEvent sce) {
 		//WEB容器 初始化时调用
 		TokenManager.init("wxecde8da70c21dc65", "d4624c36b6795d1d99dcf0547af5443d");
+		//TokenManager.init("wx46af0b9fd8bdc7d7", "cc8510ce2bfe486ee9d83a010bffa58e");
         System.out.println("yes it is me !");
     }
 

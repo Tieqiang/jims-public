@@ -31,7 +31,7 @@ public class PatInfo implements java.io.Serializable {
 	private String defaultFlag;
 	private String sex;
 	private Date birthday;
-	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
+//	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
 
 	// Constructors
 
@@ -41,15 +41,15 @@ public class PatInfo implements java.io.Serializable {
 
 	/** full constructor */
 	public PatInfo(String idCard, String cellphone, String name,
-			String defaultFlag, String sex, Date birthday,
-			Set<PatVsUser> patVsUsers) {
+			String defaultFlag, String sex, Date birthday
+			/*Set<PatVsUser> patVsUsers*/) {
 		this.idCard = idCard;
 		this.cellphone = cellphone;
 		this.name = name;
 		this.defaultFlag = defaultFlag;
 		this.sex = sex;
 		this.birthday = birthday;
-		this.patVsUsers = patVsUsers;
+//		this.patVsUsers = patVsUsers;
 	}
 
 	// Property accessors
@@ -119,14 +119,14 @@ public class PatInfo implements java.io.Serializable {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patInfo")
-	public Set<PatVsUser> getPatVsUsers() {
-		return this.patVsUsers;
-	}
-
-	public void setPatVsUsers(Set<PatVsUser> patVsUsers) {
-		this.patVsUsers = patVsUsers;
-	}
+//
+//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patInfo")
+//	public Set<PatVsUser> getPatVsUsers() {
+//		return this.patVsUsers;
+//	}
+//
+//	public void setPatVsUsers(Set<PatVsUser> patVsUsers) {
+//		this.patVsUsers = patVsUsers;
+//	}
 
 }

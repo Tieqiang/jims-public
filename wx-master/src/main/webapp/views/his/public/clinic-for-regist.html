@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+ <head lang="en">
+    <meta charset="UTF-8">
+    <!--<meta charset="UTF-8">-->
+    <title>号表维护</title>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+    <title></title>
+</head>
+<body id="lay" class="easyui-layout" style="width: 100%;height:100%" >
+<div region="north" title="号表查询" collapsed=false style="height:80px;" >
+            <form id="mysearch" method="post" style="padding:15px">
+                时间描述:&nbsp;&nbsp;&nbsp;<input name="clinicIndexName" class="easyui-validatebox"  value="" id="clinicIndexName"/>
+              </form>
+         </div>
+<div region="center" >
+            <table id="regist" class="easyui-datagrid"></table>
+        </div>
+<div id="foot" style="padding:2px 5px;">
+    <!--<a href="#" id="searchInfo" class="easyui-linkbutton" iconCls="icon-search">显示号表约束</a>-->
+    <!--<a href="#" id="searchBtn" class="easyui-linkbutton" iconCls="icon-search">显示号表信息</a>-->
+    <!--<a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加号表约束</a>-->
+    <a href="#" id="registBtn" class="easyui-linkbutton" iconCls="icon-add">生成</a>
+    <a href="#" id="findInfo" class="easyui-linkbutton" iconCls="icon-add">详情</a>
+    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改</a>
+    <a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>
+    <a href="#" id="findBtn" class="easyui-linkbutton" iconCls="icon-search">查询</a>
+    <a id="clearbtn" class="easyui-linkbutton" iconCls="icon-clear">清空</a>
+</div>
+<div id="registSelect" class="easyui-dialog" style="width:500px;height:300px;padding:10px 20px" closed="true">
+    <form id="registSelectForm" method="post" novalidate>
+        <div class="fitem" style="display:none;padding-top:20px;" >
+            <label>编号</label>
+            <select id="id" name="id" required="true"></select>
+        </div>
+
+        <div class="fitem" id="HL" style="padding-top:10px;">
+            <label>选择号类：</label>
+            <select id="clinicSettingType" name="clinicSettingType" required="true"></select>
+        </div>
+        <div class="fitem" style="padding-top:10px;">
+            <label>选择号别：</label>
+            <select id="clinicLabel" name="clinicLabel" required="true"></select>
+        </div>
+        <div class="fitem" style="padding-top:10px;">
+            <label>选择日期：</label>
+            <input id="date"  editable="false"  class="easyui-datetimebox" formatter="yyyy-MM-dd HH:mm:ss" required="true"/>至<input id="date1" editable="false"  class="easyui-datetimebox" formatter="yyyy-MM-dd HH:mm:ss" required="true" />
+        </div>
+        <br/>
+        <br/>
+        <br/>
+         <div class="fitem" style="padding-bottom:10px;padding-right:10px">
+            <a id="btn_ok1" class="easyui-linkbutton" iconCls="icon-ok">确定</a>
+            <a id="btn_cl1" class="easyui-linkbutton" iconCls="icon-cancel"
+               onclick="javascript:$('#registSelect').dialog('close')">关闭</a>
+        </div>
+    </form>
+</div>
+<div id="tableInfo" class="easyui-dialog" style="width:400px;height:400px;padding:10px 20px" closed="true">
+    <form id="tableInfoForm" method="post" novalidate>
+        <div class="fitem">
+            <label>挂号日期：</label>
+            <input id="i_date" name="date" value="" class="easyui-textbox" disabled="disabled"/>
+        </div>
+         <div class="fitem">
+            <label>号别名称：</label>
+            <input id="i_clinicLabel" name="clinicLabel" disabled="disabled" class="easyui-textbox"></select>
+        </div>
+         <div class="fitem">
+            <label>所属科室：</label>
+            <input id="i_dept" name="chargeType" disabled="disabled" class="easyui-textbox"></select>
+        </div>
+         <div class="fitem">
+            <label>已挂号数：</label>
+            <input id="i_currentRegistCount" name="currentRegistCount" disabled="disabled" class="easyui-textbox"></select>
+        </div>
+         <div class="fitem">
+            <label>当前号：</label>
+            <input id="i_currentRegistNo" name="chargeType" disabled="disabled" class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>限号数：</label>
+            <input id="i_registrationLimits" name="chargeType" disabled="disabled" class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>限约号数：</label>
+            <input id="xyhs" name="xyhs" disabled="disabled" class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>时间描述：</label>
+            <input id="i_description" name="chargeType" disabled="disabled" class="easyui-textbox" value=""/>;
+         </div>
+        <div class="fitem">
+            <a id="" class="easyui-linkbutton" iconCls="icon-cancel"
+               onclick="javascript:$('#tableInfo').dialog('close')">关闭</a>
+        </div>
+    </form>
+</div>
+<div id="tableInfo1" class="easyui-dialog" style="width:400px;height:400px;padding:10px 20px" closed="true">
+<form id="tableInfoForm1" method="post" novalidate>
+        <div class="fitem" style="display:none">
+            <label>编号</label>
+             <input id="bid" name="id" class="easyui-textbox" />
+        </div>
+        <div class="fitem">
+            <label>挂号日期：</label>
+            <input id="date2"/>
+        </div>
+         <div class="fitem">
+            <label>号别名称：</label>
+             <select id="clinicLabel1" name="clinicLabel" required="true"></select>
+        </div>
+         <div class="fitem">
+            <label>已挂号数：</label>
+            <input id="i_currentRegistCount1" name="currentRegistCount"  class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>当前号：</label>
+            <input id="i_currentRegistNo1" name="currentRegistNo"  class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>限号数：</label>
+            <input id="i_registrationLimits1" name="registrationLimits"  class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>限约号数</label>
+            <input id="i_appointmentLimits1" name="appointmentLimits"  class="easyui-textbox"/>
+        </div>
+         <div class="fitem">
+            <label>时间描述</label>
+            <input id="i_description1" name="description"  class="easyui-textbox"/>
+         </div>
+        <div class="fitem">
+            <a id="btn_ok2" class="easyui-linkbutton" iconCls="icon-ok">确定</a>
+            <a  class="easyui-linkbutton" iconCls="icon-cancel"  onclick="javascript:$('#tableInfo').dialog('close')">关闭</a>
+        </div>
+    </form>
+</div>
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="../../../javascript/clinic-for-regist.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+ </body>
+</html>

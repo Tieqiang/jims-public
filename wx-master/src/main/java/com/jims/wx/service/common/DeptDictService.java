@@ -17,7 +17,7 @@ import java.util.List;
 @Path("dept-dict")
 @Produces("application/json")
 public class DeptDictService {
-
+//find-by-id
     private DeptDictFacade deptDictFacade ;
 
     @Inject
@@ -30,6 +30,28 @@ public class DeptDictService {
     public List<DeptDict> list(@QueryParam("hospitalId")String hospitalId){
         return deptDictFacade.findByHospitalId(hospitalId) ;
     }
+//    @GET
+//    @Path("list-all")
+//    public List<DeptDict> listAll(){
+//        return deptDictFacade.findAll(DeptDict.class);
+//    }
+    /**
+     *根据id查询对象
+     * @param deptId
+     * @return
+     */
+    @GET
+    @Path("find-by-id")
+    public DeptDict findById(@QueryParam("deptId")String deptId){
+        return deptDictFacade.findById(deptId) ;
+    }
+
+    @GET
+    @Path("list-all")
+    public List<DeptDict> listAll(){
+        return deptDictFacade.findAll(DeptDict.class);
+    }
+
 
     /**
      * 查询未与核算单元对照的科室
@@ -41,7 +63,16 @@ public class DeptDictService {
     public List<DeptDict> listWidthNotRecking(@QueryParam("hospitalId")String hospitalId){
         return deptDictFacade.findByHospitalIdWithRecking(hospitalId) ;
     }
-
+//    /**
+//     *根据id查询对象
+//     * @param deptId
+//     * @return
+//     */
+//    @GET
+//    @Path("find-by-id")
+//    public DeptDict findById(@QueryParam("deptId")String deptId){
+//        return deptDictFacade.findById(deptId) ;
+//    }
     /**
      * 查询已经与核算单元对照的科室
      * @param hospitalId

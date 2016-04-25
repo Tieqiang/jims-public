@@ -7,6 +7,10 @@ import com.jims.wx.entity.WxOpenAccountConfig;
 import com.jims.wx.facade.AppUserFacade;
 import com.jims.wx.facade.HospitalInfoFacade;
 import com.jims.wx.facade.RequestMessageFacade;
+import com.jims.wx.util.Bare;
+import com.jims.wx.vo.AppSetVo;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
 import com.jims.wx.facade.WxOpenAccountConfigFacade;
 import com.jims.wx.vo.AppSetVo;
 import org.eclipse.jetty.client.HttpClient;
@@ -14,18 +18,21 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.util.ssl.SslContextFactory;
 import org.eclipse.jetty.util.thread.QueuedThreadPool;
-import weixin.popular.api.*;
+import weixin.popular.api.SnsAPI;
+import weixin.popular.api.TokenAPI;
 import com.jims.wx.vo.AppSetVo;
 import weixin.popular.api.SnsAPI;
-import weixin.popular.bean.BaseResult;
+import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
+import weixin.popular.client.LocalHttpClient;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.TokenManager;
 import weixin.popular.support.expirekey.DefaultExpireKey;
+import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.inject.Inject;
@@ -39,6 +46,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.net.URLEncoder;
 
 /**
  * Created by heren on 2016/2/24.
@@ -104,6 +112,7 @@ public class WxService {
                     + eventMessage.getToUserName() + "__"
                     + eventMessage.getMsgId() + "__"
                     + eventMessage.getCreateTime();
+            System.out.println(eventMessage.getContent());
             if(expireKey.exists(key)){
                 //重复通知不作处理
                 return;
@@ -113,11 +122,9 @@ public class WxService {
             //不同的消息类型有不同处理方式
             String msgType = eventMessage.getMsgType() ;
             String event = eventMessage.getEvent() ;
-            System.out.println("msgType:" + msgType);
-            System.out.println("event:" + event);
             if("event".equals(msgType)&&"subscribe".equals(event)){
                 //公众号订阅
-                String fromUser = eventMessage.getFromUserName() ;      //fromUserName就是openId
+                String fromUser = eventMessage.getFromUserName() ;
                 User user = UserAPI.userInfo(this.getToken(), fromUser) ;
                 appUserFacade.createUser(user) ;
             }
@@ -176,6 +183,9 @@ public class WxService {
     public String getToken(){
         return TokenManager.getDefaultToken() ;
     }
+
+
+
 
     @GET
     @Path("questionnaire-survey")

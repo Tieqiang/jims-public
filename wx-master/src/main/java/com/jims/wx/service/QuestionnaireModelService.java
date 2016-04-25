@@ -8,7 +8,9 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhu on 2016/3/17.
@@ -56,9 +58,19 @@ public class QuestionnaireModelService {
 
     @POST
     @Path("del")
-    public void delQuestionnaireModel(@QueryParam("modelId") String modelIds){
-        System.out.println(modelIds);
-        questionnaireModelFacade.delQuestionnaireModel(modelIds);
+    public Map<String,Object> delQuestionnaireModel(@QueryParam("modelId") String modelIds){
+        Map<String,Object> map=new HashMap<String,Object>();
+//        System.out.println(modelIds);
+        try {
+            questionnaireModelFacade.delQuestionnaireModel(modelIds);
+            map.put("isSuccess",true);
+            map.put("msg","删除成功！！");
+        }catch(Exception e){
+            map.put("isSuccess",false);
+            map.put("msg","删除失败！");
+            e.printStackTrace();
+        }
+         return map;
     }
 
     /**

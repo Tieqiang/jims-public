@@ -1,0 +1,63 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>选择医生</title>
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+ </head>
+<body>
+      <div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">
+         <input id="text1" class="weui_input" disabled="disabled"  type="number" pattern="" placeholder=""/></div>
+ <div ng-app="myApp">
+   <div ng-controller="tableCtrl" id="doctList">
+        <input type="hidden" name="deptId" id="deptId" value=""/>
+        <div ng-repeat="x in names">
+             <div class="weui_cells weui_cells_access">
+                 <!--onclick="findDeptInfo($(this).find('span').text());"-->
+            <a class="weui_cell" >
+                <div>
+                    <input type="hidden" name="openId" id="openId" value=""/>
+                </div>
+                <div class="weui_cell_bd weui_cell_primary">
+                     <div>
+                         <table style="width:100%;">
+                            <tr >
+                                <td rowspan="2" style="width:60%"><img src="{{x.headUrl}}" class="imgCls" width="50%"/></td>
+                                <td style="width:40%">姓名：{{x.name}}</td>
+                            </tr>
+                            <tr>
+                                  <td>职务：{{x.title}}</td>
+                            </tr>
+                             <tr >
+                                 <td colspan="2"><font color="#A9A9A9">{{x.description}}</font></td>
+                             </tr>
+                             <!--<hr style="color:#ccc;">-->
+                             <tr >
+                                 <td colspan="2">{{x.timeDesc}}</td>
+                             </tr>
+                             <!--onclick="judgeIsEnabledRegist(this)"-->
+                             <tr  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price)">
+                                  <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
+                                 <td>剩余号：<span class="span">{{x.enabledNum}}</span></td>
+                                 <p style="display:none">{{x.rid}}</p>
+                                 <th  style="display:none">{{x.price}}</th>
+                                 <!--<div style="display:none">{{x.id}}</div>-->
+                              </tr>
+                         </table>
+                      </div>
+                   </div>
+             </a>
+        </div>
+        </div>
+    </div>
+     <a href="javascript:history.go(-1)" class="weui_btn weui_btn_primary" id="return" >返回</a>
+</div>
+ </div>
+</div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-doct-info.js"></script>
+</html>
