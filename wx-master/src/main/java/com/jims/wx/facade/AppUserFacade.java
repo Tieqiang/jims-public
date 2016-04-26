@@ -98,8 +98,7 @@ public class AppUserFacade extends BaseFacade {
         }else{
             appUser = new AppUser() ;
         }
-
-        appUser.setCity(user.getCity());
+         appUser.setCity(user.getCity());
         appUser.setCountry(user.getCountry());
         appUser.setGroupId(user.getGroupid());
         appUser.setHeadImgUrl(user.getHeadimgurl());
@@ -111,7 +110,13 @@ public class AppUserFacade extends BaseFacade {
         appUser.setRemark(user.getRemark());
         appUser.setSubscribe(user.getSubscribe());
         appUser.setSubscrbeTime(user.getSubscribe_time());
-        merge(appUser) ;
+
+        saveAppUser(appUser) ;
+    }
+
+    @Transactional
+    private void saveAppUser(AppUser appUser) {
+           entityManager.merge(appUser);
     }
 
     /***
