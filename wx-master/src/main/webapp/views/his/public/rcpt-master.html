@@ -6,30 +6,35 @@
     <title>近期就诊记录</title>
     <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
     <style type="text/css">
-        p{ text-indent:3em;}
-        h3{text-indent: 1em; }
+        p {
+            text-indent: 3em;
+        }
+
+        h3 {
+            text-indent: 1em;
+        }
     </style>
 </head>
-<body >
+<body>
 <div ng-app="myApp" id="app">
     <div ng-controller="tableCtrl">
         <div id="name" style="display: none">
             <h2>用户列表</h2>
+
             <div>
                 <div class="weui_cells weui_cells_access">
-                    <a class="weui_cell" href="javascript:;"  ng-repeat="name in nameList" >
+                    <a class="weui_cell" href="javascript:;" ng-repeat="name in nameList">
                         <div class="weui_cell_bd weui_cell_primary">
                             <span ng-bind="name.name"></span>
                         </div>
-                        <div class="weui_cell_ft" ng-click="clickName(name.patId,name.name)" >点击查看详情</div>
+                        <div class="weui_cell_ft" ng-click="clickName(name.patId,name.name)">点击查看详情</div>
                     </a>
                 </div>
             </div>
         </div>
-
         <div id="clinic" style="display: none">
             <h2>近期就诊记录</h2>
-            <table style="width: 100%;"  >
+            <table style="width: 100%;">
                 <tr>
                     <td>姓名</td>
                     <td>就诊科室</td>
@@ -43,8 +48,10 @@
                 </tr>
             </table>
             <br/>
-            <div id="submit" >
-                <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="clickPatient()" style='position: absolute; bottom: 0; display: block;  width: 100%'>查看收据纪录</a><br>
+
+            <div id="submit">
+                <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="clickPatient()"
+                   style='position: absolute; bottom: 0; display: block;  width: 100%'>查看收据纪录</a><br>
             </div>
         </div>
 
@@ -53,13 +60,13 @@
             <hr>
             <table width="100%">
                 <tbody>
-                    <td>收据编码</td>
-                    <td>应收费</td>
-                    <td>实收费</td>
-                    <td></td>
+                <td>收据编码</td>
+                <td>应收费</td>
+                <td>实收费</td>
+                <td></td>
                 </tbody>
 
-                <tr ng-repeat="outp in outpList"  ng-click="clickRcpt(outp.rcptNo)" style="height: 40px;">
+                <tr ng-repeat="outp in outpList" ng-click="clickRcpt(outp.rcptNo)" style="height: 40px;">
                     <!--<a class="weui_cell" href="javascript:;"   ng-click="clickRcpt(outp.rcptNo)" >-->
                     <td>{{ outp.rcptNo }}</td>
                     <td>{{ outp.totalChanges }}</td>
@@ -69,7 +76,8 @@
                 </tr>
             </table>
 
-            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backNameList()" style='position: absolute; bottom: 0; display: block;  width: 100%'>返回用户列表</a><br>
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backNameList()"
+               style='position: absolute; bottom: 0; display: block;  width: 100%'>返回用户列表</a><br>
         </div>
 
         <div id="items" style="display: none">
@@ -91,7 +99,8 @@
 
             </table>
             <br/>
-            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backPatient()" style='position: absolute; bottom: 0; display: block;  width: 100%'>返回</a><br>
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backPatient()"
+               style='position: absolute; bottom: 0; display: block;  width: 100%'>返回</a><br>
         </div>
     </div>
 </div>
@@ -105,11 +114,10 @@
             </strong>
         </div>
         <div class="weui_dialog_ft">
-            <a href="javascript:;"  class="weui_btn_dialog default" id="nullRcptOk" >确定</a>
+            <a href="javascript:;" class="weui_btn_dialog default" id="nullRcptOk">确定</a>
         </div>
     </div>
 </div>
-
 
 
 <script src="/assert/angular/angular.min.js"></script>
