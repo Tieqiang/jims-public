@@ -19,7 +19,10 @@ public class PatVsUserFacade extends BaseFacade {
     private AppUserFacade appUserFacade ;
 
     @Inject
-
+    public PatVsUserFacade(EntityManager entityManager,AppUserFacade appUserFacade){
+        this.entityManager=entityManager;
+        this.appUserFacade=appUserFacade;
+    }
 
 
 
