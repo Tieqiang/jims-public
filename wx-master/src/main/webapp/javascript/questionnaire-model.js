@@ -240,18 +240,30 @@ $(function () {
     $("#delBtn").on('click', function () {
         var row = $("#dg").datagrid('getSelected');
         if (row) {
-            var modelId=row.id;
-            var rowIndex = $("#dg").datagrid('getRowIndex', row);
-            $("#dg").datagrid('deleteRow', rowIndex);
-            if (editIndex == rowIndex) {
-                editIndex = undefined;
-            }
-            $.postJSON("/api/questionnaire-model/del?modelId="+modelId, function (data, status) {
-                $.messager.alert("系统提示", "删除成功", "info");
-                loadDict();
-            }, function (data) {
-                $.messager.alert('提示', "删除成功", "info");
-            })
+            $.messager.confirm("系统提示", "确认要删除吗?", function (r){
+                if(r){
+                    var modelId=row.id;
+                    var rowIndex = $("#dg").datagrid('getRowIndex', row);
+                    $("#dg").datagrid('deleteRow', rowIndex);
+                    if (editIndex == rowIndex) {
+                        editIndex = undefined;
+                    }
+                    $.ajax({
+                        type:"POST",
+                        url:"/api/questionnaire-model/del?modelId="+modelId,
+                        cache:false,
+                        success:function(data){
+                            if(data.isSuccess){
+                                $.messager.alert("系统提示",data.msg, "info");
+                            }else{
+                                $.messager.alert('系统提示', data.msg, "error");
+                            }
+                        }
+                    });
+                }else{
+                    return
+                }
+            });
         } else {
             $.messager.alert('系统提示', "请选择要删除的行", 'info');
         }
