@@ -12,7 +12,6 @@ import com.jims.wx.vo.AppSetVo;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.client.methods.RequestBuilder;
 import com.jims.wx.facade.WxOpenAccountConfigFacade;
-import com.jims.wx.vo.AppSetVo;
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
@@ -199,4 +198,20 @@ public class WxService {
         }
         response.sendRedirect("/views/his/public/questionnaire-survey.html?openId="+snsToken.getOpenid()+"&patId="+patId);
         return "http://www.baidu.com/" ;    }
+    @GET
+       @Path("pat-visit")
+    public String inp(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patientId="";
+        if(appList.size()>0){
+            patientId=appList.get(0).getPatId();
+        }
+        response.sendRedirect("/views/his/public/Pat-Visit.html?openId="+snsToken.getOpenid()+"&patientId="+patientId);
+        return "http://www.baidu.com/" ;    }
+
+
+
+
 }
