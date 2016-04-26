@@ -14,19 +14,21 @@ public class QuestionnaireVsSubjectVo implements java.io.Serializable {
     private String questionContent;//题干
     private String questionType;//题目类型
     private String preAnswer;//默认答案
+    private String picture;//题干图片
 
     private List<SubjectOptions> subjectOptionses ;
 
     public QuestionnaireVsSubjectVo() {
     }
 
-    public QuestionnaireVsSubjectVo(String id, String questionVsSubId, String questModelId, String questionContent, String questionType, String preAnswer, List<SubjectOptions> subjectOptionses) {
+    public QuestionnaireVsSubjectVo(String id, String questionVsSubId, String questModelId, String questionContent, String questionType, String preAnswer, String picture, List<SubjectOptions> subjectOptionses) {
         this.id = id;
-        this.questionVsSubId=questionVsSubId;
+        this.questionVsSubId = questionVsSubId;
         this.questModelId = questModelId;
         this.questionContent = questionContent;
         this.questionType = questionType;
         this.preAnswer = preAnswer;
+        this.picture = picture;
         this.subjectOptionses = subjectOptionses;
     }
 
@@ -84,5 +86,13 @@ public class QuestionnaireVsSubjectVo implements java.io.Serializable {
 
     public void setSubjectOptionses(List<SubjectOptions> subjectOptionses) {
         this.subjectOptionses = subjectOptionses;
+    }
+
+    public String getPicture() {
+        return picture;
+    }
+
+    public void setPicture(String picture) {
+        this.picture = picture;
     }
 }
