@@ -206,6 +206,18 @@ public class WxService {
         return "http://www.baidu.com/" ;    }
 
 
+    @GET
+    @Path("rcpt-list")
+    public String rcpt(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patId="";
+        if(appList.size()>0){
+            patId=appList.get(0).getPatId();
+        }
+        response.sendRedirect("/views/his/public/rcpt-master.html?openId="+snsToken.getOpenid());
+        return "http://www.baidu.com/" ;    }
 
 
 }
