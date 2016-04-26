@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>近期就诊记录</title>
+    <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
+    <style type="text/css">
+        p{ text-indent:3em;}
+        h3{text-indent: 1em; }
+    </style>
+</head>
+<body >
+<div ng-app="myApp" id="app">
+    <div ng-controller="tableCtrl">
+        <div id="name" style="display: none">
+            <h2>用户列表</h2>
+            <div>
+                <div class="weui_cells weui_cells_access">
+                    <a class="weui_cell" href="javascript:;"  ng-repeat="name in nameList" >
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <span ng-bind="name.name"></span>
+                        </div>
+                        <div class="weui_cell_ft" ng-click="clickName(name.patId,name.name)" >点击查看详情</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div id="clinic" style="display: none">
+            <h2>近期就诊记录</h2>
+            <table style="width: 100%;"  >
+                <tr>
+                    <td>姓名</td>
+                    <td>就诊科室</td>
+                    <td>就诊时间</td>
+                </tr>
+
+                <tr ng-repeat="clinic in clinicList" style="height:30px;">
+                    <td>{{ clinic.name }}</td>
+                    <td>{{ clinic.clinicLabel }}</td>
+                    <td>{{ clinic.visitDate }}</td>
+                </tr>
+            </table>
+            <br/>
+            <div id="submit" >
+                <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="clickPatient()" style='position: absolute; bottom: 0; display: block;  width: 100%'>查看收据纪录</a><br>
+            </div>
+        </div>
+
+        <div id="rcpt" style="display: none">
+            <span>姓名：</span><span id="checkName"></span>
+            <hr>
+            <table width="100%">
+                <tbody>
+                    <td>收据编码</td>
+                    <td>应收费</td>
+                    <td>实收费</td>
+                    <td></td>
+                </tbody>
+
+                <tr ng-repeat="outp in outpList"  ng-click="clickRcpt(outp.rcptNo)" style="height: 40px;">
+                    <!--<a class="weui_cell" href="javascript:;"   ng-click="clickRcpt(outp.rcptNo)" >-->
+                    <td>{{ outp.rcptNo }}</td>
+                    <td>{{ outp.totalChanges }}</td>
+                    <td>{{ outp.totalCosts }}</td>
+                    <td><span style="color: #0000ff">>></span></td>
+                    <!--</a>-->
+                </tr>
+            </table>
+
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backNameList()" style='position: absolute; bottom: 0; display: block;  width: 100%'>返回用户列表</a><br>
+        </div>
+
+        <div id="items" style="display: none">
+            <h2>收费详情</h2>
+            <table width="100%">
+                <tr>
+                    <td>项目名称</td>
+                    <td>数量</td>
+                    <td>应收费</td>
+                    <td>实收费</td>
+                </tr>
+
+                <tr ng-repeat="rcpt in rctpList" style="height: 40px">
+                    <td>{{ rcpt.itemName }}</td>
+                    <td>{{ rcpt.amount }}({{ rcpt.units }})</td>
+                    <td>{{ rcpt.changes }}元</td>
+                    <td>{{ rcpt.costs }}元</td>
+                </tr>
+
+            </table>
+            <br/>
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backPatient()" style='position: absolute; bottom: 0; display: block;  width: 100%'>返回</a><br>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" style="display: none " id="nullRcpt">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd">
+            <strong class="weui_dialog_title">
+                <i class="weui_icon_msg weui_icon_warn"></i><br>您查看的用户一个月内没有就诊记录
+            </strong>
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;"  class="weui_btn_dialog default" id="nullRcptOk" >确定</a>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="/assert/angular/angular.min.js"></script>
+<script src="/assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="/javascript/rcpt-master.js" type="text/javascript"></script>
+</body>
+</html>
