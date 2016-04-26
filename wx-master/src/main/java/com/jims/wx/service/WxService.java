@@ -53,7 +53,6 @@ public class WxService {
     private HttpServletRequest request ;
     private HttpServletResponse response ;
     private WxOpenAccountConfigFacade wxOpenAccountConfigFacade ;
-    private HospitalInfoFacade hospitalInfoFacade ;
     private HospitalInfoFacade hospitalInfoFacade;
 
     //重复通知过滤
@@ -180,16 +179,6 @@ public class WxService {
         return TokenManager.getDefaultToken() ;
     }
 
-    @GET
-    @Path("test")
-    public String test(@QueryParam("code")String code) throws IOException {
-        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo() ;
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(),code) ;
-
-        response.sendRedirect("/login.html?openId="+snsToken.getOpenid());
-        return "http://www.baidu.com/" ;
-    }
-
 
     @GET
     @Path("questionnaire-survey")
@@ -203,4 +192,20 @@ public class WxService {
         }
         response.sendRedirect("/views/his/public/questionnaire-survey.html?openId="+snsToken.getOpenid()+"&patId="+patId);
         return "http://www.baidu.com/" ;    }
+    @GET
+       @Path("pat-visit")
+    public String inp(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patientId="";
+        if(appList.size()>0){
+            patientId=appList.get(0).getPatId();
+        }
+        response.sendRedirect("/views/his/public/Pat-Visit.html?openId="+snsToken.getOpenid()+"&patientId="+patientId);
+        return "http://www.baidu.com/" ;    }
+
+
+
+
 }
