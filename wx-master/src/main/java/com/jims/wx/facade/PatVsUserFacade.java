@@ -8,6 +8,7 @@ import com.jims.wx.entity.PatVsUser;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +16,12 @@ import java.util.List;
  */
 public class PatVsUserFacade extends BaseFacade {
     private EntityManager entityManager;
+    private AppUserFacade appUserFacade ;
 
     @Inject
-    public PatVsUserFacade(EntityManager entityManager){
+    public PatVsUserFacade(EntityManager entityManager, AppUserFacade appUserFacade){
         this.entityManager=entityManager;
+        this.appUserFacade = appUserFacade;
     }
 
     @Transactional
@@ -41,17 +44,6 @@ public class PatVsUserFacade extends BaseFacade {
          }
     }
 
-//    /**
-//     * 根据patInfoId查询身份证号
-//     * @param patInfoId
-//     * @return
-//     */
-////    PatInfo
-//    public String findIdCardById(String patInfoId) {
-//         String sql="select p.idCard from PatInfo as p where p.id='"+patInfoId+"'";
-//         return (String)entityManager.createQuery(sql).getSingleResult();
-//      }
-
     /**
      *
      * @param appuserId
@@ -65,4 +57,69 @@ public class PatVsUserFacade extends BaseFacade {
         }else{
         return "";}
     }
+
+
+    /**
+     * 根据openId查询次微信用户是否绑定了患者
+     * @param openid
+     * @return
+     */
+    public boolean findIsExistsPatInfo(String openid) {
+        AppUser appUser= appUserFacade.getAppUserByOpenId(openid);
+        if(appUser!=null){
+            String idCard=findPatIdById(appUser.getId());
+            if(idCard!=null&&!"".equals(idCard)){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+    /**
+     * 查询次患者否绑定
+     * @param openId
+     * @param idCard
+     * @return
+     */
+    public Boolean findIsBangker(String idCard,String openId) {
+        // find appUserId by openId
+        String appUserId=null;
+        List<AppUser> appUsers=appUserFacade.findByOpenId(openId);
+        if(!appUsers.isEmpty()){
+            appUserId=appUsers.get(0).getId();
+        }
+        List<PatInfo> list=findPatInfosByAppUserId(openId);
+        if(!list.isEmpty()){//绑定了患者
+            String var="";
+            for(PatInfo patInfo:list){
+                if(idCard.equals(patInfo.getIdCard())){
+                    var=patInfo.getIdCard();
+                    break;
+                }
+            }
+            if(var!=null&&!"".equals(var)){//次患者已经绑定
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
+
+    /**
+     * @description 通过aappUserId 查询所绑定患者的集合
+     * @param appUserId
+     * @return patInfos
+     */
+    public List<PatInfo> findPatInfosByAppUserId(String appUserId){
+        List<PatInfo> patInfos=new ArrayList<PatInfo>();
+        String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appUserId+"'";
+        return entityManager.createQuery(sql).getResultList();
+    }
+
+
+
 }

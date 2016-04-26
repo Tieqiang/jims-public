@@ -47,20 +47,32 @@ public class PatInfoService {
     private PatVsUserFacade patVsUserFacade;
 
     @Inject
-    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response,PatVsUserFacade patVsUserFacade){
-        this.appUserFacade=appUserFacade;
-        this.patInfoFacade=patInfoFacade;
-        this.request=request;
-        this.response=response;
-        this.patVsUserFacade=patVsUserFacade;
-     }
-
+    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response,PatVsUserFacade patVsUserFacade) {
+        this.appUserFacade = appUserFacade;
+        this.patInfoFacade = patInfoFacade;
+        this.request = request;
+        this.response = response;
+        this.patVsUserFacade = patVsUserFacade;
+    }
     /**
-//     * 保存增改
-//      * @param patInfo
+     * 通过openId 查询患者的list
+     * @param openId
      * @return
-//     */
-//    data:{name:name,idCard:idCard,cellphone:cellphone},
+     */
+    @GET
+    @Path("list")
+    public List<PatInfo> getList(@QueryParam("openId") String openId){
+        List<AppUser> list=appUserFacade.findByOpenId(openId);
+        String appUserId=list.get(0).getId();
+        return patVsUserFacade.findPatInfosByAppUserId(appUserId);
+     }
+     /**
+     * 保存患者信息
+     * @param openId
+     * @param name
+     * @param idCard
+     * @param cellphone
+     */
     @GET
     @Path("save")
     public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone) {
@@ -68,7 +80,7 @@ public class PatInfoService {
             /**
              * 查询之前是否绑定
              */
-            Boolean isBangker=this.patVsUserFacade.findIsBangker(openId);
+            Boolean isBangker=this.patVsUserFacade.findIsBangker(idCard,openId);
             if(isBangker){
                 response.sendRedirect("/views/his/public/user-bangker-failed.html");
             }else{

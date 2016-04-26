@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>选择患者</title>
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+    <style type="text/css">
+        div{
+            margin:0;
+         }
+        .btn{
+            border: none;
+            margin: 0px auto;
+            margin: 1px;
+            background: url(/assert/easyui/themes/icons/search.png) no-repeat;
+        }
+        div,form, input, button, select, textarea {margin:0; padding:0;
+            }
+/*<img src="/assert/easyui/themes/icons/search.png" style="float:left;"/>*/
+        /*#text1{ background:url(/assert/easyui/themes/icons/search.png) no-repeat left center; width:200px; height:30px;}*/
+
+
+
+    </style>
+
+</head>
+<body>
+
+    <!--<div class="weui_cell">-->
+        <!--<div class="weui_cell_bd weui_cell_primary">-->
+            <!--<textarea class="weui_textarea" placeholder="科室、医生姓名或拼音首字母" rows="1"></textarea>-->
+         <!--</div>-->
+    <!--</div>-->
+
+     <div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">
+         <input id="text1" class="weui_input"  type="number" pattern="" placeholder="姓名或拼音首字母"/></div>
+
+
+    <div class="weui_cells weui_cells_access" style="margin-top:10px;">
+         <a class="weui_cell" href="javascript:;">
+            <div class="weui_cell_hd"><img src="/assert/images/wdsc.png" alt="" style="width:20px;margin-right:5px;display:block"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>我的收藏</p>
+            </div>
+         </a>
+     </div>
+ <div ng-app="myApp">
+    <div ng-controller="tableCtrl" id="patInfoList">
+        <!--<input type="hidden" id="openId" value="">-->
+        <div ng-repeat="x in names">
+             <div class="weui_cells weui_cells_access">
+            <a class="weui_cell" onclick="findPatInfo($(this).find('span').text());">
+                <div></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                    <span style="display:none" class="span">{{x.idCard}}</span>
+                    <p>姓名：{{x.name}}</p>
+                </div>
+                <div class="weui_cell_ft" id="deptname">身份证：{{x.idCard}}</div>
+            </a>
+        </div>
+        </div>
+    </div>
+</div>
+ </div>
+</div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-select-patinfo.js"></script>
+</html>

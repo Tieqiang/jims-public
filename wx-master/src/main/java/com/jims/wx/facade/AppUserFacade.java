@@ -140,7 +140,7 @@ public class AppUserFacade extends BaseFacade {
      * @param openId
      * @return
      */
-    private AppUser getAppUserByOpenId(String openId) {
+    public AppUser getAppUserByOpenId(String openId) {
         String hql = "from AppUser as user where user.openId = '"+openId+"'" ;
         List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
         if(appUsers.size()>0){
@@ -182,8 +182,6 @@ public class AppUserFacade extends BaseFacade {
         }
         return null;
     }
-
-
 
 
 }
