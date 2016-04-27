@@ -159,7 +159,13 @@ public class DoctInfo implements java.io.Serializable {
             String s = "";
             try {
                 s = new String(this.description, "UTF-8");
-                s = s.replaceAll("<[A-z/ =']*>", "").replace("<h1>","").replace("</h1>","");
+                s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").
+                        replace("<h1>","").replace("</h1>","").
+                        replace("<h2>","").replace("</h2>","").
+                        replace("<h3>","").replace("</h3>","").
+                        replace("<h4>","").replace("</h4>","").
+                        replace("<h5>","").replace("</h5>","").
+                        replace("<h6>","").replace("</h6>","");
              } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

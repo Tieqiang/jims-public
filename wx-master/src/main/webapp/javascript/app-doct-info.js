@@ -31,12 +31,17 @@ app.controller('tableCtrl', function ($scope, $http) {
 //        alert("rid="+rid);
         if (enabledCount > 0) {
             //可以挂号
-            var flag = window.confirm("确定要挂号吗?(此号的价格为:" + price + ")");
-            if (flag) {//要挂号
+//            var flag = window.confirm("确定要挂号吗?(此号的价格为:" + price + ")");
+//            if (flag) {//要挂号
                 var openId = $("#openId").val();
 //              alert("openId="+openId+"price="+price);
-                window.location.href = "/api/clinic-for-regist/regist?price=" + price + "&clinicForRegistId=" + rid + "&openId=" + openId;
-            }
+                /**
+                 * 如果确定要挂号，跳转到选择患者页面
+                 * @type {string}
+                 */
+                window.location.href="/views/his/public/app-select-patinfo.html?openId="+openId+"&price=" + price + "&clinicForRegistId=" + rid ;
+//                window.location.href = "/api/clinic-for-regist/regist?price=" + price + "&clinicForRegistId=" + rid + "&openId=" + openId;
+//            }
         } else {
             alert("此号已满，不能再挂号！");
         }

@@ -25,24 +25,26 @@ public class ClinicTypeChargeFacade extends BaseFacade {
 
     /**
      * 通过号类ID查询所有此号类的收费列表
+     *
      * @param id
      * @return
      */
-    public List<ClinicTypeCharge> findById(String id){
+    public List<ClinicTypeCharge> findById(String id) {
         String sqls = "from ClinicTypeCharge c where 1=1";
-        if(null != id && !id.trim().equals("")){
-            sqls +=" and c.clinicTypeId='" + id.trim() + "'";
+        if (null != id && !id.trim().equals("")) {
+            sqls += " and c.clinicTypeId='" + id.trim() + "'";
         }
         return entityManager.createQuery(sqls).getResultList();
     }
 
     /**
      * 保存增删改
+     *
      * @param beanChangeVo
      * @return
      */
     @Transactional
-    public List<ClinicTypeCharge> save(BeanChangeVo<ClinicTypeCharge> beanChangeVo){
+    public List<ClinicTypeCharge> save(BeanChangeVo<ClinicTypeCharge> beanChangeVo) {
         List<ClinicTypeCharge> lists = new ArrayList<>();
         List<ClinicTypeCharge> inserted = beanChangeVo.getInserted();   //获取增加的数据
         List<ClinicTypeCharge> updated = beanChangeVo.getUpdated();     //修改的数据
@@ -63,22 +65,23 @@ public class ClinicTypeChargeFacade extends BaseFacade {
             ids.add(delete.getId());
             lists.add(delete);
         }
-        this.removeByStringIds(ClinicTypeCharge.class,ids);
+        this.removeByStringIds(ClinicTypeCharge.class, ids);
         return lists;
     }
 
     /**
      * 根据号类的id 查询号表的价格
+     *
      * @param clinicTypeId
      * @return
      */
     public Double findPriceByClinicTypeSettingId(String clinicTypeId) {
-        Double priceCount=0.0;
-        String sql="from ClinicTypeCharge where clinicTypeId='"+clinicTypeId+"'";
-        List<ClinicTypeCharge> list=entityManager.createQuery(sql).getResultList();
-        for(ClinicTypeCharge c:list){
-            priceCount=priceCount+c.getPrice();
+        Double priceCount = 0.0;
+        String sql = "from ClinicTypeCharge where clinicTypeId='" + clinicTypeId + "'";
+        List<ClinicTypeCharge> list = entityManager.createQuery(sql).getResultList();
+        for (ClinicTypeCharge c : list) {
+            priceCount = priceCount + c.getPrice();
         }
-         return priceCount;
+        return priceCount;
     }
 }

@@ -24,7 +24,6 @@ public class CompsiteModul extends JerseyServletModule {
         Map<String, String> params = new HashMap<String, String>();
         params.put("com.sun.jersey.config.property.packages", "com.jims.wx.service"); //PROPERTY_PACKAGES
         params.put("com.sun.jersey.api.json.POJOMappingFeature", "true");
-
         serve("/api/*").with(GuiceContainer.class, params);
         install(new JpaPersistModule("domain"));
         filter("/api/*").through(PersistFilter.class);

@@ -1,1 +1,0 @@
-alter pat_vs_user add id varchar2(64);
