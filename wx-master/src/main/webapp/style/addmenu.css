@@ -8,7 +8,7 @@ a,img {
 }
 body > div {
     position: relative;
-    height: 580px;
+    height: 480px;
     margin: 10px;
     float: left;
     font-size: 14px;
@@ -27,7 +27,7 @@ body > div {
     background: #fff;
     position: absolute;
     width: 262px;
-    height: 466px;
+    height: 376px;
     left: 18px;
     top: 58px;
 }
