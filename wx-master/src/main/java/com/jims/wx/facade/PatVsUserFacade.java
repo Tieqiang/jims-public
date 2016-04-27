@@ -19,10 +19,12 @@ public class PatVsUserFacade extends BaseFacade {
     private AppUserFacade appUserFacade ;
 
     @Inject
-    public PatVsUserFacade(EntityManager entityManager, AppUserFacade appUserFacade){
+    public PatVsUserFacade(EntityManager entityManager,AppUserFacade appUserFacade){
         this.entityManager=entityManager;
-        this.appUserFacade = appUserFacade;
+        this.appUserFacade=appUserFacade;
     }
+
+
 
     @Transactional
     public PatInfo save(PatInfo patInfo) {
@@ -51,9 +53,9 @@ public class PatVsUserFacade extends BaseFacade {
      */
     public String findPatIdById(String appuserId) {
         String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appuserId+"'";
-        PatInfo patinfo=(PatInfo)entityManager.createQuery(sql).getSingleResult();
-        if(patinfo!=null){
-            return patinfo.getIdCard();
+        List<PatInfo> patinfo=entityManager.createQuery(sql).getResultList();
+        if(!patinfo.isEmpty()){
+            return patinfo.get(0).getIdCard();
         }else{
         return "";}
     }
