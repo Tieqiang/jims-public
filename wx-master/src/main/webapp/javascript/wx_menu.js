@@ -31,7 +31,7 @@ function check_data(data){
         for(var i=0;i<buttons.length;i++){
             var menu = buttons[i]
             //校验菜单名称
-            if(menu.name == undefined || menu.name == '' || strlen(menu.name) > 8){
+            if(menu.name == undefined || menu.name == ''){
                 add_menu_click($('#menu li .menu_li:eq('+i+')'))
                 $('#sub_name_text').css('border','1px solid red')
                 return false
@@ -39,7 +39,7 @@ function check_data(data){
             if(menu.sub_button && menu.sub_button.length > 0){
                 for(var j=0;j<menu.sub_button.length;j++){
                     var button = menu.sub_button[j]
-                    if(button.name == undefined || button.name == '' || strlen(button.name) > 16){
+                    if(button.name == undefined || button.name == ''){
                         add_menu_click($('#menu li .menu_li:eq('+i+')'))
                         add_click_button($('#menu li:eq('+i+') span a:eq('+j+')'))
                         $('#sub_name_text').css('border','1px solid red')
@@ -167,7 +167,7 @@ function add_button(index,data){
     }
     var sp = $('#menu ul li:eq('+index+') span div')
     var size = $('a',sp).length
-    var html = '<a href="#" onclick="add_click_button(this)">' + data.name + '</a>'
+    var html = '<a href="#" onclick="add_click_button(this)">' + (strlen(data.name)>10 ? limit_str(data.name,8)+'...' : data.name) + '</a>'
     $('a:last-child',sp).before(html)
     if(c)
         $($('a:eq('+(size-1)+')',sp)).click()
@@ -305,14 +305,18 @@ function change_table(isSub){
  */
 $('#sub_name_text').blur(function(){
     var val = $(this).val()
-    $('#sub_title').html(val)
     if(current_botton_index != -1){
+        val = limit_str(val,16)
         datas.button[current_menu_index].sub_button[current_botton_index].name = val
-        $('#menu li:eq('+current_menu_index+') span a:eq('+current_botton_index+')').html(val)
+        $('#menu li:eq('+current_menu_index+') span a:eq('+current_botton_index+')').html(
+            strlen(val)>10 ? (limit_str(val,8)+'...') : val)
     } else {
+        val = limit_str(val,8)
         $('.menu_li:eq('+current_menu_index+') div').html(val)
         datas.button[current_menu_index].name = val
     }
+    $('#sub_name_text').val(val)
+    $('#sub_title').html(val)
 })
 /**
  * 菜单(子菜单)url
@@ -357,4 +361,27 @@ function strlen(str){
         }
     }
     return len;
+}
+/**
+ * 限制字符串长度，汉字长度为2
+ * @param str
+ * @param l 限制最大长度
+ * @returns {*}
+ */
+function limit_str(str,l){
+    var len = 0;
+    for (var i=0; i<str.length; i++) {
+        var c = str.charCodeAt(i);
+        //单字节加1
+        if ((c >= 0x0001 && c <= 0x007e) || (0xff60<=c && c<=0xff9f)) {
+            len++;
+        }
+        else {
+            len+=2;
+        }
+        if(len == l){
+            return str.substr(0,i+1)
+        }
+    }
+    return str;
 }
