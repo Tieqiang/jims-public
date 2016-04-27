@@ -98,8 +98,7 @@ public class AppUserFacade extends BaseFacade {
         }else{
             appUser = new AppUser() ;
         }
-
-        appUser.setCity(user.getCity());
+         appUser.setCity(user.getCity());
         appUser.setCountry(user.getCountry());
         appUser.setGroupId(user.getGroupid());
         appUser.setHeadImgUrl(user.getHeadimgurl());
@@ -111,7 +110,13 @@ public class AppUserFacade extends BaseFacade {
         appUser.setRemark(user.getRemark());
         appUser.setSubscribe(user.getSubscribe());
         appUser.setSubscrbeTime(user.getSubscribe_time());
-        merge(appUser) ;
+
+        saveAppUser(appUser) ;
+    }
+
+    @Transactional
+    private void saveAppUser(AppUser appUser) {
+           entityManager.merge(appUser);
     }
 
     /***
@@ -135,26 +140,12 @@ public class AppUserFacade extends BaseFacade {
         }
     }
 
-    /**
-     * 根据分组Id找到对应的分组
-     * @param targetId
-     * @return
-     */
-    private AppUserGroups getAppuserGroupsByGroupId(String targetId) {
-        String hql = "from AppUserGroups as group where group.groupId = '"+targetId+"'" ;
-        List<AppUserGroups> appUserGroupses = createQuery(AppUserGroups.class,hql,new ArrayList<Object>()).getResultList() ;
-        if(appUserGroupses.size()>0){
-            return appUserGroupses.get(0) ;
-        }
-        return null;
-    }
-
     /***
      * 根据微信的OPENID找对应的用户
      * @param openId
      * @return
      */
-    private AppUser getAppUserByOpenId(String openId) {
+    public AppUser getAppUserByOpenId(String openId) {
         String hql = "from AppUser as user where user.openId = '"+openId+"'" ;
         List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
         if(appUsers.size()>0){
@@ -181,27 +172,6 @@ public class AppUserFacade extends BaseFacade {
     @Transactional
     public void savePatVsUser(PatVsUser patVsUser) {
         entityManager.merge(patVsUser);
-     }
-
-    /***
-     * 修改用户的分组
-     *  @param openId
-     * @param targetId
-     * @param currentId
-     */
-    @Transactional
-    public void updateGroup(String openId, String targetId, String currentId) {
-        AppUser appUser = getAppUserByOpenId(openId) ;
-        AppUserGroups appUserGroups = getAppuserGroupsByGroupId(targetId) ;
-        AppUserGroups currentGroups = getAppuserGroupsByGroupId(currentId) ;
-        if(appUser !=null){
-            appUser.setGroupId(Integer.parseInt(targetId));
-            appUserGroups.setCount(appUserGroups.getCount() +1 );
-            currentGroups.setCount(appUserGroups.getCount() -1 );
-            merge(appUser) ;
-            merge(appUserGroups) ;
-            merge(currentGroups) ;
-        }
     }
 
     /**
@@ -217,22 +187,6 @@ public class AppUserFacade extends BaseFacade {
         }
         return null;
     }
-
-    /***
-     * 根据微信的OPENID找对应的用户
-     * @param openId
-     * @return
-     */
-    private AppUser getAppUserByOpenId(String openId) {
-        String hql = "from AppUser as user where user.openId = '"+openId+"'" ;
-        List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
-        if(appUsers.size()>0){
-            return appUsers.get(0) ;
-        }
-        return null;
-    }
-
-
 
 
 }

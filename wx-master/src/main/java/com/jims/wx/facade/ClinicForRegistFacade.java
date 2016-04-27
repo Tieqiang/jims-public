@@ -20,7 +20,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * Created by wangjing on 2016/3/21.
+ * Created by cxy on 2016/3/21.
  */
 public class ClinicForRegistFacade extends BaseFacade {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -29,6 +29,7 @@ public class ClinicForRegistFacade extends BaseFacade {
     private ClinicTypeChargeFacade clinicTypeChargeFacade;
     private ClinicScheduleFacade clinicScheduleFacade;
     private ThreadLocal<Integer> shareData = new ThreadLocal<Integer>();
+
     @Inject
     public ClinicForRegistFacade(EntityManager entityManager, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicScheduleFacade clinicScheduleFacade) {
         this.entityManager = entityManager;
@@ -36,8 +37,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
         this.clinicScheduleFacade = clinicScheduleFacade;
     }
+
     /**
      * 保存对象内容
+     *
      * @param saveData
      * @return
      */
@@ -45,8 +48,10 @@ public class ClinicForRegistFacade extends BaseFacade {
     public ClinicForRegist save(ClinicForRegist saveData) {
         return merge(saveData);
     }
+
     /**
      * 修改对象内容
+     *
      * @param updateData
      * @return
      */
@@ -62,8 +67,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return newUpdateDict;
     }
+
     /**
      * 批量删除
+     *
      * @param clazz
      * @param ids
      * @return
@@ -79,8 +86,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         super.removeByStringIds(clazz, list);
         return list;
     }
+
     /**
      * 判断是否能生成号表
+     *
      * @param date
      * @param clinicIndexId
      * @return
@@ -101,6 +110,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return map;
     }
+
     /**
      * @param date
      * @param clinicIndexId
@@ -110,28 +120,29 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     public Map<String, Object> registTable(String date, String clinicIndexId, String date1, String desc, String id) {
         Map<String, Object> map = new HashMap<String, Object>();
-        List<ClinicForRegist> list=new ArrayList<ClinicForRegist>();
+        List<ClinicForRegist> list = new ArrayList<ClinicForRegist>();
         try {
             List<Object[]> dayTimes = clinicScheduleFacade.queryDayAndTime(clinicIndexId);
             for (int i = 0; i < dayTimes.size(); i++) {
                 System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
-                    ClinicForRegist clinicForRegist=saveRecord(dayTimes.get(i)[2].toString(),new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                    ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
                     list.add(clinicForRegist);
                 }
             }
-            if(!list.isEmpty()){
+            if (!list.isEmpty()) {
                 map.put("isRegist", true);
-            }else{
+            } else {
                 map.put("isRegist", false);
             }
-         } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             map.put("isRegist", false);
         }
         return map;
     }
+
     /**
      * @param parse clinicDate
      * @param byId  号别
@@ -139,7 +150,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
-    private ClinicForRegist saveRecord(String  limits,Date parse, ClinicIndex byId, String desc) {
+    private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId, String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
@@ -153,11 +164,12 @@ public class ClinicForRegistFacade extends BaseFacade {
 //        Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
         c.setCurrentNo(0);
         c.setTimeDesc(desc);
-        Double price=clinicTypeChargeFacade.findPriceByClinicTypeSettingId(byId.getClinicTypeId());
+        Double price = clinicTypeChargeFacade.findPriceByClinicTypeSettingId(byId.getClinicTypeId());
         c.setRegistPrice(price);
-        ClinicForRegist clinicForRegist=save(c);
+        ClinicForRegist clinicForRegist = save(c);
         return clinicForRegist;
     }
+
     /**
      * @param id
      * @return
@@ -166,6 +178,7 @@ public class ClinicForRegistFacade extends BaseFacade {
     private Long countHaveRegistedRecord(String id) {
         return (Long) entityManager.createQuery("select count(*) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
     }
+
     /**
      * @param startTime yyyy-MM-dd HH:mm:ss
      * @param endTime   yyyy-MM-dd HH:mm:ss
@@ -207,6 +220,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return list;
     }
+
     /**
      * @param dayForWeek
      * @return
@@ -229,8 +243,10 @@ public class ClinicForRegistFacade extends BaseFacade {
             return DayOfWeek.星期日.toString();
         }
     }
+
     /**
      * 判断当前日期是星期几
+     *
      * @param pTime 修要判断的时间
      * @return dayForWeek 判断结果
      * @Exception 发生异常
@@ -247,6 +263,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return dayForWeek;
     }
+
     /**
      * @param dateFrom 开始时间  yyyy-MM-dd HH:mm:ss
      * @param dateEnd  结束时间   yyyy-MM-dd HH:mm:ss
@@ -283,8 +300,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return dateList;
     }
+
     /**
      * 判断一个日期周几
+     *
      * @param date
      * @return
      */
@@ -293,8 +312,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         calendar.setTime(date);
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
+
     /**
-     *获取当前是低级周
+     * 获取当前是低级周
+     *
      * @param weekDays
      * @return
      */
@@ -310,8 +331,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return weekNumber;
     }
+
     /**
      * 字符串与整型互相转换
+     *
      * @param strWeek
      * @return
      */
@@ -336,8 +359,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return number;
     }
+
     /**
      * 根据id 查询号表对象
+     *
      * @param id
      * @return
      */
@@ -347,6 +372,7 @@ public class ClinicForRegistFacade extends BaseFacade {
 
     /**
      * 查找当前挂号人数
+     *
      * @param dayOfWeek
      * @return
      */
@@ -360,6 +386,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         Long count = (Long) entityManager.createQuery(sql).getSingleResult();
         return count;
     }
+
     /**
      * @param id
      * @param flag
@@ -374,8 +401,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return list.get(0);
     }
+
     /**
      * 更新当日挂号人数
+     *
      * @param id
      * @param i
      */
@@ -405,8 +434,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         c.setDescription(cc.getTimeDesc());
         return c;
     }
+
     /**
      * 判断号表约束是否存在
+     *
      * @param clinicTypeId
      * @param clinicDate
      * @param i
@@ -422,8 +453,10 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return true;
     }
+
     /**
      * 条件查询
+     *
      * @param clinicForRegistClass
      * @return
      */
@@ -457,12 +490,13 @@ public class ClinicForRegistFacade extends BaseFacade {
     }
 
     /**
-     *查找号别新消息
+     * 查找号别新消息
+     *
      * @return
      */
     public List<ClinicIndex> findClinicIndexAll() {
-          return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
-     }
+        return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
+    }
 
     /*
      * @description * 如果这个医生当天有出诊就显示当天 如果没有就显示里今天最近的一天
@@ -470,30 +504,30 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @param currentDateStr
      * @return
      */
-      public ClinicForRegist findRegistInfo(String currentDateStr,String clinicIndexId) {
-         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-         ClinicForRegist clinicForRegist = null;
-         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%' and clinicIndex.id='"+clinicIndexId+"'";
-         clinicForRegists = entityManager.createQuery(sql).getResultList();
-         if(clinicForRegists.isEmpty()){
-                return findRegistInfo(getNextDayStr(currentDateStr),clinicIndexId);
-         }else{
-             return clinicForRegists.get(0);
-         }
+    public ClinicForRegist findRegistInfo(String currentDateStr, String clinicIndexId) {
+        List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
+        ClinicForRegist clinicForRegist = null;
+        String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%' and clinicIndex.id='" + clinicIndexId + "'";
+        clinicForRegists = entityManager.createQuery(sql).getResultList();
+        if (clinicForRegists.isEmpty()) {
+            return findRegistInfo(getNextDayStr(currentDateStr), clinicIndexId);
+        } else {
+            return clinicForRegists.get(0);
         }
-     /**
-     *
+    }
+
+    /**
      * @param dateStr
      * @return
      */
-    public String getNextDayStr(String dateStr){
-        String nextDayStr="";
+    public String getNextDayStr(String dateStr) {
+        String nextDayStr = "";
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(sdf.parse(dateStr));
             calendar.add(Calendar.DAY_OF_MONTH, 1);
             Date nextDay = new Date(calendar.getTimeInMillis());
-            nextDayStr=sdf.format(nextDay);
+            nextDayStr = sdf.format(nextDay);
         } catch (ParseException e) {
             e.printStackTrace();
         }

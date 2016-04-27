@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+ <html lang="zh-CN" http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>微信支付</title>
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+ </head>
+<body>
+         <!--<div class="weui_text_area">-->
+            <!--&lt;!&ndash;<h2 class="weui_msg_title">微信付款</h2>&ndash;&gt;-->
+            <!--<p class="weui_msg_desc">付款金额：<input type="text" disabled="disabled" value="" id="price"></p>-->
+        <!--</div>-->
+              <div class="weui_cell">
+                 <div class="weui_cell_bd weui_cell_primary">
+                     <p>付款金额：</p>
+                 </div>
+                 <div class="weui_cell_ft"><span id="price" style="color:red;"></span></div>
+             </div>
+             <div class="weui_cell">
+                 <div class="weui_cell_bd weui_cell_primary">
+                     <p>付款项目</p>
+                 </div>
+                 <div class="weui_cell_ft">挂号收费</div>
+             </div>
+         <div class="weui_opr_area">
+            <p class="weui_btn_area">
+                <a id="pay" class="weui_btn weui_btn_primary">确认支付</a>
+                <a href="javascript:history.go(-1);" class="weui_btn weui_btn_default">取消</a>
+            </p>
+        </div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-pay.js"></script>
+<!--http://res.wx.qq.com/open/js/jweixin-1.0.0.js-->
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+</html>

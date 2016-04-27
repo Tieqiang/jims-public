@@ -9,24 +9,19 @@ import java.util.List;
  */
 public class QuestionnaireVsSubjectVo implements java.io.Serializable {
     private String id;
-
-
     private String questionVsSubId;
     private String questModelId;//所属问卷
     private String questionContent;//题干
     private String questionType;//题目类型
     private String preAnswer;//默认答案
-    private String picture;
+    private String picture;//题干图片
 
-    private List<SubjectOptions> subjectOptionses;
+    private List<SubjectOptions> subjectOptionses ;
 
     public QuestionnaireVsSubjectVo() {
     }
 
-    public QuestionnaireVsSubjectVo(String id, String questionVsSubId,
-                                    String questModelId, String questionContent,
-                                    String questionType, String preAnswer,
-                                    String picture, List<SubjectOptions> subjectOptionses) {
+    public QuestionnaireVsSubjectVo(String id, String questionVsSubId, String questModelId, String questionContent, String questionType, String preAnswer, String picture, List<SubjectOptions> subjectOptionses) {
         this.id = id;
         this.questionVsSubId = questionVsSubId;
         this.questModelId = questModelId;

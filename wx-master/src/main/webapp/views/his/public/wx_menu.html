@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>微信</title>
+    <script src="/assert/easyui/jquery.min.js" type="text/javascript"></script>
+    <link href="/style/addmenu.css" type="text/css" rel="stylesheet"/>
+</head>
+<body>
+<div class="phone-bg">
+    <div class="phone-bg-main">
+        <div id="menu">
+            <ul id="add_menu">
+                <li>
+                    <div class="menu_li" onclick="add_menu_and_data()">+</div>
+                </li>
+            </ul>
+        </div>
+        <div style="clear:both"></div>
+    </div>
+</div>
+<div class="info-bg">
+    <table>
+        <tr>
+            <td colspan="2" id="sub_title">子菜单名称</td>
+            <td id="delete_title"><a href="#">删除子菜单</a></td>
+        </tr>
+        <tr>
+            <td colspan="3" class="sub_alter">已添加子菜单，仅可设置菜单名称。</td>
+        </tr>
+        <tr>
+            <td id="sub_name">子菜单名称</td>
+            <td colspan="2"><input type="text" id="sub_name_text"/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td colspan="2" class="sub_alter">字数不超过8个汉字或16个字母</td>
+        </tr>
+        </table>
+    <div id="hiddens">
+    <table>
+        <tr>
+            <td id="menu_text" style="width: 85px">子菜单内容</td>
+            <td >
+                <input type="radio" name="sub_text" onclick="set_content(1)" value="1"/>发送消息
+                <input type="radio" name="sub_text" onclick="set_content(2)" checked="checked" value="2"/>跳转页面
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <div id="sub_content" >
+                    <div id="add_content" style="width: 100%;display: none">
+                        <div id="sub_text_title" >
+                            <ul id="sub_text_content">
+                                <li>图文消息</li>
+                                <li>图片</li>
+                                <li>语音</li>
+                                <li>视频</li>
+                            </ul>
+                        </div>
+                        <div id="sub_info">
+                            <div class="sub_add_info" style="float: left;">
+                                &nbsp;
+                            </div>
+                            <div class="sub_add_info" style="float: right;">
+                                &nbsp;
+                            </div>
+                        </div>
+                    </div>
+                    <div id="to_url">
+                        <table style="width: 400px;">
+                            <tr>
+                                <td colspan="2">
+                                    订阅者点击该子菜单会跳到以下链接
+                                </td>
+                            </tr>
+                            <tr>
+                                <td width="20%">
+                                    页面地址
+                                </td>
+                                <td width="80%">
+                                    <input type="text" id="url_id">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    </div>
+</div>
+<div id="button_s">
+    <input id="save_button" onclick="save()" type="button" value="保存并发布">
+    <input onclick="delete_all()" type="button" value="删除">
+</div>
+<script src="../../../javascript/wx_menu.js"></script>
+<script>
+    $(function(){
+        $.get('/api/wx-menu/getMenu',function(res){
+            datas = res.menu
+            if(!datas || !datas.button){
+                datas = {'button':[]}
+            }
+            var buttons = datas.button
+            addLi(buttons)
+            $('#menu ul li .menu_li:eq(0)').click()
+        })
+    })
+</script>
+</body>
+</html>
