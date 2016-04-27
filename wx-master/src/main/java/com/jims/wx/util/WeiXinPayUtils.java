@@ -14,21 +14,28 @@ import java.util.UUID;
  */
 public  class WeiXinPayUtils {
       // 公众号 appId
-      private static final String APP_ID="wx890edf605415aaec";
+      private static  String APP_ID="wx890edf605415aaec";
       //公众号密钥 appSerect
-      private static final String APP_SERECT="0e9446b7e5690138e6f8b1d07bb04a02";
+      private static  String APP_SERECT="0e9446b7e5690138e6f8b1d07bb04a02";
       //微信支付商号
-      private static final String MCH_ID = "1318000301";
+      private static  String MCH_ID = "1318000301";
       //API密钥 or 商户支付密钥
-      private static final String KEY = "jmyruanjianyouxiangongsi84923632";
+      private static  String KEY = "jmyruanjianyouxiangongsi84923632";
       //微信支付方式
-      private static final String PAY_WAY="JSAPI";
-      /**
-      * 受保护的构造方法
-      */
-      protected WeiXinPayUtils(){
+      private static  String PAY_WAY="JSAPI";
+//      /**
+//      * 受保护的构造方法
+//      */
+//      protected WeiXinPayUtils(){
+//
+//      }
 
-      }
+     public void init(String APP_ID,String APP_SERECT,String MCH_ID,String KEY){
+         this.APP_ID=APP_ID;
+         this.APP_SERECT=APP_SERECT;
+         this.MCH_ID=MCH_ID;
+         this.KEY=KEY;
+     }
 
     /**
      * @description 页面调起JSAPI所需要的json字符串
