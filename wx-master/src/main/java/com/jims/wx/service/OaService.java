@@ -2,13 +2,13 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.AccessTooken;
 import com.jims.wx.entity.HospitalStaff;
-import com.jims.wx.facade.AccessTookenFacade;
 import com.jims.wx.facade.AppUserFacade;
 import com.jims.wx.facade.HospitalInfoFacade;
 import com.jims.wx.facade.HospitalStaffFacade;
 import com.jims.wx.vo.AppSetVo;
 import weixin.popular.api.MessageAPI;
 import weixin.popular.bean.BaseResult;
+import weixin.popular.support.TokenManager;
 
 import javax.inject.Inject;
 import javax.ws.rs.POST;
@@ -27,14 +27,12 @@ import java.util.List;
 public class OaService {
     private AppUserFacade appUserFacade ;
     private HospitalInfoFacade hospitalInfoFacade;
-    private AccessTookenFacade accessTookenFacade;
     private HospitalStaffFacade hospitalStaffFacade;
 
     @Inject
-    public OaService(AppUserFacade appUserFacade,HospitalInfoFacade hospitalInfoFacade,AccessTookenFacade accessTookenFacade,HospitalStaffFacade hospitalStaffFacade){
+    public OaService(AppUserFacade appUserFacade,HospitalInfoFacade hospitalInfoFacade,HospitalStaffFacade hospitalStaffFacade){
         this.appUserFacade=appUserFacade;
         this.hospitalInfoFacade=hospitalInfoFacade;
-        this.accessTookenFacade=accessTookenFacade;
         this.hospitalStaffFacade=hospitalStaffFacade;
     }
 
@@ -50,14 +48,12 @@ public class OaService {
         }
 
         //第二步获取 公众号的ACCESSTOOKEN
-        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
-        AccessTooken access=accessTookenFacade.findByAppId(appSetVo.getAppId());
-        String accessTooken=access.getAccessTooken();
+        String accessToken =TokenManager.getDefaultToken() ;
 
         //第三步 拼写json发送消息
         if(openId != "") {
             String jsonMessage="{\"touser\":\""+openId+"\",\"msgtype\":\"text\",\"text\":{\"content\":\""+message+"\"}} ";
-            BaseResult a=MessageAPI.messageCustomSend(accessTooken, jsonMessage);
+            BaseResult a=MessageAPI.messageCustomSend(accessToken, jsonMessage);
         }
         return Response.status(Response.Status.OK).build() ;
     }
