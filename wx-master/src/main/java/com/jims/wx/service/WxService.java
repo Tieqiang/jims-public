@@ -315,4 +315,14 @@ public class WxService {
         String json = PayUtil.generatePayJsRequestJson(packageParams, "wx890edf605415aaec", KEY, KEY);
         return json;
     }
+    @GET
+    @Path("hospital-staff")
+    public String hospitalStaff(@QueryParam("code") String code) throws IOException {
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
+        response.sendRedirect("/views/his/public/hospital-staff.html?openId=" + snsToken.getOpenid() );
+        return "http://www.baidu.com/";
+    }
+
 }

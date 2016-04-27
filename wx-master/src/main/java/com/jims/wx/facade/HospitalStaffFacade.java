@@ -4,8 +4,10 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.HospitalStaff;
+import com.jims.wx.vo.BeanChangeVo;
 
 import javax.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,11 +25,44 @@ public class HospitalStaffFacade extends BaseFacade {
         return  entityManager.createQuery("from HospitalStaff where personId='"+personId+"'").getResultList();
     }
 
+    public List<HospitalStaff> findByName(String name) {
+        String hql = "from  HospitalStaff md where 1=1";
+        if (null != name && !name.trim().equals("")) {
+            hql += " and md.name like '%" + name.trim() + "%'";
+        }
+        return entityManager.createQuery(hql).getResultList();
+    }
+
+
     @Transactional
     public HospitalStaff save(HospitalStaff hospitalStaff){
         hospitalStaff = super.merge(hospitalStaff);
         return hospitalStaff;
     }
+    @Transactional
+    public List<HospitalStaff> savePc(BeanChangeVo<HospitalStaff> beanChangeVo) {
+        List<HospitalStaff> newUpdateDict = new ArrayList<>();
+        List<HospitalStaff> inserted = beanChangeVo.getInserted();
+        List<HospitalStaff> updated = beanChangeVo.getUpdated();
+        List<HospitalStaff> deleted = beanChangeVo.getDeleted();
+        for (HospitalStaff dict : inserted) {
+            HospitalStaff merge = merge(dict);
+            newUpdateDict.add(merge);
+        }
 
+        for (HospitalStaff dict : updated) {
+            HospitalStaff merge = merge(dict);
+            newUpdateDict.add(merge);
+        }
+
+        List<String> ids = new ArrayList<>();
+
+        for (HospitalStaff dict : deleted) {
+            ids.add(dict.getId());
+            newUpdateDict.add(dict);
+        }
+        this.removeByStringIds(HospitalStaff.class, ids);
+        return newUpdateDict;
+    }
 
 }
