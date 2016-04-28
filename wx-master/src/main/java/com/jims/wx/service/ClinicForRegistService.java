@@ -38,9 +38,10 @@ public class ClinicForRegistService {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     private HttpServletResponse response;
     private PatInfoFacade patInfoFacade;
+    private ClinicScheduleFacade clinicScheduleFacade;
 
     @Inject
-    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response,PatInfoFacade patInfoFacade) {
+    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response,PatInfoFacade patInfoFacade,ClinicScheduleFacade clinicScheduleFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
@@ -52,7 +53,16 @@ public class ClinicForRegistService {
         this.appUserFacade = appUserFacade;
         this.response = response;
         this.patInfoFacade=patInfoFacade;
+        this.clinicScheduleFacade=clinicScheduleFacade;
     }
+
+
+
+
+
+
+
+
 
     /**
      * @param price             挂号的价格
@@ -142,9 +152,7 @@ public class ClinicForRegistService {
         AppUser appuser=appUserFacade.findAppUserByOpenId(openId);
 
         PatInfo patInfo=patInfoFacade.findById(appuser.getPatId());
-
-
-        /*
+         /*
         * 获取当前日期 String
          */
         String currentDateStr = sdf.format(new Date());
@@ -373,5 +381,39 @@ public class ClinicForRegistService {
             }
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
+    }
+
+    /**
+     * 查询确认订单的信息
+     * @param openId
+     * @param clinicForRegistId
+     * @return
+     */
+    @POST
+    @Path("find-doct-regist")
+    public AppDoctInfoVo findDoctRegist(@QueryParam("openId") String openId,@QueryParam("clinicForRegistId") String clinicForRegistId){
+           AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
+        try{
+            AppUser appUser =appUserFacade.findAppUserByOpenId(openId);
+            PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
+            appDoctInfoVo.setPatName(patInfo.getName());
+            appDoctInfoVo.setIdCard(patInfo.getIdCard());
+            ClinicForRegist clinicForRegist=clinicForRegistFacade.findById(clinicForRegistId);
+            appDoctInfoVo.setEnabledNum(clinicForRegist.getRegistrationLimits()-clinicForRegist.getRegistrationNum());
+            appDoctInfoVo.setTimeDesc(sdf.format(new Date()));
+            appDoctInfoVo.setDeptName(clinicForRegist.getClinicIndex().getClinicDept());
+            ClinicIndex clinicIndex=clinicForRegist.getClinicIndex();
+            String clinicScheduletime=clinicScheduleFacade.findTime(clinicIndex.getId());
+            appDoctInfoVo.setScheduleTime(clinicScheduletime);
+            String docId=clinicIndex.getDoctorId();
+            DoctInfo doctInfo=doctInfoFacade.findById(docId);
+            appDoctInfoVo.setName(doctInfo.getName());
+            appDoctInfoVo.setTitle(doctInfo.getTitle());
+            appDoctInfoVo.setHeadUrl(doctInfo.getHeadUrl());
+            return appDoctInfoVo;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return appDoctInfoVo;
     }
 }

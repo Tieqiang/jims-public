@@ -22,12 +22,52 @@ public class AppDoctInfoVo {
 
     private Integer enabledNum;
     private Double price;
-    public Double getPrice(){
+
+    //就诊人的信息
+    private String patName;
+
+
+    private String deptName;//科室名称
+
+    private Integer doctCount;
+
+    private String idCard;
+
+
+    private String scheduleTime;
+
+    public String getScheduleTime() {
+        return this.scheduleTime;
+    }
+
+    public void setScheduleTime(String scheduleTime) {
+        this.scheduleTime = scheduleTime;
+    }
+
+    public String getIdCard() {
+        return this.idCard;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public String getPatName() {
+        return this.patName;
+    }
+
+    public void setPatName(String patName) {
+        this.patName = patName;
+    }
+
+    public Double getPrice() {
         return this.price;
     }
-    public void setPrice(Double price){
-        this.price=price;
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
+
     public String getDeptName() {
         return deptName;
     }
@@ -36,21 +76,20 @@ public class AppDoctInfoVo {
         this.deptName = deptName;
     }
 
-    private String deptName;//科室名称
 
-    private  Integer doctCount;
-
-    public Integer getDoctCount(){
+    public Integer getDoctCount() {
         return this.doctCount;
     }
 
-    public void setDoctCount(Integer doctCount){
-        this.doctCount=doctCount;
+    public void setDoctCount(Integer doctCount) {
+        this.doctCount = doctCount;
     }
-    public AppDoctInfoVo(){
+
+    public AppDoctInfoVo() {
 
     }
-     public String getHeadUrl() {
+
+    public String getHeadUrl() {
         return headUrl;
     }
 
@@ -58,19 +97,21 @@ public class AppDoctInfoVo {
         this.headUrl = headUrl;
     }
 
-//    public String getId() {
+    //    public String getId() {
 //        return this.id;
 //    }
 //
 //    public void setId(String id) {
 //        this.id = id;
 //    }
-    public String getRid(){
+    public String getRid() {
         return this.rid;
     }
-    public void setRid(String rid){
-        this.rid=rid;
+
+    public void setRid(String rid) {
+        this.rid = rid;
     }
+
     public String getName() {
         return name;
     }
@@ -118,8 +159,6 @@ public class AppDoctInfoVo {
     public void setEnabledNum(Integer enabledNum) {
         this.enabledNum = enabledNum;
     }
-
-
 
 
 //    private

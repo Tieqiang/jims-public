@@ -117,7 +117,7 @@ public class AppUserFacade extends BaseFacade {
     }
 
     @Transactional
-    private AppUser saveAppUser(AppUser appUser) {
+    public AppUser saveAppUser(AppUser appUser) {
          AppUser appUser1=entityManager.merge(appUser);
         return appUser1;
     }
@@ -165,7 +165,11 @@ public class AppUserFacade extends BaseFacade {
     * 根据openId 查询appUser
      */
     public AppUser findAppUserByOpenId(String openId) {
-         return (AppUser)entityManager.createQuery("from AppUser where openId='"+openId+"'").getSingleResult();
+       Object obj=entityManager.createQuery("from AppUser where openId='"+openId+"'").getSingleResult();
+        if(obj!=null){
+            return (AppUser)obj;
+        }
+        return null;
      }
 
     /**
@@ -205,4 +209,13 @@ public class AppUserFacade extends BaseFacade {
             return false;
         }
      }
+
+    /**
+     * 删除appUser对象
+     * @param appUser
+     */
+    @Transactional
+    public void deleteByObject(AppUser appUser) {
+        remove(appUser);
+    }
 }

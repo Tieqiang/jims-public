@@ -32,7 +32,8 @@ public class DeptDictFacade extends BaseFacade {
             return null;
         }
 //        deptId=deptId.replace("","");
-        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id='"+deptId+"'").getSingleResult();
+        Integer deptId2=Integer.parseInt(deptId);
+        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id='"+deptId2+"'").getSingleResult();
         if(d==null){
             return null;
         }

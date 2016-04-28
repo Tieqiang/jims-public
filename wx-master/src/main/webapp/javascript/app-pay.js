@@ -19,26 +19,38 @@ function getUrlParameter(name){
         return results[1];
     }
 }
-// ?price="+price+"&clinicForRegistId="+rid+"&openId="+openId+"&name="+name+"&title="+title+"&enabledCount="+enabledCount+"&patName="+patName+"&timeDesc="+timeDesc;
-
-var openId=getUrlParameter("openId");//opemnId
+function GetQueryString(name) {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+}
+var openId=GetQueryString("openId");//opemnId
 var price=getUrlParameter("price");//挂号价格
 var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
-var name=getUrlParameter("name");
-var title=getUrlParameter("title");
-var enabledCount=getUrlParameter("enabledCount");
-var patName=getUrlParameter("patName");
-var timeDesc=getUrlParameter("timeDesc");
-var deptName=getUrlParameter("deptName");
-$(function(){
-     $("#price").text(price+"￥");
-     $("#name").text(name);
-    $("#title").text(title);
-    $("#enabledCount").text(enabledCount);
-    $("#patName").text(patName);
-    $("#timeDesc").text(timeDesc);
-    $("#deptName").text(deptName);
-      $("#pay").on("click",function(){
+ $(function(){
+      $.ajax({
+         type:"POST",
+         cache:false,
+         url:"/api/clinic-for-regist/find-doct-regist?openId="+openId+"&clinicForRegistId="+clinicForRegistId,
+         dataType:"JSON",
+         success:function(data){//appDoctInfoVo;
+            $("#headUrl").attr("src",data.headUrl);
+             $("#name").text(data.name);
+             $("#title").text(data.title);
+             $("#deptName").text(data.deptName);
+             $("#scheduleTime").text(data.scheduleTime);
+             $("#timeDesc").text(data.timeDesc);
+             $("#price").text(price+"￥");//patName
+             $("#patName").text(data.patName);//enabledCount
+             $("#enabledCount").text(data.enabledNum);
+             $("#idCard").val(data.idCard);
+          }
+      });
+
+
+
+
+       $("#pay").on("click",function(){
               //生成支付js
             $.ajax({
                 type:"POST",

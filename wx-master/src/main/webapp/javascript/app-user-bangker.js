@@ -36,7 +36,7 @@ var clickFun=function() {
     var name = $("#name").val();
     var idCard = $("#idCard").val();
     var cellphone = $("#cellphone").val();
-    var openId=$("#openId").val();
+    var openId=v;
     if(name.trim()=="" || name.trim()==null){
         alert("姓名不能为空！");
     }else if(idCard.trim()=="" || idCard.trim()==null){

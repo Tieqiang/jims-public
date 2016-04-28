@@ -105,12 +105,9 @@ public class PatInfoService {
                             //将patId放入appUser
                            AppUser appUser1=appUserFacade.findAppUserByOpenId(openId);
                            appUser1.setPatId(patInfo.getId());
-                            List<AppUser> list=new ArrayList<AppUser>();
-                            list.add(appUser1);
-                            appUserFacade.save(list);
+                           appUserFacade.saveAppUser(appUser1);
                     }
-
-                }
+                 }
                 //为查看详情做准备
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId="+patInfo.getId());
             }

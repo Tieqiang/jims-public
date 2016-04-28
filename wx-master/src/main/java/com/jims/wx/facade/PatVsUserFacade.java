@@ -69,8 +69,8 @@ public class PatVsUserFacade extends BaseFacade {
     public boolean findIsExistsPatInfo(String openid) {
         AppUser appUser= appUserFacade.getAppUserByOpenId(openid);
         if(appUser!=null){
-            String idCard=findPatIdById(appUser.getId());
-            if(idCard!=null&&!"".equals(idCard)){
+            String patId=appUser.getPatId();
+            if(patId!=null&&!"".equals(patId)){
                 return true;
             }else{
                 return false;
@@ -122,6 +122,12 @@ public class PatVsUserFacade extends BaseFacade {
         return entityManager.createQuery(sql).getResultList();
     }
 
-
-
+    /**
+     * 根据appUser的Id 删除
+     * @param id
+     */
+    public void deleteByAppUserId(String id) {
+         String sql="delete from PatVsUser as p where p.appUser.id='"+id+"'";
+         entityManager.createQuery(sql).executeUpdate();
+     }
 }

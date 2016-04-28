@@ -143,4 +143,25 @@ public class ClinicScheduleFacade extends BaseFacade {
         }
         return null;
     }
+
+    /**
+     * 根据号别的id 查询出诊时间
+     * @param clinicIndexId
+     * @return
+     * private String dayOfWeek;
+    private String timeOfDay;
+     */
+    public String findTime(String clinicIndexId) {
+//        ClinicSchedule
+        String time="";
+        String sql="from ClinicSchedule where clinicIndexId='"+clinicIndexId+"'";
+        List<ClinicSchedule> list=entityManager.createQuery(sql).getResultList();
+        for(ClinicSchedule clinicSchedule:list){
+             time+=clinicSchedule.getDayOfWeek()+clinicSchedule.getTimeOfDay()+";";
+        }
+        if(time!=null&&!"".equals(time)){
+            time=time.substring(0,time.length()-1);
+        }
+        return time;
+    }
 }

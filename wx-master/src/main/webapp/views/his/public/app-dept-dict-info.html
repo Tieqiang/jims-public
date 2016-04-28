@@ -50,7 +50,7 @@
     <div ng-controller="tableCtrl" id="deptlist">
         <div ng-repeat="x in names">
              <div class="weui_cells weui_cells_access">
-            <a class="weui_cell" onclick="findDeptInfo($(this).find('span').text());">
+            <a class="weui_cell" ng-click="findDeptInfo(x.id);">
                 <div></div>
                 <div class="weui_cell_bd weui_cell_primary">
                     <span style="display:none" class="span">{{x.id}}</span>

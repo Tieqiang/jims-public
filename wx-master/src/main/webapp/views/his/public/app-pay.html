@@ -9,18 +9,15 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="../../../style/doct-info.css">
     <title></title>
-
-</head>
+ </head>
 <body>
-
-
-<div id="js_article" class="rich_media">
+ <div id="js_article" class="rich_media">
     <div class="main-content">
         <div class="Coupons-list serplace-list">
             <ul>
                 <li class="clearfix">
                     <div class="doc-info clearfix">
-                        <div class="dochome-photo"><img src="images/doctor-1.jpg"/></div>
+                        <div class="dochome-photo"><img src="" id="headUrl"/></div>
                         <div class="doc-info-main">
                             <div class="doc-name-wrap">
                                 <span class="doc-name" id="name"></span>
@@ -29,13 +26,12 @@
                            <span class="deptName"></span>
                         </div>
                     </div>
-                    <!--<div class="doc-reginfo">-->
-                        <!--&lt;!&ndash;<span>门诊时间</span> 周二下午、周五上午<br/>&ndash;&gt;-->
-                        <!--<span>医生专长</span> 高血压、冠心病、心力衰竭、心脏瓣膜病\高血压、冠心病、心力衰竭、心脏瓣膜病-->
-
-                    <!--</div>-->
-                    <div class="bot-line parkinfo-text clearfix">
-                        <div class="fd-left" class="deptName"></div>
+                     <div class="bot-line parkinfo-text clearfix">
+                        <div class="fd-left">门诊时间</div>
+                        <div class="fd-right" id="scheduleTime"></div>
+                    </div>
+                     <div class="bot-line parkinfo-text clearfix">
+                        <div class="fd-left">挂号时间</div>
                         <div class="fd-right" id="timeDesc"></div>
                     </div>
                     <div class="bot-line parkinfo-text clearfix">
@@ -52,8 +48,10 @@
                     <div class="parkinfo-text tr">
                         余号 <a href="#" class="color-blue"><span id="enabledCount"></span></a>个
                     </div>
+                    <input type="hidden" id="idCard" value=""/>
                 </li>
             </ul>
+
             <div id="pay" class="bot-btn"><button class="btn btn_info">确定挂号</button></div>
             <!--<a id="pay" class="weui_btn weui_btn_primary">确认支付</a>-->
             <!--<a href="javascript:history.go(-1);" class="weui_btn weui_btn_default">取消</a>-->

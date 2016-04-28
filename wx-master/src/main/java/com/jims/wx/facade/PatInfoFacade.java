@@ -7,6 +7,7 @@ import com.jims.wx.entity.PatInfo;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Created by chenxy on 2016/3/16.
@@ -45,4 +46,16 @@ public class PatInfoFacade extends BaseFacade {
         String sql="from PatInfo where id='"+patId+"'";
         return (PatInfo)entityManager.createQuery(sql).getSingleResult();
     }
+
+
+    /**
+     *
+     * @param list
+     */
+    @Transactional
+    public void delete(List<PatInfo> list) {
+        for(PatInfo patInfo:list){
+            remove(patInfo);
+        }
+     }
 }

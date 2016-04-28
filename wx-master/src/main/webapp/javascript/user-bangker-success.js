@@ -11,7 +11,6 @@ function getUrlParameter(name){
         return results[1];
     }
 }
-
 var patId=getUrlParameter("patId");
 alert("patId="+patId);
 
@@ -23,6 +22,6 @@ $(function(){
  */
 function view(){
   window.location.href="/views/his/public/app-pat-info.html?patId="+patId;
- }
+}
 
 

@@ -8,19 +8,11 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="../../../style/doct-info.css">
-    <title></title>
+    <title>当天挂号选择医生</title>
 </head>
 <body>
-
-
-<div id="js_article" class="rich_media">
-
-    <!--<div class="top_banner serplace-banner">-->
-        <!--<a href="#" class="fd-left close-btn">X</a>-->
-        <!--<h3 class="fd-left">当天挂号选择医生</h3>-->
-        <!--<a href="#" class="more-link"></a>-->
-    <!--</div>-->
-     <div class="main-content" >
+ <div id="js_article" class="rich_media">
+      <div class="main-content" >
         <div class="sd-ttile" id="text1">
             <!--心血管门诊（13名）-->
         </div>
@@ -31,7 +23,7 @@
                 <div ng-app="myApp">
                     <div ng-controller="tableCtrl" id="doctList">
                         <div ng-repeat="x in names">
-                            <li class="clearfix"  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,,x.timeDesc,x.patName,x.deptName)">
+                            <li class="clearfix"  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,x.timeDesc,x.patName,x.deptName)">
                                 <div class="doc-info clearfix">
                                     <div class="fd-left" style="max-width: 50%;"><img src="{{x.headUrl}}" /></div>
                                     <div class="fd-left doc-info-main">
