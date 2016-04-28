@@ -9,6 +9,7 @@ import weixin.popular.bean.user.User;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.Transient;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +90,7 @@ public class AppUserFacade extends BaseFacade {
     }
 
     @Transactional
-    public void createUser(User user) {
+    public AppUser createUser(User user) {
         String hql = "from AppUser as user where user.openId = '"+user.getOpenid()+"'" ;
         AppUser appUser =null ;
         List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
@@ -110,13 +111,15 @@ public class AppUserFacade extends BaseFacade {
         appUser.setRemark(user.getRemark());
         appUser.setSubscribe(user.getSubscribe());
         appUser.setSubscrbeTime(user.getSubscribe_time());
-
-        saveAppUser(appUser) ;
+//        merge(appUser);
+        AppUser appUser1=saveAppUser(appUser) ;
+        return appUser1;
     }
 
     @Transactional
-    private void saveAppUser(AppUser appUser) {
-           entityManager.merge(appUser);
+    private AppUser saveAppUser(AppUser appUser) {
+         AppUser appUser1=entityManager.merge(appUser);
+        return appUser1;
     }
 
     /***
@@ -188,5 +191,18 @@ public class AppUserFacade extends BaseFacade {
         return null;
     }
 
+    /**
+     * 判断appUser 表中的patId 是否为空
+     * @param openId
+     * @return
+     */
+    public boolean judgeIsFirstBangker(String openId) {
 
+        AppUser     appUser=findAppUserByOpenId(openId);
+        if(appUser.getPatId()==null || "".equals(appUser.getPatId())){//之前还没有绑定过
+            return true;
+        }else{
+            return false;
+        }
+     }
 }

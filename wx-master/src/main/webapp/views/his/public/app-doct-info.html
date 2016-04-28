@@ -1,61 +1,74 @@
 ﻿<!DOCTYPE html>
-<html lang="zh-CN">
-<head lang="en">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>选择医生</title>
-    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
- </head>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../../style/doct-info.css">
+    <title></title>
+</head>
 <body>
-      <div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">
-         <input id="text1" class="weui_input" disabled="disabled"  type="number" pattern="" placeholder=""/></div>
- <div ng-app="myApp">
-   <div ng-controller="tableCtrl" id="doctList">
-        <input type="hidden" name="deptId" id="deptId" value=""/>
-        <div ng-repeat="x in names">
-             <div class="weui_cells weui_cells_access">
-                 <!--onclick="findDeptInfo($(this).find('span').text());"-->
-            <a class="weui_cell" >
-                <div>
-                    <input type="hidden" name="openId" id="openId" value=""/>
-                </div>
-                <div class="weui_cell_bd weui_cell_primary">
-                     <div>
-                         <table style="width:100%;">
-                            <tr >
-                                <td rowspan="2" style="width:60%"><img src="{{x.headUrl}}" class="imgCls" width="50%"/></td>
-                                <td style="width:40%">姓名：{{x.name}}</td>
-                            </tr>
-                            <tr>
-                                  <td>职务：{{x.title}}</td>
-                            </tr>
-                             <tr >
-                                 <td colspan="2"><font color="#A9A9A9">{{x.description}}</font></td>
-                             </tr>
-                             <!--<hr style="color:#ccc;">-->
-                             <tr >
-                                 <td colspan="2">{{x.timeDesc}}</td>
-                             </tr>
-                             <!--onclick="judgeIsEnabledRegist(this)"-->
-                             <tr  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price)">
-                                  <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
-                                 <td>剩余号：<span class="span">{{x.enabledNum}}</span></td>
-                                 <p style="display:none">{{x.rid}}</p>
-                                 <th  style="display:none">{{x.price}}</th>
-                                 <!--<div style="display:none">{{x.id}}</div>-->
-                              </tr>
-                         </table>
-                      </div>
-                   </div>
-             </a>
+
+
+<div id="js_article" class="rich_media">
+
+    <!--<div class="top_banner serplace-banner">-->
+        <!--<a href="#" class="fd-left close-btn">X</a>-->
+        <!--<h3 class="fd-left">当天挂号选择医生</h3>-->
+        <!--<a href="#" class="more-link"></a>-->
+    <!--</div>-->
+     <div class="main-content" >
+        <div class="sd-ttile" id="text1">
+            <!--心血管门诊（13名）-->
         </div>
+         <div class="Coupons-list serplace-list">
+            <input type="hidden" name="deptId" id="deptId" value=""/>
+            <input type="hidden" name="openId" id="openId" value=""/>
+            <ul>
+                <div ng-app="myApp">
+                    <div ng-controller="tableCtrl" id="doctList">
+                        <div ng-repeat="x in names">
+                            <li class="clearfix"  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,,x.timeDesc,x.patName,x.deptName)">
+                                <div class="doc-info clearfix">
+                                    <div class="fd-left" style="max-width: 50%;"><img src="{{x.headUrl}}" /></div>
+                                    <div class="fd-left doc-info-main">
+                                        <span class="doc-name" >{{x.name}}</span>
+                                        <span>{{x.title}}</span><br/><br/>
+                                        线上接诊
+                                        <a href="#" class="color-blue">11</a>
+                                        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+                                        评价
+                                        <a href="#" class="color-blue">15</a>
+                                    </div>
+                                    <button class="save-btn">收藏</button>
+                                </div>
+                                <div class="bot-line doc-detail">
+                                    {{x.description}}
+                                </div>
+                                <div class="bot-line parkinfo-text">
+                                    <span class="icon-span icon10">&nbsp;</span>{{x.timeDesc}} 剩余号：<span class="span">{{x.enabledNum}}</span><span class="icon-span icon11 fd-right">&nbsp;</span>
+                                </div>
+                               <div style="display:none;">
+                                    <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
+                                    <td>剩余号：<span class="span">{{x.enabledNum}}</span></td>
+                                    <p style="display:none">{{x.rid}}</p>
+                                    <th  style="display:none">{{x.price}}</th>
+                                    <p>{{x.patName}}</p>
+                                    <p>{{x.deptName}}</p>
+                                </div>
+                            </li>
+
+                        </div></div></div>
+             </ul>
         </div>
-    </div>
-     <a href="javascript:history.go(-1)" class="weui_btn weui_btn_primary" id="return" >返回</a>
-</div>
+     </div>
  </div>
-</div>
+
+
+
 </body>
 <script src="../../../assert/angular/angular.min.js"></script>
 <script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>

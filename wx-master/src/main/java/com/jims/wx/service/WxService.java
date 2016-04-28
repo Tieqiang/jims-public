@@ -132,11 +132,24 @@ public class WxService {
                 //公众号订阅
                 String fromUser = eventMessage.getFromUserName();
                 User user = UserAPI.userInfo(this.getToken(), fromUser);
-                appUserFacade.createUser(user);
-            }
+                AppUser appUser=appUserFacade.createUser(user);
+                if(appUser!=null&&!"".equals(appUser)){//关注成功
+                String message="欢迎关注，详情点击"+"<a href='http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-dept-dict-info.html'>详情</a>";
+                    //创建回复
+                    XMLMessage xmlTextMessage = new XMLTextMessage(
+                            eventMessage.getFromUserName(),
+                            eventMessage.getToUserName(),
+                            message);
+                    //回复
+                    xmlTextMessage.outputStreamWrite(outputStream);
+                    return;
+                }
 
+             }
             if ("unsubscribe".equals(event) && "event".equals(msgType)) {
                 //取消订阅公众号
+
+
             }
 
             if ("text".equals(msgType) || "image".equals(msgType) || "voice".equals(msgType)
@@ -154,12 +167,14 @@ public class WxService {
             if ("VIEW".equals(event) && "event".equals(msgType)) {
             }
             //创建回复
+            //创建回复
             XMLMessage xmlTextMessage = new XMLTextMessage(
                     eventMessage.getFromUserName(),
                     eventMessage.getToUserName(),
                     "您所发送消息已经收到，会尽快回复您");
             //回复
             xmlTextMessage.outputStreamWrite(outputStream);
+
             return;
         }
         outputStreamWrite(outputStream, "");
@@ -225,7 +240,10 @@ public class WxService {
     @GET
     @Path("user-bangker")
     public String userBangker(@QueryParam("code") String code) {
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+//        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+        //测试用
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         try {
             response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
         } catch (IOException e) {
@@ -244,8 +262,10 @@ public class WxService {
     @Path("find-dept")
     public String findDept(@QueryParam("code") String code) {
         try {
-//          AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-            SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+            //测试用
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
             System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
             /**
              * 如果次微信用户有绑定的患者，则跳到挂号页面，否则跳到绑卡页面
@@ -315,4 +335,14 @@ public class WxService {
         String json = PayUtil.generatePayJsRequestJson(packageParams, "wx890edf605415aaec", KEY, KEY);
         return json;
     }
+
+    @GET
+    @Path("find-pat-info")
+    public String findPatInfo(@QueryParam("code")String code) throws IOException {
+        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
+        response.sendRedirect("/views/his/public/app-my-information.html?openId="+snsToken.getOpenid());
+        return "" ;
+    }
+
 }

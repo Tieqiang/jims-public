@@ -31,7 +31,8 @@ public class DeptDictFacade extends BaseFacade {
         if(deptId=="" || deptId==null){
             return null;
         }
-        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id="+deptId+"").getSingleResult();
+//        deptId=deptId.replace("","");
+        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id='"+deptId+"'").getSingleResult();
         if(d==null){
             return null;
         }
@@ -118,6 +119,9 @@ public class DeptDictFacade extends BaseFacade {
      */
     public String findDeptDictByDeptId(String deptId) {
 //        DeptDict
-         return (String)entityManager.createQuery("select d.deptName from DeptDict as d where d.id='"+deptId+"'").getSingleResult();
+        DeptDict deptDict=(DeptDict)entityManager.createQuery("from DeptDict where id='"+deptId+"'").getSingleResult();
+        if(deptDict!=null)
+            return deptDict.getId();
+            return "";
      }
 }

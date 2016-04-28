@@ -17,6 +17,13 @@ $(function() {
 var app = angular.module("myApp", []);
 
 app.controller('tableCtrl',function ($scope, $http) {
+    $scope.findDeptInfo=function (deptId){
+        console.log("deptId="+deptId);
+        var openId=$("#openId").val();
+//    alert("openId="+openId);
+        alert("aa"+deptId+"a");
+        window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
+     };
     $http.get("/api/dept-dict/list-all")
         .success(function (data) {
 //            alert(data);
@@ -38,13 +45,15 @@ $("#openId").val(openId);
 /**
  * 查找科室下面医生的信息
  * @param deptId
- */
-var findDeptInfo=function findDeptInfo(deptId){
-    var openId=$("#openId").val();
-//    alert("openId="+openId);
-     window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
-
-};
+// */
+//var findDeptInfo=function findDeptInfo(deptId){
+//    console.log("deptId="+deptId);
+//    var openId=$("#openId").val();
+////    alert("openId="+openId);
+//    alert("aa"+deptId+"a");
+//     window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
+//
+//};
 
 var loadDict = function (deptId) {
     $.get("/api/dept-dict/find-by-id?deptId='"+deptId+"'", function (data) {

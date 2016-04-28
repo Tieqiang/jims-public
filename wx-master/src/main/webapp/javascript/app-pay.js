@@ -19,16 +19,26 @@ function getUrlParameter(name){
         return results[1];
     }
 }
+// ?price="+price+"&clinicForRegistId="+rid+"&openId="+openId+"&name="+name+"&title="+title+"&enabledCount="+enabledCount+"&patName="+patName+"&timeDesc="+timeDesc;
+
 var openId=getUrlParameter("openId");//opemnId
 var price=getUrlParameter("price");//挂号价格
 var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
-var idCard=getUrlParameter("idCard") //患者的身份证号
-
-
-//
+var name=getUrlParameter("name");
+var title=getUrlParameter("title");
+var enabledCount=getUrlParameter("enabledCount");
+var patName=getUrlParameter("patName");
+var timeDesc=getUrlParameter("timeDesc");
+var deptName=getUrlParameter("deptName");
 $(function(){
      $("#price").text(price+"￥");
-     $("#pay").on("click",function(){
+     $("#name").text(name);
+    $("#title").text(title);
+    $("#enabledCount").text(enabledCount);
+    $("#patName").text(patName);
+    $("#timeDesc").text(timeDesc);
+    $("#deptName").text(deptName);
+      $("#pay").on("click",function(){
               //生成支付js
             $.ajax({
                 type:"POST",
@@ -43,7 +53,7 @@ $(function(){
                             if(res.err_msg == 'get_brand_wcpay_request:ok'){
                                  // 支付成功后微信会调用 notify_url
                                 //支付成功，后台数据库加入响应挂号操作
-                                window.location.href="/api/clinic-for-regist/regist?idCard="+idCard+"&price="+price+"&clinicForRegistId="+clinicForRegistId;
+                                window.location.href="/api/clinic-for-regist/regist?idCard="+idCard+"&price="+price+"&clinicForRegistId="+clinicForRegistId+"&openId="+openId;
                             }else{
                                 //支付失败
                                 window.location.href="/views/his/public/app-pay-failed.html";

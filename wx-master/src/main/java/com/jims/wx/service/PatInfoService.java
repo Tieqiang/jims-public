@@ -77,8 +77,8 @@ public class PatInfoService {
     @Path("save")
     public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone) {
         try {
-            /**
-             * 查询之前是否绑定
+              /**
+             * 查询之前是否绑定次idCard
              */
             Boolean isBangker=this.patVsUserFacade.findIsBangker(idCard,openId);
             if(isBangker){
@@ -95,8 +95,24 @@ public class PatInfoService {
                     patVsUser.setAppUser(appUser);
                     patVsUser.setPatInfo(patInfo);
                     appUserFacade.savePatVsUser(patVsUser);
+                    /**
+                     * 查询用户是否是第一次绑定
+                     * 如果是第一次绑定的话，那么将此patId 放入appUser表中
+                     * 否则就不放
+                     */
+                    boolean isFirstBangker=appUserFacade.judgeIsFirstBangker(openId);
+                    if(isFirstBangker){//
+                            //将patId放入appUser
+                           AppUser appUser1=appUserFacade.findAppUserByOpenId(openId);
+                           appUser1.setPatId(patInfo.getId());
+                            List<AppUser> list=new ArrayList<AppUser>();
+                            list.add(appUser1);
+                            appUserFacade.save(list);
+                    }
+
                 }
-                response.sendRedirect("/views/his/public/user-bangker-success.html");
+                //为查看详情做准备
+                response.sendRedirect("/views/his/public/user-bangker-success.html?patId="+patInfo.getId());
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -107,6 +123,34 @@ public class PatInfoService {
             }
         }
     }
+
+
+    /**
+     * 通过用户的openId 查找我的信息
+     * @param openId
+     * @return
+     */
+    @POST
+    @Path("find-info-by-open-id")
+    public  PatInfo findPatInfoByOpenId(@QueryParam("openId") String openId){
+        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+        String patId=appUser.getPatId();
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        return patInfo;
+    }
+
+    /**
+     * patId 查找patInfo
+     * @param patId
+     * @return
+     */
+    @POST
+    @Path("view")
+    public  PatInfo view(@QueryParam("patId") String patId){
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        return patInfo;
+    }
+
 
  }
 

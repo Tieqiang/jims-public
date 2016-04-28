@@ -30,7 +30,7 @@ public class DeptDict implements java.io.Serializable {
 	private String deptStopFlag;
 	private String deptInfo;
     private String parentId ;
-	private Set<StaffDict> staffDicts = new HashSet<StaffDict>(0);
+//	private Set<StaffDict> staffDicts = new HashSet<StaffDict>(0);
     private String deptType ;//科室类型，一般将科室分为：直接医疗类科室、医疗技术类科室、医疗辅助类科室、管理类科室、未纳入成本
     private String deptClass ;//科室类别，一般为经营科室和其他
     private String endDept ;//是否末级科室
@@ -59,7 +59,7 @@ public class DeptDict implements java.io.Serializable {
 		this.deptStopFlag = deptStopFlag;
 		this.deptInfo = deptInfo;
         this.parentId = parentId;
-        this.staffDicts = staffDicts;
+//        this.staffDicts = staffDicts;
         this.deptType = deptType;
         this.deptClass = deptClass;
         this.endDept = endDept;
@@ -198,16 +198,16 @@ public class DeptDict implements java.io.Serializable {
 		this.deptInfo = deptInfo;
 	}
 
-    @JsonIgnore
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deptDict")
-	public Set<StaffDict> getStaffDicts() {
-		return this.staffDicts;
-	}
-
-
-	public void setStaffDicts(Set<StaffDict> staffDicts) {
-		this.staffDicts = staffDicts;
-	}
+//    @JsonIgnore
+//	@OneToMany(cascade = CascadeType.ALL, mappedBy = "deptDict")
+//	public Set<StaffDict> getStaffDicts() {
+//		return this.staffDicts;
+//	}
+//
+//
+//	public void setStaffDicts(Set<StaffDict> staffDicts) {
+//		this.staffDicts = staffDicts;
+//	}
 
 
     @Column(name="dept_type")

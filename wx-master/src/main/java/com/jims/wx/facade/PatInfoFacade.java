@@ -25,5 +25,24 @@ public class PatInfoFacade extends BaseFacade {
          return entityManager.merge(patInfo);
     }
 
+    /**
+     * 根据主键查询患者的idCard
+     * @param patId
+     * @return
+     */
+    public String findIdCard(String patId) {
+//        PatInfo patInfo;
+        String sql="select p.idCard from PatInfo as p where p.id='"+patId+"'";
+         return (String)entityManager.createQuery(sql).getSingleResult();
+    }
 
+    /**
+     * 根据Id查询patInfo
+     * @param patId
+     * @return
+     */
+    public PatInfo findById(String patId) {
+        String sql="from PatInfo where id='"+patId+"'";
+        return (PatInfo)entityManager.createQuery(sql).getSingleResult();
+    }
 }

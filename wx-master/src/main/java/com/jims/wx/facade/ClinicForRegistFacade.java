@@ -510,7 +510,9 @@ public class ClinicForRegistFacade extends BaseFacade {
         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%' and clinicIndex.id='" + clinicIndexId + "'";
         clinicForRegists = entityManager.createQuery(sql).getResultList();
         if (clinicForRegists.isEmpty()) {
-            return findRegistInfo(getNextDayStr(currentDateStr), clinicIndexId);
+            //预约
+//            return findRegistInfo(getNextDayStr(currentDateStr), clinicIndexId);
+            return null;
         } else {
             return clinicForRegists.get(0);
         }
