@@ -58,7 +58,7 @@ public class HospitalInfoFacade extends BaseFacade {
         wxOpenAccountConfig.setTooken(appSetVo.getAppToken());
 
         WxOpenAccountConfig mWxOpenAccountConfig = merge(wxOpenAccountConfig) ;
-        hospitalInfo.setHospitalId(mHospitalDict.getId());
+        hospitalInfo.setHospitalName(mHospitalDict.getId());
         hospitalInfo.setInfoUrl(appSetVo.getInfoUrl());
         hospitalInfo.setAppId(mWxOpenAccountConfig.getAppId());
         merge(hospitalInfo) ;
@@ -68,30 +68,59 @@ public class HospitalInfoFacade extends BaseFacade {
 
         AppSetVo setVo = new AppSetVo() ;
 
-        String hql = "from HospitalDict" ;
+
         String infoHql = "from HospitalInfo" ;
         String wxHql = "from WxOpenAccountConfig" ;
 
-        List<HospitalDict> hospitalDictList = createQuery(HospitalDict.class,hql,new ArrayList<Object>()).getResultList() ;
+
 
         List<HospitalInfo> hospitalInfos = createQuery(HospitalInfo.class,infoHql,new ArrayList<Object>()).getResultList() ;
         List<WxOpenAccountConfig> wxOpenAccountConfigs = createQuery(WxOpenAccountConfig.class,wxHql,new ArrayList<Object>()).getResultList() ;
 
-        if(hospitalDictList.size()>0){
-            setVo.setHospitalName(hospitalDictList.get(0).getHospitalName());
-        }
+
         if(wxOpenAccountConfigs.size()>0){
             WxOpenAccountConfig config = wxOpenAccountConfigs.get(0) ;
             setVo.setOpenName(config.getOpenName());
             setVo.setAppSecret(config.getAppSecret());
             setVo.setAppId(config.getAppId());
             setVo.setAppToken(config.getTooken());
+            setVo.setMetchId(config.getMetchId());
+            setVo.setKey(config.getKey());
         }
         if(hospitalInfos.size()>0){
             setVo.setInfoUrl(hospitalInfos.get(0).getInfoUrl());
+            setVo.setHospitalName(hospitalInfos.get(0).getHospitalName());
         }
-
         return setVo ;
 
+    }
+
+    @Transactional
+    public AppSetVo save(AppSetVo appSetVo) {
+        String hql = "delete from hospital_info" ;
+        String delWx = "delete from WX_OPEN_ACCOUNT_CONFIG"  ;
+
+        createNativeQuery(hql).executeUpdate() ;
+        createNativeQuery(delWx).executeUpdate();
+
+        HospitalInfo hospitalInfo = new HospitalInfo() ;
+        hospitalInfo.setAppId(appSetVo.getAppId());
+        hospitalInfo.setHospitalName(appSetVo.getHospitalName());
+        hospitalInfo.setInfoUrl(appSetVo.getInfoUrl());
+        hospitalInfo.setContent(appSetVo.getContent());
+        hospitalInfo.setTranContent(appSetVo.getTranContent());
+        merge(hospitalInfo) ;
+
+        WxOpenAccountConfig config = new WxOpenAccountConfig() ;
+        config.setTooken(appSetVo.getAppToken());
+        config.setAppId(appSetVo.getAppId());
+        config.setOpenName(appSetVo.getOpenName());
+        config.setAppSecret(appSetVo.getAppSecret());
+        config.setKey(appSetVo.getKey());
+        config.setAppSecret(appSetVo.getAppSecret());
+        config.setMetchId(appSetVo.getMetchId());
+        merge(config) ;
+
+        return null;
     }
 }

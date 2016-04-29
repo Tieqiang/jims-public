@@ -58,13 +58,11 @@ $(function () {
     //
     $("#OABtn").on('click', function () {
         moduleId = '';
-        alert("OA");
         $("#moduleDialog").dialog('close');
     });
     //
     $("#RLBtn").on('click', function () {
         moduleId ='';
-        alert("RL");
         $("#moduleDialog").dialog('close');
     });
     //

@@ -45,7 +45,8 @@ public class DeptDictFacade extends BaseFacade {
      * @return
      */
     public List<DeptDict> findByHospitalId(String hospitalId) {
-        String hql = "from DeptDict as dept where dept.hospitalDict.id='" + hospitalId + "'";
+        //String hql = "from DeptDict as dept where dept.hospitalDict.id='" + hospitalId + "'";
+        String hql = "from DeptDict as dept ";
         Query query = entityManager.createQuery(hql);
         List resultList = query.getResultList();
         return resultList;
@@ -65,7 +66,7 @@ public class DeptDictFacade extends BaseFacade {
     }
 
     public List<DeptDict> findByHospitalIdAndQuer(String hospitalId, String q) {
-        String hql = "from DeptDict as dept where dept.hospitalDict.id='" + hospitalId + "' and " +
+        String hql = "from DeptDict as dept where 1=1 and " +
                 "dept.inputCode like '" + q + "%'";
         Query query = entityManager.createQuery(hql);
         List resultList = query.getResultList();

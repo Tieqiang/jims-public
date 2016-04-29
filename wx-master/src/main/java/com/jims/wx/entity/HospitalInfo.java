@@ -16,7 +16,7 @@ public class HospitalInfo implements java.io.Serializable {
 	// Fields
 
 	private String id;
-	private String hospitalId;
+	private String hospitalName;
 	private String appId;
 	private String infoUrl;
 	private byte[] content;
@@ -31,9 +31,9 @@ public class HospitalInfo implements java.io.Serializable {
 	}
 
 	/** full constructor */
-	public HospitalInfo(String hospitalId, String appId, String infoUrl,
+	public HospitalInfo(String hospitalName, String appId, String infoUrl,
 			byte[] content) {
-		this.hospitalId = hospitalId;
+		this.hospitalName = hospitalName;
 		this.appId = appId;
 		this.infoUrl = infoUrl;
 		this.content = content;
@@ -53,12 +53,12 @@ public class HospitalInfo implements java.io.Serializable {
 	}
 
 	@Column(name = "HOSPITAL_ID", length = 64)
-	public String getHospitalId() {
-		return this.hospitalId;
+	public String getHospitalName() {
+		return this.hospitalName;
 	}
 
-	public void setHospitalId(String hospitalId) {
-		this.hospitalId = hospitalId;
+	public void setHospitalName(String hospitalName) {
+		this.hospitalName = hospitalName;
 	}
 
 	@Column(name = "APP_ID", length = 64)

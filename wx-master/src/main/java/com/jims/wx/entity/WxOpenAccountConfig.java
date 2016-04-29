@@ -25,6 +25,8 @@ public class WxOpenAccountConfig implements java.io.Serializable {
 	private String jsRout;
 	private String url;
 	private String tooken;
+    private String metchId ;
+    private String key ;
 
 	// Constructors
 
@@ -34,7 +36,7 @@ public class WxOpenAccountConfig implements java.io.Serializable {
 
 	/** full constructor */
 	public WxOpenAccountConfig(String openName, String appId, String appSecret,
-			String hospitalId, String jsRout, String url, String tooken) {
+                               String hospitalId, String jsRout, String url, String tooken, String metchId, String key) {
 		this.openName = openName;
 		this.appId = appId;
 		this.appSecret = appSecret;
@@ -42,7 +44,9 @@ public class WxOpenAccountConfig implements java.io.Serializable {
 		this.jsRout = jsRout;
 		this.url = url;
 		this.tooken = tooken;
-	}
+        this.metchId = metchId;
+        this.key = key;
+    }
 
 	// Property accessors
 	@GenericGenerator(name = "generator", strategy = "uuid.hex")
@@ -119,5 +123,24 @@ public class WxOpenAccountConfig implements java.io.Serializable {
 	public void setTooken(String tooken) {
 		this.tooken = tooken;
 	}
+
+    @Column(name="metch_id")
+    public String getMetchId() {
+        return metchId;
+    }
+
+    public void setMetchId(String metchId) {
+        this.metchId = metchId;
+    }
+
+    @Column(name="key")
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
 
 }

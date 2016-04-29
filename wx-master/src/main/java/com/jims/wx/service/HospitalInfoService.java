@@ -35,18 +35,18 @@ public class HospitalInfoService {
     /**
      * 保存修改
      *
-     * @param hospitalInfo
+     * @param appSetVo
      * @return
      */
     @POST
     @Path("merge")
-    public Response save(@QueryParam("tranContent") String tranContent, HospitalInfo hospitalInfo ) {
+    public Response save(@QueryParam("tranContent") String tranContent, AppSetVo appSetVo ) {
         try {
-            if (null != hospitalInfo) {
-                hospitalInfo.setContent(tranContent.getBytes("UTF-8"));
-                hospitalInfo = hospitalInfoFacade.save(hospitalInfo);
+            if (null != appSetVo) {
+                appSetVo.setContent(tranContent.getBytes("UTF-8"));
+                appSetVo = hospitalInfoFacade.save(appSetVo);
             }
-            return Response.status(Response.Status.OK).entity(hospitalInfo).build();
+            return Response.status(Response.Status.OK).entity(appSetVo).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
             errorException.setMessage(e);
