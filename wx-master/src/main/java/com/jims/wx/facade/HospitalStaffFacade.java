@@ -30,6 +30,12 @@ public class HospitalStaffFacade extends BaseFacade {
         hospitalStaff = super.merge(hospitalStaff);
         return hospitalStaff;
     }
+
+    //根据主键id查询
+    public List<HospitalStaff> getById(String id) {
+        return  entityManager.createQuery("from HospitalStaff where id='"+id+"'").getResultList();
+    }
+
     @Transactional
     public List<HospitalStaff> savePc(BeanChangeVo<HospitalStaff> beanChangeVo) {
         List<HospitalStaff> newUpdateDict = new ArrayList<>();
