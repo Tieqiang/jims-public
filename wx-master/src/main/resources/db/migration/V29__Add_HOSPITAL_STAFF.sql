@@ -9,7 +9,14 @@ create table HOSPITAL_STAFF
 tablespace USERS
   pctfree 10
   initrans 1
-  maxtrans 255;
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 -- Add comments to the table 
 comment on table HOSPITAL_STAFF
   is '医院员工表';
@@ -27,11 +34,39 @@ alter table HOSPITAL_STAFF
   tablespace USERS
   pctfree 10
   initrans 2
-  maxtrans 255;
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 alter table HOSPITAL_STAFF
   add constraint AK_KEY_2_HOSPITAL_S unique (PERSON_ID)
   using index 
   tablespace USERS
   pctfree 10
   initrans 2
-  maxtrans 255;
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table HOSPITAL_STAFF
+  add constraint AK_KEY_3_HOSPITAL_S unique (OPEN_ID)
+  using index 
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
