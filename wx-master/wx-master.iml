@@ -78,8 +78,6 @@
     <orderEntry type="library" name="Maven: xpp3:xpp3_min:1.1.4c" level="project" />
     <orderEntry type="library" name="Maven: org.flywaydb:flyway-core:3.0" level="project" />
     <orderEntry type="library" name="Maven: org.sitemesh:sitemesh:3.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.sun.jersey.contribs:jersey-multipart:1.17" level="project" />
-    <orderEntry type="library" name="Maven: org.jvnet:mimepull:1.6" level="project" />
     <orderEntry type="module" module-name="wx-sdk" />
     <orderEntry type="library" name="Maven: com.alibaba:fastjson:1.2.7" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.3.6" level="project" />
