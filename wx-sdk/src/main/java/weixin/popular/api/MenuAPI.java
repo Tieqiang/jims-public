@@ -78,37 +78,62 @@ public class MenuAPI extends BaseAPI{
 
     public static void main(String[] args){
         String menu="{\n" +
-                "    \"button\": [\n" +
-                "        {\n" +
-                "            \"type\": \"click\", \n" +
-                "            \"name\": \"今日歌曲\", \n" +
-                "            \"key\": \"V1001_TODAY_MUSIC\"\n" +
-                "        }, \n" +
-                "        {\n" +
-                "            \"name\": \"菜单\", \n" +
-                "            \"sub_button\": [\n" +
-                "                {\n" +
-                "                    \"type\": \"view\", \n" +
-                "                    \"name\": \"首页\", \n" +
-                "                    \"url\":\n" +
-                " \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/user-bangker&response_type" +
-                "                               =code&scope=snsapi_base&state=1#wechat_redirect\"\n" +
-                "                }, \n" +
-                "                {\n" +
-                "                    \"type\": \"view\", \n" +
-                "                    \"name\": \"视频\", \n" +
-                "                    \"url\": \"http://v.qq.com/\"\n" +
-                "                }, \n" +
-                "                {\n" +
-                "                    \"type\": \"click\", \n" +
-                "                    \"name\": \"赞一下我们\", \n" +
-                "                    \"key\": \"V1001_GOOD\"\n" +
-                "                }\n" +
-                "            ]\n" +
-                "        }\n" +
-                "    ]\n" +
+                "    \"menu\": {\n" +
+                "        \"button\": [\n" +
+                "            {\n" +
+                "                \"name\": \"cxy\", \n" +
+                "                \"sub_button\": [\n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"绑定患者\", \n" +
+                "                        \"url\": \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/user-       bangker&response_type=code&scope=snsapi_basestate=1#wechat_redirect\"\n" +
+                "                    }, \n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"挂号\", \n" +
+                "                        \"url\": \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/find-dept&response_type=code&scope=snsapi_basestate=1#wechat_redirect\"\n" +
+                "                    }, \n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"科室信息\", \n" +
+                "                        \"url\": \"http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-dept-dict-info.html\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }, \n" +
+                "            {\n" +
+                "                \"name\": \"zhuqi\", \n" +
+                "                \"sub_button\": [\n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"调查问卷\", \n" +
+                "                        \"url\": \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/questionnaire-  survey&response_type=code&scope=snsapi_basestate=1#wechat_redirect\"\n" +
+                "                    }, \n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"近期就诊记录\", \n" +
+                "                        \"url\": \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/rcpt-list&response_type=code&scope=snsapi_basestate=1#wechat_&redirect\"\n" +
+                "                    },\n" +
+                "\t\t   {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"住院记录查询\", \n" +
+                "                        \"url\": \"https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx1b3cf470d135a830&redirect_uri=http://9tvafbgbdf.proxy.qqbrowser.cc/api/wx-service/pat-visit&response_type=code&scope=snsapi_basestate=1#wechat_redirect\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }, \n" +
+                "            {\n" +
+                "                \"name\": \"fyg\", \n" +
+                "                \"sub_button\": [\n" +
+                "                    {\n" +
+                "                        \"type\": \"view\", \n" +
+                "                        \"name\": \"医院介绍\", \n" +
+                "                        \"url\": \"http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/hospital-disc.html\"\n" +
+                "                    }\n" +
+                "                ]\n" +
+                "            }\n" +
+                "        ]\n" +
+                "    }\n" +
                 "}";
-        String str="IC-Tf7sRP-c6Bv3t06q2gMseWxMUdNYEYoJgapKk8GnNwqt4kujHJrd4FeUirnIAOvPWh0dn3li9Rf-gqECGBqBHoCK565ZyJ2myb-eOa7uFjFJL7GYUu6iaPnOMRdf6HTZbAAAXJP";
+        String str="ULmuc0S_qm3LE5635QO4TmlWFNZkwHWPqBbGwaLor-YpZ3XG5CYnnTQlwsHrv_YCTC1S1ejW-mHyxwYzcGmoP_Bx_9r6Dpci5nw7owt2_z8_ape_ntzf_SnPWG4x7pSALKOiAJAQPT";
         menuCreate(str,menu);
 
     }

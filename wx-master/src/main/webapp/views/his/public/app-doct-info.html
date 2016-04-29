@@ -25,15 +25,15 @@
                         <div ng-repeat="x in names">
                             <li class="clearfix"  ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,x.timeDesc,x.patName,x.deptName)">
                                 <div class="doc-info clearfix">
-                                    <div class="fd-left" style="max-width: 50%;"><img src="{{x.headUrl}}" /></div>
+                                    <div class="fd-left"><img src="{{x.headUrl}}" /></div>
                                     <div class="fd-left doc-info-main">
                                         <span class="doc-name" >{{x.name}}</span>
                                         <span>{{x.title}}</span><br/><br/>
-                                        线上接诊
-                                        <a href="#" class="color-blue">11</a>
-                                        &nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
-                                        评价
-                                        <a href="#" class="color-blue">15</a>
+                                        <!--线上接诊-->
+                                        <!--<a href="#" class="color-blue">11</a>-->
+                                        <!--&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;-->
+                                        <!--评价-->
+                                        <!--<a href="#" class="color-blue">15</a>-->
                                     </div>
                                     <button class="save-btn">收藏</button>
                                 </div>
@@ -52,8 +52,9 @@
                                     <p>{{x.deptName}}</p>
                                 </div>
                             </li>
-
-                        </div></div></div>
+                        </div>
+                    </div>
+                </div>
              </ul>
         </div>
      </div>

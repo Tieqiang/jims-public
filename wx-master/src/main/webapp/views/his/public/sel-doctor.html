@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="format-detection" content="telephone=no">
+<link rel="stylesheet" type="text/css" href="css/css.css">
+<title></title> 
+ </head>
+<body> 
+
+
+    <div id="js_article" class="rich_media">
+
+        <div class="top_banner serplace-banner">
+			<a href="#" class="fd-left close-btn">X</a>
+			<h3 class="fd-left">当天挂号选择医生</h3>
+			<a href="#" class="more-link"></a>
+        </div>
+
+		<div class="main-content" >
+			<div class="sd-ttile" id="text1">
+				<!--心血管门诊（13名）-->
+			</div>
+
+
+			<div class="Coupons-list serplace-list">
+                <input type="hidden" name="deptId" id="deptId" value=""/>
+                <input type="hidden" name="openId" id="openId" value=""/>
+  				<ul ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price)">
+                    <div ng-app="myApp">
+                        <div ng-controller="tableCtrl" id="doctList">
+                            <div ng-repeat="x in names">
+                    <li class="clearfix">
+						<div class="doc-info clearfix">
+							<div class="fd-left"><img src="{{x.headUrl}}"/></div>
+							<div class="fd-left doc-info-main">
+								<span class="doc-name" >{{x.name}}</span>
+								<span>{{x.title}}</span><br/><br/>
+								线上接诊 
+								<a href="#" class="color-blue">11</a>
+								&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;
+								评价
+								<a href="#" class="color-blue">15</a>
+							</div>
+							<button class="save-btn">收藏</button>
+						</div>
+						<div class="bot-line doc-detail">
+                            {{x.description}}
+						</div>
+						<div class="bot-line parkinfo-text">
+							<span class="icon-span icon10">&nbsp;</span>{{x.timeDesc}}<span class="icon-span icon11 fd-right">&nbsp;</span>
+						</div>
+ 					</li>
+
+                        </div></div></div>
+
+				</ul>
+			</div>
+			
+			
+
+
+		</div>
+	
+    </div> 
+
+
+
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-doct-info.js"></script>
+</html>

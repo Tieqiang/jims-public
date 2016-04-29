@@ -72,7 +72,7 @@ public class WxService {
     private static ExpireKey expireKey = new DefaultExpireKey();
 
     @Inject
-    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, WxOpenAccountConfigFacade wxOpenAccountConfigFacade, PatVsUserFacade patVsUserFacade, HospitalInfoFacade hospitalInfoFacade,PatInfoFacade patInfoFacade) {
+    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, WxOpenAccountConfigFacade wxOpenAccountConfigFacade, PatVsUserFacade patVsUserFacade, HospitalInfoFacade hospitalInfoFacade, PatInfoFacade patInfoFacade) {
         this.requestMessageFacade = requestMessageFacade;
         this.appUserFacade = appUserFacade;
         this.request = request;
@@ -80,7 +80,7 @@ public class WxService {
         this.wxOpenAccountConfigFacade = wxOpenAccountConfigFacade;
         this.patVsUserFacade = patVsUserFacade;
         this.hospitalInfoFacade = hospitalInfoFacade;
-        this.patInfoFacade=patInfoFacade;
+        this.patInfoFacade = patInfoFacade;
     }
 
     @Path("check")
@@ -135,9 +135,9 @@ public class WxService {
                 //公众号订阅
                 String fromUser = eventMessage.getFromUserName();
                 User user = UserAPI.userInfo(this.getToken(), fromUser);
-                AppUser appUser=appUserFacade.createUser(user);
-                if(appUser!=null&&!"".equals(appUser)){//关注成功
-                String message="欢迎关注，详情点击"+"<a href='http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-dept-dict-info.html'>详情</a>";
+                AppUser appUser = appUserFacade.createUser(user);
+                if (appUser != null && !"".equals(appUser)) {//关注成功
+                    String message = "欢迎关注，详情点击" + "<a href='http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-dept-dict-info.html'>详情</a>";
                     //创建回复
                     XMLMessage xmlTextMessage = new XMLTextMessage(
                             eventMessage.getFromUserName(),
@@ -148,19 +148,19 @@ public class WxService {
                     return;
                 }
 
-             }
+            }
             if ("unsubscribe".equals(event) && "event".equals(msgType)) {
                 //取消订阅公众号
                 String fromUser = eventMessage.getFromUserName();
 //                User user = UserAPI.userInfo(this.getToken(), fromUser);
-                AppUser appUser=appUserFacade.findAppUserByOpenId(fromUser);
+                AppUser appUser = appUserFacade.findAppUserByOpenId(fromUser);
 //                List<PatInfo> list=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
 //                patInfoFacade.delete(list);
-                if(appUser!=null){
+                if (appUser != null) {
                     appUserFacade.deleteByObject(appUser);
                 }
- //                patVsUserFacade.deleteByAppUserId(appUser.getId());
-             }
+                //                patVsUserFacade.deleteByAppUserId(appUser.getId());
+            }
 
             if ("text".equals(msgType) || "image".equals(msgType) || "voice".equals(msgType)
                     || "video".equals(msgType) || "shortvideo".equals(msgType)) {//普通消息
@@ -318,16 +318,17 @@ public class WxService {
 
     @GET
     @Path("rcpt-list")
-    public String rcpt(@QueryParam("code")String code) throws IOException {
-        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
-        List<AppUser> appList=appUserFacade.findByOpenId(snsToken.getOpenid());
-        String patId="";
-        if(appList.size()>0){
-            patId=appList.get(0).getPatId();
+    public String rcpt(@QueryParam("code") String code) throws IOException {
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
+        String patId = "";
+        if (appList.size() > 0) {
+            patId = appList.get(0).getPatId();
         }
-        response.sendRedirect("/views/his/public/rcpt-master.html?openId="+snsToken.getOpenid());
-        return "http://www.baidu.com/" ;    }
+        response.sendRedirect("/views/his/public/rcpt-master.html?openId=" + snsToken.getOpenid());
+        return "http://www.baidu.com/";
+    }
 
     @POST
     @Path("pay-jsp")
@@ -348,28 +349,43 @@ public class WxService {
     }
 
     @GET
-  @Path("find-pat-info")
-    public String findPatInfo(@QueryParam("code")String code) throws IOException {
-        AppSetVo appSetVo= hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(),appSetVo.getAppSecret(), code);
-        response.sendRedirect("/views/his/public/app-my-information.html?openId="+snsToken.getOpenid());
-        return "" ;
+    @Path("find-pat-info")
+    public String findPatInfo(@QueryParam("code") String code) throws IOException {
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        response.sendRedirect("/views/his/public/app-my-information.html?openId=" + snsToken.getOpenid());
+        return "";
     }
-// window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
-        @GET
-        @Path("query-string")
-        public String queryString(@QueryParam("openId")String openId,@QueryParam("deptId")String deptId) throws IOException {
-            response.sendRedirect("/views/his/public/app-doct-info.html?openId="+openId+"&deptId="+deptId);
-            return "" ;
-        }
-/**
- *  window.location.href="/views/his/public/app-pay.html?openId="+openId+"&price=" + price + "&clinicForRegistId=" + rid ;
- */
 
-@GET
-@Path("app-pay")
-public String appPay(@QueryParam("openId")String openId,@QueryParam("clinicForRegistId")String clinicForRegistId,@QueryParam("price")String price) throws IOException {
-    response.sendRedirect("/views/his/public/app-pay.html?openId="+openId+"&price="+price+"&clinicForRegistId="+clinicForRegistId);
-    return "" ;
-}
+    // window.location.href="/views/his/public/app-doct-info.html?deptId="+deptId+"&openId="+openId;
+    @GET
+    @Path("query-string")
+    public String queryString(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
+        response.sendRedirect("/views/his/public/app-doct-info.html?openId=" + openId + "&deptId=" + deptId);
+        return "";
+    }
+
+
+    @GET
+    @Path("app-pay")
+    public String appPay(@QueryParam("openId") String openId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("price") String price) throws IOException {
+        response.sendRedirect("/views/his/public/app-pay.html?openId=" + openId + "&price=" + price + "&clinicForRegistId=" + clinicForRegistId);
+        return "";
+    }
+
+    @GET
+    @Path("get-param")
+    public String getParam(@QueryParam("patId") String patId) throws IOException {
+        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
+        return "";
+    }
+//    get-regist-id?clinicForRegistId="+rid;
+    @GET
+    @Path("get-regist-id")
+    public String getRegistId(@QueryParam("clinicForRegistId") String clinicForRegistId) throws IOException {
+        response.sendRedirect("/views/his/public/app-regist-doct-info.html?clinicForRegistId=" + clinicForRegistId);
+        return "";
+    }
+
+
 }

@@ -77,7 +77,7 @@ public class PatInfoService {
     @Path("save")
     public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone) {
         try {
-              /**
+             /**
              * 查询之前是否绑定次idCard
              */
             Boolean isBangker=this.patVsUserFacade.findIsBangker(idCard,openId);

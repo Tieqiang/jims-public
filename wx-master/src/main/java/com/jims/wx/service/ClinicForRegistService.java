@@ -394,10 +394,12 @@ public class ClinicForRegistService {
     public AppDoctInfoVo findDoctRegist(@QueryParam("openId") String openId,@QueryParam("clinicForRegistId") String clinicForRegistId){
            AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
         try{
-            AppUser appUser =appUserFacade.findAppUserByOpenId(openId);
-            PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
-            appDoctInfoVo.setPatName(patInfo.getName());
-            appDoctInfoVo.setIdCard(patInfo.getIdCard());
+            if(openId!=null&&!"".equals(openId)){
+                AppUser appUser =appUserFacade.findAppUserByOpenId(openId);
+                PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
+                appDoctInfoVo.setPatName(patInfo.getName());
+                appDoctInfoVo.setIdCard(patInfo.getIdCard());
+            }
             ClinicForRegist clinicForRegist=clinicForRegistFacade.findById(clinicForRegistId);
             appDoctInfoVo.setEnabledNum(clinicForRegist.getRegistrationLimits()-clinicForRegist.getRegistrationNum());
             appDoctInfoVo.setTimeDesc(sdf.format(new Date()));

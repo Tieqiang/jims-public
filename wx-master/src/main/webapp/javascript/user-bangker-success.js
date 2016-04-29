@@ -21,7 +21,7 @@ $(function(){
  * 查看详情
  */
 function view(){
-  window.location.href="/views/his/public/app-pat-info.html?patId="+patId;
+   window.location.href="/api/wx-service/get-param?patId="+patId;
 }
 
 
