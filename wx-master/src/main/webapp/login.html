@@ -24,7 +24,7 @@
                 if(r!=null)return  unescape(r[2]); return null;
             }
 
-            alert(GetQueryString("openId"))
+
             //得到焦点
             $("#password").focus(function () {
                 $("#left_hand").animate({
@@ -83,7 +83,7 @@
                     if(data.errorMessage){
                         alert(data.errorMessage) ;
                     }else{
-                        location.href="/views/his/common/module-select.html" ;
+                        location.href="/index.html" ;
                     }
                 },'json')
             }) ;

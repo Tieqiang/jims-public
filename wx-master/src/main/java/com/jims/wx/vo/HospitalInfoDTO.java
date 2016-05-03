@@ -14,7 +14,7 @@ public class HospitalInfoDTO {
         this.id = id;
     }
 
-    private String  id;
+        private String  id;
 
     public String getText() {
         return text;

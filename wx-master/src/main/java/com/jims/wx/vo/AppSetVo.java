@@ -1,5 +1,6 @@
 package com.jims.wx.vo;
 
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 
@@ -15,18 +16,29 @@ public class AppSetVo implements Serializable {
     private String openName ;
     private String appToken;
     private String infoUrl ;
+    private String metchId ;
+    private String key ;
+    private byte[] content;
+
+    @Transient
+    private String tranContent;
+
 
     public AppSetVo() {
 
     }
 
-    public AppSetVo(String hospitalName, String appId, String appSecret, String openName, String appToken, String infoUrl) {
+    public AppSetVo(String hospitalName, String appId, String appSecret, String openName, String appToken, String infoUrl, String metchId, String key, byte[] content, String tranContent) {
         this.hospitalName = hospitalName;
         this.appId = appId;
         this.appSecret = appSecret;
         this.openName = openName;
         this.appToken = appToken;
         this.infoUrl = infoUrl;
+        this.metchId = metchId;
+        this.key = key;
+        this.content = content;
+        this.tranContent = tranContent;
     }
 
 
@@ -76,5 +88,37 @@ public class AppSetVo implements Serializable {
 
     public void setInfoUrl(String infoUrl) {
         this.infoUrl = infoUrl;
+    }
+
+    public String getMetchId() {
+        return metchId;
+    }
+
+    public void setMetchId(String metchId) {
+        this.metchId = metchId;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
+    public String getTranContent() {
+        return tranContent;
+    }
+
+    public void setTranContent(String tranContent) {
+        this.tranContent = tranContent;
     }
 }

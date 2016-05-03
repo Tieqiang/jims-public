@@ -1,4 +1,4 @@
-$(function (){
+$(function () {
     //链接验证
     var strRegex = "^((https|http|ftp|rtsp|mms)?://)"
         + "?(([0-9a-z_!~*'().&=+$%-]+: )?[0-9a-z_!~*'().&=+$%-]+@)?" //ftp的user@
@@ -10,42 +10,56 @@ $(function (){
         + "(:[0-9]{1,4})?" // 端口- :80
         + "((/?)|" // a slash isn't required if there is no file name
         + "(/[0-9a-z_!~*'().;?:@&=+$,%#-]+)+/?)$";
-    var re=new RegExp(strRegex);
+    var re = new RegExp(strRegex);
 
     var show = function () {
-        $.get("/api/hospital-info/list-all", function (data){
-            if(data[0]!=null) {
-                $("#id").textbox('setValue', data[0].id);
-                $("#hospitalId").textbox('setValue', data[0].hospitalId);
-                $("#appId").textbox('setValue', data[0].appId);
-                $("#infoUrl").textbox('setValue', data[0].infoUrl);
-                $("#tranContent").val(data[0].tranContent);
+        $.get("/api/hospital-info/get", function (data) {
+            if (data != null) {
+
+                console.log(data);
+                $("#hospitalName").textbox('setValue', data.hospitalName);
+                $("#appId").textbox('setValue', data.appId);
+                $("#infoUrl").textbox('setValue', data.infoUrl);
+                $("#appSecret").textbox('setValue', data.appSecret);
+                $("#openName").textbox('setValue', data.openName);
+                $("#appToken").textbox('setValue', data.appToken);
+                $("#metchId").textbox('setValue', data.metchId);
+                $("#key").textbox('setValue', data.key);
+                $("#tranContent").val(data.tranContent);
+
             }
         })
     }
     show();
-    $("#noBtn").on('click',function(){
+    $("#noBtn").on('click', function () {
         show();
     })
 
-    $("#saveBtn").on('click',function(){
+    $("#saveBtn").on('click', function () {
         var hospitalInfo = {};
-        hospitalInfo.id = $("#id").val();
-        hospitalInfo.hospitalId = $("#hospitalId").val();
+        hospitalInfo.hospitalName = $("#hospitalName").val();
         hospitalInfo.appId = $("#appId").val();
         hospitalInfo.infoUrl = $("#infoUrl").val();
+        hospitalInfo.appSecret = $("#appSecret").val();
+        hospitalInfo.openName = $("#openName").val();
+        hospitalInfo.appToken = $("#appToken").val();
+        hospitalInfo.metchId = $("#metchId").val();
+        hospitalInfo.key = $("#key").val();
+        var tranContent = $("#tranContent").val();
 
         var oEditor = CKEDITOR.instances.tranContent;
         var tranContent1 = oEditor.getData();
         var tranContent=stripscript(tranContent1);
         alert(tranContent);
 
-        if(re.test(hospitalInfo.infoUrl)){
-            $.postJSON("/api/hospital-info/merge?tranContent="+tranContent, hospitalInfo, function (data) {
+        console.log(hospitalInfo.infoUrl);
+
+        if (re.test(hospitalInfo.infoUrl)) {
+            $.postJSON("/api/hospital-info/merge?tranContent=" + tranContent, hospitalInfo, function (data) {
                 $.messager.alert("系统提示", "保存成功", "info");
                 show();
             });
-        }else{
+        } else {
             $.messager.alert("系统提示", "医院链接错误!!", "error");
         }
     })

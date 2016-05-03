@@ -67,11 +67,9 @@ $(function(){
         $('#dlg').dialog('close');
     })
     $("#reLogin").on('click',function(){
-        location.href="/login1.html"
+        location.href="/login.html"
     })
-    $("#changeLogin").on('click',function(){
-        location.href="/views/his/common/module-select.html"
-    })
+
     $("#dlgNew").dialog({
         title: '修改密码',
         width: 300,
@@ -175,10 +173,6 @@ $(function(){
     }
 
 
-    $("#lockWindow").on('click',function(){
-        $("#logwindow").window("open") ;
-    })
-
     var promise = $.get('/api/login/get-login-info',function(data){
         config =data ;
     })
@@ -186,7 +180,7 @@ $(function(){
     promise.done(function(){
         var menus=[] ;//菜单列表
         var menuTreeData = [] ;//菜单树的列表
-        var url = "api/menu/list-login-module?moduleId="+config.moduleId+"&loginName="+config.loginName;
+        //var url = "api/menu/list-login-module?moduleId="+config.moduleId+"&loginName="+config.loginName;
         var lisAll = "api/menu/list" ;
         $(".site_title").append(config.hospitalName+"-"+config.moduleName) ;
 
