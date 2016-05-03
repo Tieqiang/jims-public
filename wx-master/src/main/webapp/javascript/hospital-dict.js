@@ -29,7 +29,6 @@ $(function () {
         }]]
     });
 
-
     /**
      * 加载医院信息表
      */
@@ -48,6 +47,7 @@ $(function () {
                     unitCode: item.unitCode,
                     location: item.location,
                     parentHospital: item.parentHospital,
+                    organizationFullCode: item.organizationFullCode,
                     children: []
                 };
 
@@ -83,14 +83,17 @@ $(function () {
     $("#addBtn").on('click', function () {
 
         $("#dlg").dialog("open").dialog("setTitle", "添加医院");
-
+        $("#hospitalName").textbox('setValue',null);
+        $("#unitCode").numberbox('setValue', null);
+        $("#location").textbox('setValue', null);
+        $("#zipCode").textbox('setValue', null);
+        $("#organizationFullCode").textbox('setValue', null);
+        $("#parentHospital").textbox('setValue', null);
     })
-
 
     /**
      * 添加分院
      */
-
     $("#addChildBtn").on('click', function () {
 
         var node = $("#tt").treegrid('getSelected');
@@ -99,10 +102,16 @@ $(function () {
             return;
         }
         $("#dlg").dialog("open").dialog("setTitle", "添加分院");
+
+        $("#hospitalName").textbox('setValue', null);
+        $("#unitCode").numberbox('setValue', null);
+        $("#location").textbox('setValue', null);
+        $("#zipCode").textbox('setValue', null);
+        $("#organizationFullCode").textbox('setValue', null);
+
         $("#parentHospital").textbox('setValue', node.id);
 
     });
-
 
     /**
      * 修改医院信息
@@ -177,7 +186,6 @@ $(function () {
             $.messager.alert("系统提示", "请先删除分院，在删除总院");
             return;
         }
-
 
         $.messager.confirm("系统提示", "确定要删除【" + node.hospitalName + "】吗？", function (r) {
             if (r) {
