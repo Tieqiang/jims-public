@@ -34,9 +34,11 @@ $(function (){
         hospitalInfo.hospitalId = $("#hospitalId").val();
         hospitalInfo.appId = $("#appId").val();
         hospitalInfo.infoUrl = $("#infoUrl").val();
-        var tranContent = $("#tranContent").val();
 
-        console.log(hospitalInfo.infoUrl);
+        var oEditor = CKEDITOR.instances.tranContent;
+        var tranContent1 = oEditor.getData();
+        var tranContent=stripscript(tranContent1);
+        alert(tranContent);
 
         if(re.test(hospitalInfo.infoUrl)){
             $.postJSON("/api/hospital-info/merge?tranContent="+tranContent, hospitalInfo, function (data) {
@@ -48,3 +50,15 @@ $(function (){
         }
     })
 })
+
+function stripscript(s)
+{
+    var pattern = new RegExp("[`~!@#$^&*()=|{}':;',\\[\\].<>/?~！@#￥……&*（）&mdash;—|{}【】”“]")
+    var rs = "";
+    for (var i = 0; i < s.length; i++) {
+        rs = rs+s.substr(i, 1).replace(pattern, '');
+    }
+    return rs;
+}
+
+

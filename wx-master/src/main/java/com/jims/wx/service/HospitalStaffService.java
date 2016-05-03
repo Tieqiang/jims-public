@@ -38,6 +38,13 @@ public class HospitalStaffService {
     return hospitalStaffFacade.findById(personId);
     }
 
+    @GET
+    @Path("find-by-open-id")
+    public List<HospitalStaff> findByOpenId(@QueryParam("openId")String openId){
+        return hospitalStaffFacade.findByOpenId(openId);
+    }
+
+
     @POST
     @Path("save")
     public Response save(HospitalStaff hospitalStaff) {

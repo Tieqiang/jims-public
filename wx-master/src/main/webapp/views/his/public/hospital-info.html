@@ -2,46 +2,45 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>产品编码描述字典维护</title>
+    <title>医院概况信息</title>
     <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
     <link rel="stylesheet" href="/assert/easyui/themes/color.css">
     <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
     <link rel="stylesheet" href="/style/common.css">
-
 </head>
 <body>
 
 <div id="show" class="easyui-layout" style="width: 100%;height:80%" border="false" fit="true">
-    <div id="searchDiv" region="center" title="医院概况编辑" >
-        <form id="fm" method="post" >
+    <div id="searchDiv" region="center" title="医院概况编辑">
+        <form id="fm" method="post">
             <table cellpadding="5">
-                <tr style="display: none" >
+                <tr style="display: none">
                     <td>id：</td>
-                    <td><input id="id" class="easyui-textbox"  value="<%=b[0].hospitalId%>"></td>
+                    <td><input id="id" class="easyui-textbox" value="<%=b[0].hospitalId%>"></td>
                 </tr>
 
-                <tr >
+                <tr>
                     <td>医院编号：</td>
-                    <td><input id="hospitalId" class="easyui-textbox"  value="" ></td>
+                    <td><input id="hospitalId" class="easyui-textbox" value=""></td>
                 </tr>
 
                 <tr>
                     <td>微信账号：</td>
-                    <td><input id="appId" class="easyui-textbox"  value=""></td>
+                    <td><input id="appId" class="easyui-textbox" value=""></td>
                 </tr>
 
                 <tr>
                     <td>医院链接：</td>
-                    <td><input id="infoUrl" class="easyui-textbox"  value=""></td>
+                    <td><input id="infoUrl" class="easyui-textbox" value=""></td>
                 </tr>
             </table>
             <div>
                 <h4>医院描述：</h4>
-                <textarea id="tranContent" name="description" class="ckeditor"></textarea>
+                <textarea id="tranContent" name="tranContent" class="ckeditor"></textarea>
             </div>
         </form>
     </div>
-    <div id="tb"  style="height:30px; background-color: #f2f8ff" region="south">
+    <div id="tb" style="height:30px; background-color: #f2f8ff" region="south">
         <a href="#" id="saveBtn" class="easyui-linkbutton" iconCls="icon-save">保存</a>
         <a href="#" id="noBtn" class="easyui-linkbutton" iconCls="icon-no">取消</a>
     </div>

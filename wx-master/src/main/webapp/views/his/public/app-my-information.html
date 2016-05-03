@@ -5,51 +5,85 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>我的信息</title>
     <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
+    <style type="text/css">
+        .title
+        {
+            margin:10px;
+            border:1px solid #ccc;
+            border-radius:5px;
+            background:#ccc;
+            padding:5px;
+        }
+     </style>
 </head>
 <body>
-<div ng-app="myApp">
-    <div ng-controller="tableCtrl" id="doctList">
-        <div ng-repeat="x in names">
-            <div class="weui_cells weui_cells_access">
-    <a class="weui_cell" href="javascript:;">
-        <div class="weui_cell_hd"></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>姓名</p>
+<div ng-app="myApp" id="app">
+    <input type="hidden" id="id" value="">
+    <div ng-controller="tableCtrl">
+        <div id="staffWelcome" style="display: none">
+            <br/>&nbsp;&nbsp;
+            <span style="font-weight:bold;">
+                <span id="staffName"></span>,你好！
+            </span>
         </div>
-        <div class="weui_cell_ft" id="name">{{x.name}}</div>
-    </a>
-    <a class="weui_cell" href="javascript:;">
-        <div class="weui_cell_hd"></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>省份证号</p>
+        <div class="weui_cells weui_cells_access">
+            <div class="title">默认用户</div>
+            <div class="weui_cell" href="javascript:;" ng-click="findInfo()" >
+                <div class="weui_cell_hd"></div>
+                <div class="weui_cell_bd weui_cell_primary">
+                  <span id="name"></span>
+                </div>
+                <div class="weui_cell_ft" >查看详情</div>
+            </div>
         </div>
-        <div class="weui_cell_ft" id="idCard">{{x.idCard}}</div>
-    </a>
-    <a class="weui_cell" href="javascript:;">
-        <div class="weui_cell_hd"></div>
-        <div class="weui_cell_bd weui_cell_primary">
-            <p>手机号</p>
+        <div>
+            <div class="weui_cells weui_cells_access" >
+                <div class="title">其他用户</div>
+                 <div>
+                    <a class="weui_cell" href="javascript:;" ng-repeat="x in name">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <span ng-bind="x.name"></span>
+                        </div>
+                        <div class="weui_cell_ft" ng-click="findInfo(x.id)">查看详情</div>
+                    </a>
+                </div>
+            </div>
         </div>
-        <div class="weui_cell_ft" id="phone">{{x.cellphone}}</div>
-    </a>
-    <a onclick="but()" class="weui_btn weui_btn_primary" id="return" style="display: none;">返回</a>
+        <div>
+
+            <div class="weui_btn_area" style="margin-bottom: 100px;">
+                <a class="weui_btn weui_btn_primary" onclick="staffBangker()" id="showTooltips">我是员工</a>
+                <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="userBangker()">增加用户</a>
+             </div>
+
+            <!--<div style="display: block" id="staffJoin">-->
+                <!--<a href="javascript:;" class="weui_btn weui_btn_primary" onclick="staffBangker()"-->
+                   <!--style='position: absolute; bottom:60px;'>我是员工</a>-->
+            <!--</div>-->
+            <!--<div>-->
+                <!--<a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="userBangker()"-->
+                   <!--style='position: absolute; bottom: 0; display: block;'>增加用户</a>-->
+            <!--</div>-->
+
+        </div>
+    </div>
 </div>
-            </div></div></div>
 
-
-
-
-
-
-
-
-
-         <center><a href="javascript:;" class="weui_btn weui_btn_primary" onclick="userBangker()"
-                   style='position: absolute; bottom:20%; display: block;  width: 50%'>患者绑定</a></center>
-         <center><a href="javascript:;" class="weui_btn weui_btn_primary" onclick="staffBangker()"
-                   style='position: absolute; bottom:50%; display: block;  width: 50%'>员工绑定</a></center>
-
+<div class="weui_dialog_alert" style="display: none " id="alert">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd">
+            <strong class="weui_dialog_title">
+                <i class="weui_icon_msg weui_icon_warn"></i><br>绑定失败
+            </strong>
+        </div>
+        <div class="weui_dialog_bd">您绑定的用户数量已达上限！</div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" id="no2">确定</a>
+        </div>
+    </div>
 </div>
+
 <script src="/assert/angular/angular.min.js"></script>
 <script src="/assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script src="../../../javascript/app-my-information.js" type="text/javascript"></script>

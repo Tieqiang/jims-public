@@ -22,6 +22,7 @@ app.controller('tableCtrl', function ($scope, $http) {
             $scope.patVisit = data;
         });
     $scope.click = function (patientId, visitId) {
+        $("#head").hide();
         $http.get("/api/time/list?patientId=" + patientId + "&visitId=" + visitId)
             .success(function (data) {
                 console.log(patientId);
@@ -29,10 +30,11 @@ app.controller('tableCtrl', function ($scope, $http) {
                 $("#inp").attr("style", "display:block");
                 $("#fanhui").attr("style", "display:block");
                 $('#fan').click(function () {
+                    $("#head").show();
                     $("#patVisit").attr("style", "display:block");
                     $("#inp").attr("style", "display:none");
                 });
                 $scope.Inp = data;
             });
-    }
+     }
 });

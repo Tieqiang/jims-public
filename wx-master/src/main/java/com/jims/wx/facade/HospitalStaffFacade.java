@@ -25,6 +25,12 @@ public class HospitalStaffFacade extends BaseFacade {
         return  entityManager.createQuery("from HospitalStaff where personId='"+personId+"'").getResultList();
     }
 
+    public List<HospitalStaff> findByOpenId(String openId) {
+//        HospitalStaff
+        return  entityManager.createQuery("from HospitalStaff where openId='"+openId+"'").getResultList();
+    }
+
+
     @Transactional
     public HospitalStaff save(HospitalStaff hospitalStaff){
         hospitalStaff = super.merge(hospitalStaff);
@@ -40,7 +46,6 @@ public class HospitalStaffFacade extends BaseFacade {
             HospitalStaff merge = merge(dict);
             newUpdateDict.add(merge);
         }
-
         for (HospitalStaff dict : updated) {
             HospitalStaff merge = merge(dict);
             newUpdateDict.add(merge);

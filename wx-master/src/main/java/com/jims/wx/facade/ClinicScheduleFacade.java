@@ -124,6 +124,7 @@ public class ClinicScheduleFacade extends BaseFacade {
      * @description / 通过所选择的号别  查询出诊安排
      * @author created by chenxiaoyang
      */
+//    from ClinicTypeSetting as type where 1=1 and type.hospitalId='4028862d4fcf2590014fcf9aef480016'
 ////    ClinicSchedule
 //    public List<Object[]> queryDayAndTime(String clinicIndexId) {
 //        String hql = "select c.dayOfWeek,c.timeOfDay,c.registrationLimits from ClinicSchedule as c where c.clinicIndexId='" + clinicIndexId + "'";

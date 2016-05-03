@@ -2,7 +2,7 @@ package com.jims.wx.service;
 
 import com.jims.wx.vo.MediaVo;
 import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
+//import com.sun.jersey.multipart.FormDataParam;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jetty.http.HttpTester;
 import org.hibernate.annotations.SourceType;
@@ -60,18 +60,18 @@ public class MediaService {
 
 
 
-    @POST
-    @Path("upload")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    public Response uploadFiel(@FormDataParam("file") InputStream inputStream,
-                               @FormDataParam("file") FormDataContentDisposition fileDetail) throws FileNotFoundException {
-
-
-        //Media media=MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image, inputStream, new Description());
-        //Media media = MediaAPI.mediaUpload(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image,inputStream);
-        UploadimgResult uploadimgResult =MediaAPI.mediaUploadimg(TokenManager.getDefaultToken(),inputStream) ;
-        return Response.status(Response.Status.OK).entity(uploadimgResult).build();
-    }
+//    @POST
+//    @Path("upload")
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    public Response uploadFiel(@FormDataParam("file") InputStream inputStream,
+//                               @FormDataParam("file") FormDataContentDisposition fileDetail) throws FileNotFoundException {
+//
+//
+//        //Media media=MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image, inputStream, new Description());
+//        //Media media = MediaAPI.mediaUpload(TokenManager.getDefaultToken(), weixin.popular.bean.media.MediaType.image,inputStream);
+//        UploadimgResult uploadimgResult =MediaAPI.mediaUploadimg(TokenManager.getDefaultToken(),inputStream) ;
+//        return Response.status(Response.Status.OK).entity(uploadimgResult).build();
+//    }
 
 
     @POST

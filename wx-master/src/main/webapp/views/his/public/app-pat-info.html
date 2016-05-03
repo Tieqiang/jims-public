@@ -9,33 +9,55 @@
  </head>
 <body>
  <div id="deptInfo">
-    <div class="weui_cells weui_cells_access">
-        <a class="weui_cell" href="javascript:;">
-            <div class="weui_cell_hd"></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <p>姓名</p>
-            </div>
-            <div class="weui_cell_ft" id="name"></div>
-        </a>
-        <a class="weui_cell" href="javascript:;">
-            <div class="weui_cell_hd"></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <p>省份证号</p>
-            </div>
-            <div class="weui_cell_ft" id="idCard"></div>
-        </a>
-        <a class="weui_cell" href="javascript:;">
-            <div class="weui_cell_hd"></div>
-            <div class="weui_cell_bd weui_cell_primary">
-                <p>手机号</p>
-            </div>
-            <div class="weui_cell_ft" id="phone"></div>
-        </a>
-        <a onclick="but()" class="weui_btn weui_btn_primary" id="return" style="display: none;">返回</a>
+     <div class="weui_cells weui_cells_form">
+         <input type="hidden" id="patId" value=""/>
+          <div class="weui_cell">
+             <div class="weui_cell_hd"><label class="weui_label">姓&nbsp;&nbsp;&nbsp;名</label></div>
+             <div class="weui_cell_bd weui_cell_primary">
+                 <input id="name"  class="weui_input" type="text" value=""  style="margin-left: 168px;" />
+             </div>
+         </div>
+         <div class="weui_cell">
+             <div class="weui_cell_hd"><label class="weui_label">身份证</label></div>
+             <div class="weui_cell_bd weui_cell_primary">
+                 <input id="idCard" class="weui_input" type="text" pattern="[0-9a-z]"  value=""   style="margin-left: 70px;" />
+             </div>
+         </div>
+         <div class="weui_cell">
+             <div class="weui_cell_hd"><label class="weui_label">手机号</label></div>
+             <div class="weui_cell_bd weui_cell_primary">
+                 <input id="phone" class="weui_input" type="number" value=""  style="margin-left: 136px;"/>
+             </div>
+         </div>
+
     </div>
 </div>
 </div>
 </div>
+
+
+ <div class="weui_dialog_alert" style="display: none " id="alert">
+     <div class="weui_mask"></div>
+     <div class="weui_dialog">
+         <div class="weui_dialog_hd">
+             <strong class="weui_dialog_title">
+                 <i class="weui_icon_msg weui_icon_warn"></i><br>删除失败
+             </strong>
+         </div>
+         <div class="weui_dialog_bd">默认用户不能删除，只能更换。</div>
+         <div class="weui_dialog_ft">
+             <a href="javascript:;" class="weui_btn_dialog default" id="no2">确定</a>
+         </div>
+     </div>
+ </div>
+ <div class="weui_btn_area">
+     <a onclick="moren()" class="weui_btn weui_btn_primary" id="moren">设为默认</a>
+     <a onclick="del()" class="weui_btn weui_btn_primary" >删除绑定</a>
+     <a onclick="update()" class="weui_btn weui_btn_primary">保存修改</a>
+ </div>
+ <!--<a onclick="moren()" class="weui_btn weui_btn_primary" id="moren" style='position: absolute; bottom: 12%; display: block;width:100%; '>设为默认</a>-->
+ <!--<a onclick="del()" class="weui_btn weui_btn_primary" style='position: absolute; bottom: 24%; display: block;width:100%; '>删除</a>-->
+ <!--<a onclick="update()" class="weui_btn weui_btn_primary" style='position: absolute; bottom: 0; display: block;width:100%; '>保存修改</a>-->
 </body>
 <script src="../../../assert/angular/angular.min.js"></script>
 <script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>

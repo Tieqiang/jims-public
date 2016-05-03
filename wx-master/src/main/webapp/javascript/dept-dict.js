@@ -44,8 +44,8 @@ $(function () {
             field: 'id',
             hidden: true
         }, {
-            title: '科室编码',
-            field: 'deptCode',
+            title: '科室图标',
+            field: 'img',
             width: "10%"
         }, {
             title: '科室名称',
@@ -161,6 +161,7 @@ $(function () {
                 obj.deptClass = item.deptClass;
                 obj.endDept = item.endDept;
                 obj.deptInfo = item.deptInfo;
+                obj.img = item.img;
                 obj.children = [];
 
                 depts.push(obj);
@@ -321,7 +322,8 @@ $(function () {
         deptDict.deptClass = $("#deptClass").combobox('getValue');
         deptDict.deptType = $("#deptType").combobox('getValue');
         deptDict.endDept = $("#endDept").combobox('getValue');
-
+        deptDict.imgUrl=$("#headUrl").val();
+//        alert($("#headUrl").val());
         var oEditor = CKEDITOR.instances.deptInfo;
         deptDict.deptInfo = oEditor.getData();
 
@@ -356,6 +358,9 @@ $(function () {
         $("#deptLocation").textbox('setValue', "");
         $("#deptStopFlag").combobox('setValue', "");
         $("#parentId").textbox('setValue', "");
+//        <img src="" id="viewImg"/>
+        $("#viewImg").attr("src","");
+        $("#headUrl").val("");
         var oEditor = CKEDITOR.instances.deptInfo;
         oEditor.setData("");
     }
@@ -385,4 +390,36 @@ $(function () {
         });
 
     });
+    $("#uploadBtn").on('click',function(){
+        var fileToUpload=document.getElementById("fileToUpload");
+        var suffer=fileToUpload.value.substring(fileToUpload.value.indexOf(".")+1);
+        if(suffer!="jpg"&&suffer!="png"&&suffer!="gif"&&suffer!="jpeg"&&suffer!="bmp"&&suffer!="swf"){
+            $.messager.alert("系统提示", "请选择正确格式的图片","error");
+        }else{
+            ajaxUpload();
+        }
+    });
+    /**
+     * ajax 上传
+     * */
+    var ajaxUpload=function ajaxUpload(){
+        $.ajaxFileUpload({
+            url : '/img-upload-servlet',
+            secureuri : false,
+            fileElementId : 'fileToUpload',
+            dataType : 'json',
+            data : {username : $("#username").val()},
+            success: function(data, status) {
+                $('#uploadSpan').append("<span><font color='red'> 上传成功 ✔</font></span>");
+//                 $('#headUrl').val("");
+//                alert(data.picUrl);
+                $('#headUrl').attr("value",data.picUrl);
+                $("#viewImg").attr("src",data.picUrl);
+                //                 alert($('#headUrl').attr('value'));
+            },
+            error : function(data, status, e) {
+                $.messager.alert('系统提示','上传出错','error');
+            }
+        })
+    }
 });

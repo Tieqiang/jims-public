@@ -35,9 +35,8 @@ public class DoctInfo implements java.io.Serializable {
     private byte[] description;//byte[]
     @Transient
     private String tranDescription;
-
-//    private Set<ClinicIndex> clinicIndexes = new HashSet<ClinicIndex>(0);
-
+    private String img;
+    private String hospitalName;
 
     // Constructors
 
@@ -153,6 +152,7 @@ public class DoctInfo implements java.io.Serializable {
         }
         return null;
     }
+
     @Transient
     public String getTranDescription2() {
         if (this.description != null && !"".equals(this.description)) {
@@ -160,13 +160,13 @@ public class DoctInfo implements java.io.Serializable {
             try {
                 s = new String(this.description, "UTF-8");
                 s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").
-                        replace("<h1>","").replace("</h1>","").
-                        replace("<h2>","").replace("</h2>","").
-                        replace("<h3>","").replace("</h3>","").
-                        replace("<h4>","").replace("</h4>","").
-                        replace("<h5>","").replace("</h5>","").
-                        replace("<h6>","").replace("</h6>","");
-             } catch (UnsupportedEncodingException e) {
+                        replace("<h1>", "").replace("</h1>", "").
+                        replace("<h2>", "").replace("</h2>", "").
+                        replace("<h3>", "").replace("</h3>", "").
+                        replace("<h4>", "").replace("</h4>", "").
+                        replace("<h5>", "").replace("</h5>", "").
+                        replace("<h6>", "").replace("</h6>", "");
+            } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
             return s;
@@ -174,14 +174,40 @@ public class DoctInfo implements java.io.Serializable {
         return null;
     }
 
+    @Transient
+    public String getTranDescription3() {
+        if (this.description != null && !"".equals(this.description)) {
+            String s = "";
+            String sub="";
+            try {
+                s = new String(this.description, "UTF-8");
+                s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").
+                        replace("<h1>", "").replace("</h1>", "").
+                        replace("<h2>", "").replace("</h2>", "").
+                        replace("<h3>", "").replace("</h3>", "").
+                        replace("<h4>", "").replace("</h4>", "").
+                        replace("<h5>", "").replace("</h5>", "").
+                        replace("<h6>", "").replace("</h6>", "");
+                 if(s.length()>22){
+                     sub=s.substring(0,22)+"...";
+                 }else{
+                     sub=s;
+                 }
+             } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            return "<a title='"+s+"' style='text-decoration: none;'>"+sub+"</a>";
+        }
+        return null;
+    }
+
     /**
-     *
      * @param args
      */
-    public static void main(String[] args){
+    public static void main(String[] args) {
 //        JSWBlend_SRC_OUTPeer.
 //        String regexstr = "@"<(?!br).\\\\*?>"";   //去除所有标签，只剩br
-        String s="<span><a>你好</a></span>";
+        String s = "<span><a>你好</a></span>";
 //        String regex="<[^>]*>";
 //        Pattern pattern= Pattern.compile(regex);
 //        Matcher matcher=pattern.matcher(s);
@@ -194,6 +220,21 @@ public class DoctInfo implements java.io.Serializable {
 
     }
 
-}
+    @Transient
+    public String getImg() {
+        return this.img;
+    }
 
-//}
+    public void setImg(String url) {
+        this.img = "<img src='" + url + "'/>";
+    }
+
+    @Transient
+    public String getHospitalName() {
+        return hospitalName;
+    }
+
+    public void setHospitalName(String hospitalName) {
+        this.hospitalName = hospitalName;
+    }
+}

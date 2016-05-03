@@ -140,7 +140,7 @@ $(function () {
             }
 
             addData();
-
+            alert(1);
             $.get("/api/clinic-schedule/find-by-id", {id: row.id}, function (data) {
                 $("#dg").datagrid('loadData', data);
             });

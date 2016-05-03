@@ -12,7 +12,7 @@ function getUrlParameter(name){
     }
 }
 var patId=getUrlParameter("patId");
-alert("patId="+patId);
+//alert("patId="+patId);
 
 $(function(){
 

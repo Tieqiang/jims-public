@@ -12,6 +12,7 @@ import freemarker.template.SimpleDate;
 import freemarker.template.utility.StringUtil;
 import org.apache.commons.lang.StringUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -39,9 +40,10 @@ public class ClinicForRegistService {
     private HttpServletResponse response;
     private PatInfoFacade patInfoFacade;
     private ClinicScheduleFacade clinicScheduleFacade;
+    private HttpServletRequest request;
 
     @Inject
-    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response,PatInfoFacade patInfoFacade,ClinicScheduleFacade clinicScheduleFacade) {
+    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response,PatInfoFacade patInfoFacade,ClinicScheduleFacade clinicScheduleFacade,HttpServletRequest request) {
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
@@ -54,7 +56,8 @@ public class ClinicForRegistService {
         this.response = response;
         this.patInfoFacade=patInfoFacade;
         this.clinicScheduleFacade=clinicScheduleFacade;
-    }
+        this.request=request;
+     }
 
 
 
@@ -145,6 +148,8 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id")
     public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId,@QueryParam("openId") String openId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
+        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
 
         /**
          * 查询默认绑定患者
@@ -174,25 +179,22 @@ public class ClinicForRegistService {
                   * 当天挂号
                  */
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findRegistInfo(currentDateStr, clinicIndex.getId());
-
-                AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
-                appDoctInfoVo.setName(doctInfo.getName());
-                appDoctInfoVo.setTitle(doctInfo.getTitle());
-                appDoctInfoVo.setHeadUrl(doctInfo.getHeadUrl());
-                appDoctInfoVo.setDescription(doctInfo.getTranDescription2());
-//                if(clinicForRegist!=null&&!"".equals(clinicForRegist)){
-                    appDoctInfoVo.setCurrentNum(clinicForRegist==null?0:clinicForRegist.getRegistrationNum());
-                    appDoctInfoVo.setEnabledNum(clinicForRegist==null?0:clinicForRegist.getRegistrationLimits() - clinicForRegist.getRegistrationNum());
-                    appDoctInfoVo.setTimeDesc(clinicForRegist==null?sdf.format(new Date()):clinicForRegist.getTimeDesc());
-                    appDoctInfoVo.setDeptName(deptName);
-                    appDoctInfoVo.setPrice(clinicForRegist==null?0:clinicForRegist.getRegistPrice());
-                    appDoctInfoVo.setRid(clinicForRegist==null?null:clinicForRegist.getId());
-                    appDoctInfoVo.setPatName(patInfo.getName());
-//                }else{
-//                    appDoctInfoVo.setDoctCount(0);
-//                }
-                appDoctInfoVos.add(appDoctInfoVo);
-            }
+                    if(clinicForRegist!=null&&!"".equals(clinicForRegist)){
+                        AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
+                        appDoctInfoVo.setName(doctInfo.getName());
+                        appDoctInfoVo.setTitle(doctInfo.getTitle());
+                        appDoctInfoVo.setHeadUrl(addr+doctInfo.getHeadUrl());
+                        appDoctInfoVo.setDescription(doctInfo.getTranDescription2());
+                        appDoctInfoVo.setCurrentNum(clinicForRegist==null?0:clinicForRegist.getRegistrationNum());
+                        appDoctInfoVo.setEnabledNum(clinicForRegist==null?0:clinicForRegist.getRegistrationLimits() - clinicForRegist.getRegistrationNum());
+                        appDoctInfoVo.setTimeDesc(clinicForRegist==null?sdf.format(new Date()):clinicForRegist.getTimeDesc());
+                        appDoctInfoVo.setDeptName(deptName);
+                        appDoctInfoVo.setPrice(clinicForRegist==null?0:clinicForRegist.getRegistPrice());
+                        appDoctInfoVo.setRid(clinicForRegist==null?null:clinicForRegist.getId());
+                        appDoctInfoVo.setPatName(patInfo.getName());
+                        appDoctInfoVos.add(appDoctInfoVo);
+                    }
+             }
         }
         return appDoctInfoVos;
     }
@@ -412,6 +414,7 @@ public class ClinicForRegistService {
             appDoctInfoVo.setName(doctInfo.getName());
             appDoctInfoVo.setTitle(doctInfo.getTitle());
             appDoctInfoVo.setHeadUrl(doctInfo.getHeadUrl());
+            appDoctInfoVo.setDescription(doctInfo.getTranDescription2());
             return appDoctInfoVo;
         }catch (Exception e){
             e.printStackTrace();

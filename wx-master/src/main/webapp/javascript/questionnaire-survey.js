@@ -273,6 +273,7 @@ if(GetQueryString("patId")=="" || GetQueryString("patId")==null){
                     $http.post("/api/answer-sheet/add", $scope.answerSheetVo)
                         .success(function (data) {
                             $('#dialog1').hide();
+//                            alert("ok");
                             $("#app").attr("style", "display:none;");
                             $("#msg").attr("style", "display:block;");
                         });

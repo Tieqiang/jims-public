@@ -137,7 +137,7 @@ public class WxService {
                 User user = UserAPI.userInfo(this.getToken(), fromUser);
                 AppUser appUser = appUserFacade.createUser(user);
                 if (appUser != null && !"".equals(appUser)) {//关注成功
-                    String message = "欢迎关注，详情点击" + "<a href='http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-dept-dict-info.html'>详情</a>";
+                    String message = "欢迎关注，详情点击" + "<a href='/views/his/public/app-dept-dict-info.html'>详情</a>";
                     //创建回复
                     XMLMessage xmlTextMessage = new XMLTextMessage(
                             eventMessage.getFromUserName(),
@@ -333,7 +333,6 @@ public class WxService {
     @POST
     @Path("pay-jsp")
     public String payJs2() {
-
         PayPackage packageParams = new PayPackage();
         packageParams.setBank_type("WX");
         packageParams.setBody("挂号");
@@ -365,7 +364,6 @@ public class WxService {
         return "";
     }
 
-
     @GET
     @Path("app-pay")
     public String appPay(@QueryParam("openId") String openId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("price") String price) throws IOException {
@@ -379,7 +377,8 @@ public class WxService {
         response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
         return "";
     }
-//    get-regist-id?clinicForRegistId="+rid;
+
+
     @GET
     @Path("get-regist-id")
     public String getRegistId(@QueryParam("clinicForRegistId") String clinicForRegistId) throws IOException {
@@ -387,5 +386,31 @@ public class WxService {
         return "";
     }
 
+    @GET
+    @Path("find-by-id")
+    public String findById(@QueryParam("patId") String patId, @QueryParam("openId") String openId, @QueryParam("mid") String mid) throws IOException {
+        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId + "&openId=" + openId + "&mid=" + mid);
+        return "";
+    }
 
+
+    @GET
+    @Path("query-dept")
+    public String queryDept(@QueryParam("deptId") String deptId) throws IOException {
+        response.sendRedirect("/views/his/public/app-dept-info.html?deptId="+ deptId);
+        return "";
+    }
+    @GET
+    @Path("change")
+    public String change(@QueryParam("openId") String openId) throws IOException {
+        response.sendRedirect("/views/his/public/app-my-information.html?openId="+ openId);
+        return "";
+    }
+//    query-open
+    @GET
+    @Path("query-open")
+    public String queryOpen(@QueryParam("openId") String openId) throws IOException {
+        response.sendRedirect("/views/his/public/app-user-bangker.html?param="+ openId);
+        return "";
+    }
 }

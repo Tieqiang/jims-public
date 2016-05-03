@@ -1,9 +1,11 @@
 package com.jims.wx.entity;
 
+import com.google.inject.Inject;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,10 +36,15 @@ public class DeptDict implements java.io.Serializable {
     private String deptType ;//科室类型，一般将科室分为：直接医疗类科室、医疗技术类科室、医疗辅助类科室、管理类科室、未纳入成本
     private String deptClass ;//科室类别，一般为经营科室和其他
     private String endDept ;//是否末级科室
-	// Constructors
+    private String imgUrl;//图标url
+    private String img;
 
+
+	// Constructors
 	/** default constructor */
+
 	public DeptDict() {
+
 	}
 
 	/** full constructor */
@@ -238,4 +245,35 @@ public class DeptDict implements java.io.Serializable {
     }
 
 
+    @Column(name="IMG_URL")
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    @Transient
+    public String getImg(){
+         return this.img;
+    }
+    public void setImg(String url){
+       this.img="<img src='"+url+"'/>";
+    }
+
+    @Transient
+    public String getTranDeptInfo(){
+        if(this.deptInfo!=null&&!"".equals(deptInfo)){
+            deptInfo = deptInfo.replaceAll("</?[a-zA-Z]+[^><]*>", "").
+                    replace("<h1>", "").replace("</h1>", "").
+                    replace("<h2>", "").replace("</h2>", "").
+                    replace("<h3>", "").replace("</h3>", "").
+                    replace("<h4>", "").replace("</h4>", "").
+                    replace("<h5>", "").replace("</h5>", "").
+                    replace("<h6>", "").replace("</h6>", "");
+            return deptInfo;
+        }
+        return "";
+    }
 }

@@ -19,14 +19,15 @@ app.controller('tableCtrl',function ($scope, $http) {
      };
     $http.get("/api/dept-dict/list-all")
         .success(function (data) {
+//            alert(data.img);
              $scope.names = data;});
 
 });
   var loadDict = function (deptId) {
     $.get("/api/dept-dict/find-by-id?deptId='"+deptId+"'", function (data) {
-           $("#deptname").html(data.deptName);
+         $("#deptname").html(data.deptName);
          $("#deptAlis").html(data.deptAlis);
-        $("#deptLocation").html(data.deptLocation);
+         $("#deptLocation").html(data.deptLocation);
         $("#deptdesc").html("    "+data.deptInfo);
      });
 }

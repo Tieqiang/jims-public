@@ -41,27 +41,36 @@ $(function () {
             title: '编号',
             hidden:'true'
         }, {
+            field: 'img',
+            title: '医生头像',
+            width: "20%"
+
+        }, {
             field: 'name',
             title: '医生姓名',
-            width: "20%"
+            width: "15%"
 
         }, {
             field: 'title',
             title: '医生头衔',
-            width: "20%"
+            width: "15%"
 
         }, {
             field: 'headUrl',
             title: '头像地址',
-            width: "20%"
+            hidden:true
         }, {
             field: 'hospitalId',
             title: '所在医院编号',
-            width: "20%"
+            hidden:true
         }, {
-            field: 'tranDescription',
+            field: 'hospitalName',
+            title: '所在医院',
+            width:"20%"
+        }, {
+            field: 'tranDescription3',
             title: '个人描述',
-            width: "20%"
+            width: "30%"
         }]]
     });
     /**
@@ -160,13 +169,12 @@ $(function () {
                 title: '修改医生信息'
             });
             $("#dlg").dialog('open');
-            $("#fm").get(0).reset();
-            loadSelectedRowData(arr);
+//            $("#fm").get(0).reset();
+            $("#viewImg").attr("src","");
             $("#headDiv").show();
             $("#uploadDiv").show();
-//            alert(arr[0].hospitalId);
-            setValue(arr[0].hospitalId)
-        }
+            loadSelectedRowData(arr);
+         }
     });
 
     /**
@@ -174,6 +182,10 @@ $(function () {
      */
     var loadSelectedRowData = function (arr) {
         var oEditor = CKEDITOR.instances.description;
+        var hid=arr[0].hospitalId;
+//        alert("hid="+hid);
+        $('#cc').combobox('setValue',hid);
+//        setValue(arr[0].hospitalId);
         oEditor.setData(arr[0].tranDescription);
         $('#fm').form('load', {
             id: arr[0].id,
@@ -181,6 +193,7 @@ $(function () {
             title: arr[0].title,
             headUrl: arr[0].headUrl
         });
+
     }
     /**
      * button of delete click

@@ -126,8 +126,14 @@ public class PatVsUserFacade extends BaseFacade {
      * 根据appUser的Id 删除
      * @param id
      */
+    @Transactional
     public void deleteByAppUserId(String id) {
          String sql="delete from PatVsUser as p where p.appUser.id='"+id+"'";
          entityManager.createQuery(sql).executeUpdate();
      }
+    @Transactional
+     public void deleteByPatId(String patId) {
+        String sql="delete from PatVsUser as p where p.patInfo.id='"+patId+"'";
+        entityManager.createQuery(sql).executeUpdate();
+    }
 }

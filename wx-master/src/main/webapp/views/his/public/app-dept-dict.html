@@ -11,68 +11,35 @@
     <title>当天挂号选择科室</title>
 </head>
 <body>
-<!--<div style="border-style:double ;border-color:#F0F8FF;border-width: thin;margin-top:20px;margin-left:10px;margin-right:0px;">-->
-         <!--<input id="text1" class="weui_input"  type="number" pattern="" placeholder="科室、医生姓名或拼音首字母"/></div>-->
-     <!--<div class="weui_cells weui_cells_access" style="margin-top:10px;">-->
-         <!--<a class="weui_cell" href="javascript:;">-->
-            <!--<div class="weui_cell_hd"><img src="/assert/images/wdsc.png" alt="" style="width:20px;margin-right:5px;display:block"></div>-->
-            <!--<div class="weui_cell_bd weui_cell_primary">-->
-                <!--<p>我的收藏</p>-->
-            <!--</div>-->
-         <!--</a>-->
-     <!--</div>-->
- <!--<div ng-app="myApp">-->
-    <!--<div ng-controller="tableCtrl" id="deptlist">-->
-        <!--<input type="hidden" id="openId" value="">-->
-        <!--<div ng-repeat="x in names">-->
-             <!--<div class="weui_cells weui_cells_access">-->
-                            <!--<a class="weui_cell" onclick="findDeptInfo($(this).find('span').text());">-->
-                                <!--<div></div>-->
-                                <!--<div class="weui_cell_bd weui_cell_primary">-->
-                                    <!--<span style="display:none" class="span">{{x.id}}</span>-->
-                                    <!--<p>{{x.deptName}}</p>-->
-                                <!--</div>-->
-                            <!--</a>-->
-        <!--</div>-->
-        <!--</div>-->
-    <!--</div>-->
-<!--</div>-->
- <!--</div>-->
-<!--</div>-->
-
-
-
 <div id="js_article" class="rich_media">
-    <!--<div class="top_banner serplace-banner">-->
-        <!--<a href="#" class="fd-left close-btn">X</a>-->
-        <!--<h3 class="fd-left"></h3>-->
-        <!--<a href="#" class="more-link"></a>-->
-    <!--</div>-->
     <div class="main-content">
         <div class="top-search">
             <input type="text" class="inp-text-search" placeholder="科室、医生姓名或拼音首字母">
-             <div class="bot-line parkinfo-text">
+
+            <div class="bot-line parkinfo-text">
                 <a href="#" class="hoffice-link">
-                    <span class="icon-span icon10">&nbsp;</span>我的收藏<span class="icon-span icon11 fd-right">&nbsp;</span>
+                    <span class="icon-span icon0">&nbsp;</span>我的收藏<span class="icon-span icon11 fd-right">&nbsp;</span>
                 </a>
             </div>
-        <div ng-app="myApp">
-        <div ng-controller="tableCtrl" id="deptlist">
-            <input type="hidden" id="openId" value="">
-            <div ng-repeat="x in names">
-                 <div class="bot-line parkinfo-text" ng-click="findDeptInfo(x.id);">
-                    <a href="#" class="hoffice-link">
-                        <span style="display:none" class="span">{{x.id}}</span>
-                        <!--<p>{{x.deptName}}</p>-->
-                        <span class="icon-span icon10">&nbsp;</span>{{x.deptName}}<span class="icon-span icon11 fd-right">&nbsp;</span></a>
-                </div>
+            <div ng-app="myApp">
+                <div ng-controller="tableCtrl" id="deptlist">
+                    <input type="hidden" id="openId" value="">
+
+                    <div ng-repeat="x in names">
+                        <div class="bot-line parkinfo-text" ng-click="findDeptInfo(x.id);">
+                            <a href="#" class="hoffice-link">
+                                <span style="display:none" class="span">{{x.id}}</span>
+                                <!--<p>{{x.deptName}}</p>-->
+                                <span class="icon-span"><img src="{{x.imgUrl}}"></span>{{x.deptName}}<span
+                                    class="icon-span icon11 fd-right">&nbsp;</span></a>
+                        </div>
+                    </div>
                 </div>
             </div>
-            </div>
-             </div>
         </div>
     </div>
-  </body>
+</div>
+</body>
 <script src="../../../assert/angular/angular.min.js"></script>
 <script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <script src="../../../javascript/app-dept-dict.js"></script>

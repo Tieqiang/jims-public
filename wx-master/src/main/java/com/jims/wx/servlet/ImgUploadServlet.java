@@ -19,15 +19,13 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 
 /**
- *
  * 文件上传 具体步骤： 1）获得磁盘文件条目工厂 DiskFileItemFactory 要导包 2） 利用 request 获取 真实路径
  * ，供临时文件存储，和 最终文件存储 ，这两个存储位置可不同，也可相同 3）对 DiskFileItemFactory 对象设置一些 属性
  * 4）高水平的API文件上传处理 ServletFileUpload upload = new ServletFileUpload(factory);
  * 目的是调用 parseRequest（request）方法 获得 FileItem 集合list ，
- *
+ * <p/>
  * 5）在 FileItem 对象中 获取信息， 遍历， 判断 表单提交过来的信息 是否是 普通文本信息 另做处理 6） 第一种. 用第三方 提供的
  * item.write( new File(path,filename) ); 直接写到磁盘上 第二种. 手动处理
- *
  */
 public class ImgUploadServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -47,21 +45,16 @@ public class ImgUploadServlet extends HttpServlet {
         TEMP_FOLDER = servletCtx.getRealPath("/uploadTemp");
     }
 
-//    @Override
-//    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        super.doPut(req, resp);
-//    }
-
     /**
      * @see javax.servlet.http.HttpServlet#doGet(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doGet(HttpServletRequest request,
                          HttpServletResponse response) throws ServletException, IOException {
         request.setCharacterEncoding("utf-8"); // 设置编码
         response.setCharacterEncoding("utf-8");
         response.setContentType("text/html;charset=UTF-8");
-         DiskFileItemFactory factory = new DiskFileItemFactory();
+        DiskFileItemFactory factory = new DiskFileItemFactory();
 
         // 如果没以下两行设置的话，上传大的 文件 会占用 很多内存，
         // 设置暂时存放的 存储室 , 这个存储室，可以和 最终存储文件 的目录不同
@@ -75,7 +68,7 @@ public class ImgUploadServlet extends HttpServlet {
 
         // 高水平的API文件上传处理
         ServletFileUpload upload = new ServletFileUpload(factory);
-         try {
+        try {
             // 提交上来的信息都在这个list里面
             // 这意味着可以上传多个文件
             // 请自行组织代码
@@ -87,17 +80,16 @@ public class ImgUploadServlet extends HttpServlet {
             // 保存后的文件名
             String saveName = new Date().getTime() + filename.substring(filename.lastIndexOf("."));
             // 保存后图片的浏览器访问路径
-            String picUrl = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/upload/"+saveName;
+//            String picUrl = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/upload/"+saveName;
+            String picUrl = "/upload/" + saveName;
             System.out.println("存放目录:" + PATH_FOLDER);
             System.out.println("文件名:" + filename);
-            System.out.println("浏览器访问路径:" + picUrl);
-             // 真正写到磁盘上
+            System.out.println("相对路径:" + picUrl);
+            // 真正写到磁盘上
             item.write(new File(PATH_FOLDER, saveName)); // 第三方提供的
-
             PrintWriter writer = response.getWriter();
-
             writer.print("{");
-            writer.print("msg:\"文件大小:"+item.getSize()+",文件名:"+filename+"\"");
+            writer.print("msg:\"文件大小:" + item.getSize() + ",文件名:" + filename + "\"");
             writer.print(",picUrl:\"" + picUrl + "\"");
             writer.print("}");
 
@@ -113,7 +105,7 @@ public class ImgUploadServlet extends HttpServlet {
 
     private FileItem getUploadFileItem(List<FileItem> list) {
         for (FileItem fileItem : list) {
-            if(!fileItem.isFormField()) {
+            if (!fileItem.isFormField()) {
                 return fileItem;
             }
         }
@@ -133,7 +125,7 @@ public class ImgUploadServlet extends HttpServlet {
 
     /**
      * @see javax.servlet.http.HttpServlet#doPost(javax.servlet.http.HttpServletRequest request, javax.servlet.http.HttpServletResponse
-     *      response)
+     * response)
      */
     protected void doPost(HttpServletRequest request,
                           HttpServletResponse response) throws ServletException, IOException {

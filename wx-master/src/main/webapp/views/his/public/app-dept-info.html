@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>科室信息</title>
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+</head>
+<body>
+<div id="deptInfo">
+    <div class="weui_cells weui_cells_access">
+        <a class="weui_cell" href="javascript:;">
+            <div class="weui_cell_hd"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>科室名称</p>
+            </div>
+            <div class="weui_cell_ft" id="deptname"></div>
+        </a>
+        <a class="weui_cell" href="javascript:;">
+            <div class="weui_cell_hd"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>科室别名</p>
+            </div>
+            <div class="weui_cell_ft" id="deptAlis"></div>
+        </a>
+        <a class="weui_cell" href="javascript:;">
+            <div class="weui_cell_hd"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>科室位置</p>
+            </div>
+            <div class="weui_cell_ft" id="deptLocation"></div>
+        </a>
+        <a class="weui_cell" href="javascript:;">
+            <div class="weui_cell_hd"></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <p>科室简介</p>
+            </div>
+            <br>
+        </a>
+
+        <div class="weui_cell" id="deptdesc" style="background-color:#ccc;">
+            <!--<div class="weui_cell_bd weui_cell_primary">-->
+            <!--<textarea class="weui_textarea" placeholder="" rows="" id="deptdesc" disabled="disabled"-->
+            <!--style="background-color: #ccc;"> </textarea>-->
+            <!--</div>-->
+        </div>
+        <div class="weui_btn_area">
+            <a href="javascript:history.go(-1)" class="weui_btn weui_btn_primary" id="return">返回</a>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-dept-info.js"></script>
+</html>

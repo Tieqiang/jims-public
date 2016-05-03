@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head lang="en">
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, nofollow"/>
     <title>科室信息维护</title>
     <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
     <link rel="stylesheet" href="/assert/easyui/themes/color.css">
@@ -84,19 +85,36 @@
                 <td>&nbsp;&nbsp;<label>上级科室:</label></td>
                 <td><input name="parentId" id="parentId" class="easyui-textbox" disabled></td>
             </tr>
-        </table>
 
-        <div class="fitem">
+            <tr>
+                <td>&nbsp;&nbsp;<label>上传图标：</label></td>
+                <td> <input id="fileToUpload" type="file" size="45" name="fileToUpload">
+                    <a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >上传</a></td>
+            </tr>
+            <tr>
+                <td>
+                    <img src="" id="viewImg"/>
+                </td>
+             </tr>
+        </table>
+        <!--<div class="fitem" id="uploadDiv" style="align:center;">-->
+            <!--<label></label>-->
+            <!--<input id="fileToUpload" type="file" size="45" name="fileToUpload">-->
+            <!--<a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >上传</a>-->
+            <!--<br/>-->
+            <!--<img src="" id="viewImg"/>-->
+        <!--</div>-->
+         <div class="fitem">
             <!--<div style="height:100px;float:left;">科室简介</div>-->
             <span><h4>科室简介:</h4>
             <textarea id="deptInfo" name="deptInfo"></textarea>
             <script type="text/javascript">CKEDITOR.replace('deptInfo');</script></span>
         </div>
-        <div class="fitem">
+        <!--<div class="fitem">-->
             <input name="id" id="id" type="hidden">
-        </div>
-
-    </form>
+        <!--</div>-->
+            <input type="hidden" id="headUrl" value=""/>
+     </form>
 </div>
 <div id="dlg-buttons">
     <a href="javascript:void(0)" id="saveBtn" class="easyui-linkbutton c6" iconCls="icon-ok" style="width:90px">保存</a>
@@ -109,9 +127,10 @@
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
 <script type="text/javascript" src="/javascript/tool.js"></script>
-<!--富文本编辑器-->
+<!--文本编辑器-->
 <script src="/assert/plugins/ckeditor/ckeditor.js"></script>
 <!--引入自己的js-->
-<script type="text/javascript" src="/javascript/dept-dict.js"></script>
+<script type="text/javascript" src="../../../javascript/dept-dict.js"></script>
+<script type="text/javascript" src="/javascript/common/ajaxfileupload.js"></script>
 </body>
 </html>

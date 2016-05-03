@@ -22,6 +22,8 @@ var deptId = GetQueryString("deptId");
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
     $scope.judgeIsEnabledRegist = function (rid, enabledCount, price, name, title, timeDesc, patName, deptName) {
+//       alert("qqq"+rid);
+        var clinicForRegistId =rid;
         if (enabledCount > 0) {
 //                var openId = $("#openId").val();
             //选择其他患者
@@ -30,17 +32,18 @@ app.controller('tableCtrl', function ($scope, $http) {
 //             window.location.href="/views/his/public/app-pay.html?openId="+openId+"&price=" + price + "&clinicForRegistId=" + rid ;
             window.location.href = "/api/wx-service/app-pay?openId=" + openId + "&price=" + price + "&clinicForRegistId=" + rid
         }else {
-            alert("rid="+rid);
+//            alert("rid="+clinicForRegistId);
             //医生详情 clinicForRegistId
-            window.location.href="/api/wx-service/get-regist-id?clinicForRegistId="+rid;
+            window.location.href="/api/wx-service/get-regist-id?clinicForRegistId="+clinicForRegistId;
         }
     }
     $http.get("/api/clinic-for-regist/find-by-dept-id?deptId=" + deptId + "&openId=" + openId)
         .success(function (data) {
             if (data.length > 0) {
-                alert(data.length);
-                $("#text1").attr("text", data[0].deptName + ":" + data.length + "人");
+//                alert(data.length);
+                $("#text1").html(data[0].deptName + ":" + data.length + "人");
             }
+            console.info(data);
             $scope.names = data;
         });
 });

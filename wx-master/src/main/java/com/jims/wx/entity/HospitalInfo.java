@@ -94,6 +94,13 @@ public class HospitalInfo implements java.io.Serializable {
             String s = "";
             try {
                 s = new String(this.content, "UTF-8");
+                s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").replaceAll("p","").
+                        replace("<h1>", "").replace("</h1>", "").
+                        replace("<h2>", "").replace("</h2>", "").
+                        replace("<h3>", "").replace("</h3>", "").
+                        replace("<h4>", "").replace("</h4>", "").
+                        replace("<h5>", "").replace("</h5>", "").
+                        replace("<h6>", "").replace("</h6>", "");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

@@ -29,7 +29,8 @@ public class PatVisitFacade extends BaseFacade {
         Query qu = createNativeQuery(sql);
         List<Objects[]> resultList = qu.getResultList();
         for(Object[] objects:resultList){
-            PatVisitVo patVisitVo = new PatVisitVo(objects[0].toString(),Double.parseDouble(objects[1].toString()),objects[3].toString(),objects[4].toString(),objects[5]==null?null:objects[5].toString(),objects[6]==null?null:objects[6].toString(),objects[2].toString()) ;
+            PatVisitVo patVisitVo = new PatVisitVo(objects[0]==null?null:objects[0].toString(),Double.parseDouble(objects[1].toString()),objects[3].toString(),objects[4].toString(),objects[5]==null?null:objects[5].toString(),objects[6]==null?null:objects[6].toString(),objects[2]==null?null:objects[2].toString()) ;
+
             if (objects[5]!=null){
                 patVisitVo.setAdmissionDateTime(patVisitVo.getAdmissionDateTime().substring(0,19));
             }

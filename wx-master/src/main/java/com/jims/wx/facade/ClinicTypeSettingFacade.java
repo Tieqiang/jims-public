@@ -25,13 +25,12 @@ public class ClinicTypeSettingFacade extends BaseFacade {
         List<ComboboxVo> comboboxVolist=new ArrayList<ComboboxVo>();
         List<ClinicTypeSetting> list= entityManager.createQuery("from ClinicTypeSetting").getResultList();
         for(int i=0;i<list.size();i++){
-            ClinicTypeSetting c=list.get(0);
+            ClinicTypeSetting c=list.get(i);
             ComboboxVo v=new ComboboxVo();
             v.setId(c.getId());
             v.setText(c.getClinicType());
             comboboxVolist.add(v);
         }
-
         return comboboxVolist;
 
     }

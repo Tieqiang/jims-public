@@ -29,6 +29,7 @@ public class HospitalInfoService {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<HospitalInfo> findAllHospital(){
+
         return hospitalInfoFacade.findAll(HospitalInfo.class) ;
     }
 
@@ -42,6 +43,8 @@ public class HospitalInfoService {
     @Path("merge")
     public Response save(@QueryParam("tranContent") String tranContent, HospitalInfo hospitalInfo ) {
         try {
+//            rquo
+            tranContent=tranContent.replace("rquo","").replace("lquo","");
             if (null != hospitalInfo) {
                 hospitalInfo.setContent(tranContent.getBytes("UTF-8"));
                 hospitalInfo = hospitalInfoFacade.save(hospitalInfo);

@@ -47,9 +47,6 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
           }
       });
 
-
-
-
        $("#pay").on("click",function(){
               //生成支付js
             $.ajax({
@@ -61,7 +58,7 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
  //                        // 成功返回支付js
 //                        alert(json.package);
                         WeixinJSBridge.invoke('getBrandWCPayRequest',json,function(res){
-                            alert("errorMsg"+res.err_msg);
+//                            alert("errorMsg"+res.err_msg);
                             if(res.err_msg == 'get_brand_wcpay_request:ok'){
                                  // 支付成功后微信会调用 notify_url
                                 //支付成功，后台数据库加入响应挂号操作
@@ -75,12 +72,17 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
             });
      })
  })
-/**
- * 确认付款
+ /**
+ *
  */
-
-
-//wx.config({
+function change(){
+    if(openId!=null&&openId!=""){
+        window.location.href="/api/wx-service/change?openId="+openId;
+    }else{
+        alert("暂时不能切换默认用户！");
+    }
+ }
+ //wx.config({
 //    debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 //    appId: appId, // 必填，公众号的唯一标识
 //    timestamp:timeStamp2 , // 必填，生成签名的时间戳

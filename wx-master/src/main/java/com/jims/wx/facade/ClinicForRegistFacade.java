@@ -116,7 +116,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @param clinicIndexId
      * @return
      * @author chenxiaoyang
-     * @description号表生成
+     * @description 号表生成
      */
     public Map<String, Object> registTable(String date, String clinicIndexId, String date1, String desc, String id) {
         Map<String, Object> map = new HashMap<String, Object>();
@@ -127,9 +127,13 @@ public class ClinicForRegistFacade extends BaseFacade {
                 System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
-                    ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
-                    list.add(clinicForRegist);
-                }
+                    //判断这个号别 这个时间 是否已经生成了号表
+                    boolean flag=judgeIsExists(clinicIndexId,registdateList.get(j));//
+                    if(!flag){
+                        ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                        list.add(clinicForRegist);
+                    }
+                 }
             }
             if (!list.isEmpty()) {
                 map.put("isRegist", true);
@@ -142,6 +146,23 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return map;
     }
+
+    /***
+     * 判断某个号别 某个时间的号表是否存在
+      * @param clinicIndexId
+     * @param date
+     * @return if 存在 true else false
+     *
+     */
+    private boolean judgeIsExists(String clinicIndexId, String date) {
+        String hql="from ClinicForRegist where clinicIndex.id='"+clinicIndexId+"'and timeDesc like '%"+date+"%'";
+        System.out.println("hql="+hql);
+        List<ClinicForRegist>  list=entityManager.createQuery(hql).getResultList();
+        if(!list.isEmpty()){//已经存在
+            return true;
+        }
+        return  false;
+     }
 
     /**
      * @param parse clinicDate
