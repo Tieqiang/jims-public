@@ -1,5 +1,5 @@
 /**
- * Created by heren on 2016/4/18.
+ * Created by fyg on 2016/4/18.
  */
 
 var materialApp = angular.module("materialApp", [ 'ngFileUpload'])
@@ -24,28 +24,38 @@ var messageBuildCtrl = materialApp.controller('materialControl', ['$scope', '$ht
         $scope.myVideo = false;
     };
 
-    /*$scope.images = []; //定义图片实体数组
+    $scope.type = "image";
+    $scope.imgItems = new Array();
+    $http.get('/api/material/list?type='+ $scope.type).success(function(resp){
+        //console.log($scope.imgItems);
+        angular.forEach(resp.item,function(data,index){
+            var fullUrl = data.url;
+            fullUrl=fullUrl.split("?")[0];
+            resp.item[index].url = fullUrl;
+            //console.log("fullUrl:" + fullUrl);
+            /*imgItems = resp.item;
+            console.log("resp.item[index].url:" + resp.item[index].url);
+            imgItems = resp.item[index];
+            imgItems = [data.length];
+            console.log("data.url:" + data.url);
+            imgItems[index] = '<img src="' + data.url + '">';
+            $("#i").html(imgItems[index]);
+            imgItems[index] = '"' + data.url + '"';
+            console.log("imgItems[index]:" + imgItems[index]);*/
+        });
+        $scope.imgItems = resp.item;
+        //console.log("$scope.imgItems:" + $scope.imgItems);
+    });
 
-    $scope.image = new Image;   //图片实体
-
-    $scope.images.push($scope.image);*/
-
+    $scope.media_id = "";
     //文件上传
-    $scope.submit = function () {
-        //if ($scope.form.file.$valid && $scope.file) {
-            $scope.upload($scope.file);
-        //}
-    };
-    // upload on file select or drop
     $scope.upload = function (file) {
         console.log("file:" + file);
         Upload.upload({
-            url: '/api/material/upload',    //服务端接收
+            url: '/api/material/upload-img',    //服务端接收
             data: {file: file}     //上传的同时带的参数
-            //file: file
         }).then(function (resp) {
-            console.log("resp.data.url:" + resp.data.url);
-            //$scope.image.image_media_id = resp.data.url;
+            console.log("resp.data.media_id:" + resp.data.media_id);
         }, function (resp) {
             console.log('Error status: ' + resp.status);
         }, function (evt) {
@@ -53,19 +63,4 @@ var messageBuildCtrl = materialApp.controller('materialControl', ['$scope', '$ht
             console.log('progress: ' + progressPercentage + '% ' + evt.config.data.file.name);
         });
     };
-
-    /**
-     * 保存素材小
-     */
-    $scope.save = function () {
-        $http.post("/api/material/save", $scope.images).success(function () {
-            console.log("ok");
-        })
-    };
 }]);
-
-/*
-//image 的实体类
-var Image = function () {
-    this.image_media_id = "";
-};*/
