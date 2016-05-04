@@ -10,7 +10,17 @@ public class Media extends BaseResult{
 	
 	private Integer created_at;
 
-	public String getType() {
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getType() {
 		return type;
 	}
 
