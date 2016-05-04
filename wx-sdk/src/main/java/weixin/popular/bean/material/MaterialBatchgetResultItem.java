@@ -10,7 +10,17 @@ public class MaterialBatchgetResultItem {
 
 	private String update_time;
 
-	public String getMedia_id() {
+    private String url;
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getMedia_id() {
 		return media_id;
 	}
 
