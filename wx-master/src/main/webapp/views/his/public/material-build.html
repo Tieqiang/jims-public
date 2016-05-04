@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>永久素材管理</title>
-    <link href="../../../assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/assert/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 </head>
 <body class="container-fluid" ng-controller="materialControl">
@@ -17,10 +17,11 @@
             <li><a href="#video" data-toggle="tab" ng-click="videoToggle()">视频</a></li>
         </ul>
     </div>
-    <div class="row" ng-hide="myImg">
+    <div class="row" ng-hide="myImg" style="height:400px;">
         <div class="col-md-12">
-            <div class="col-sm-8" style="border:1px;">
-                <div class="text-center text-muted">该分组暂时没有素材</div>
+            <div class="col-sm-8" style="border:1px;" ng-repeat="x in imgItems">
+                <img ng-src="{{x.url}}">
+                <!--<p class="text-center text-muted">该分组暂时没有素材</p>-->
             </div>
             <div class="col-sm-2" style="border:1px;">
                 <form enctype="multipart/form-data">
@@ -33,42 +34,32 @@
             <div class="col-sm-2" style="border:1px;">
                 <table class="table table-hover">
                     <tr>
-                        <th>未分组</th>
+                        <th class="btn btn-link" style="border: 0 none;">未分组</th>
                     </tr>
                     <tr>
-                        <th>
-                            <button type="button" class="btn btn-link" data-toggle="popover" data-placement="bottom"
-                                    data-content="底部的 Popover 中的一些内容">
-                                <span class="glyphicon glyphicon-plus"></span>新建分组
-                            </button>
+                        <th class="btn btn-link" style="border: 0 none;">
+                            <span class="glyphicon glyphicon-plus"></span>新建分组
                         </th>
                     </tr>
                 </table>
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="voice" ng-hide="myVoice">
+    <div class="tab-pane fade" id="voice" ng-hide="myVoice" style="height: 400px">
         <div class="row">
             <div class="col-md-12">
                 <div class="col-sm-10" style="border:1px;">
-                    <div class="text-center text-muted">暂无数据，可点击右边新建按钮创建</div>
+                    <p class="text-center text-muted">暂无数据，可点击右上角新建按钮创建</p>
                 </div>
                 <div class="col-sm-2" style="border:1px;">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>
-                                <button class="btn btn-success" data-toggle="modal" data-target="#voiceModal">
-                                    <span class="glyphicon glyphicon-plus"></span>新建语音
-                                </button>
-                            </th>
-                        </tr>
-                    </table>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#voiceModal">
+                        <span class="glyphicon glyphicon-plus"></span>新建语音
+                    </button>
                 </div>
             </div>
         </div>
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="voiceModal" tabindex="-1" role="dialog"
-             aria-labelledby="voiceModalLabel" aria-hidden="true">
+        <div class="modal fade" id="voiceModal" tabindex="-1" role="dialog" aria-labelledby="voiceModalLabel" aria-hidden="true">
             <div class="modal-dialog" style="width:800px;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -113,13 +104,13 @@
                             </div>
                             <div class="form-group">
                                 <span class="col-sm-2 control-label">语音内容</span>
-                                <label class="text-muted">格式支持mp3、wma、wav、amr，文件大小不超过30M，语音时长不超过30分钟</label>
+                                <span class="text-muted">格式支持mp3、wma、wav、amr，文件大小不超过30M，语音时长不超过30分钟</span>
                             </div>
                             <div class="form-group">
                                 <form enctype="multipart/form-data">
                                     <a class="btn btn-default col-sm-offset-2" ngf-select="upload($file)" ng-model="file" name="file"
-                                         ngf-pattern="'image/*'"
-                                         ngf-accept="'image/*'" ngf-max-size="2MB" ngf-min-height="100"
+                                         ngf-pattern="'voice/*'"
+                                         ngf-accept="'voice/*'" ngf-max-size="2MB" ngf-min-height="100"
                                          ngf-resize="{width: 100, height: 100}">上传</a>
                                 </form>
                             </div>
@@ -133,32 +124,25 @@
                             保存
                         </button>
                     </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal -->
+                </div>
+            </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="video" ng-hide="myVideo">
+    <div class="tab-pane fade" id="video" ng-hide="myVideo" style="height:400px;">
         <div class="row">
             <div class="col-md-12">
                 <div class="col-sm-10" style="border:1px;">
                     <p class="text-center text-muted">暂无视频 ,<a class="btn btn-link" data-toggle="modal" data-target="#videoModal">点此上传</a></p>
                 </div>
                 <div class="col-sm-2" style="border:1px;">
-                    <table class="table table-hover">
-                        <tr>
-                            <th>
-                                <button class="btn btn-success" data-toggle="modal" data-target="#videoModal">
-                                    <span class="glyphicon glyphicon-plus"></span>新建视频
-                                </button>
-                            </th>
-                        </tr>
-                    </table>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#videoModal">
+                        <span class="glyphicon glyphicon-plus"></span>新建视频
+                    </button>
                 </div>
             </div>
         </div>
         <!-- 模态框（Modal） -->
-        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog"
-             aria-labelledby="videoModalLabel" aria-hidden="true">
+        <div class="modal fade" id="videoModal" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
             <div class="modal-dialog" style="width:800px;">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -213,6 +197,15 @@
                                     <label class="col-sm-2"><input type="radio" name="classify">娱乐</label>
                                 </div>
                             </div>
+                            <div class="form-group">
+                                <label class="col-sm-2 control-label">标签<span class="glyphicon glyphicon-question-sign"></span></label>
+                                <a href="#" data-toggle="popover" title="Example popover">
+                                    请悬停在我的上面
+                                </a>
+                                <div class="col-sm-10">
+                                    <input class="form-control" id="mLabel">
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -224,26 +217,16 @@
                         </button>
                     </div>
                 </div>
-                <!-- /.modal-content -->
             </div>
-            <!-- /.modal -->
         </div>
     </div>
 </div>
-<!--<script>
-    $('#voiceModal').modal().css({
-        width: 'auto',
-        'margin-left': function () {
-            return -($(this).width() / 2);
-        }
-    });
-</script>-->
 
-<script src="../../../assert/easyui/jquery.min.js" type="text/javascript"></script>
-    <script src="../../../assert/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-    <script src="../../../assert/angular/angular.min.js" type="text/javascript"></script>
-    <script src="../../../assert/ngupload/ng-file-upload.min.js"></script>
-    <script src="../../../assert/ngupload/ng-file-upload-shim.min.js"></script>
-    <script src="../../../javascript/material-build.js"></script>
+    <script src="/assert/easyui/jquery.min.js" type="text/javascript"></script>
+    <script src="/assert/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+    <script src="/assert/angular/angular.min.js" type="text/javascript"></script>
+    <script src="/assert/ngupload/ng-file-upload.min.js"></script>
+    <script src="/assert/ngupload/ng-file-upload-shim.min.js"></script>
+    <script src="/javascript/material-build.js"></script>
 </body>
 </html>
