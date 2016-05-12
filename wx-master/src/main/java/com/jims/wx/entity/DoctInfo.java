@@ -226,7 +226,7 @@ public class DoctInfo implements java.io.Serializable {
     }
 
     public void setImg(String url) {
-        this.img = "<img src='" + url + "'/>";
+        this.img = "<img src='" + url + "' style='width:100%;'/>";
     }
 
     @Transient

@@ -44,6 +44,8 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
              $("#patName").text(data.patName);//enabledCount
              $("#enabledCount").text(data.enabledNum);
              $("#idCard").val(data.idCard);
+//             alert(data.registTime);
+             $("#registTime").text(data.registTime);
           }
       });
 

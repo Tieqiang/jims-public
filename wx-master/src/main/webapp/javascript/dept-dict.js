@@ -38,10 +38,14 @@ $(function () {
         //toolbar: '#tb',
         footer: '#tb',
         fitColumns: true,
-        title: parent.config.hospitalName + "--科室维护",
+        title: "科室维护",
         columns: [[{
             title: 'id',
             field: 'id',
+            hidden: true
+        },{
+            title: 'imgUrl',
+            field: 'imgUrl2',
             hidden: true
         }, {
             title: '科室图标',
@@ -141,9 +145,10 @@ $(function () {
     var loadDept = function () {
         var depts = [];
         var treeDepts = [];
-        var loadPromise = $.get("/api/dept-dict/list?hospitalId=" + parent.config.hospitalId, function (data) {
+        var loadPromise = $.get("/api/dept-dict/list", function (data) {
             //$("#tt").treegrid('loadData',data);
             $.each(data, function (index, item) {
+//                console.info(item);
                 var obj = {};
                 obj.deptCode = item.deptCode;
                 obj.id = item.id;
@@ -155,15 +160,15 @@ $(function () {
                 obj.deptDevideAttr = item.deptDevideAttr;
                 obj.deptLocation = item.deptLocation;
                 obj.deptStopFlag = item.deptStopFlag;
-                obj.hospitalId = item.hospitalDict.id;
                 obj.parentId = item.parentId;
                 obj.deptType = item.deptType;
                 obj.deptClass = item.deptClass;
                 obj.endDept = item.endDept;
                 obj.deptInfo = item.deptInfo;
                 obj.img = item.img;
+                obj.imgUrl2=item.imgUrl2;
                 obj.children = [];
-
+//                obj.
                 depts.push(obj);
             });
         });
@@ -290,25 +295,25 @@ $(function () {
         $("#deptDevideAttr").textbox('setValue', node.deptDevideAttr);
         $("#deptLocation").textbox('setValue', node.deptLocation);
         $("#deptStopFlag").combobox('setValue', node.deptStopFlag);
-//console.log(node.deptStopFlag);console.log(node.endDept);console.log(node.deptType);console.log(node.deptClass);
         $("#endDept").combobox('setValue', node.endDept);
         $("#deptType").combobox('setValue', node.deptType);
         $("#deptClass").combobox('setValue', node.deptClass);
         $("#parentId").textbox('setValue', node.parentId);
-        $("#deptInfo").val( node.deptInfo);
-
-
-
+//        alert(node.imgUrl2);
+//        console.info(node);
+        $("#headUrl").attr("value",node.imgUrl2);
+//        $("#deptInfo").val(node.deptInfo);
+        var oEditor = CKEDITOR.instances.deptInfo;
+         oEditor.setData(node.deptInfo);
         $("#dlg").dialog('open').dialog('setTitle', "修改科室");
-
-    });
+     });
 
     /**
      * 保存信息
      */
     $("#saveBtn").on('click', function () {
         var deptDict = {};
-        deptDict.hospitalDict = {};
+//        deptDict.hospitalDict = {};
         deptDict.id = $("#id").val();
         deptDict.deptCode = $("#deptCode").textbox('getValue');
         deptDict.deptName = $("#deptName").textbox('getValue');
@@ -323,13 +328,13 @@ $(function () {
         deptDict.deptType = $("#deptType").combobox('getValue');
         deptDict.endDept = $("#endDept").combobox('getValue');
         deptDict.imgUrl=$("#headUrl").val();
-//        alert($("#headUrl").val());
+        alert($("#headUrl").val());
         var oEditor = CKEDITOR.instances.deptInfo;
         deptDict.deptInfo = oEditor.getData();
 
         //alert(oEditor.getData());
 
-        deptDict.hospitalDict.id = parent.config.hospitalId;
+//        deptDict.hospitalDict.id = parent.config.hospitalId;
 
         if ($("#fm").form('validate')) {
             $.postJSON("/api/dept-dict/add", deptDict, function (data) {

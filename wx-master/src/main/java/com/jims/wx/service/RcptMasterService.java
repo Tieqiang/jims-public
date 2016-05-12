@@ -38,29 +38,30 @@ public class RcptMasterService {
     }
 
     /**
-     * 根据patId查询
+     * 根据patId查询就诊收费总额
      * @param
      * @return
      */
+
     @GET
     @Path("find-by-patient")
-    public List<OutpRcptMasterVo> findByPatientId(@QueryParam("patientId") String patientId){
-        return rcptMasterFacade.getByPatientId(patientId);
+    public List<OutpRcptMasterVo> findByPatientId(@QueryParam("patientId") String patientId,@QueryParam("date") String date){
+         return rcptMasterFacade.getByPatientId(patientId,date);
     }
 
 
     /**
-     * 根据RcptNo查询
+     * 根据RcptNo查询详细收费
      * @param
      * @return
      */
-
     @GET
     @Path("find-by-rcpt")
     public List<OutpBillItemsVo> findByRcptNo(@QueryParam("rcptNo") String rcptNo){
         return rcptMasterFacade.getByRcptNo(rcptNo);
     }
 
+    // 根据openId查询绑定用户
     @GET
     @Path("find-by-app-user")
     public List<PatVsUserVo> findByAppUser(@QueryParam("openId") String openId){

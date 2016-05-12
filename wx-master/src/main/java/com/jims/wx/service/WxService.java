@@ -264,7 +264,7 @@ public class WxService {
     }
 
     /**
-     * app挂号选择科室
+     * app当天挂号选择科室
      *
      * @param code
      * @return
@@ -305,7 +305,7 @@ public class WxService {
         String price = request.getParameter("price");
         String openId = request.getParameter("openId");
         String body = "测试挂号";
-        String notifyUrl = "http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-pay-success.html";
+        String notifyUrl = "/views/his/public/app-pay-success.html";
         String ip = request.getRemoteAddr();
         if (price.contains(".")) {//double
             price = String.valueOf(Double.valueOf(price) * 100);
@@ -329,7 +329,6 @@ public class WxService {
         response.sendRedirect("/views/his/public/rcpt-master.html?openId=" + snsToken.getOpenid());
         return "http://www.baidu.com/";
     }
-
     @POST
     @Path("pay-jsp")
     public String payJs2() {
@@ -397,20 +396,126 @@ public class WxService {
     @GET
     @Path("query-dept")
     public String queryDept(@QueryParam("deptId") String deptId) throws IOException {
-        response.sendRedirect("/views/his/public/app-dept-info.html?deptId="+ deptId);
+        response.sendRedirect("/views/his/public/app-dept-info.html?deptId=" + deptId);
         return "";
     }
+
     @GET
     @Path("change")
     public String change(@QueryParam("openId") String openId) throws IOException {
-        response.sendRedirect("/views/his/public/app-my-information.html?openId="+ openId);
+        response.sendRedirect("/views/his/public/app-my-information.html?openId=" + openId);
         return "";
     }
-//    query-open
+
+    //    query-open
     @GET
     @Path("query-open")
     public String queryOpen(@QueryParam("openId") String openId) throws IOException {
-        response.sendRedirect("/views/his/public/app-user-bangker.html?param="+ openId);
+        response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+        return "";
+    }
+
+    @GET
+    @Path("regist-open")
+    public String registOpen(@QueryParam("openId") String openId) throws IOException {
+
+        boolean flag = patVsUserFacade.findIsExistsPatInfo(openId);
+        if (flag) {//绑定和患者
+            response.sendRedirect("/views/his/public/app-dept-dict.html?param=" + openId);
+        } else {
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+        }
+        return "";
+    }
+
+    /**
+     *
+     * @param age
+     * @param sexValue
+     * @return
+     * @throws IOException
+     */
+    @GET
+    @Path("select-body")
+    public String  selectBody(@QueryParam("age") String age,@QueryParam("sexValue") String sexValue) throws IOException {
+         if(sexValue=="1")//男性
+             response.sendRedirect("/views/his/public/app-select-body.html?age=" + age+"&sexValue="+sexValue);
+             response.sendRedirect("/views/his/public/app-select-body-woman.html?age=" + age+"&sexValue="+sexValue);
+         return "";
+    }
+
+
+    @GET
+    @Path("query-symptom")
+    public String  querySymptom(@QueryParam("bodyId") String bodyId,@QueryParam("openId") String openId) throws IOException {
+        response.sendRedirect("/views/his/public/app-select-symptom.html?bodyId=" + bodyId+"&openId="+openId);
+        return "";
+    }
+
+
+
+    @GET
+    @Path("query-sickness")
+    public String  queerySickness(@QueryParam("ids") String ids,@QueryParam("openId") String openId) throws IOException {
+        response.sendRedirect("/views/his/public/app-sickness-result.html?ids=" + ids+"&openId="+openId);
+        return "";
+    }
+
+    /**
+
+     *
+     * @param code
+     * @return
+     */
+    @GET
+    @Path("find-body")
+    public String findBody(@QueryParam("code") String code) {
+        try {
+            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+            //测试用
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+            response.sendRedirect("/views/his/public/app-select-body.html?openId=" + snsToken.getOpenid());
+         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * app预约挂号选择科室
+     *
+     * @param code
+     * @return
+     */
+    @GET
+    @Path("find-dept-pre")
+    public String findDeptPre(@QueryParam("code") String code) {
+        try {
+            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+            //测试用
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+            /**
+             * 如果次微信用户有绑定的患者，则跳到挂号页面，否则跳到绑卡页面
+             */
+            boolean flag = patVsUserFacade.findIsExistsPatInfo(snsToken.getOpenid());
+            if (flag) {//绑定和患者
+                response.sendRedirect("/views/his/public/app-dept-dict-pre.html?param=" + snsToken.getOpenid());
+            } else {//没有绑定患者,跳转到用户绑定页面
+                response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+    @GET
+    @Path("query-string-pre")
+    public String queryStringPre(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
+        response.sendRedirect("/views/his/public/app-doct-info-pre.html?openId=" + openId + "&deptId=" + deptId);
         return "";
     }
 }

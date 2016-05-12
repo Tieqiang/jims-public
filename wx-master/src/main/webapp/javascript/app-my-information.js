@@ -48,7 +48,7 @@ app.controller('tableCtrl', function ($scope, $http) {
             .success(function (data) {
 //                console.log(data);
                 if (data.length < 3) {
-                    alert(openId);
+//                    alert(openId);
                     window.location.href = "/api/wx-service/query-open?openId=" + openId;
                 } else{
                     $("#alert").attr("style", "display:block;");

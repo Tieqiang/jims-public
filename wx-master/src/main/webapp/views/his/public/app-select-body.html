@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title>人体部位选择</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+    <link rel="stylesheet" href="../../../assert/css/body.css">
+     <style>
+        .wormanDisplay{display: none;}
+    </style>
+
+</head>
+
+<body style="background-color:#ebeff0;">
+
+
+<div class="g-bd">
+    <div class="assayright zndzright">
+        <!--<div class="zndz02">-->
+            <!--<span style="font-weight: bold;">性别：</span><select id="sex" name="sex" class="sex" onChange="changeSex()" style="margin-right: 10px;">-->
+            <!--<option value="M">&nbsp;&nbsp;&nbsp;男</option>-->
+            <!--<option selected="selected" value="F">&nbsp;&nbsp;&nbsp;女 </option>-->
+        <!--</select>-->
+            <!--<br/><br/>-->
+            <!--<span style="font-weight: bold;">年龄：</span><input id="age" name="age" size="6" class="age" value="28" style="" type="text">&nbsp;<span style="font-weight: bold;">岁</span>-->
+        <!--</div>-->
+
+        <!-- 选择症状 -->
+        <div id="optionList">
+            <div id="zndz0202" class="zndz0202">
+                <!--人体图  -->
+                <div id="pic">
+                    <img src="/assert/images/rtbwxz.png">
+                    <div class="zndz0203">
+                        <a href="javascript:void();" onClick="changeSymptomList()" class="sta-list">症状列表</a>
+                        <input id="xb" name="xb" value="F" type="hidden">
+                        <a href="javascript:void();" onClick="changeSex()" id="changeSex" v="1"><img src="../../../assert/images/nanbutto.jpg"></a>
+                    </div>
+                    <div id="nvren">
+                        <div class="wrap_fore" style="display: block; background: transparent url(../../../assert/images/nvren.png) repeat scroll 0% 0%; position: relative; padding: 0px; width: 228px; height: 789px;"><canvas width="228" height="789" style="width: 228px; height: 789px; position: absolute; left: 0px; top: 0px; padding: 0px; border: 0px none; opacity: 1;"></canvas><img style="opacity: 0; position: absolute; left: 0px; top: 0px; padding: 0px; border: 0px none; width: 228px;" id="body_fore" src="/assert/images/nvren.png" usemap="#female_fore" alt="症状自检" class="female_fore maphilighted"></div>
+                        <map name="female_fore" id="female_fore" class="female_fore">
+                            <area shape="poly" coords="73,70,79,99,77,108,73,116,64,134,53,152,39,165,30,177,28,188,22,200,20,202,4,207,3,204,22,174,40,141,52,123,66,90,73,74" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="151,74,142,95,158,129,164,142,193,176,195,182,202,201,205,201,220,207,222,206,206,178,183,137,166,110,152,76" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="79,162,109,191,108,222,110,256,106,278,109,299,104,341,104,354,106,365,102,381,86,379,86,373,93,357,87,322,86,285,89,271,77,209,77,184,79,167,81,159" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="115,193,142,165,143,166,146,192,145,212,133,265,133,270,138,301,129,353,130,360,138,377,124,383,120,382,117,373,116,356,118,343,115,310,114,296,116,279,112,264,113,240,114,209,114,193,114,192" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="99,179,106,172,113,174,119,174,125,179,121,184,115,190,110,190,107,187,103,181,101,179" href="javascript:;" title="会阴" alt="会阴" onClick="showSymptom(13)">
+                            <area shape="poly" coords="88,124,101,122,107,117,112,114,120,120,130,123,135,124,137,137,140,152,140,160,115,174,101,169,93,162,86,154,84,148,87,139,88,131,89,126" href="javascript:;" title="腹部" alt="腹部" onClick="showSymptom(2)">
+                            <area shape="poly" coords="93,61,102,67,112,69,121,65,130,62,136,62,146,64,152,72,143,88,141,94,141,105,139,113,133,116,127,114,117,108,111,107,107,108,100,114,86,117,83,114,79,105,81,98,81,92,82,85,77,79,73,74,78,70,86,68,93,64" href="javascript:;" title="胸部" alt="胸部" onClick="showSymptom(3)">
+                            <area shape="poly" coords="101,48,101,52,98,55,95,58,96,60,101,64,109,66,114,67,119,64,123,63,126,59,125,52,123,48,122,46,121,46,118,49,115,51,109,53,105,51,103,49,102,49" href="javascript:;" title="颈部" alt="颈部" onClick="showSymptom(10)">
+                            <area shape="poly" coords="110,1,102,3,98,7,95,12,93,15,93,17,99,18,103,18,107,20,111,20,115,20,119,20,127,18,130,18,134,18,130,12,129,8,125,5,122,3,118,2,114,2,106,1" href="javascript:;" title="头部" alt="头部" onClick="showSymptom(4)">
+                            <area shape="poly" coords="106,43,111,41,113,41,116,43,113,46,109,45,107,44,107,43" href="javascript:;" title="嘴巴" alt="嘴巴" onClick="showSymptom(9)">
+                            <area shape="poly" coords="97,34,99,41,105,48,111,52,119,48,123,41,125,32,118,32,117,32,116,36,117,40,116,45,111,47,105,44,105,39,107,34,106,33,102,32,99,32,98,34" href="javascript:;" title="面部" alt="面部" onClick="showSymptom(16)">
+                            <area shape="poly" coords="113,28,113,30,113,32,113,34,114,35,114,37,114,37,113,37,111,38,110,38,108,37,109,36,109,35,109,32,110,30,110,28,111,27,112,27" href="javascript:;" title="鼻子" alt="鼻子" onClick="showSymptom(9)">
+                            <area shape="poly" coords="99,26,102,25,105,25,106,27,107,27,107,29,106,31,103,31,100,31,99,28,100,26" href="javascript:;" title="眼睛" alt="眼睛" onClick="showSymptom(8)">
+                            <area shape="poly" coords="114,28,117,27,119,25,122,25,123,27,124,29,120,31,118,31,116,30,115,29" href="javascript:;" title="眼睛" alt="眼睛" onClick="showSymptom(8)">
+                            <area shape="poly" coords="125,29,123,31,125,34,124,36,126,36,127,35,128,32,128,30,127,29,126,29,125,29,124,29" href="javascript:;" title="耳部" alt="耳部" onClick="showSymptom(9)">
+
+                            <area shape="poly" coords="81,592,97,603,113,601,112,650,114,672,110,689,112,705,111,722,107,758,107,771,110,787,101,791,87,787,94,778,96,766,88,708,90,697,94,680,84,634,81,616,81,600" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="119,601,134,601,151,594,151,615,138,671,138,682,142,706,141,729,136,753,136,770,142,785,143,786,130,791,122,785,126,757,121,730,120,709,122,693,116,671,118,640,118,607,118,601" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="76,475,84,510,72,528,69,532,63,545,42,570,31,584,22,607,3,614,3,609,23,579,44,538,56,524,63,507,76,476" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="161,488,151,512,161,530,167,542,199,581,210,606,228,612,229,608,208,578,187,536,175,517,160,488" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="142,553,117,567,89,554,82,570,81,589,97,600,107,600,117,598,131,600,151,593,149,576,146,564" href="javascript:;" title="臀部" alt="臀部" onClick="showSymptom(15)">
+                            <area shape="poly" coords="93,541,117,534,139,540,142,551,118,565,90,552" href="javascript:;" title="腰部" alt="腰部" onClick="showSymptom(14)">
+                            <area shape="poly" coords="79,471,94,465,101,461,134,463,151,471,158,477,159,487,137,540,116,533,92,539,84,501,78,473" href="javascript:;" title="背部" alt="背部" onClick="showSymptom(6)">
+                            <area shape="poly" coords="105,405,116,402,135,409,140,425,140,440,139,452,136,461,106,460,96,445,94,430,99,411,107,403" href="javascript:;" title="头部" alt="头部" onClick="showSymptom(4)">
+                        </map>
+                    </div>
+                    <div class="wormanDisplay" id="nanren">
+                        <div class="wrap_fore" style="display: block; background: transparent url(/assert/images/nanren.png) repeat scroll 0% 0%; position: relative; padding: 0px; width: 228px; height: 789px;"><canvas width="228" height="789" style="width: 228px; height: 789px; position: absolute; left: 0px; top: 0px; padding: 0px; border: 0px none;"></canvas><img style="opacity: 0; position: absolute; left: 0px; top: 0px; padding: 0px; border: 0px none; width: 228px;" id="body_fore" src="/assert/images/nanren.png" usemap="#male_fore" alt="症状自检" class="male_fore maphilighted"></div>
+                        <map name="male_fore" id="male_fore" class="male_fore">
+                            <area shape="poly" coords="61,75,70,99,68,108,57,126,51,132,46,145,27,170,25,181,19,198,19,201,10,204,4,203,6,179,1,176,-1,174,5,168,16,162,32,135,39,123,49,101,55,80,60,74" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="144,68,141,95,142,107,158,129,164,143,186,169,193,187,194,200,201,203,210,204,215,194,212,184,210,176,216,173,208,165,198,164,176,125,173,120,162,98,156,78,150,70,145,68" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="76,162,104,193,105,196,96,234,85,266,82,277,82,291,72,337,74,344,74,350,74,352,73,356,74,369,69,381,66,384,50,373,52,365,59,348,58,344,58,340,61,334,59,286,64,268,68,245,69,213,73,174,75,162" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="137,162,136,158,122,180,109,193,118,232,126,260,130,269,130,276,132,296,141,336,141,347,142,355,140,371,146,382,151,383,157,379,164,370,157,351,157,342,155,338,153,333,154,285,152,274,148,265,145,245,144,202,142,184,139,165,136,156" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="93,167,106,170,120,166,122,166,122,173,120,180,115,190,108,193,104,192,95,184,91,174,91,166" href="javascript:;" title="会阴" alt="会阴" onClick="showSymptom(13)">
+                            <area shape="poly" coords="75,112,104,113,118,113,138,106,132,125,133,143,135,152,135,156,124,164,110,171,102,170,89,164,78,158,80,135,78,123,72,108" href="javascript:;" title="腹部" alt="腹部" onClick="showSymptom(2)">
+                            <area shape="poly" coords="91,57,61,72,70,96,75,110,105,110,125,114,138,106,145,68,122,59,106,66,91,58" href="javascript:;" title="胸部" alt="胸部" onClick="showSymptom(3)">
+                            <area shape="poly" coords="94,48,101,54,108,53,115,46,116,56,110,65,98,65,92,56" href="javascript:;" title="颈部" alt="颈部" onClick="showSymptom(10)">
+                            <area shape="poly" coords="86,14,91,7,93,4,98,1,107,1,116,6,120,11,122,18,122,24,105,22,90,21,85,21,86,14" href="javascript:;" title="头部" alt="头部" onClick="showSymptom(4)">
+                            <area shape="poly" coords="100,44,104,42,108,42,109,43,109,45,102,46,100,45" href="javascript:;" title="嘴巴" alt="嘴巴" onClick="showSymptom(9)">
+                            <area shape="poly" coords="90,28,89,34,92,44,97,51,103,54,108,54,116,47,118,33,116,32,110,33,111,41,111,45,108,48,100,48,97,41,98,34,90,29" href="javascript:;" title="面部" alt="面部" onClick="showSymptom(16)">
+                            <area shape="poly" coords="103,30,101,35,102,38,106,38,108,38,110,38,108,33,106,30" href="javascript:;" title="鼻子" alt="鼻子" onClick="showSymptom(9)">
+                            <area shape="poly" coords="93,26,101,26,107,26,112,25,115,26,116,29,116,31,110,31,107,30,103,30,100,31,98,32,94,30,93,29,93,26" href="javascript:;" title="眼睛" alt="眼睛" onClick="showSymptom(8)">
+                            <area shape="poly" coords="86,26,89,38,85,32,85,26" href="javascript:;" title="耳部" alt="耳部" onClick="showSymptom(9)">
+                            <area shape="poly" coords="121,25,118,37,120,38,123,28,121,26" href="javascript:;" title="耳部" alt="耳部" onClick="showSymptom(9)">
+
+                            <area shape="poly" coords="68,479,77,512,59,536,56,539,55,544,52,550,31,577,28,583,23,597,22,608,17,610,7,614,2,610,-2,604,-2,602,5,590,5,588,-1,588,1,584,12,578,19,573,27,564,42,533,45,530,55,503,63,484,67,480" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="150,476,149,503,150,509,156,523,168,537,170,539,172,545,176,555,192,573,198,581,202,594,205,607,209,610,214,611,220,612,223,612,228,603,227,600,221,586,226,587,226,586,216,578,208,570,187,534,181,528,172,505,166,487,164,482,160,479,155,477,152,476,150,475" href="javascript:;" title="手部" alt="手部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="79,597,78,610,77,629,75,644,75,651,75,660,72,672,71,681,68,689,66,703,67,723,68,743,68,751,67,754,65,759,63,766,60,774,58,781,58,785,60,789,74,795,78,792,81,785,81,773,80,765,80,756,80,749,87,711,91,702,91,687,95,672,102,653,114,607,114,605,101,607,91,605,84,601,81,599" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="119,607,121,619,126,643,131,654,133,666,140,682,140,694,146,720,151,747,151,757,152,763,151,774,151,782,153,793,159,797,167,793,174,786,175,784,166,758,165,749,164,719,165,703,164,693,160,682,156,663,155,629,153,596,151,601,145,607,138,609,133,609,128,608,124,608,121,607" href="javascript:;" title="腿部" alt="腿部" onClick="showSymptom(18)">
+                            <area shape="poly" coords="86,566,83,573,81,583,82,592,81,596,93,601,101,603,111,604,115,603,116,603,121,604,132,605,139,605,147,602,151,598,151,594,151,585,149,577,148,569,147,570,141,573,136,575,130,575,123,577,117,577,107,576,103,574,95,572,90,571,87,569,85,568" href="javascript:;" title="臀部" alt="臀部" onClick="showSymptom(15)">
+                            <area shape="poly" coords="87,549,99,542,113,538,121,541,128,544,134,546,140,550,142,552,142,559,144,565,146,568,138,568,128,572,118,576,115,578,109,573,100,570,92,565,87,565,85,565,86,554" href="javascript:;" title="腰部" alt="腰部" onClick="showSymptom(14)">
+                            <area shape="poly" coords="91,465,83,472,75,477,70,479,78,500,77,511,81,523,84,537,85,547,95,541,105,537,113,537,120,536,127,539,133,543,139,546,141,549,141,532,144,520,148,508,148,499,147,488,147,478,148,474,133,467,126,464,120,470,113,473,103,470,96,466,95,463" href="javascript:;" title="背部" alt="背部" onClick="showSymptom(6)">
+                            <area shape="poly" coords="100,454,107,450,115,450,121,451,123,452,124,459,126,462,120,466,111,470,104,467,99,464,97,460,100,456" href="javascript:;" title="颈部" alt="颈部" onClick="showSymptom(10)">
+                            <area shape="poly" coords="102,409,107,407,112,406,116,406,120,408,123,409,128,415,129,424,129,431,128,439,124,447,123,450,118,449,111,449,105,450,101,452,98,443,95,435,94,427,93,420,95,417,97,412,103,409" href="javascript:;" title="头部" alt="头部" onClick="showSymptom(4)">
+                        </map>
+
+                    </div>
+                </div>
+
+                <!-- 人体部位列表 -->
+                <div id="body" class="wormanDisplay">
+                    <div class="zndz0301"><a href="javascript:void();" onClick="back()"><img src="/assert/images/fhbutto.png" style="float: left;margin-left: 10px;"></a><span style="position: relative;left: -77px;">请选择症状</span></div>
+                    <div id="bwList" class="bwList">
+                        <a class="zndzzz" id="symptomList_18" href="javascript:void();" onClick="symptomList2(18)">四肢</a>
+                        <a class="zndzzz" id="symptomList_17" href="javascript:void();" onClick="symptomList2(17)">口腔</a>
+                        <a class="zndzzz" id="symptomList_16" href="javascript:void();" onClick="symptomList2(16)">面部</a>
+                        <a class="zndzzz" id="symptomList_15" href="javascript:void();" onClick="symptomList2(15)">臀部</a>
+                        <a class="zndzzz" id="symptomList_14" href="javascript:void();" onClick="symptomList2(14)">腰部</a>
+                        <a class="zndzzz" id="symptomList_13" href="javascript:void();" onClick="symptomList2(13)">会阴</a>
+                        <a class="zndzzz" id="symptomList_12" href="javascript:void();" onClick="symptomList2(12)">皮肤</a>
+                        <a class="zndzzz" id="symptomList_11" href="javascript:void();" onClick="symptomList2(11)">上肢</a>
+                        <a class="zndzzz" id="symptomList_10" href="javascript:void();" onClick="symptomList2(10)">颈部</a>
+                        <a class="zndzzz" id="symptomList_9" href="javascript:void();" onClick="symptomList2(9)">五官</a>
+                        <a class="zndzzz" id="symptomList_8" href="javascript:void();" onClick="symptomList2(8)">眼</a>
+                        <a class="zndzzz" id="symptomList_7" href="javascript:void();" onClick="symptomList2(7)">全身</a>
+                        <a class="zndzzz" id="symptomList_6" href="javascript:void();" onClick="symptomList2(6)">背部</a>
+                        <a class="zndzzz" id="symptomList_5" href="javascript:void();" onClick="symptomList2(5)">下肢</a>
+                        <a class="zndzzz" id="symptomList_4" href="javascript:void();" onClick="symptomList2(4)">颅部</a>
+                        <a class="zndzzz" id="symptomList_3" href="javascript:void();" onClick="symptomList2(3)">胸部</a>
+                        <a class="zndzzz" id="symptomList_2" href="javascript:void();" onClick="symptomList2(2)">腹部</a>
+                    </div>
+                    <!--<div ng-app="myApp">-->
+                        <!--<div ng-controller="tableCtrl" id="deptlist">-->
+                            <!--<input type="hidden" id="openId" value="">-->
+                            <!--<div ng-repeat="x in names">-->
+                                <div id="symptomList" class="symptomList"></div>
+
+
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                </div>
+            </div>
+        </div>
+        <!--问题  -->
+        <div id="questionList"></div>
+        <!--查看结果  -->
+        <div id="addDisease" class="wormanDisplay">
+            <div id="addDiseaseLeft" class="addDiseaseLeft">
+                <div class="zzxx">
+                    <div style="float: left;color: #44a2de;font-size: 14px;margin-left: 12px;margin-top: -4px;font-weight: bold;">已选症状</div>
+                    <div style="float: right;"><a style="color: #44a2de;font-size: 14px;margin-right: 12px;" href="javascript:void();" onClick="addDisease()"><!--<img src="/assert/images/addzz.png">--></a></div>
+                </div>
+                <div id="possibleDisease" style="color: #44aade"></div>
+            </div>
+            <div id="addDiseaseRight" class="addDiseaseRight"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="/javascript/jquery.js"></script>
+<script type="text/javascript" src="../../../javascript/app-select-body.js"></script>
+<script type="text/javascript" src="../../../javascript/maphilight_conf.js"></script>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script type="text/javascript" src="/javascript/jquery-1.js"></script>
+<script type="text/javascript" src="../../../javascript/intelligent.js"></script>
+<script type="text/javascript" src="../../../javascript/bodyList.js"></script></body>
+</html>

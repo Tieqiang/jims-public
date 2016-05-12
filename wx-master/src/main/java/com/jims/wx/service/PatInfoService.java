@@ -1,10 +1,8 @@
 package com.jims.wx.service;
 import com.google.inject.Inject;
-import com.jims.wx.entity.AppUser;
-import com.jims.wx.entity.PatVsUser;
+import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
-import com.jims.wx.facade.AppUserFacade;
-import com.jims.wx.facade.PatVsUserFacade;
+import com.jims.wx.facade.*;
 import com.jims.wx.vo.PatInfoVo;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -21,18 +19,17 @@ import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+
 import com.google.inject.Inject;
-import com.jims.wx.entity.PatInfo;
 import com.jims.wx.expection.ErrorException;
-import com.jims.wx.facade.PatInfoFacade;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.StreamingOutput;
 
 /**
  * Created by chenxy on 2016/4/17.
@@ -47,14 +44,17 @@ public class PatInfoService {
     private HttpServletRequest request ;
     private HttpServletResponse response ;
     private PatVsUserFacade patVsUserFacade;
-
+    private PatMasterIndexFacade patMasterIndexFacade;
+    private MedicalCardMemoFacade medicalCardMemoFacade;
     @Inject
-    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response,PatVsUserFacade patVsUserFacade) {
+    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response,PatVsUserFacade patVsUserFacade,PatMasterIndexFacade patMasterIndexFacade,MedicalCardMemoFacade medicalCardMemoFacade) {
         this.appUserFacade = appUserFacade;
         this.patInfoFacade = patInfoFacade;
         this.request = request;
         this.response = response;
         this.patVsUserFacade = patVsUserFacade;
+        this.patMasterIndexFacade=patMasterIndexFacade;
+        this.medicalCardMemoFacade=medicalCardMemoFacade;
     }
     /**
      * 通过openId 查询患者的list
@@ -79,12 +79,16 @@ public class PatInfoService {
     @Path("save")
     public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone,@QueryParam("patId") String patId) {
         PatInfo patInfo=null;
+        String patientId=null;
         try {
+            AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+            patientId=patMasterIndexFacade.checkIdCard(idCard);
             if(patId!=null&&!"".equals(patId)){
                 patInfo= patInfoFacade.findById(patId);
                 patInfo.setCellphone(cellphone);
                 patInfo.setIdCard(idCard);
                 patInfo.setName(name);
+                patInfo.setPatientId(patientId);
                 patInfo = patInfoFacade.save(patInfo);
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId="+patId);
              }else{
@@ -101,7 +105,7 @@ public class PatInfoService {
                     patInfo.setName(name);
                     patInfo = patInfoFacade.save(patInfo);
                     if (StringUtils.isNotBlank(openId)) {
-                        AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+
                         PatVsUser patVsUser = new PatVsUser();
                         patVsUser.setAppUser(appUser);
                         patVsUser.setPatInfo(patInfo);
@@ -165,7 +169,6 @@ public class PatInfoService {
         return patInfoFacade.findByOpenId(openId);
     }
 
-//    update-pat-id?patId="+patId;
 
     @GET
     @Path("update-pat-id")
@@ -174,7 +177,7 @@ public class PatInfoService {
             AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
             appUser.setPatId(patId);
             appUserFacade.saveAppUser(appUser);
-            response.sendRedirect("/views/his/public/user-bangker-success.html");
+            response.sendRedirect("/views/his/public/user-bangker-success.html?flag=1");
         }catch (Exception e){
             e.printStackTrace();
             try {
@@ -215,6 +218,13 @@ public class PatInfoService {
             return null;
         }
      }
-
+//    check-idCard?idCard="+idCard,\
+    @POST
+    @Path("check-idCard")
+     public Map<String,Object> checkCard(@QueryParam("idCard") String idCard){
+        Map<String,Object> map=new HashMap<String,Object>();
+//        map=patMasterIndexFacade.checkIdCard(idCard);
+        return null;
+     }
  }
 

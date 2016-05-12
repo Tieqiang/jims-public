@@ -96,4 +96,16 @@ public class PatInfoFacade extends BaseFacade {
     public void deleteByObject(PatInfo patInfo) {
           entityManager.remove(patInfo);
     }
+
+    /**
+     *
+     * @param idCard
+     * @return
+     */
+    public PatInfo findByIdCard(String idCard) {
+        List<PatInfo> list=entityManager.createQuery("from PatInfo where idCard='"+idCard+"'").getResultList();
+        if(!list.isEmpty())
+            return list.get(0);
+            return null;
+    }
 }

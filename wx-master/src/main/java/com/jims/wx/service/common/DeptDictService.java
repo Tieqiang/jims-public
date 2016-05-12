@@ -2,7 +2,9 @@ package com.jims.wx.service.common;
 
 
 import com.jims.wx.entity.DeptDict;
+import com.jims.wx.entity.DoctInfo;
 import com.jims.wx.facade.DeptDictFacade;
+import com.jims.wx.facade.DoctInfoFacade;
 import com.jims.wx.util.PinYin2Abbreviation;
 
 import javax.inject.Inject;
@@ -10,7 +12,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by heren on 2015/9/15.
@@ -21,41 +25,44 @@ public class DeptDictService {
     //find-by-id
     private DeptDictFacade deptDictFacade;
     private HttpServletRequest request;
+    private DoctInfoFacade doctInfoFacade;
 
     @Inject
-    public DeptDictService(DeptDictFacade deptDictFacade, HttpServletRequest request) {
+    public DeptDictService(DeptDictFacade deptDictFacade, HttpServletRequest request, DoctInfoFacade doctInfoFacade) {
         this.request = request;
         this.deptDictFacade = deptDictFacade;
+        this.doctInfoFacade = doctInfoFacade;
     }
 
     @GET
     @Path("list")
-    public List<DeptDict> list(@QueryParam("hospitalId") String hospitalId) {
-        List<DeptDict> list = deptDictFacade.findByHospitalId(hospitalId);
+    public List<DeptDict> list() {
+        List<DeptDict> list = deptDictFacade.findAll(DeptDict.class);
         return getList(list);
     }
 
     /**
-     *
      * @param list
      * @return
      */
-    private List<DeptDict> getList( List<DeptDict> list){
+    private List<DeptDict> getList(List<DeptDict> list) {
         String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         List<DeptDict> deptDicts = new ArrayList<DeptDict>();
         for (DeptDict deptDict : list) {
-            deptDict.setImgUrl(addr+deptDict.getImgUrl());
+            deptDict.setImgUrl2(deptDict.getImgUrl());
+            deptDict.setImgUrl(addr + deptDict.getImgUrl());
             deptDict.setImg(deptDict.getImgUrl());
             deptDicts.add(deptDict);
         }
         return deptDicts;
     }
+
     /**
-    * 根据id查询对象
-    *
-    * @param deptId
-    * @return
-    */
+     * 根据id查询对象
+     *
+     * @param deptId
+     * @return
+     */
     @GET
     @Path("find-by-id")
     public DeptDict findById(@QueryParam("deptId") String deptId) {
@@ -67,7 +74,7 @@ public class DeptDictService {
     @Path("list-all")
     public List<DeptDict> listAll() {
 
-       return  getList(deptDictFacade.findAll(DeptDict.class));
+        return getList(deptDictFacade.findAll(DeptDict.class));
     }
 
 
@@ -133,6 +140,38 @@ public class DeptDictService {
     public Response delDeptDict(@PathParam("deptId") String deptId) {
         DeptDict deptDict = deptDictFacade.deleteById(deptId);
         return Response.status(Response.Status.OK).entity(deptDict).build();
+    }
+
+    /**
+     * app科室列表模糊查询
+     *
+     * @param likeSearch 科室
+     * @return
+     */
+    @GET
+    @Path("query-like")
+    public Map<String, Object> queryLike(@QueryParam("likeSearch") String likeSearch) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<DoctInfo> doctInfos = null;
+        List<DeptDict> deptDicts = null;
+        /**
+         * 先去查询科室
+         * 如果存在科室
+         * 则返回科室
+         * 反之查询医生
+         * 如果存在医生返回医生的集合
+         */
+        deptDicts = deptDictFacade.queryLike(likeSearch);
+        if (!deptDicts.isEmpty()) {
+            map.put("list", deptDicts);
+            map.put("what", "deptDict");
+            return map;
+        } else {//没有查到科室
+            doctInfos = doctInfoFacade.queryLike(likeSearch);
+            map.put("list", doctInfos);
+            map.put("what", "doctInfo");
+            return map;
+        }
     }
 
 }

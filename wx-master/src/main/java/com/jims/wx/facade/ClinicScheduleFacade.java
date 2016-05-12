@@ -72,13 +72,13 @@ public class ClinicScheduleFacade extends BaseFacade {
     }
 
 
-    public List<ClinicTypeIndexVo> listTree(String hospitalId) {
+    public List<ClinicTypeIndexVo> listTree() {
         List<ClinicTypeIndexVo> result = new ArrayList<ClinicTypeIndexVo>();
 
         String hql = "from ClinicTypeSetting as type where 1=1";
-        if (null != hospitalId && !hospitalId.trim().equals("")) {
-            hql += " and type.hospitalId='" + hospitalId + "'";
-        }
+//        if (null != hospitalId && !hospitalId.trim().equals("")) {
+//            hql += " and type.hospitalId='" + hospitalId + "'";
+//        }
         List<ClinicTypeSetting> settings = entityManager.createQuery(hql).getResultList();
         if (null != settings && settings.size() > 0) {
             Iterator settingIte = settings.iterator();

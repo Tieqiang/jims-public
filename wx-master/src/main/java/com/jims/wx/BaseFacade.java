@@ -1,6 +1,7 @@
 package com.jims.wx;
 
 import com.google.common.base.Optional;
+import com.jims.wx.entity.ClinicForRegist;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.AliasToBeanResultTransformer;
 
@@ -278,6 +279,8 @@ public class BaseFacade {
     public JpqlQueryBuilder jpqlQueryBuilder(StringBuilder jpql, Object param, String judge, ArrayList<Object> parameters, boolean addWhereOrNot) {
         return new JpqlQueryBuilder(jpql, param, judge, parameters, addWhereOrNot);
     }
+
+
 
     public static class JPQLBuilder {
         private StringBuilder sb = new StringBuilder();

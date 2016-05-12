@@ -1,0 +1,64 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../../style/doct-info.css">
+    <title>预约挂号选择医生</title>
+</head>
+<body>
+<div id="js_article" class="rich_media">
+    <div class="main-content">
+        <div class="sd-ttile" id="text1">
+            <!--心血管门诊（13名）-->
+        </div>
+        <div class="Coupons-list serplace-list">
+            <input type="hidden" name="deptId" id="deptId" value=""/>
+            <input type="hidden" name="openId" id="openId" value=""/>
+            <ul>
+                <div ng-app="myApp">
+                    <div ng-controller="tableCtrl" id="doctList">
+                        <div ng-repeat="x in names">
+                            <li class="clearfix">
+                                 <div class="doc-info clearfix">
+                                    <div class="dochome-photo"><img src="{{x.headUrl}}" id="headUrl"/></div>
+                                    <div class="doc-info-main">
+                                        <div class="doc-name-wrap">
+                                            <span class="doc-name" id="name">{{x.name}}</span>
+                                            <span id="title">{{x.title}}</span>
+                                        </div>
+                                        <span id="deptName">{{x.deptName}}</span>
+                                    </div>
+                                </div>
+                                <div class="bot-line doc-detail">
+                                    {{x.description}}
+                                </div>
+                                <div ng-repeat="y in x.registInfoVOs">
+                                        <div class="bot-line parkinfo-text"  ng-click="judgeIsEnabledRegist(y.rid,y.enabledNum,y.price,x.name,x.title,y.timeDesc,x.patName,x.deptName)"/>
+                                            <span class="icon-span icon10">&nbsp;</span>{{y.timeDesc}} 剩余号 <font color="blue;">{{y.enabledNum}}</font>
+                                        </div>
+                                        <div style="display:none;">
+                                            <td><font color="#D3D3D3">已挂号：{{y.currentNum}}</font></td>
+                                            <td>剩余号：<span class="span">{{y.enabledNum}}</span></td>
+                                            <p style="display:none">{{y.rid}}</p>
+                                            <th style="display:none">{{y.price}}</th>
+                                            <p>{{x.patName}}</p>
+                                             <p>{{x.deptName}}</p>
+                                        </div>
+                                 </div>
+                            </li>
+                        </div>
+                    </div>
+             </ul>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-doct-info-pre.js"></script>
+</html>

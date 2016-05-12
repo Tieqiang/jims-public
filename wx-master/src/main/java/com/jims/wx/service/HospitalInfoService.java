@@ -6,9 +6,11 @@ import com.jims.wx.facade.HospitalInfoFacade;
 import com.jims.wx.vo.AppSetVo;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,34 +21,45 @@ import java.util.List;
 public class HospitalInfoService {
 
     private HospitalInfoFacade hospitalInfoFacade;
+    private HttpServletRequest request;
 
     @Inject
-    public HospitalInfoService(HospitalInfoFacade hospitalInfoFacade){
+    public HospitalInfoService(HospitalInfoFacade hospitalInfoFacade, HttpServletRequest request){
         this.hospitalInfoFacade = hospitalInfoFacade;
+        this.request=request;
     }
+
 
     @Path("list-all")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public List<HospitalInfo> findAllHospital(){
-        return hospitalInfoFacade.findAll(HospitalInfo.class) ;
+        List<HospitalInfo> hospitalInfos=new ArrayList<HospitalInfo>();
+        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        List<HospitalInfo> list= hospitalInfoFacade.findAll(HospitalInfo.class) ;
+        //重新赋值 imgUrl
+        for(HospitalInfo hospitalInfo:list){
+            hospitalInfo.setHospitalImg(addr+hospitalInfo.getHospitalImg());
+            hospitalInfos.add(hospitalInfo);
+        }
+        return hospitalInfos;
     }
 
     /**
      * 保存修改
      *
-     * @param appSetVo
+     * @param hospitalInfo
      * @return
      */
     @POST
     @Path("merge")
-    public Response save(@QueryParam("tranContent") String tranContent, AppSetVo appSetVo ) {
+    public Response save(@QueryParam("tranContent") String tranContent, AppSetVo hospitalInfo ) {
         try {
-            if (null != appSetVo) {
-                appSetVo.setContent(tranContent.getBytes("UTF-8"));
-                appSetVo = hospitalInfoFacade.save(appSetVo);
+            if (null != hospitalInfo) {
+                hospitalInfo.setContent(tranContent.getBytes("UTF-8"));
+                hospitalInfo = hospitalInfoFacade.save(hospitalInfo);
             }
-            return Response.status(Response.Status.OK).entity(appSetVo).build();
+            return Response.status(Response.Status.OK).entity(hospitalInfo).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
             errorException.setMessage(e);
@@ -77,7 +90,7 @@ public class HospitalInfoService {
     @Path("get")
     @GET
     public AppSetVo getAppSetVo(){
-        return hospitalInfoFacade.findAppSetVo();
+         return hospitalInfoFacade.findAppSetVo();
     }
 
 }

@@ -31,11 +31,12 @@ public class PatInfo implements java.io.Serializable {
 	private String defaultFlag;
 	private String sex;
 	private Date birthday;
-//	private Set<PatVsUser> patVsUsers = new HashSet<PatVsUser>(0);
 
+    private String patientId;
+
+//    private String patId;
 	// Constructors
-
-	/** default constructor */
+ 	/** default constructor */
 	public PatInfo() {
 	}
 
@@ -119,14 +120,12 @@ public class PatInfo implements java.io.Serializable {
 	public void setBirthday(Date birthday) {
 		this.birthday = birthday;
 	}
-//
-//	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "patInfo")
-//	public Set<PatVsUser> getPatVsUsers() {
-//		return this.patVsUsers;
-//	}
-//
-//	public void setPatVsUsers(Set<PatVsUser> patVsUsers) {
-//		this.patVsUsers = patVsUsers;
-//	}
+    @Column(name="patient_id")
+    public String getPatientId() {
+        return patientId;
+    }
 
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
+    }
 }

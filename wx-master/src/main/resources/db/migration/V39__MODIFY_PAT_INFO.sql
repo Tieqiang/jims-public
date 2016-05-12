@@ -1,0 +1,1 @@
+alter table pat_info add patient_id varchar2(64);

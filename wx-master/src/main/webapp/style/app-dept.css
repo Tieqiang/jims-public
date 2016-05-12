@@ -103,7 +103,10 @@ td p {
 {
     float:right;
 }
-
+.fd-right2
+{
+    float:right;
+}
 form {
     display: none!important
 }

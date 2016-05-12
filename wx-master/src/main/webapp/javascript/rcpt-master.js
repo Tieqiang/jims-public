@@ -17,7 +17,24 @@ app.controller('tableCtrl', function ($scope, $http) {
             $("#items").attr("style", "display:none;");
             $scope.nameList = data;
         });
-
+    /**
+     * 单击tr触发
+     * @param date
+     */
+//    $scope.clickTR=function(date){
+//
+//    }
+    $scope.clickTR = function (date) {
+        $http.get("/api/rcpt-master/find-by-patient?patientId=" + patId+"&date="+date)
+            .success(function (data) {
+                $('#checkName').html(name);
+                $("#name").attr("style", "display:none;");
+                $("#clinic").attr("style", "display:none;");
+                $("#rcpt").attr("style", "display:block;");
+                $("#items").attr("style", "display:none;");
+                $scope.outpList = data;
+            })
+    }
     $scope.clickName = function (id, checkName) {
         $http.get("/api/rcpt-master/find-by-pat-id?patId=" + id)
             .success(function (data) {
@@ -40,17 +57,7 @@ app.controller('tableCtrl', function ($scope, $http) {
             })
     }
 
-    $scope.clickPatient = function () {
-        $http.get("/api/rcpt-master/find-by-patient?patientId=" + patId)
-            .success(function (data) {
-                $('#checkName').html(name);
-                $("#name").attr("style", "display:none;");
-                $("#clinic").attr("style", "display:none;");
-                $("#rcpt").attr("style", "display:block;");
-                $("#items").attr("style", "display:none;");
-                $scope.outpList = data;
-            })
-    }
+
 
     $scope.clickRcpt = function (rcptNo) {
         $http.get("/api/rcpt-master/find-by-rcpt?rcptNo=" + rcptNo)

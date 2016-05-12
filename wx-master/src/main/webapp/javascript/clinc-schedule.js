@@ -155,10 +155,9 @@ $(function () {
 
         var depts = [];
         var treeDepts = [];
-        var loadPromise = $.get("/api/clinic-schedule/list-tree?hospitalId=" + config.hospitalId, function (data) {
+        var loadPromise = $.get("/api/clinic-schedule/list-tree", function (data) {
             $.each(data, function (index, item) {
                 var obj = {};
-
                 obj.id = item.id;
                 obj.parentFlag = item.parentFlag;
                 obj.clinicName=item.clinicName;

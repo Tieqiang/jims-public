@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head lang="en">
+    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!--<meta http-equiv="X-UA-Compatible" content="IE=edge">-->
+    <title>填写个人信息</title>
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+ </head>
+<body>
+<input type="hidden" name="openId" id="openId" value=""/>
+    <div class="weui_cells weui_cells_form">
+         <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label">性别</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input  name="sex" type="radio" value="1" checked="checked" class="sex"/>男
+                <input  name="sex" type="radio" value="0"  class="sex"/>女
+            </div>
+         </div>
+         <div class="weui_cell">
+            <div class="weui_cell_hd"><label class="weui_label" >年龄</label></div>
+            <div class="weui_cell_bd weui_cell_primary">
+                <input id="age" class="weui_input" type="text" pattern="[0-9]" placeholder="请输入您的年龄！"/>
+            </div>
+        </div>
+     </div>
+    <div class="weui_cells_tips">温馨提示：本结果仅供参考，可能产生误诊，漏诊，不能代替医生和其他医务人员的建议</div>
+    <div class="weui_btn_area">
+        <a class="weui_btn weui_btn_primary" href="javascript:check()" id="showTooltips">立即自检</a>
+    </div>
+    <script language="javascript" src="/assert/easyui/jquery.min.js"></script>
+    <script src="../../../javascript/app-intelligent-guide.js" language="javascript"></script>
+    <script language="javascript" src="/javascript/tool.js"></script>
+  </body>
+ </html>

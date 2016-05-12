@@ -30,8 +30,7 @@ public class EnscriptAndDenScript {
         }
         return a;
     }
-
-    /**
+     /**
      * 解密算法
      * @param str
      * @return

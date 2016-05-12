@@ -77,4 +77,16 @@ public class DoctInfoFacade extends BaseFacade {
     public DoctInfo findById(String doctId) {
          return (DoctInfo)entityManager.createQuery("from DoctInfo where id='"+doctId+"'").getSingleResult();
     }
+
+    /**
+     * 模糊查询医生的集合
+     * @param likeSearch
+     * @return
+     */
+    public List<DoctInfo> queryLike(String likeSearch) {
+        List<DoctInfo> doctInfos=null;
+        String sql="from DoctInfo where name like '%"+likeSearch+"%'";
+        doctInfos=entityManager.createQuery(sql).getResultList();
+        return doctInfos;
+     }
 }

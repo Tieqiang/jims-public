@@ -45,7 +45,7 @@ function moren(){
     }
  }
 function update(){
-alert(1);
+//alert(1);
     var patId=$("#patId").val();//patId
     var name = $("#name").val();
     var idCard = $("#idCard").val();
@@ -84,6 +84,18 @@ function del(){
         });
     }
  }
+/**
+ * 挂号
+ */
+function regist(){
+    //跳转到科室列表页面  find-dept
+    if(openId!=null&&!""==openId){
+        window.location.href="/api/wx-service/regist-open?openId="+openId;
+    }else{
+        alert("暂时不能挂号！");
+    }
+
+}
 
 
 

@@ -26,6 +26,7 @@ public class ClinicForRegist implements java.io.Serializable {
     private Integer currentNo;
     private Integer registrationNum;
     private Double registPrice;
+    private String registTime;
     // Constructors
 
     /**
@@ -136,6 +137,15 @@ public class ClinicForRegist implements java.io.Serializable {
 
     public void setRegistPrice(Double registPrice) {
         this.registPrice = registPrice;
+    }
+
+    @Column(name = "regist_time")
+    public String getRegistTime() {
+        return registTime;
+    }
+
+    public void setRegistTime(String registTime) {
+        this.registTime = registTime;
     }
 
     @Transient

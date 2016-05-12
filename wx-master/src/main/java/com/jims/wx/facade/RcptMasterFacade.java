@@ -57,15 +57,19 @@ public class RcptMasterFacade extends BaseFacade{
     }
 
     //根据patientId查询门诊收据记录outp_rcpt_master
-    public List<OutpRcptMasterVo> getByPatientId(String patientId){
+    public List<OutpRcptMasterVo> getByPatientId(String patientId,String date){
         if(null != patientId && !patientId.trim().equals("")){
-            Date date=new Date();
-            DateFormat ff=new SimpleDateFormat("yyyy-MM-dd");
-            Calendar c = Calendar.getInstance();
-            c.add(Calendar.MONTH, -1);
-            String sql = "select RCPT_NO,TOTAL_COSTS,TOTAL_CHARGES,NAME from OUTPBILL.outp_rcpt_master where visit_Date >=to_date("+ "'"+ff.format(c.getTime())+"','yyyy-mm-dd')";
+            //2016-04-19
+//            if(date!=null&&!"".equals(date)){//2016/4/19
+//                 date=date.replaceAll("-","/");
+//                 String md=date.substring(5,10);
+//                 if(md.contains("0")){
+//                    md=md.replaceAll("0","");
+//                 }
+//                 date=date.substring(0,5)+md;
+//            }   select * from OUTPBILL.outp_rcpt_master
+            String sql = "select RCPT_NO,TOTAL_COSTS,TOTAL_CHARGES,NAME from OUTPBILL.outp_rcpt_master where to_char(visit_Date,'YYYY-MM-DD') like '%"+date+"%'";
             sql +=" and patient_id='" +patientId+ "'";
-            System.out.print(sql);
             List<OutpRcptMasterVo> outpRcptMasterVos = new ArrayList<>() ;
             Query qu = entityManager.createNativeQuery(sql);
             List<Objects[]> resultList=qu.getResultList();

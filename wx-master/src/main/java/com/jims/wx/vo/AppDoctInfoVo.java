@@ -1,5 +1,8 @@
 package com.jims.wx.vo;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by cxy on 2016/4/20.
  */
@@ -26,11 +29,25 @@ public class AppDoctInfoVo {
     //就诊人的信息
     private String patName;
 
+    private String deptName;//科室名称
 
+    private Integer doctCount;
     private String idCard;
 
 
     private String scheduleTime;
+
+    private String registTime;
+
+    public String getRegistTime() {
+        return registTime;
+    }
+
+    public void setRegistTime(String registTime) {
+        this.registTime = registTime;
+    }
+
+    private List<RegistInfoVO> registInfoVOs=new ArrayList<RegistInfoVO>();
 
     public String getScheduleTime() {
         return this.scheduleTime;
@@ -59,9 +76,11 @@ public class AppDoctInfoVo {
     public Double getPrice() {
         return this.price;
     }
-    public void setPrice(Double price){
-        this.price=price;
+
+    public void setPrice(Double price) {
+        this.price = price;
     }
+
     public String getDeptName() {
         return deptName;
     }
@@ -70,21 +89,21 @@ public class AppDoctInfoVo {
         this.deptName = deptName;
     }
 
-    private String deptName;//科室名称
 
-    private  Integer doctCount;
 
-    public Integer getDoctCount(){
+    public Integer getDoctCount() {
         return this.doctCount;
     }
 
-    public void setDoctCount(Integer doctCount){
-        this.doctCount=doctCount;
+    public void setDoctCount(Integer doctCount) {
+        this.doctCount = doctCount;
     }
-    public AppDoctInfoVo(){
+
+    public AppDoctInfoVo() {
 
     }
-     public String getHeadUrl() {
+
+    public String getHeadUrl() {
         return headUrl;
     }
 
@@ -92,19 +111,15 @@ public class AppDoctInfoVo {
         this.headUrl = headUrl;
     }
 
-//    public String getId() {
-//        return this.id;
-//    }
-//
-//    public void setId(String id) {
-//        this.id = id;
-//    }
-    public String getRid(){
+
+    public String getRid() {
         return this.rid;
     }
-    public void setRid(String rid){
-        this.rid=rid;
+
+    public void setRid(String rid) {
+        this.rid = rid;
     }
+
     public String getName() {
         return name;
     }
@@ -153,10 +168,11 @@ public class AppDoctInfoVo {
         this.enabledNum = enabledNum;
     }
 
+    public List<RegistInfoVO> getRegistInfoVOs() {
+        return registInfoVOs;
+    }
 
-
-
-//    private
-//    private
-
+    public void setRegistInfoVOs(List<RegistInfoVO> registInfoVOs) {
+        this.registInfoVOs = registInfoVOs;
+    }
 }

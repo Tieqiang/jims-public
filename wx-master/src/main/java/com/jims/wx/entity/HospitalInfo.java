@@ -13,80 +13,96 @@ import java.io.UnsupportedEncodingException;
 @Table(name = "HOSPITAL_INFO", schema = "WX")
 public class HospitalInfo implements java.io.Serializable {
 
-	// Fields
+    // Fields
 
-	private String id;
-	private String hospitalName;
-	private String appId;
-	private String infoUrl;
-	private byte[] content;
+    private String id;
+    private String hospitalId;
+    private String appId;
+    private String infoUrl;
+    private byte[] content;
+    private String hospitalImg;
 
     @Transient
     private String tranContent;
 
-	// Constructors
 
-	/** default constructor */
-	public HospitalInfo() {
-	}
+    // Constructors
 
-	/** full constructor */
-	public HospitalInfo(String hospitalName, String appId, String infoUrl,
-			byte[] content) {
-		this.hospitalName = hospitalName;
-		this.appId = appId;
-		this.infoUrl = infoUrl;
-		this.content = content;
-	}
+    /**
+     * default constructor
+     */
+    public HospitalInfo() {
 
-	// Property accessors
-	@GenericGenerator(name = "generator", strategy = "uuid.hex")
-	@Id
-	@GeneratedValue(generator = "generator")
-	@Column(name = "ID", unique = true, nullable = false, length = 64)
-	public String getId() {
-		return this.id;
-	}
+    }
 
-	public void setId(String id) {
-		this.id = id;
-	}
+    /**
+     * full constructor
+     */
+    public HospitalInfo(String hospitalId, String appId, String infoUrl,
+                        byte[] content) {
+        this.hospitalId = hospitalId;
+        this.appId = appId;
+        this.infoUrl = infoUrl;
+        this.content = content;
+    }
 
-	@Column(name = "HOSPITAL_ID", length = 64)
-	public String getHospitalName() {
-		return this.hospitalName;
-	}
+    // Property accessors
+    @GenericGenerator(name = "generator", strategy = "uuid.hex")
+    @Id
+    @GeneratedValue(generator = "generator")
+    @Column(name = "ID", unique = true, nullable = false, length = 64)
+    public String getId() {
+        return this.id;
+    }
 
-	public void setHospitalName(String hospitalName) {
-		this.hospitalName = hospitalName;
-	}
+    public void setId(String id) {
+        this.id = id;
+    }
 
-	@Column(name = "APP_ID", length = 64)
-	public String getAppId() {
-		return this.appId;
-	}
+    @Column(name = "HOSPITAL_ID", length = 64)
+    public String getHospitalId() {
+        return this.hospitalId;
+    }
 
-	public void setAppId(String appId) {
-		this.appId = appId;
-	}
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
 
-	@Column(name = "INFO_URL", length = 1024)
-	public String getInfoUrl() {
-		return this.infoUrl;
-	}
+    @Column(name = "APP_ID", length = 64)
+    public String getAppId() {
+        return this.appId;
+    }
 
-	public void setInfoUrl(String infoUrl) {
-		this.infoUrl = infoUrl;
-	}
+    public void setAppId(String appId) {
+        this.appId = appId;
+    }
 
-	@Column(name = "CONTENT")
-	public byte[] getContent() {
-		return this.content;
-	}
+    @Column(name = "INFO_URL", length = 1024)
+    public String getInfoUrl() {
+        return this.infoUrl;
+    }
 
-	public void setContent(byte[] content) {
-		this.content = content;
-	}
+    public void setInfoUrl(String infoUrl) {
+        this.infoUrl = infoUrl;
+    }
+
+    @Column(name = "CONTENT")
+    public byte[] getContent() {
+        return this.content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
+    }
+
+    @Column(name = "HOSPITAL_IMG")
+    public String getHospitalImg() {
+        return hospitalImg;
+    }
+
+    public void setHospitalImg(String hospitalImg) {
+        this.hospitalImg = hospitalImg;
+    }
 
     @Transient
     public String getTranContent() {
@@ -94,13 +110,13 @@ public class HospitalInfo implements java.io.Serializable {
             String s = "";
             try {
                 s = new String(this.content, "UTF-8");
-                s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").replaceAll("p","").
+                s = s.replaceAll("</?[a-zA-Z]+[^><]*>", "").replaceAll("p", "").
                         replace("<h1>", "").replace("</h1>", "").
                         replace("<h2>", "").replace("</h2>", "").
                         replace("<h3>", "").replace("</h3>", "").
                         replace("<h4>", "").replace("</h4>", "").
                         replace("<h5>", "").replace("</h5>", "").
-                        replace("<h6>", "").replace("</h6>", "");
+                        replace("<h6>", "").replace("</h6>", "").replaceAll("rquo","").replaceAll("lquo","");
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }

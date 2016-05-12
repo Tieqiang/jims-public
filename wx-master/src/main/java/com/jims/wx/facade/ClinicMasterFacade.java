@@ -86,4 +86,20 @@ public class ClinicMasterFacade extends BaseFacade {
     public ClinicMaster saveRecord(ClinicMaster clinicMaster) {
          return entityManager.merge(clinicMaster);
     }
+
+    /**
+     * 修改取号状态
+     * @param clinicMasterId
+     */
+    public ClinicMaster updateTakeRegistStatus(String clinicMasterId) {
+        String sql="from ClinicMaster where takeStatus='1' and  id='"+clinicMasterId+"'";
+        ClinicMaster clinicMaster= (ClinicMaster) entityManager.createQuery(sql).getSingleResult();
+        if(clinicMaster!=null &&!"".equals(clinicMaster)){
+                clinicMaster.setTakeStatus("1");
+                clinicMaster=saveRecord(clinicMaster);
+                return clinicMaster;
+         }else{
+            return null;
+        }
+    }
 }

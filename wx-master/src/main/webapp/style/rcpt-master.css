@@ -1,0 +1,24 @@
+.medical-tab tr th,.medical-tab tr td
+{
+    text-align:center;
+}
+.medical-tab tr th
+{
+    font-size:18px;
+}
+.medical-tab tr td
+{
+    font-size:16px;
+    background:#fff;
+}
+.medical-tab tr td.medhis-info
+{
+    color:#aaa;
+    font-size:16px;
+    padding:10px;
+    text-align:left;
+}
+.medical-tab tr td.medhis-info span
+{
+    color:#666;
+}

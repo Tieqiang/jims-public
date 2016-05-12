@@ -9,7 +9,8 @@ $(function () {
      */
     var loadDict = function () {
         $.get("/api/doct-info/get-list", function (data) {
-            $("#t_user").datagrid('loadData', data);
+//            var obj=[{description:1,headUrl:1,hospitalId:1,hospitalName:1,id:1,img:1,name:1,title:1}];
+             $("#t_user").datagrid('loadData', data);
         });
     }
     loadDict();

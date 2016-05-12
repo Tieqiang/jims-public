@@ -130,7 +130,7 @@ public class ClinicForRegistFacade extends BaseFacade {
                     //判断这个号别 这个时间 是否已经生成了号表
                     boolean flag=judgeIsExists(clinicIndexId,registdateList.get(j));//
                     if(!flag){
-                        ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                        ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j),registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
                         list.add(clinicForRegist);
                     }
                  }
@@ -171,7 +171,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
-    private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId, String desc) {
+    private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId,String registTime,String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
@@ -187,6 +187,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         c.setTimeDesc(desc);
         Double price = clinicTypeChargeFacade.findPriceByClinicTypeSettingId(byId.getClinicTypeId());
         c.setRegistPrice(price);
+        c.setRegistTime(registTime);
         ClinicForRegist clinicForRegist = save(c);
         return clinicForRegist;
     }
@@ -217,22 +218,22 @@ public class ClinicForRegistFacade extends BaseFacade {
             String dow = revert(dayForWeek);
             if (dow.equals(dayOfWeek)) {
                 //出诊安排在上午 你选择的是12点之后
-                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(14, 16)) > 12) {
+                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 12) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(14, 16)) > 18) {
+                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 18) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(14, 16)) > 22) {
+                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 22) {
                     list.remove(sdf.format(sdf.parse(startTime)));
                 }
             }
             int dayForWeek2 = dayForWeek(endTime);
             String dow2 = revert(dayForWeek2);
             if (dow.equals(dayOfWeek)) {
-                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(14, 16)) < 8) {
+                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 8) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(14, 16)) < 14) {
+                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 14) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(14, 16)) < 18) {
+                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 18) {
                     list.remove(sdf.format(sdf.parse(startTime)));
                 }
             }
@@ -556,4 +557,27 @@ public class ClinicForRegistFacade extends BaseFacade {
         }
         return nextDayStr;
     }
+
+    /**
+     *查找可以预约的号表
+     * 从明天开始计算
+     * @param currentDateStr
+     * @param clinicIndexId
+     * @return
+     */
+    public List<ClinicForRegist> findRegistInfoPre(String currentDateStr, String clinicIndexId) {
+        List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
+        clinicForRegists=entityManager.createQuery("from ClinicForRegist where clinicIndex.id='"+clinicIndexId+"'").getResultList();
+        if(!clinicForRegists.isEmpty()){
+            Iterator iterator=clinicForRegists.iterator();
+            while(iterator.hasNext()){
+                ClinicForRegist clinicForRegist=(ClinicForRegist)iterator.next();
+                String timeDesc=clinicForRegist.getTimeDesc();
+                if(timeDesc.contains(currentDateStr)){
+                    clinicForRegists.remove(clinicForRegist);
+                }
+             }
+         }
+         return clinicForRegists;
+     }
 }

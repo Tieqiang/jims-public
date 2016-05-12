@@ -70,8 +70,8 @@ public class ClinicScheduleService {
 
     @GET
     @Path("list-tree")
-    public List<ClinicTypeIndexVo> listTree(@QueryParam("hospitalId")String hospitalId){
-        return clinicScheduleFacade.listTree(hospitalId);
+    public List<ClinicTypeIndexVo> listTree(){
+        return clinicScheduleFacade.listTree();
     }
 
 }

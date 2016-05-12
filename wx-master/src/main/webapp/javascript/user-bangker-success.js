@@ -12,15 +12,17 @@ function getUrlParameter(name){
     }
 }
 var patId=getUrlParameter("patId");
-//alert("patId="+patId);
-
-$(function(){
-
+var flag=getUrlParameter("flag");
+ $(function(){
+    if(flag!=null&&flag!=""){
+        $("#ckxq").hide();
+    }
 })
 /**
  * 查看详情
  */
 function view(){
+//    if(){}
    window.location.href="/api/wx-service/get-param?patId="+patId;
 }
 

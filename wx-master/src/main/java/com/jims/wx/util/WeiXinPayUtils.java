@@ -64,6 +64,9 @@ public  class WeiXinPayUtils {
           //totalFee 不能有小数点
 //          String p=String.valueOf((price*10));
 //          Integer pInt=Integer.parseInt(p);
+          if(price.contains(".")){
+              price=price.substring(0,price.indexOf("."));
+          }
           unifiedorder.setTotal_fee(price);//单位分
           unifiedorder.setSpbill_create_ip(ip);//IP
           unifiedorder.setNotify_url(notifyUrl);
@@ -84,7 +87,7 @@ public  class WeiXinPayUtils {
            *  2  支付签名的生成 设置
            */
           json = PayUtil.generateMchPayJsRequestJson(prepayId, APP_ID, KEY);
-          System.out.println(json);
+//          System.out.println(json);
           return json;
       }
 

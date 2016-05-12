@@ -52,6 +52,7 @@ public class OaService {
 
         //第三步 拼写json发送消息
         if(openId != "") {
+//               http://oa_url/main/openmsgsj.asp?id={id}&code={code}
             String jsonMessage="{\"touser\":\""+openId+"\",\"msgtype\":\"text\",\"text\":{\"content\":\""+message+"\"}} ";
             BaseResult a=MessageAPI.messageCustomSend(accessToken, jsonMessage);
         }

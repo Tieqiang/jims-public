@@ -1,5 +1,18 @@
 package com.jims.wx.util;
 
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.client.methods.RequestBuilder;
+import org.apache.http.message.BasicHeader;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+import weixin.popular.client.LocalHttpClient;
+
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.net.URLEncoder;
@@ -44,16 +57,53 @@ public class Bare {
                 Runtime.getRuntime().exec(new String[] { browser, url });
         }
     }
-    public static void main(String[] args) {
-//        String url = "http://192.168.6.162/views/his/public/app-user-bangker.html?param=1";
-//        Bare.openURL(url);
-        try {
-            String url= URLEncoder.encode("http://192.168.6.162/views/his/public/app-user-bangker.html", "utf-8");
-            System.out.println(url);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
 
-//        connectOauth2Authorize();
+
+
+    public static void main(String[] args) {
+//        HttpPost httpPost = new HttpPost("www.zy91.com/zndz//zyyy/intelligent/bodyList.html");
+//        HttpResponse response = null;
+//        String content = null;
+//
+//        try {
+//            httpPost.setHeader(new BasicHeader(HttpHeaders.REFERER, "www.zy91.com/zndz//zyyy/intelligent/bodyList.html"));
+//            httpPost.setHeader(new BasicHeader(HttpHeaders.CONTENT_TYPE,
+//                    "application/x-www-form-urlencoded; charset=UTF-8"));
+//            httpPost.setHeader(new BasicHeader("X-Requested-With", "XMLHttpRequest"));
+//
+//            response = LocalHttpClient.execute(httpPost);
+//            if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+//                content = EntityUtils.toString(response.getEntity());
+//            }else {
+//                throw new Exception("访问错误！");
+//            }
+//            httpPost.abort();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        System.out.println(content);
+        HttpResponse response = null;
+        String content = null;
+         HttpUriRequest httpUriRequest = RequestBuilder.post()
+                .setUri("www.zy91.com/zndz//zyyy/intelligent/bodyList.html")
+//                 .add
+                .build();
+
+         response=LocalHttpClient.execute(httpUriRequest);
+
+        if (response.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+            try {
+                content = EntityUtils.toString(response.getEntity());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+                throw new Exception("访问错误！");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println(content);
     }
 }

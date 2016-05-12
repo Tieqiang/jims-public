@@ -71,9 +71,16 @@ $(function () {
 //                    }
                 },
                 {
+                    title: '相关费用',
+                    field: 'registPrice',
+                    width: "10%",
+                    align: 'center'
+
+                },
+                {
                     title: '时间描述',
                     field: 'timeDesc',
-                    width: "40%",
+                    width: "30%",
                     align: 'center'
 
                 }
@@ -123,6 +130,7 @@ $(function () {
             $("#i_registrationLimits1").textbox("setValue", arr[0].registrationLimits);
             $("#i_appointmentLimits1").textbox("setValue", arr[0].appointmentLimits==null?0:arr[0].appointmentLimits);
             $("#i_description1").textbox("setValue", arr[0].timeDesc);
+            $("#registPrice").attr("value",arr[0].registPrice);
 //            loadRegistData();
         }
     });
@@ -134,6 +142,8 @@ $(function () {
         clinicForRegist.registrationLimits = $("#i_registrationLimits1").textbox("getValue");
         clinicForRegist.appointmentLimits = $("#i_appointmentLimits1").textbox("getValue");
         clinicForRegist.currentNo = $("#i_currentRegistNo1").textbox("getValue");
+        clinicForRegist.registPrice = $("#registPrice").val();
+         alert($("#registPrice").val());
         clinicForRegist.registrationNum = $("#i_currentRegistCount1").textbox("getValue");
         var clinicIndexId = getclinicLabel1();
         $.postJSON("/api/clinic-for-regist/update?clinicIndexId=" + clinicIndexId + "&date=" + date, clinicForRegist, function (data) {

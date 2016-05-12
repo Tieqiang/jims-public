@@ -10,19 +10,35 @@ import java.io.Serializable;
 @XmlRootElement
 public class AppSetVo implements Serializable {
 
-    private String hospitalName ;
-    private String appId ;
-    private String appSecret ;
-    private String openName ;
+    private String hospitalName;
+    private String appId;
+    private String appSecret;
+    private String openName;
     private String appToken;
-    private String infoUrl ;
-    private String metchId ;
-    private String key ;
+    private String infoUrl;
+    private String metchId;
+    private String key;
     private byte[] content;
-
+    private String hospitalImg;
     @Transient
     private String tranContent;
+    private String hospitalId;
 
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
+    public String getHospitalImg() {
+        return hospitalImg;
+    }
+
+    public void setHospitalImg(String hospitalImg) {
+        this.hospitalImg = hospitalImg;
+    }
 
     public AppSetVo() {
 
