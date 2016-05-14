@@ -73,8 +73,7 @@ public class DeptDictService {
     @GET
     @Path("list-all")
     public List<DeptDict> listAll() {
-
-        return getList(deptDictFacade.findAll(DeptDict.class));
+         return getList(deptDictFacade.findAllByCondition());
     }
 
 

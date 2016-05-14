@@ -152,4 +152,13 @@ public class DeptDictFacade extends BaseFacade {
         deptDicts=entityManager.createQuery(sql).getResultList();
         return deptDicts;
      }
+
+    /**
+     * 如果有二级科室
+     * @return
+     */
+    public List<DeptDict> findAllByCondition() {
+        String sql="from DeptDict where parentId is null";
+        return entityManager.createQuery(sql).getResultList();
+    }
 }

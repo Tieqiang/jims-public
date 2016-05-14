@@ -328,7 +328,7 @@ $(function () {
         deptDict.deptType = $("#deptType").combobox('getValue');
         deptDict.endDept = $("#endDept").combobox('getValue');
         deptDict.imgUrl=$("#headUrl").val();
-        alert($("#headUrl").val());
+//        alert($("#headUrl").val());
         var oEditor = CKEDITOR.instances.deptInfo;
         deptDict.deptInfo = oEditor.getData();
 
@@ -353,7 +353,8 @@ $(function () {
      * 清除输入框信息
      */
     var clearInput = function () {
-        $("#id").val();
+        $("#id").val("")
+
         $("#deptCode").textbox('setValue', "");
         $("#deptName").textbox('setValue', "");
         $("#deptAlis").textbox('setValue', "");
