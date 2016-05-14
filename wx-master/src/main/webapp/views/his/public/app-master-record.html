@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <title>近期门诊记录</title>
+    <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
+    <link rel="stylesheet" href="../../../style/rcpt-master.css"/>
+    <!--<style type="text/css">-->
+        <!--p {-->
+            <!--text-indent: 3em;-->
+        <!--}-->
+
+        <!--h3 {-->
+            <!--text-indent: 1em;-->
+        <!--}-->
+    <!--</style>-->
+</head>
+<body>
+<div ng-app="myApp" id="app">
+    <div ng-controller="tableCtrl">
+        <div id="name" style="display: none">
+            <div align="center" id="head"><h4>您好,近期门诊记录如下<span style="color:red">*</span></h4></div>
+            <div>
+                <div class="weui_cells weui_cells_access">
+                    <a class="weui_cell" href="javascript:;" ng-repeat="name in nameList">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            <span ng-bind="name.name"></span>
+                        </div>
+                        <div class="weui_cell_ft" ng-click="clickName(name.patId,name.name)">点击查看详情</div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div id="clinic" style="display: none" class="main-content">
+            <!--<div class="main-content">-->
+             <table cellpadding="0" cellspacing="0" border="0" width="100%" class="medical-tab">
+                 <thead>
+                     <tr>
+                         <th width="20%">姓名</th>
+                         <th width="45%">就诊科室</th>
+                         <th width="35%">就诊时间</th>
+                     </tr>
+                 </thead>
+
+                 <tbody>
+                     <tr ng-repeat="clinic in clinicList" style="height:30px;" ng-click="clickTR(clinic.visitDate)">
+                        <td style="align:center;">{{ clinic.name }}</td>
+                        <td style="align:center;">{{ clinic.clinicLabel }}</td>
+                        <td style="align:center;">{{ clinic.visitDate }}</td>
+                     </tr>
+                     <tr>
+                         <td colspan="3" class="medhis-info"><span>温馨提示：</span>查看详细收据信息请查看详情(查看详情显示的是整个门诊记录的收据列表，不是针对某一条的门诊记录)</td>
+                     </tr>
+                 </tbody>
+            </table>
+            <br/>
+         </div>
+
+         <div id="rcpt" style="display: none" >
+            <span>姓名：</span><span id="checkName"></span>
+            <hr>
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="medical-tab">
+                <thead>
+                    <td>收据编码</td>
+                    <td>应收费</td>
+                    <td>实收费</td>
+                    <td></td>
+                </thead>
+                <tbody>
+                 <tr ng-repeat="outp in outpList" ng-click="clickRcpt(outp.rcptNo)" style="height: 40px;">
+                     <td>{{ outp.rcptNo }}</td>
+                    <td>{{ outp.totalChanges }}</td>
+                    <td>{{ outp.totalCosts }}</td>
+                    <td><span style="color: #0000ff">>></span></td>
+                 </tr>
+                </tbody>
+            </table>
+
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backNameList()"
+               style='position: absolute; bottom: 0; display: block;  width: 100%'>返回用户列表</a><br>
+        </div>
+
+        <div id="items" cellpadding="0" cellspacing="0" border="0" width="100%" class="medical-tab">
+            <h2>收费详情</h2>
+            <table width="100%">
+                <thead>
+                    <td>项目名称</td>
+                    <td>数量</td>
+                    <td>应收费</td>
+                    <td>实收费</td>
+                </thead>
+                <tbody>
+                <tr ng-repeat="rcpt in rctpList">
+                    <td>{{ rcpt.itemName }}</td>
+                    <td>{{ rcpt.amount }}({{ rcpt.units }})</td>
+                    <td>{{ rcpt.changes }}元</td>
+                    <td>{{ rcpt.costs }}元</td>
+                </tr>
+                </tbody>
+            </table>
+            <br/>
+            <a href="javascript:;" class="weui_btn weui_btn_primary" ng-click="backPatient()"
+               style='position: absolute; bottom: 0; display: block;  width: 100%'>返回</a><br>
+        </div>
+    </div>
+</div>
+
+<div class="weui_dialog_alert" style="display: none " id="nullRcpt">
+    <div class="weui_mask"></div>
+    <div class="weui_dialog">
+        <div class="weui_dialog_hd">
+            <strong class="weui_dialog_title">
+                <i class="weui_icon_msg weui_icon_warn"></i><br>您查看的用户一个月内没有就诊记录
+            </strong>
+        </div>
+        <div class="weui_dialog_ft">
+            <a href="javascript:;" class="weui_btn_dialog default" id="nullRcptOk">确定</a>
+        </div>
+    </div>
+</div>
+
+
+<script src="/assert/angular/angular.min.js"></script>
+<script src="/assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/rcpt-master.js" type="text/javascript"></script>
+</body>
+</html>
