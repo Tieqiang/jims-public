@@ -567,17 +567,9 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     public List<ClinicForRegist> findRegistInfoPre(String currentDateStr, String clinicIndexId) {
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists=entityManager.createQuery("from ClinicForRegist where clinicIndex.id='"+clinicIndexId+"'").getResultList();
-        if(!clinicForRegists.isEmpty()){
-            Iterator iterator=clinicForRegists.iterator();
-            while(iterator.hasNext()){
-                ClinicForRegist clinicForRegist=(ClinicForRegist)iterator.next();
-                String timeDesc=clinicForRegist.getTimeDesc();
-                if(timeDesc.contains(currentDateStr)){
-                    clinicForRegists.remove(clinicForRegist);
-                }
-             }
-         }
-         return clinicForRegists;
+        clinicForRegists=entityManager.createQuery("from ClinicForRegist where registTime>'"+currentDateStr+"'  and clinicIndex.id='"+clinicIndexId+"' order by registTime asc").getResultList();
+        if(!clinicForRegists.isEmpty())
+          return clinicForRegists;
+          return null;
      }
 }

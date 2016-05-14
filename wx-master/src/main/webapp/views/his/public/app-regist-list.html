@@ -1,13 +1,75 @@
 <!DOCTYPE html>
 <html>
-<head lang="en">
-    <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../../style/app-dept.css">
+    <title>我的挂号</title>
 </head>
 <body>
+<div ng-app="myApp" id="app">
+    <div ng-controller="tableCtrl">
 
-   <div class="weui_cells_tips">温馨提示：此模块正在施工中！</div>
+        <div id="js_article" class="rich_media">
+            <div class="main-content">
+                <DIV id="con">
 
+                    <UL id="tags" class="clearfix">
+                        <LI class="selectTag"><A onClick="selectTag('tagContent0',this)"
+                                                 href="javascript:void(0)">当天挂号</A></LI>
+                        <LI><A onClick="selectTag('tagContent1',this)" href="javascript:void(0)">历史挂号</A></LI>
+                    </UL>
+                    <DIV id="tagContent">
+                        <DIV class="tagContent selectTag" id="tagContent0">
+
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="medical-tab">
+                                <thead>
+                                <tr>
+                                    <th width="20%">姓名</th>
+                                    <th width="45%">就诊科室</th>
+                                    <th width="35%">挂号时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="x in today">
+                                    <td>{{x.name}}</td>
+                                    <td>{{x.clinicLabel}}</td>
+                                    <td>{{x.registDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </DIV>
+                        <DIV class="tagContent" id="tagContent1">
+                            <table cellpadding="0" cellspacing="0" border="0" width="100%" class="medical-tab">
+                                <thead>
+                                <tr>
+                                    <th width="20%">姓名</th>
+                                    <th width="45%">就诊科室</th>
+                                    <th width="35%">挂号时间</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="y in history">
+                                    <td>{{y.name}}</td>
+                                    <td>{{y.clinicLabel}}</td>
+                                    <td>{{y.registDate}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </DIV>
+
+                    </DIV>
+                </DIV>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
-
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script type="text/javascript" src="../../../javascript/app-regist-list.js"></script>
 </html>

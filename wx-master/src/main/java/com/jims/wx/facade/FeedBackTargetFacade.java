@@ -1,6 +1,8 @@
 package com.jims.wx.facade;
 
+import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
+import com.jims.wx.entity.FeedBackTarget;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -18,19 +20,17 @@ public class FeedBackTargetFacade extends BaseFacade {
     }
 
     /**
-     * 根据id查询身体的name
      *
-     * @param bodyPartId
+     * @param feedTargetId
      * @return
      */
-    public String findNameById(String bodyPartId) {
+    public FeedBackTarget findByName(String feedTargetId) {
+        String sql="from FeedBackTarget where id='"+feedTargetId+"'";
+        return (FeedBackTarget)entityManager.createQuery(sql).getSingleResult();
+     }
 
-        String sql = "select b.name from BodyPart as b where  b.id='" + bodyPartId + "'";
-
-        String bodyPartName = (String) entityManager.createQuery(sql).getSingleResult();
-
-        if (bodyPartName != null && !"".equals(bodyPartName))
-            return bodyPartName;
-        return "";
-    }
+    @Transactional
+    public void save(FeedBackTarget feedBackTarget) {
+       merge(feedBackTarget);
+     }
 }

@@ -85,11 +85,12 @@ public class ClinicForRegistService {
             PatInfo patInfo=patInfoFacade.findById(patId);
 //            String idCard2 = patInfoFacade.findIdCard(patId);
             String patientId=patInfo.getPatientId();
+            String registTime=clinicForRegist.getRegistTime();//就诊日期
             if(patientId!=null&&!"".equals(patientId)){
                 clinicMaster.setPatientId(patientId);
             }else{
                 //生成一个
-                String registTime=clinicForRegist.getRegistTime();//就诊日期
+
 //                Double math=Math.random()*9000+1000;//1000-9999
                 /**
                  * 根据就诊日期 查询库里是否有序列记录，如果有的话，那么 取出来+1
@@ -117,6 +118,11 @@ public class ClinicForRegistService {
             clinicMaster.setClinicCharge(Double.valueOf(price));
             clinicMaster.setTakeStatus("0");//未取号
             clinicMaster.setRegistDate(new Date());
+            try {
+                clinicMaster.setVisitDate(sdf.parse(registTime));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 //             clinicMaster.setVisitDate();
              /*
              * 跟新号表的数据

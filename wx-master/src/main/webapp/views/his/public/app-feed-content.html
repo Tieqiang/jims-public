@@ -2,9 +2,32 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title></title>
-</head>
+    <title>就医反馈</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
+    <link rel="stylesheet" type="text/css" href="../../../style/app-dept.css">
+ </head>
 <body>
-
+<div ng-app="myApp" id="app" style="align:center;">
+    <div ng-controller="tableCtrl">
+        <div class="choice-tile">
+            <span class="choice-tile-text" id="question"></span>
+        </div>
+        <!--<h3 style="background-color:#b6b6b6"><span ></span></h3>-->
+        <label class="weui_cell weui_check_label" ng-repeat="x in options">
+             <div class="weui_cell_hd"  >
+                <p style="align:center;"><input type="radio" name="A"  value="{{x}}"/><span class="choice-tile-text">{{x}}</span></p>
+             </div>
+         </label>
+         <div class="weui_btn_area">
+            <a class="weui_btn weui_btn_primary"  id="submit">提交</a>
+        </div>
+    </div>
+</div>
 </body>
+<script language="javascript" src="/assert/easyui/jquery.min.js"></script>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../javascript/app-feed-content.js" language="javascript"></script>
+<script language="javascript" src="/javascript/tool.js"></script>
 </html>

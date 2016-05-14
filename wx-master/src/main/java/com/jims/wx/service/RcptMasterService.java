@@ -1,5 +1,10 @@
 package com.jims.wx.service;
 
+import com.jims.wx.entity.AppUser;
+import com.jims.wx.entity.PatInfo;
+import com.jims.wx.facade.AppUserFacade;
+import com.jims.wx.facade.PatInfoFacade;
+import com.jims.wx.facade.PatVsUserFacade;
 import com.jims.wx.facade.RcptMasterFacade;
 import com.jims.wx.vo.ClinicMasterVo;
 import com.jims.wx.vo.OutpBillItemsVo;
@@ -11,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,10 +26,17 @@ import java.util.List;
 @Produces("application/json")
 public class RcptMasterService {
     private RcptMasterFacade rcptMasterFacade;
+    private AppUserFacade appUserFacade;
+    private PatInfoFacade patInfoFacade;
+    private PatVsUserFacade patVsUserFacade;
+
 
     @Inject
-    public RcptMasterService(RcptMasterFacade rcptMasterFacade) {
+    public RcptMasterService(RcptMasterFacade rcptMasterFacade,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade,PatVsUserFacade patVsUserFacade) {
         this.rcptMasterFacade = rcptMasterFacade;
+        this.appUserFacade=appUserFacade;
+        this.patInfoFacade=patInfoFacade;
+        this.patVsUserFacade=patVsUserFacade;
     }
 
     /**
@@ -70,5 +83,29 @@ public class RcptMasterService {
         }else {
             return null;
         }
+    }
+
+    /**
+     * 查询是否有就诊记录
+     * @param openId
+     * @return
+     */
+    @GET
+    @Path("find-by-open-id")
+    public List<String> findByOpenId(@QueryParam("openId") String openId){
+        List<String> lables=new ArrayList<String>();
+        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+        List<PatInfo> lst=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
+        for(PatInfo patInfo:lst){
+            List<ClinicMasterVo> list= rcptMasterFacade.getByPatId(patInfo.getPatientId());
+            if(!list.isEmpty()){
+                for(ClinicMasterVo clinicMasterVo:list){
+                    String clinicLabel=clinicMasterVo.getClinicLabel();
+                    lables.add(clinicLabel);
+                }
+                return lables;
+            }
+        }
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 package com.jims.wx.facade;
 
+import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
+import com.jims.wx.entity.FeedBackResult;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -17,5 +19,8 @@ public class FeedBackResultFacade extends BaseFacade {
         this.entityManager = entityManager;
     }
 
-   
+    @Transactional
+    public void save(FeedBackResult f) {
+            merge(f);
+    }
 }

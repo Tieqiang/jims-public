@@ -7,13 +7,12 @@ import weixin.popular.bean.BaseResult;
 import weixin.popular.support.TokenManager;
 
 import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 给某个用户
@@ -31,7 +30,7 @@ public class OaService {
 
     @Path("send-message")
     @POST
-    public Response sendOaMessage(@QueryParam("id") String id ,@QueryParam("message") String message) throws IOException {
+    public Response sendOaMessage(@QueryParam("id") String id ,@QueryParam("message") String message,@QueryParam("code") String code) throws IOException {
         //根据personId获取 openId
         String[] idsArray = id.split(",");
         System.out.println(idsArray.length);
@@ -51,9 +50,37 @@ public class OaService {
 
         //第三步 拼写json发送消息
         String s = new String(message.getBytes("GB2312"),"UTF-8");
-        System.out.print(s);
+//        System.out.print(s);
         String state = "ok";
         for(int i=0;i<openId.length;i++) {
+//            http://oa_url/main/openmsgsj.asp?id={id}&code={code}
+//            message=message+"http://oa_url/main/openmsgsj.asp?id={"+idsArray[i]+"}&code={"+code+"}";
+//            message=message.replace("id=","");
+//            您有新的流程待办单，信息如下：
+//            编码[]
+//            安保人员工资审核表：物业经理审批
+//            时间：[2016/5/12 17:25:30]
+//            发起人：[admin]
+//            请及时登录OA进行处理
+
+
+            String target="";
+            String target2="";
+            String regex2="code=(.+)";
+            String regex="id=(.+)";
+            Pattern pattern=Pattern.compile(regex);
+            Matcher matcher=pattern.matcher(message);
+            while(matcher.find()){
+                 target=matcher.group();
+            }
+            Pattern pattern2=Pattern.compile(regex2);
+            Matcher matcher2=pattern2.matcher(message);
+            while(matcher2.find()){
+                target2=matcher.group();
+            }
+            String result="id={"+
+                    idsArray[i]+"}&"+target2;
+            message=message.replace(target,result);
             String jsonMessage = "{\"touser\":\"" + openId[i] + "\",\"msgtype\":\"text\",\"text\":{\"content\":\"" + message + "\"}} ";
             BaseResult aa = MessageAPI.messageCustomSend(accessToken, jsonMessage);
             if(!aa.getErrmsg().equals("ok")){
@@ -66,4 +93,19 @@ public class OaService {
             return null;
         }
     }
+
+
+//    public static void main(String[] args){
+////        id={1231231231}&code={code}
+//        String message=" http://oa_url/main/openmsgsj.asp?id={1231231231}&code={code}";
+//        String regex="id=(.+)";
+//        String regex2="code=(.+)";
+//        Pattern pattern=Pattern.compile(regex2);
+//        Matcher matcher=pattern.matcher(message);
+//        while(matcher.find()){
+//            String str=matcher.group();
+//            System.out.println(str);
+//
+//        }
+//    }
 }

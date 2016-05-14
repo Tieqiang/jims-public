@@ -13,9 +13,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by chenxy on 2016/4/17.
@@ -140,8 +138,13 @@ public class IntelligentGuideService {
      */
     @GET
     @Path("find-symptom-by-body")
-    public List<ClinicSymptom> findSymptomByBodyId(@QueryParam("bodyId") String bodyId) {
-        return clinicSymptomFacade.findSymptomByBodyId(bodyId);
+    public Map<String,Object>findSymptomByBodyId(@QueryParam("bodyId") String bodyId) {
+        Map<String,Object> map=new HashMap<String,Object>();
+        String bodyName=bodyPartFacade.findNameById(bodyId);
+        List<ClinicSymptom> list= clinicSymptomFacade.findSymptomByBodyId(bodyId);
+        map.put("bodyName",bodyName);
+        map.put("list",list);
+        return map;
     }
 
     /**

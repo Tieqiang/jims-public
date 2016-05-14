@@ -14,22 +14,26 @@
         <table id="t_user" class="easyui-datagrid"></table>
     </div>
 </div>
-
 <div id="dlg" modal="true" draggable="false" class="easyui-dialog" style="width:700px;height:500px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons" data-options="modal:true">
-    <div class="ftitle">症状维护</div>
+    <div class="ftitle">就医反馈维护</div>
     <form id="fm" method="post" novalidate>
-        <div class="fitem" style="display:none">
+        <div class="fitem">
             <label>编号</label>
             <input name="id" id="docId" class="easyui-textbox" disabled="true" value="">
         </div>
         <div class="fitem">
-            <label>症状名称：</label>
-            <input id="name" name="name" class="easyui-textbox" required="true" value="">
+            <label>反馈对象：</label>
+            <input id="feedTarget"  class="easyui-textbox" required="true" value="" disabled="disabled">
         </div>
         <div class="fitem">
-            <label>身体部位：</label>
-            <select id="bodyPartId" name="bodyPartId" required="true"></select>
+            <label>问题内容：</label>
+           <input type="text" id="questionContent" value=""  class="easyui-textbox"/>
+        </div>
+        <div class="fitem">
+            <label>选项内容：</label>
+            <input type="text" id="optionContent" value=""  class="easyui-textbox"/>
+            <span style="color:red;">注：选项内容请用空格隔开！</span>
         </div>
      </form>
 </div>
@@ -40,16 +44,14 @@
 </div>
 
 <div id="tb" style="padding:2px 5px;">
-    <a href="#" id="addBtn" class="easyui-linkbutton" iconCls="icon-add">添加</a>
-    <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改</a>
-    <!--<a href="#" id="delBtn" class="easyui-linkbutton" iconCls="icon-remove">删除</a>-->
-</div>
+     <a href="#" id="editBtn" class="easyui-linkbutton" iconCls="icon-edit">修改</a>
+ </div>
 
 
 <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
-<script type="text/javascript" src="../../../javascript/clinic-symptom.js" charset="UTF-8"></script>
+<script type="text/javascript" src="../../../javascript/feed-back.js" charset="UTF-8"></script>
 <script type="text/javascript" src="../../../javascript/tool.js"></script>
  </body>
 </html>

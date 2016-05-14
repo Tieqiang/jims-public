@@ -10,21 +10,46 @@
     <link rel="stylesheet" type="text/css" href="../../../style/app-dept.css">
     <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
     <title>可能疾病以及推荐科室</title>
+    <style>
+        .reg-remind
+        {
+            margin:10px;
+        }
+        .reg-remind-list
+        {
+            background:#fff;
+            border:1px dashed #ccc;
+            border-radius:5px;
+            padding:10px;
+            margin-bottom:10px;
+            font-size:17px;
+        }
+        .wblock-span
+        {
+            display:block;
+
+        }
+        .margin10-r
+        {
+            margin-right:10px;
+        }
+
+    </style>
 </head>
 <body>
 <div id="js_article" class="rich_media">
     <div class="main-content">
-        <div class="top-search">
+        <div class="reg-remind">
             <div ng-app="myApp">
                 <div ng-controller="tableCtrl" id="deptlist">
                     <input type="hidden" id="openId" value="">
                     <div ng-repeat="x in names">
-                        <div class="bot-line parkinfo-text" ng-click="haveSelected(x.id);"> <!--ng-click="findDeptInfo(x.id);"-->
+                        <div class="reg-remind-list clearfix" ng-click="haveSelected(x.id);"> <!--ng-click="findDeptInfo(x.id);"-->
                             <a href="#" class="hoffice-link" >
                                 <span style="display:none" class="span">{{x.id}}</span>
-                                 <span>可能疾病：{{x.name}}</span>
-                                 <span>推荐科室：{{x.deptName}}</span></a>
-                          </div>
+                                <span class="fd-left wblock-span margin10-r">可能疾病：{{x.name}}</span>
+                                <span class="fd-left wblock-span">推荐科室：{{x.deptName}}</span></a>
+                           </div>
                     </div>
                 </div>
             </div>
@@ -33,8 +58,8 @@
 </div>
 
 <div class="weui_btn_area">
-    <a class="weui_btn weui_btn_primary" href="" id="today">当天挂号</a>
-    <a class="weui_btn weui_btn_primary" href="" id="prepare">预约挂号</a>
+    <a class="weui_btn weui_btn_primary" onclick="today()" id="today">当天挂号</a>
+    <a class="weui_btn weui_btn_primary" onclick="prepare()" id="prepare">预约挂号</a>
 </div>
 
 </body>

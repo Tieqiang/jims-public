@@ -19,14 +19,15 @@ app.controller('tableCtrl', function ($scope, $http) {
 //          ids=ids+symptomId+",";
 ////          $("#haveSelected").html("<span style='color:red'>√</span>");
 //     }
-    $http.get("/api/intelligent-guide/find-body-name?bodyId="+bodyId)
-        .success(function (data) {
-            alert(data+"    data");
-            $("#text1").html(data);
-        });
+//    $http.get("/api/intelligent-guide/find-body-name?bodyId="+bodyId)
+//        .success(function (data) {
+////            alert(data+"    data");
+//            $("#text1").html(data);
+//        });
     $http.get("/api/intelligent-guide/find-symptom-by-body?bodyId="+bodyId)
-        .success(function (data) {
-            $scope.names = data;
+        .success(function (data) {//map
+            $("#text1").html(data.bodyName);
+            $scope.names = data.list;
      });
 });
 /**

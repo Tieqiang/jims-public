@@ -18,15 +18,14 @@
              <div ng-app="myApp">
                 <div ng-controller="tableCtrl" id="deptlist">
                     <input type="hidden" id="openId" value="">
-                    <div class="sd-ttile" id="text1">
-                     </div>
-                    <div ng-repeat="x in names">
+                    <div class="sd-ttile" id="text1"> </div>
+                     <div ng-repeat="x in names">
                         <div class="bot-line parkinfo-text"> <!--ng-click="findDeptInfo(x.id);"-->
                             <a href="#" class="hoffice-link" >
                                 <input type="hidden" >
                                 <span style="display:none" class="span">{{x.id}}</span>
-                                <span class="icon-span">{{x.name}}</span>
-                                <input type="checkbox" name="flag" class="fd-right" value="{{x.id}}" /></a>
+                                <span class="choice-tile-text">{{x.name}}</span>
+                                <input type="checkbox" name="flag" class="fd-right" class="choice-tile-text" value="{{x.id}}" /></a>
                          </div>
                     </div>
                  </div>
