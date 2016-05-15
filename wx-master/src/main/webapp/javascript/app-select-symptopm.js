@@ -13,18 +13,10 @@ function getUrlParameter(name) {
 }
 var bodyId=getUrlParameter("bodyId");
 var openId=getUrlParameter("openId");
+var sexValue=getUrlParameter("sexValue");//1 女性 0 男性
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
-//     $scope.haveSelected = function (symptomId) {
-//          ids=ids+symptomId+",";
-////          $("#haveSelected").html("<span style='color:red'>√</span>");
-//     }
-//    $http.get("/api/intelligent-guide/find-body-name?bodyId="+bodyId)
-//        .success(function (data) {
-////            alert(data+"    data");
-//            $("#text1").html(data);
-//        });
-    $http.get("/api/intelligent-guide/find-symptom-by-body?bodyId="+bodyId)
+     $http.get("/api/intelligent-guide/find-symptom-by-body?bodyId="+bodyId+"&sexValue="+sexValue)
         .success(function (data) {//map
             $("#text1").html(data.bodyName);
             $scope.names = data.list;
@@ -50,7 +42,7 @@ function result(){
         ids=ids.substring(0,ids.length-1);//1，2，
         alert(ids);
 //        window.location.href="/api/intelligent-guide/find-sickness-by-symptom?ids="+ids;
-         window.location.href = "/api/wx-service/query-sickness?ids=" + ids+"&openId="+openId;
+         window.location.href = "/api/wx-service/query-sickness?ids=" + ids+"&openId="+openId+"&sexValue="+sexValue;
      }
 
 }

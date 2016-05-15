@@ -41,9 +41,13 @@ public class ClinicSymptomFacade extends BaseFacade {
      * @param bodyId
      * @return
      */
-    public List<ClinicSymptom> findSymptomByBodyId(String bodyId) {
-
-        String sql="from ClinicSymptom where bodyPartId='"+bodyId+"'";
+    public List<ClinicSymptom> findSymptomByBodyId(String bodyId,String sexValue) {
+        if(sexValue=="1"){
+            sexValue="女";
+        }else{
+            sexValue="男";
+        }
+        String sql="from ClinicSymptom where bodyPartId='"+bodyId+"' and sex='"+sexValue+"'";
 
         List<ClinicSymptom> list=entityManager.createQuery(sql).getResultList();
 

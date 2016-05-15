@@ -39,9 +39,10 @@ public class ClinicForRegistService {
     private ClinicScheduleFacade clinicScheduleFacade;
     private HttpServletRequest request;
     private TakeRegistSeqFacade takeRegistSeqFacade;
+    private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
 
     @Inject
-    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response, PatInfoFacade patInfoFacade, ClinicScheduleFacade clinicScheduleFacade, HttpServletRequest request,TakeRegistSeqFacade takeRegistSeqFacade) {
+    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response, PatInfoFacade patInfoFacade, ClinicScheduleFacade clinicScheduleFacade, HttpServletRequest request, TakeRegistSeqFacade takeRegistSeqFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
@@ -55,7 +56,7 @@ public class ClinicForRegistService {
         this.patInfoFacade = patInfoFacade;
         this.clinicScheduleFacade = clinicScheduleFacade;
         this.request = request;
-        this.takeRegistSeqFacade=takeRegistSeqFacade;
+        this.takeRegistSeqFacade = takeRegistSeqFacade;
     }
 
 
@@ -69,94 +70,85 @@ public class ClinicForRegistService {
     @GET
     @Path("regist")
     public synchronized String regist(@QueryParam("price") String price, @QueryParam("idCard") String idCard, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("openId") String openId) {
-        if (StringUtils.isNotBlank(price) && StringUtils.isNotBlank(idCard) && StringUtils.isNotBlank(clinicForRegistId)) {
-            ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
-            /**
-             *向clinic_master表中写入一条数据
-             */
-            ClinicMaster clinicMaster = new ClinicMaster();
-            clinicMaster.setClincRegistId(clinicForRegistId);//号表主键
-//            /**
-//             * 查找Idcard
-//             */
-            AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
-            String patId = appUser.getPatId();//appuser主键
-//            String idCard2 = patVsUserFacade.findPatIdById(appuserId);
-            PatInfo patInfo=patInfoFacade.findById(patId);
-//            String idCard2 = patInfoFacade.findIdCard(patId);
-            String patientId=patInfo.getPatientId();
-            String registTime=clinicForRegist.getRegistTime();//就诊日期
-            if(patientId!=null&&!"".equals(patientId)){
-                clinicMaster.setPatientId(patientId);
-            }else{
-                //生成一个
-
-//                Double math=Math.random()*9000+1000;//1000-9999
+        try {
+            if (StringUtils.isNotBlank(price) && StringUtils.isNotBlank(idCard) && StringUtils.isNotBlank(clinicForRegistId)) {
+                ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
                 /**
-                 * 根据就诊日期 查询库里是否有序列记录，如果有的话，那么 取出来+1
-                 * 如果没有+1
+                 *向clinic_master表中写入一条数据
                  */
-                Integer sortMath=1000;
-                TakeRegistSeq record=takeRegistSeqFacade.findByDate(registTime);
-                if(record!=null&&!"".equals(record)){
-                    sortMath=Integer.parseInt(record.getMath());
-                }else{//今天是第一位取号的人员  1000放入数据库
-                    TakeRegistSeq a=takeRegistSeqFacade.save(new TakeRegistSeq(registTime,"1000"));
-                    a.setMath("1001");
-                    takeRegistSeqFacade.save(a);
+                ClinicMaster clinicMaster = new ClinicMaster();
+                clinicMaster.setClincRegistId(clinicForRegistId);//号表主键
+                //            /**
+                //             * 查找Idcard
+                //             */
+                AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+                String patId = appUser.getPatId();//appuser主键
+                //            String idCard2 = patVsUserFacade.findPatIdById(appuserId);
+                PatInfo patInfo = patInfoFacade.findById(patId);
+                //            String idCard2 = patInfoFacade.findIdCard(patId);
+                String patientId = patInfo.getPatientId();
+                String registTime = clinicForRegist.getRegistTime();//就诊日期
+                if (patientId != null && !"".equals(patientId)) {
+                    clinicMaster.setPatientId(patientId);
+                } else {
+                    Integer sortMath = 1000;
+                    TakeRegistSeq a = null;
+                    TakeRegistSeq record = takeRegistSeqFacade.findByDate(registTime);
+                    if (record != null && !"".equals(record)) {
+                        sortMath = Integer.parseInt(record.getMath());
+                        sortMath++;
+                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath));
+                        record.setMath(String.valueOf(sortMath));
+                        takeRegistSeqFacade.save(record);
+                    } else {//今天是第一位取号的人员  1000放入数据库
+                        a = takeRegistSeqFacade.save(new TakeRegistSeq("1000", registTime));
+                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(1000));
+                    }
+
+                    patInfo.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath + 1));
+
+                    patInfoFacade.save(patInfo);
                 }
-                clinicMaster.setPatientId(registTime+String.valueOf(sortMath+1));
-                //跟新一下
-                record.setMath(String.valueOf(sortMath+1));
-                takeRegistSeqFacade.save(record);
-                patInfo.setPatientId(registTime+String.valueOf(sortMath+1));
-                patInfoFacade.save(patInfo);
-             }
-            clinicMaster.setRegistFee(0.0);//设为0
-            clinicMaster.setClinicFee(0.0);///设为0
-            clinicMaster.setOtherFee(Double.valueOf(price));//和
-            clinicMaster.setClinicCharge(Double.valueOf(price));
-            clinicMaster.setTakeStatus("0");//未取号
-            clinicMaster.setRegistDate(new Date());
-            try {
+                clinicMaster.setRegistFee(0.0);//设为0
+                clinicMaster.setClinicFee(0.0);///设为0
+                clinicMaster.setOtherFee(Double.valueOf(price));//和
+                clinicMaster.setClinicCharge(Double.valueOf(price));
+                clinicMaster.setTakeStatus("0");//未取号
+                clinicMaster.setRegistDate(new Date());
                 clinicMaster.setVisitDate(sdf.parse(registTime));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-//             clinicMaster.setVisitDate();
-             /*
-             * 跟新号表的数据
-             * */
-            ClinicMaster c = clinicMasterFacade.saveRecord(clinicMaster);
-//            ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
-            //当日已经挂号数+1
-            clinicForRegist.setRegistrationNum(clinicForRegist.getRegistrationNum() + 1);
-            //当前号+1
-            clinicForRegist.setCurrentNo(clinicForRegist.getCurrentNo() + 1);
-            //限约号数-1
-            clinicForRegist.setAppointmentLimits(clinicForRegist.getAppointmentLimits() - 1);
-            ClinicForRegist cfr = clinicForRegistFacade.save(clinicForRegist);
-            if (c != null && cfr != null) {//保存成功
-                try {
+                //             clinicMaster.setVisitDate();
+                 /*
+                 * 跟新号表的数据
+                 * */
+                ClinicMaster c = clinicMasterFacade.saveRecord(clinicMaster);
+                //            ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
+                //当日已经挂号数+1
+                clinicForRegist.setRegistrationNum(clinicForRegist.getRegistrationNum() + 1);
+                //当前号+1
+                clinicForRegist.setCurrentNo(clinicForRegist.getCurrentNo() + 1);
+                //限约号数-1
+                clinicForRegist.setAppointmentLimits(clinicForRegist.getAppointmentLimits() - 1);
+                ClinicForRegist cfr = clinicForRegistFacade.save(clinicForRegist);
+                if (c != null && cfr != null) {//保存成功
+
                     //跳转到成功页面
-                    response.sendRedirect("/views/his/public/app-pay-success.html");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                try {
+                    response.sendRedirect("/views/his/public/app-pay-success.html?clinicForRegistId=" + clinicForRegistId);
+
+                } else {
+
                     //跳转到操作失败页面
                     response.sendRedirect("/views/his/public/app-pay-failed.html");
-                } catch (IOException e) {
-                    e.printStackTrace();
+
                 }
-            }
-        } else {
-            try {
+            } else {
+
                 response.sendRedirect("/views/his/public/app-pay-failed.html");
-            } catch (IOException e) {
-                e.printStackTrace();
+
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return "";
     }
@@ -172,10 +164,10 @@ public class ClinicForRegistService {
      */
     @GET
     @Path("find-by-dept-id")
-    public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId,@QueryParam("openId") String openId,@QueryParam("preFlag") String preFlag) {
+    public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId, @QueryParam("preFlag") String preFlag) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
         String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-         /**
+        /**
          * 查询默认绑定患者
          */
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
@@ -205,7 +197,7 @@ public class ClinicForRegistService {
                  * 如果没有就显示里今天最近的一天
                  * 当天挂号
                  */
-                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findRegistInfo(currentDateStr, clinicIndex.getId());
+                ClinicForRegist clinicForRegist = clinicForRegistFacade.findRegistInfo(currentDateStr, clinicIndex.getId());
                 if (clinicForRegist != null && !"".equals(clinicForRegist)) {
                     AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
                     appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
@@ -456,13 +448,14 @@ public class ClinicForRegistService {
     /**
      * 一个医生可能有多个出诊安排
      * 不包括当天的
+     *
      * @param deptId
      * @param openId
      * @return
      */
     @GET
     @Path("find-by-dept-id-pre")
-    public List<AppDoctInfoVo> findByDeptIdPre(@QueryParam("deptId") String deptId,@QueryParam("openId") String openId) {
+    public List<AppDoctInfoVo> findByDeptIdPre(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
         String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         /**
@@ -490,67 +483,68 @@ public class ClinicForRegistService {
                 if (doctId != null && !"".equals(doctId)) {
                     doctInfo = this.doctInfoFacade.findById(doctId);
                 }
-                 List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoPre(currentDateStr, clinicIndex.getId());
-                    AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
-                    appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
-                    appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
-                    appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
-                    appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    List<RegistInfoVO> registInfoVOs=new ArrayList<RegistInfoVO>();
-                     if(!clinicForRegists.isEmpty()){
-                           for(ClinicForRegist c:clinicForRegists){
-                                RegistInfoVO registInfoVO=new RegistInfoVO();
-                                registInfoVO.setCurrentNum(c.getRegistrationNum());
-                                registInfoVO.setEnabledNum(c.getRegistrationLimits() - c.getRegistrationNum());
-                                registInfoVO.setRid(c.getId());
-                                registInfoVO.setPrice(c.getRegistPrice());
-                                registInfoVO.setTimeDesc(c.getTimeDesc());
-                                registInfoVOs.add(registInfoVO);
-                            }
+                List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoPre(currentDateStr, clinicIndex.getId());
+                AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
+                appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
+                appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
+                appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
+                appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
+                List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
+                if (!clinicForRegists.isEmpty()) {
+                    for (ClinicForRegist c : clinicForRegists) {
+                        RegistInfoVO registInfoVO = new RegistInfoVO();
+                        registInfoVO.setCurrentNum(c.getRegistrationNum());
+                        registInfoVO.setEnabledNum(c.getRegistrationLimits() - c.getRegistrationNum());
+                        registInfoVO.setRid(c.getId());
+                        registInfoVO.setPrice(c.getRegistPrice());
+                        registInfoVO.setTimeDesc(c.getTimeDesc());
+                        registInfoVOs.add(registInfoVO);
                     }
+                }
                 appDoctInfoVo.setDeptName(deptName);
                 appDoctInfoVo.setPatName(patInfo.getName());
                 appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
                 appDoctInfoVos.add(appDoctInfoVo);
-             }
+            }
         }
         return appDoctInfoVos;
     }
 
     /**
-     * 取票接口
-     * @param idCard
+     * 取号接口
+      * @param idCard
      * @param patientId
      * @return
      */
     @GET
     @Path("take-regist")
-    public AppDoctInfoVo takeRegist(@QueryParam("idCard") String idCard,@QueryParam("patientId") String patientId,@QueryParam("clinicMasterId") String clinicMasterId){
-        if(idCard!=null&&!"".equals(idCard)&&patientId!=null&&!"".equals(patientId)){
-            AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
-            PatInfo patInfo=patInfoFacade.findByIdCard(idCard);
-            if(patInfo!=null&&!"".equals(patInfo)){
-                ClinicMaster clinicMaster=clinicMasterFacade.updateTakeRegistStatus(clinicMasterId);
-                  if(clinicMaster!=null&&!"".equals(clinicMaster)){//取票成功
-                        patInfo.setPatientId(patientId);
-                        patInfoFacade.save(patInfo);
-                        appDoctInfoVo=findInfo(clinicMaster.getClincRegistId(), patInfo.getId());
-                        return appDoctInfoVo;
-                  }
-             }
+    public AppDoctInfoVo takeRegist(@QueryParam("idCard") String idCard, @QueryParam("patientId") String patientId, @QueryParam("clinicMasterId") String clinicMasterId) {
+        if (idCard != null && !"".equals(idCard) && patientId != null && !"".equals(patientId)) {
+            AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
+            PatInfo patInfo = patInfoFacade.findByIdCard(idCard);
+            if (patInfo != null && !"".equals(patInfo)) {
+                ClinicMaster clinicMaster = clinicMasterFacade.updateTakeRegistStatus(clinicMasterId);
+                if (clinicMaster != null && !"".equals(clinicMaster)) {//取票成功
+                    patInfo.setPatientId(patientId);
+                    patInfoFacade.save(patInfo);
+                    appDoctInfoVo = findInfo(clinicMaster.getClincRegistId(), patInfo.getId());
+                    return appDoctInfoVo;
+                }
+            }
             return null;
-        }else{
+        } else {
             return null;
         }
-     }
+    }
 
     /**
      * 通过号表ID和患者ID查询相关信息
+     *
      * @param clinicForRegistId
      * @param patId
      * @return
      */
-    private AppDoctInfoVo findInfo(String clinicForRegistId,String patId){
+    private AppDoctInfoVo findInfo(String clinicForRegistId, String patId) {
         AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
         try {
             if (patId != null && !"".equals(patId)) {

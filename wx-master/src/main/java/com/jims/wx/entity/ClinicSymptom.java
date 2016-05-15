@@ -22,6 +22,8 @@ public class ClinicSymptom implements Serializable {
 
     private String text;
 
+    private String sex;
+
 
     @GenericGenerator(name = "generator", strategy = "uuid.hex")
     @Id
@@ -73,6 +75,14 @@ public class ClinicSymptom implements Serializable {
     @Transient
     public String getText(){
         return this.name;
+    }
+
+    @Column(name="sex")
+    public String getSex() {
+        return sex;
+    }
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
 

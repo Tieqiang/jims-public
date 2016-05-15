@@ -52,13 +52,17 @@ $(function () {
         },{
             field: 'symptomName',
             title: '症状名称',
-            width: "50%"
+            width: "40%"
 
-        }, {
+        },{
             field: 'sicknessName',
             title: '疾病名称',
-            width: "50%"
-         }]]
+            width: "40%"
+         },{
+            field: 'sex',
+            title: '性别',
+            width: "20%"
+        }]]
     });
     /**
      * button of add click
@@ -111,6 +115,7 @@ $(function () {
             clinicSickness.id = $("#docId").val();
             clinicSickness.symptomId = getValue($("#symptomId"));
             clinicSickness.sicknessId =getValue($("#sicknessId"));
+            clinicSickness.sex=$("#sex").val();
         }
         $.postJSON("/api/intelligent-guide/save-symptom-vs-sickness", clinicSickness, function (data) {
             $('#dlg').dialog('close');
@@ -140,6 +145,7 @@ $(function () {
             loadbodyPart1();
             setValue($("#symptomId"),arr[0].symptomId);
             setValue($("#sicknessId"),arr[0].sicknessId);
+            $("#sex").val(arr[0].sex);
          }
     });
     /**

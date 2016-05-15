@@ -1,0 +1,35 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="../../../style/app-dept.css">
+    <title>身体部位列表</title>
+</head>
+<body>
+<div id="js_article" class="rich_media">
+    <div class="main-content">
+        <div class="top-search">
+            <div ng-app="myApp">
+                <div ng-controller="tableCtrl" id="deptlist">
+                      <div ng-repeat="x in names">
+                        <div class="bot-line parkinfo-text" ng-click="findSysptomInfo(x.id);">
+                            <a href="#" class="hoffice-link">
+                                 <span style="display:none" class="span">{{x.id}}</span>
+                                 <span class="icon-span">{{x.name}}</span></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="../../../assert/angular/angular.min.js"></script>
+<script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<script src="../../../javascript/app-body-list.js"></script>
+</html>

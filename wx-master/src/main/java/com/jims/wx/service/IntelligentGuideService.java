@@ -138,10 +138,10 @@ public class IntelligentGuideService {
      */
     @GET
     @Path("find-symptom-by-body")
-    public Map<String,Object>findSymptomByBodyId(@QueryParam("bodyId") String bodyId) {
+    public Map<String,Object>findSymptomByBodyId(@QueryParam("bodyId") String bodyId,@QueryParam("sexValue") String sexValue) {
         Map<String,Object> map=new HashMap<String,Object>();
         String bodyName=bodyPartFacade.findNameById(bodyId);
-        List<ClinicSymptom> list= clinicSymptomFacade.findSymptomByBodyId(bodyId);
+        List<ClinicSymptom> list= clinicSymptomFacade.findSymptomByBodyId(bodyId,sexValue);
         map.put("bodyName",bodyName);
         map.put("list",list);
         return map;
@@ -155,9 +155,9 @@ public class IntelligentGuideService {
      */
     @GET
     @Path("find-sickness-by-symptom")
-    public List<ClinicSickness> findSicknessBySymptom(@QueryParam("ids") String ids) {
+    public List<ClinicSickness> findSicknessBySymptom(@QueryParam("ids") String ids,@QueryParam("sexValue") String sexValue) {
         List<ClinicSickness> cs=new ArrayList<ClinicSickness>();
-        List<String> list = symptomSicknessFacade.findSicknessBySymptom(ids);//疾病 的ids
+        List<String> list = symptomSicknessFacade.findSicknessBySymptom(ids,sexValue);//疾病 的ids
         List<ClinicSickness> clinicSicknesses =null;
         if(!list.isEmpty()){
              clinicSicknesses = clinicSickessFacade.findByIds(list);
@@ -333,6 +333,13 @@ public class IntelligentGuideService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
     }
+
+    @GET
+    @Path("body-list")
+    public List<BodyPart> bodyPartList(){
+        return bodyPartFacade.findAll(BodyPart.class);
+    }
+
 
  }
 

@@ -14,29 +14,15 @@ function getUrlParameter(name) {
 //所选择症状ids
 var ids=getUrlParameter("ids");
 var openId=getUrlParameter("openId");
+var sexValue=getUrlParameter("sexValue");
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
 
-     $http.get("/api/intelligent-guide/find-sickness-by-symptom?ids="+ids)
+     $http.get("/api/intelligent-guide/find-sickness-by-symptom?ids="+ids+"&sexValue="+sexValue)
         .success(function (data) {
             $scope.names = data;
      });
 });
-
-//
-//$(function(){
-//    /**
-//     * 今天挂号
-//     */
-//    $("#today").on("click",function(){
-////        alert(1);
-//            window.location.href="/api/wx-service/find-dept?openId="+openId;
-//    });
-//    $("#prepare").on("click",function(){
-//
-//    })
-//})
-
 function prepare(){
     window.location.href="/api/wx-service/find-dept-pre?openId="+openId;
 }

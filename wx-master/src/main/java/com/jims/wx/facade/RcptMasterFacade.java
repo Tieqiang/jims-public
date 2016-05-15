@@ -31,7 +31,6 @@ public class RcptMasterFacade extends BaseFacade{
 
     //根据patId和就诊日期查询clinic-master
     public List<ClinicMasterVo> getByPatId(String patId){
-
         Date date=new Date();
         DateFormat ff=new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
@@ -42,7 +41,6 @@ public class RcptMasterFacade extends BaseFacade{
         if(null != patId && !patId.trim().equals("")){
             sql +=" and patient_id='" +patId+ "'";
         }
-
         List<ClinicMasterVo> clinicMasterVos = new ArrayList<>() ;
         Query qu = entityManager.createNativeQuery(sql);
         List<Objects[]> resultList=qu.getResultList();

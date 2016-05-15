@@ -46,14 +46,19 @@ $(function () {
          },{
             field: 'name',
             title: '症状名称',
-            width: "50%"
+            width: "40%"
 
         }, {
             field: 'bodyPartName',
             title: '身体部位',
-            width: "50%"
+            width: "40%"
 
-        }]]
+        },{
+             field: 'sex',
+             title: '性别',
+             width: "20%"
+
+         }]]
     });
     /**
      * button of add click
@@ -90,6 +95,7 @@ $(function () {
                     clinicSymptom.id = $("#docId").val();
                     clinicSymptom.name = $("#name").val();
                     clinicSymptom.bodyPartId =getValue();
+                    clinicSymptom.sex=$("#sex").val();
                  }
                  $.postJSON("../../../api/intelligent-guide/save-symptom", clinicSymptom, function (data) {
                     $('#dlg').dialog('close');
@@ -118,6 +124,7 @@ $(function () {
              $("#docId").val(arr[0].id);
              setValue(arr[0].bodyPartId)
              $("#name").textbox("setValue",arr[0].name);
+             $("#sex").val(arr[0].sex);
           }
     });
      /**

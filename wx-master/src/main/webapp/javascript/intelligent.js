@@ -21,14 +21,6 @@ function symptomList(id){
 }
 
 
-function changeSymptomList(){
-	$('#body').removeClass('wormanDisplay');
-	$('#pic').addClass('wormanDisplay');
-	$('#symptomList_18').trigger('click');
-	$('#symptomList_18').addClass('changezndzzz');
-	
-}
-
 function back(){
 	$('#body').addClass('wormanDisplay');
 	$('#pic').removeClass('wormanDisplay');

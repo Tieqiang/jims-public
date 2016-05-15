@@ -25,7 +25,7 @@ public class SymptomSicknessFacade extends BaseFacade {
      * @param ids
      * @return
      */
-    public List<String> findSicknessBySymptom(String ids) {
+    public List<String> findSicknessBySymptom(String ids,String sexValue) {
              String idsStr="";
             String[] arr=ids.split(",");
             for(String str:arr){
@@ -34,7 +34,12 @@ public class SymptomSicknessFacade extends BaseFacade {
             if(idsStr!=null&&!"".equals(idsStr)){
                 idsStr=idsStr.substring(0,idsStr.length()-1);//
             }
-           String sql="select sicknessId from SymptomVsSickness where symptomId in   ("+idsStr+")";
+            if(sexValue=="1"){
+                sexValue="女";
+            }else{
+                sexValue="男";
+            }
+           String sql="select sicknessId from SymptomVsSickness where symptomId in   ("+idsStr+") and sex='"+sexValue+"'";
            List<String> list=entityManager.createQuery(sql).getResultList();
            if(!list.isEmpty())
               return list;

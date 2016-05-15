@@ -454,16 +454,16 @@ public class WxService {
 
     @GET
     @Path("query-symptom")
-    public String querySymptom(@QueryParam("bodyId") String bodyId, @QueryParam("openId") String openId) throws IOException {
-        response.sendRedirect("/views/his/public/app-select-symptom.html?bodyId=" + bodyId + "&openId=" + openId);
+    public String querySymptom(@QueryParam("bodyId") String bodyId,@QueryParam("openId") String openId,@QueryParam("sexValue") String sexValue) throws IOException {
+        response.sendRedirect("/views/his/public/app-select-symptom.html?bodyId=" + bodyId + "&openId=" + openId+"&sexValue="+sexValue);
         return "";
     }
 
 
     @GET
     @Path("query-sickness")
-    public String queerySickness(@QueryParam("ids") String ids, @QueryParam("openId") String openId) throws IOException {
-        response.sendRedirect("/views/his/public/app-sickness-result.html?ids=" + ids + "&openId=" + openId);
+    public String queerySickness(@QueryParam("ids") String ids, @QueryParam("openId") String openId,@QueryParam("sexValue") String sexValue) throws IOException {
+        response.sendRedirect("/views/his/public/app-sickness-result.html?ids=" + ids + "&openId=" + openId+"&sexValue="+sexValue);
         return "";
     }
 
@@ -576,6 +576,16 @@ public class WxService {
     public String findContent(@QueryParam("openId") String openId, @QueryParam("feedTargetId") String feedTargetId) {
         try {
             response.sendRedirect("/views/his/public/app-feed-content.html?openId=" + openId + "&feedTargetId=" + feedTargetId);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+//        @GET
+    @Path("body-list")
+    public String bodyList(@QueryParam("sexValue") String sexValue,@QueryParam("openId") String openId) {
+        try {
+           response.sendRedirect("/views/his/public/app-body-list.html?sexValue="+sexValue);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -22,6 +22,7 @@ public class SymptomVsSickness implements Serializable {
 
     private String sicknessName;
 
+    private String sex;
 
 
 
@@ -78,6 +79,14 @@ public class SymptomVsSickness implements Serializable {
 
     public void setSicknessName(String sicknessName) {
         this.sicknessName = sicknessName;
+    }
+    @Column(name="sex")
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
 

@@ -16,12 +16,13 @@
     }
     var openId=getUrlParameter("openId");
     function symptomList2(id){
-//        $('#pic').addClass('wormanDisplay');
-//
-//        $('#body').removeClass('wormanDisplay');
-//        $('#zndz0202').removeClass('wormanDisplay');
-//
-//        $('#symptomList_'+id).trigger('click');
-//        $('#symptomList_'+id).addClass('changezndzzz');
-        window.location.href="/api/wx-service/query-symptom?bodyId="+id+"&openId="+openId;
+        var sexValue = $('#changeSex').attr('v');// 1 女性 0 男性
+        window.location.href="/api/wx-service/query-symptom?bodyId="+id+"&openId="+openId+"&sexValue="+sexValue;
     }
+    /**
+     * 查询身体部位列表
+     */
+    function changeSymptomList(){
+        var sexValue = $('#changeSex').attr('v');// 1 女性 0 男性
+        window.location.href="/api/wx-service/body-list?sexValue="+sexValue+"&openId="+openId;
+     }
