@@ -18,7 +18,7 @@ public class Main {
         String webappDirLocation = "wx-master/src/main/webapp/";
         String webPort = System.getenv("PORT");
         if (webPort == null || webPort.isEmpty()) {
-            webPort = "80";
+            webPort = "88";
         }
         File file = new File(webappDirLocation) ;
         if(file.exists()){
@@ -46,7 +46,7 @@ public class Main {
 
         Flyway flyway = new Flyway();
         //设置数据库链接配置
-        flyway.setDataSource("jdbc:oracle:thin:@127.0.0.1:1521:oracle","wx","wx");
+        flyway.setDataSource("jdbc:oracle:thin:@127.0.0.1:1521:orcl","wx","wx");
         //设置schema用户
         flyway.setSchemas("WX");
         flyway.setTable("SCHEMA_VERSION");

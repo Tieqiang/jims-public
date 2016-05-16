@@ -56,9 +56,17 @@ $(function () {
         },{
              field: 'sex',
              title: '性别',
-             width: "20%"
-
-         }]]
+             width: "20%",
+             formatter: function(value,row,index){
+                 if(row.sex == -1){
+                     return "不区分男女";
+                 } if(row.sex =="男"){
+                     return "男";
+                 } if(row.sex == "女"){
+                     return "女";
+                 }
+             }
+          }]]
     });
     /**
      * button of add click

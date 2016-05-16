@@ -37,3 +37,5 @@ insert into body_part values('6','背部','0');
 insert into body_part values('5','下肢','0');
 insert into body_part values('4','颅部','0');
 insert into body_part values('3','胸部','0');
+insert into body_part values('2','腹部','0');
+insert into body_part values('18','四肢','0');

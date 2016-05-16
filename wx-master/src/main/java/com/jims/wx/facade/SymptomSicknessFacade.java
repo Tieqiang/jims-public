@@ -39,7 +39,7 @@ public class SymptomSicknessFacade extends BaseFacade {
         }else if("0".equals(sexValue)){
             sexValue="男";
         }
-           String sql="select sicknessId from SymptomVsSickness where symptomId in   ("+idsStr+") and sex='"+sexValue+"'";
+           String sql="select sicknessId from SymptomVsSickness where symptomId in   ("+idsStr+") and (sex='"+sexValue+"' or sex='1')";
            List<String> list=entityManager.createQuery(sql).getResultList();
            if(!list.isEmpty())
               return list;
