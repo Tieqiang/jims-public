@@ -29,7 +29,7 @@ public class OaService {
     }
 
     @Path("send-message")
-    @POST
+    @GET
     public Response sendOaMessage(@QueryParam("id") String id ,@QueryParam("message") String message,@QueryParam("code") String code) throws IOException {
         //根据personId获取 openId
         String[] idsArray = id.split(",");
@@ -66,20 +66,14 @@ public class OaService {
 
             String target="";
             String target2="";
-            String regex2="code=(.+)";
+//            String regex2="code=(.+)";
             String regex="id=(.+)";
             Pattern pattern=Pattern.compile(regex);
             Matcher matcher=pattern.matcher(message);
             while(matcher.find()){
                  target=matcher.group();
             }
-            Pattern pattern2=Pattern.compile(regex2);
-            Matcher matcher2=pattern2.matcher(message);
-            while(matcher2.find()){
-                target2=matcher.group();
-            }
-            String result="id={"+
-                    idsArray[i]+"}&"+target2;
+            String result="id={"+ openId[i]+"}";
             message=message.replace(target,result);
             String jsonMessage = "{\"touser\":\"" + openId[i] + "\",\"msgtype\":\"text\",\"text\":{\"content\":\"" + message + "\"}} ";
             BaseResult aa = MessageAPI.messageCustomSend(accessToken, jsonMessage);

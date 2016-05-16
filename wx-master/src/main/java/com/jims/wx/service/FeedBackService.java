@@ -1,10 +1,7 @@
 package com.jims.wx.service;
 
 import com.google.inject.Inject;
-import com.jims.wx.entity.AppUser;
-import com.jims.wx.entity.FeedBackResult;
-import com.jims.wx.entity.FeedBackTarget;
-import com.jims.wx.entity.PatInfo;
+import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.*;
 import com.jims.wx.vo.AppSetVo;
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -91,5 +89,27 @@ public class FeedBackService {
             return Response.status(Response.Status.OK).entity(errorException).build() ;
         }
     }
+    @GET
+    @Path("feed-back-result")
+    public List<FeedBackResult> feedBackResult(){
+       return feedBackResultFacade.findAll(FeedBackResult.class);
+    }
 
+      @POST
+      @Path("delete-result")
+      public Response delete(@QueryParam("ids") String ids) {
+            try {
+                String[] idStr = ids.split(",");
+                List<String> list = new ArrayList<String>();
+                for (int i = 0; i < idStr.length; i++) {
+                    list.add(idStr[i]);
+                }
+                feedBackResultFacade.removeByIds(FeedBackResult.class, list);
+                return Response.status(Response.Status.OK).entity(list).build();
+            } catch (Exception e) {
+                ErrorException errorException = new ErrorException();
+                errorException.setMessage(e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+            }
+        }
 }

@@ -42,9 +42,9 @@ public class ClinicSymptomFacade extends BaseFacade {
      * @return
      */
     public List<ClinicSymptom> findSymptomByBodyId(String bodyId,String sexValue) {
-        if(sexValue=="1"){
+        if("1".equals(sexValue)){
             sexValue="女";
-        }else{
+        }else if("0".equals(sexValue)){
             sexValue="男";
         }
         String sql="from ClinicSymptom where bodyPartId='"+bodyId+"' and sex='"+sexValue+"'";

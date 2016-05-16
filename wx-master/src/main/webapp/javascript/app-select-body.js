@@ -24,5 +24,6 @@
      */
     function changeSymptomList(){
         var sexValue = $('#changeSex').attr('v');// 1 女性 0 男性
+//        alert(sexValue);
         window.location.href="/api/wx-service/body-list?sexValue="+sexValue+"&openId="+openId;
      }

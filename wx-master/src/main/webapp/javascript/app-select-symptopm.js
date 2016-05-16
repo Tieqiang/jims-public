@@ -16,6 +16,7 @@ var openId=getUrlParameter("openId");
 var sexValue=getUrlParameter("sexValue");//1 女性 0 男性
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
+    alert(sexValue);
      $http.get("/api/intelligent-guide/find-symptom-by-body?bodyId="+bodyId+"&sexValue="+sexValue)
         .success(function (data) {//map
             $("#text1").html(data.bodyName);

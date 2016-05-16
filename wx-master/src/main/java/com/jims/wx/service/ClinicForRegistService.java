@@ -116,7 +116,7 @@ public class ClinicForRegistService {
                 clinicMaster.setTakeStatus("0");//未取号
                 clinicMaster.setRegistDate(new Date());
                 clinicMaster.setVisitDate(sdf.parse(registTime));
-                //             clinicMaster.setVisitDate();
+                clinicMaster.setVisitDate(sdf.parse(clinicForRegist.getRegistTime()));
                  /*
                  * 跟新号表的数据
                  * */
