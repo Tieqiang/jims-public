@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jnlp codebase="http://127.0.0.1:8080/webstart" href="http://127.0.0.1:8080/webstart/test.jnlp">
+     <information>
+        <title>HelloWorld</title>
+        <vendor>Lively Corporation</vendor>
+        <description>HelloWorld Test Example for WebStart.</description>
+        <homepage href="http://127.0.0.1:8080/webstart/index.html"/>
+        <!--&lt;!&ndash;<icon href="./images/logo.jpg"/>&ndash;&gt;-->
+        <!--<icon kind="splash" href="./images/logo.jpg"/>-->
+        <offline-allowed/>
+    </information>
+    <resources>
+         <j2se  version="1.5+"/>
+         <!--<jar href="./jar/jws/helloworld.jar"/>-->
+    </resources>
+    <application-desc main-class="jws.HelloWorld"/>
+     <security>
+        <all-permissions/>
+     </security>
+</jnlp>

@@ -39,7 +39,7 @@ app.controller('tableCtrl', function ($scope, $http) {
         $http.get("/api/rcpt-master/find-by-pat-id?patId=" + id)
             .success(function (data) {
                 if (data.length > 0) {
-                    patId = id;
+                    patId =id;
                     name = checkName;
                     $("#name").attr("style", "display:none;");
                     $("#clinic").attr("style", "display:block;");
