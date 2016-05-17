@@ -25,8 +25,9 @@ app.controller('tableCtrl', function ($scope, $http) {
     $scope.collect=function(docId,clinicIndexId){
         $http.get("/api/doct-info/user-collect?docId=" + docId + "&openId=" + openId+"&clinicIndexId="+clinicIndexId)
             .success(function (data) {
-                if(data.success){
+                if(data.success==true){
                     alert("收藏成功！");
+
                 }else{
                     alert("收藏失败！");
                 }

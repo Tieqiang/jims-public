@@ -314,9 +314,9 @@ public class ClinicForRegistService {
             e.printStackTrace();
         }
         map = clinicForRegistFacade.registTable(date, clinicIndexId, date1, desc, id);
-        return map;
-    }
 
+  return map;
+    }
     /**
      * 保存号表
      *
@@ -530,7 +530,7 @@ public class ClinicForRegistService {
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<AppDoctInfoVo> appDoctInfoVos=new ArrayList<AppDoctInfoVo>();
           List<UserCollection> userCollections=this.userCollectionFacade.findByOpenId(openId);
-          if(!userCollections.isEmpty()){
+          if(userCollections!=null&&!userCollections.isEmpty()){
               for(UserCollection userCollection:userCollections){
                   AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
                   DoctInfo doctInfo=doctInfoFacade.findById(userCollection.getDoctId());
@@ -623,4 +623,7 @@ public class ClinicForRegistService {
         }
         return appDoctInfoVos;
     }
+
+
+//    public
 }

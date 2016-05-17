@@ -21,10 +21,10 @@ public class PatVisitFacade extends BaseFacade {
                 "       a.admission_date_time as admissionDateTime ,\n" +
                 "       c.dept_name deptDischargeFrom ,\n" +
                 "       a.discharge_date_time as dischargeDateTime\n" +
-                "  from MEDREC.pat_visit a, comm.dept_dict b, comm.dept_dict c\n" +
+                "  from wx.pat_visit a, wx.dept_dict_view b, wx.dept_dict_view c\n" +
                 " where a.dept_admission_to = b.dept_code\n" +
                 "   and a.dept_discharge_from = c.dept_code(+)" +
-                "   and a.patient_id  in'"+patientIds+"'" ;
+                "   and a.patient_id  in ("+patientIds+") " ;
         List<PatVisitVo> patVisitVos = new ArrayList<>() ;
         Query qu = createNativeQuery(sql);
         List<Objects[]> resultList = qu.getResultList();

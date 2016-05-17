@@ -18,6 +18,7 @@ var v=getUrlParameter('param');
 //alert("openId="+v);
 $("#openId").val(v);
 var clickFun=function() {
+    alert(v);
 //    var patInfo = {};
     var name = $("#name").val();
     var idCard = $("#idCard").val();

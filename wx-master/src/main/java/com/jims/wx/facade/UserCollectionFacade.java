@@ -27,6 +27,10 @@ public class UserCollectionFacade extends BaseFacade {
     public Map<String, Object> saveData(String docId, String openId, String clinicIndexId) {
         Map<String,Object> map=new HashMap<String,Object>();
         try {
+            /**
+             * 判断是否已经收藏
+             *
+             */
             UserCollection userCollection=new UserCollection();
             userCollection.setOpenId(openId);
             userCollection.setClinicIndexId(clinicIndexId);
@@ -49,5 +53,33 @@ public class UserCollectionFacade extends BaseFacade {
         if(!userCollections.isEmpty())
             return userCollections;
             return null;
+    }
+
+    /**
+     *
+     * @param openId
+     * @param doctId
+     * @return
+     */
+    public List<UserCollection> judge(String openId, String doctId) {
+        String sql="from UserCollection where openId='"+openId+"' and doctId='"+doctId+"'";
+        List<UserCollection> list=entityManager.createQuery(sql).getResultList();
+        if(!list.isEmpty()){
+            return list;
+        }
+        return null;
+    }
+
+    /**
+     * 取消收藏
+     * @param docId
+     * @param openId
+     * @return
+     */
+    @Transactional
+    public int badCollect(String docId, String openId) {
+        String sql="delete from user_collection where OPENID='"+openId+"' and doc_id='"+docId+"'";
+        int count=entityManager.createNativeQuery(sql).executeUpdate();
+        return count;
     }
 }

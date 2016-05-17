@@ -2,10 +2,7 @@ package com.jims.wx.service;
 
 import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
-import com.jims.wx.entity.ClinicIndex;
-import com.jims.wx.entity.DeptDict;
-import com.jims.wx.entity.DoctInfo;
-import com.jims.wx.entity.Subject;
+import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.DoctInfoFacade;
 import com.jims.wx.facade.HospitalDictFacade;
@@ -147,9 +144,20 @@ public class DoctInfoService {
     @Path("user-collect")
     public Map<String,Object> userCollect(@QueryParam("docId") String docId,@QueryParam("openId") String openId,@QueryParam("clinicIndexId") String clinicIndexId){
         Map<String,Object> map=new HashMap<String,Object>();
-        map=this.userCollectionFacade.saveData(docId,openId,clinicIndexId);
+        List<UserCollection> userCollections=userCollectionFacade.judge(openId,docId);
+        if(userCollections!=null&&!userCollections.isEmpty()){//已经收藏
+            map.put("success",false);
+        }else{
+            map=this.userCollectionFacade.saveData(docId,openId,clinicIndexId);
+        }
         return map;
     }
+//    baddon-collection?openId=" + openId+"&doctId="+doctId)
 
-
+        @GET
+        @Path("baddon-collection")
+        public int badCollect(@QueryParam("doctId") String docId,@QueryParam("openId") String openId){
+            int count =this.userCollectionFacade.badCollect(docId,openId);
+            return count;
+        }
 }

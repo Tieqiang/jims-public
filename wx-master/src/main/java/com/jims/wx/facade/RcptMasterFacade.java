@@ -35,9 +35,9 @@ public class RcptMasterFacade extends BaseFacade{
         DateFormat ff=new SimpleDateFormat("yyyy-MM-dd");
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, -1);
-        String sql = "select * from OUTPADM.clinic_master";
+        String sql = "select * from wx.clinic_master_view";
         sql +=" where visit_Date >=to_date("+ "'"+ff.format(c.getTime())+"','yyyy-mm-dd')";
-        System.out.print(sql);
+//        System.out.print(sql);
         if(null != patId && !patId.trim().equals("")){
             sql +=" and patient_id='" +patId+ "'";
         }
@@ -57,16 +57,7 @@ public class RcptMasterFacade extends BaseFacade{
     //根据patientId查询门诊收据记录outp_rcpt_master
     public List<OutpRcptMasterVo> getByPatientId(String patientId,String date){
         if(null != patientId && !patientId.trim().equals("")){
-            //2016-04-19
-//            if(date!=null&&!"".equals(date)){//2016/4/19
-//                 date=date.replaceAll("-","/");
-//                 String md=date.substring(5,10);
-//                 if(md.contains("0")){
-//                    md=md.replaceAll("0","");
-//                 }
-//                 date=date.substring(0,5)+md;
-//            }   select * from OUTPBILL.outp_rcpt_master
-            String sql = "select RCPT_NO,TOTAL_COSTS,TOTAL_CHARGES,NAME from OUTPBILL.outp_rcpt_master where to_char(visit_Date,'YYYY-MM-DD') like '%"+date+"%'";
+            String sql = "select RCPT_NO,TOTAL_COSTS,TOTAL_CHARGES,NAME from wx.outp_rcpt_master where to_char(visit_Date,'YYYY-MM-DD') like '%"+date+"%'";
             sql +=" and patient_id='" +patientId+ "'";
             List<OutpRcptMasterVo> outpRcptMasterVos = new ArrayList<>() ;
             Query qu = entityManager.createNativeQuery(sql);
@@ -83,7 +74,7 @@ public class RcptMasterFacade extends BaseFacade{
 
     public List<OutpBillItemsVo> getByRcptNo(String rcptNo){
         if(null != rcptNo && !rcptNo.trim().equals("")){
-            String sql = "select ITEM_NAME,AMOUNT,UNITS,COSTS,CHARGES from OUTPBILL.OUTP_BILL_ITEMS";
+            String sql = "select ITEM_NAME,AMOUNT,UNITS,COSTS,CHARGES from wx.OUTP_BILL_ITEMS";
             sql +=" where RCPT_NO='" +rcptNo+ "'";
             System.out.print(sql);
             List<OutpBillItemsVo> outpBillItemsVos =new ArrayList<>();
@@ -120,7 +111,4 @@ public class RcptMasterFacade extends BaseFacade{
             return null;
         }
     }
-
-
-
-}
+ }

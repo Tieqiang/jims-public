@@ -27,10 +27,13 @@ public class PatMasterIndexFacade extends BaseFacade {
      * @return
      */
     public String checkIdCard(String idCard) {
-         String sql="from PatMasterIndex where idNo='"+idCard+"'";
-        List<PatMasterIndex> list=entityManager.createQuery(sql).getResultList();
-        if(!list.isEmpty())
-            return list.get(0).getPatientId();
+//         String sql="from PatMasterIndex where idNo='"+idCard+"'";
+        String sql="select patient_id  from wx.pat_master_index where id_no='"+idCard+"'";
+//            Query qu = entityManager.createNativeQuery(sql);
+//         List<Objects[]> resultList=qu.getResultList();
+         Object patientId=entityManager.createNativeQuery(sql).getSingleResult();
+        if(patientId!=null&&!"".equals(patientId))
+            return patientId.toString();
             return "";
     }
 
