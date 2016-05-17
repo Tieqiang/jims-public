@@ -205,6 +205,8 @@ public class ClinicForRegistService {
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findRegistInfo(currentDateStr, clinicIndex.getId());
                 if (clinicForRegist != null && !"".equals(clinicForRegist)) {
                     AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
+                    appDoctInfoVo.setClinicIndexId(clinicIndex==null?null:clinicIndex.getId());
+                    appDoctInfoVo.setDocId(doctInfo == null ? null : doctInfo.getId());
                     appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
@@ -532,6 +534,7 @@ public class ClinicForRegistService {
           if(userCollections!=null&&!userCollections.isEmpty()){
               for(UserCollection userCollection:userCollections){
                   AppDoctInfoVo appDoctInfoVo=new AppDoctInfoVo();
+
                   DoctInfo doctInfo=doctInfoFacade.findById(userCollection.getDoctId());
                   appDoctInfoVo.setDocId(doctInfo == null ? null : doctInfo.getId());
                   appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
