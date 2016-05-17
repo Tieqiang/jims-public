@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 public class PatVisitFacade extends BaseFacade {
 
-    public List<PatVisitVo> listPatVisitVo(String patientId){
+    public List<PatVisitVo> listPatVisitVo(String patientIds){
         String sql = "select a.patient_id as patientId,\n" +
                 "      a.visit_id as visitId,\n" +
                 "      a.next_of_kin as nextOfKin,\n" +
@@ -24,7 +24,7 @@ public class PatVisitFacade extends BaseFacade {
                 "  from MEDREC.pat_visit a, comm.dept_dict b, comm.dept_dict c\n" +
                 " where a.dept_admission_to = b.dept_code\n" +
                 "   and a.dept_discharge_from = c.dept_code(+)" +
-                "   and a.patient_id = '"+patientId+"'" ;
+                "   and a.patient_id  in'"+patientIds+"'" ;
         List<PatVisitVo> patVisitVos = new ArrayList<>() ;
         Query qu = createNativeQuery(sql);
         List<Objects[]> resultList = qu.getResultList();

@@ -16,7 +16,7 @@
         <div class="top-search">
             <div ng-app="myApp">
                 <div ng-controller="tableCtrl" id="deptlist">
-                    <input ng-click="finddeptOrDoctInfo();" id="likeSearch" type="text" class="inp-text-search" placeholder="科室、医生姓名或拼音首字母">
+                    <input onmouseout="likeSearch();"       id="likeSearch" type="text" class="inp-text-search" placeholder="科室、医生姓名或拼音首字母">
 
                     <div class="bot-line parkinfo-text" onclick="findMyCollection()">
                         <a href="#" class="hoffice-link">

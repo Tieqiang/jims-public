@@ -63,4 +63,32 @@ app.controller('tableCtrl',function ($scope, $http) {
 function findMyCollection(){
     window.location.href="/api/wx-service/find-my-collection?openId="+openId;
 }
+//function likeSearch(){
+//
+//    var likeSearch=$("#likeSearch").val();
+//    if(likeSearch==null || likeSearch==""){
+//        alert("请输入要查询的条件！");
+//    }else{
+//        alert(likeSearch);
+//    }
+//
+//
+//}
+$(function(){
+//    $('#likeSearch').bind('keypress',function(event){
+//        alert(event.keyCode);
+////        if(event.keyCode == "13")
+////        {
+////            alert('你输入的内容为：' + $('#likeSearch').val());
+////        }
+//    });
+    document.onkeydown = function(e){
+        var ev = document.all ? window.event : e;
+        if(ev.keyCode==13) {
+            alert(1);
+//            $('#FormId).submit();
+
+        }
+    }
+})
 

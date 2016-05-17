@@ -12,13 +12,13 @@ app.controller('tableCtrl', function ($scope, $http) {
         return null;
     };
 
-    $scope.patientId = $scope.getQueryString("patientId");
+//    $scope.patientId = $scope.getQueryString("patientId");
     $scope.openId = $scope.getQueryString("openId");
 
-    $http.get("/api/pat-visit/list?patientId=" + $scope.patientId)
+    $http.get("/api/pat-visit/list?openId=" +$scope.openId)
         .success(function (data) {
-            console.log(data);
-            $("#name").html(data[0].nextOfKin);
+//            console.log(data);
+//            $("#name").html(data[0].nextOfKin);
             $scope.patVisit = data;
         });
     $scope.click = function (patientId, visitId) {

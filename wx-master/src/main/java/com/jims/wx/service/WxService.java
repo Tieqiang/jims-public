@@ -239,12 +239,10 @@ public class WxService {
     public String inp(@QueryParam("code") String code) throws IOException {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
-        String patientId = "";
-        if (appList.size() > 0) {
-            patientId = appList.get(0).getPatId();
-        }
-        response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid() + "&patientId=" + patientId);
+//        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
+
+
+        response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid());
         return "http://www.baidu.com/";
     }
 
