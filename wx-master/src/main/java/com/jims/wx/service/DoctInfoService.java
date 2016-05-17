@@ -9,6 +9,7 @@ import com.jims.wx.entity.Subject;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.DoctInfoFacade;
 import com.jims.wx.facade.HospitalDictFacade;
+import com.jims.wx.facade.UserCollectionFacade;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.core.env.SystemEnvironmentPropertySource;
 
@@ -29,12 +30,14 @@ public class DoctInfoService {
     private DoctInfoFacade doctInfoFacade;
     private HttpServletRequest request;
     private HospitalDictFacade hospitalDictFacade;
+    private UserCollectionFacade userCollectionFacade;
 
     @Inject
-    public DoctInfoService(DoctInfoFacade doctInfoFacade, HttpServletRequest request,HospitalDictFacade hospitalDictFacade) {
+    public DoctInfoService(DoctInfoFacade doctInfoFacade, HttpServletRequest request,HospitalDictFacade hospitalDictFacade,UserCollectionFacade userCollectionFacade) {
         this.doctInfoFacade = doctInfoFacade;
         this.request=request;
         this.hospitalDictFacade=hospitalDictFacade;
+        this.userCollectionFacade=userCollectionFacade;
     }
      /**
      * 根据科室查询医生集合
@@ -138,4 +141,15 @@ public class DoctInfoService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
         }
     }
+//user-collect?docId=" + docId + "&openId=" + openId+"&clinicIndexId="+clinicIndexId)
+
+    @GET
+    @Path("user-collect")
+    public Map<String,Object> userCollect(@QueryParam("docId") String docId,@QueryParam("openId") String openId,@QueryParam("clinicIndexId") String clinicIndexId){
+        Map<String,Object> map=new HashMap<String,Object>();
+        map=this.userCollectionFacade.saveData(docId,openId,clinicIndexId);
+        return map;
+    }
+
+
 }

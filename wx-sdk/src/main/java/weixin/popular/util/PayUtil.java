@@ -131,6 +131,7 @@ public class PayUtil {
 		Map<String, String> mapS = MapUtil.objectToMap(payJsRequest);
 		String paySign = SignatureUtil.generateSign(mapS,key);
 		payJsRequest.setPaySign(paySign);
+        payJsRequest.setPrepareId(prepay_id);
 		return JsonUtil.toJSONString(payJsRequest);
 	}
 

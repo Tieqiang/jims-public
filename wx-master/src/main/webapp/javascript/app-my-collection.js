@@ -17,22 +17,11 @@ function GetQueryString(name) {
     return null;
 }
 var openId = GetQueryString("openId");
-var deptId = GetQueryString("deptId");
-//var deptId = GetQueryString("price");
+
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
-   // 加入我的收藏
-    $scope.collect=function(docId,clinicIndexId){
-        $http.get("/api/doct-info/user-collect?docId=" + docId + "&openId=" + openId+"&clinicIndexId="+clinicIndexId)
-            .success(function (data) {
-                if(data.success){
-                    alert("收藏成功！");
-                }else{
-                    alert("收藏失败！");
-                }
-            });
-    }
     $scope.judgeIsEnabledRegist = function (rid, enabledCount, price, name, title, timeDesc, patName, deptName) {
+//       alert("qqq"+rid);
         var clinicForRegistId =rid;
         if (enabledCount > 0) {
 //                var openId = $("#openId").val();
@@ -47,15 +36,8 @@ app.controller('tableCtrl', function ($scope, $http) {
             window.location.href="/api/wx-service/get-regist-id?clinicForRegistId="+clinicForRegistId;
         }
     }
-    $http.get("/api/clinic-for-regist/find-by-dept-id-pre?deptId=" + deptId + "&openId=" + openId)
-        .success(function (data) {
-            if (data.length > 0) {
-//                alert(data.length);
-                $("#text1").html(data[0].deptName + ":" + data.length + "人");
-            }
-//             for(var i=0;i<data.length;i++){
-//                 $scope.names=data[i].registInfoVOs;
-//             }
+      $http.get("/api/clinic-for-regist/find-my-collection?find-my-collection&openId=" + openId)
+        .success(function (data) {//appDoctInfoVO
              $scope.names = data;
         });
 });

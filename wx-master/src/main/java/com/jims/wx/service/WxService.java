@@ -311,7 +311,7 @@ public class WxService {
         String json = "";//返回的json字符串；
         String price = request.getParameter("price");
         String openId = request.getParameter("openId");
-        String body = "测试挂号";
+        String body = "挂号";
         String notifyUrl = "/views/his/public/app-pay-success.html";
         String ip = request.getRemoteAddr();
         if (price.contains(".")) {//double
@@ -606,6 +606,22 @@ public class WxService {
             } else {//没有绑定患者,跳转到用户绑定页面
                 response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
             }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+    /**
+     * 我的收藏
+     * @param openId
+     * @return
+     */
+    @GET
+    @Path("find-my-collection")
+    public String findMyCollection(@QueryParam("openId") String openId){
+        try {
+            response.sendRedirect("/views/his/public/app-my-collection.html?openId="+openId);
         } catch (IOException e) {
             e.printStackTrace();
         }

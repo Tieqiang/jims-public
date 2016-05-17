@@ -22,6 +22,9 @@ public class PayJsRequest {
 
 	private String paySign;
 
+    private String prepareId;
+
+
 	public String getAppId() {
 		return appId;
 	}
@@ -70,4 +73,11 @@ public class PayJsRequest {
 		this.paySign = paySign;
 	}
 
+    public String getPrepareId() {
+        return prepareId;
+    }
+
+    public void setPrepareId(String prepareId) {
+        this.prepareId = prepareId;
+    }
 }

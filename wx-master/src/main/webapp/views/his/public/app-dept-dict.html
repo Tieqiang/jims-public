@@ -18,13 +18,12 @@
                 <div ng-controller="tableCtrl" id="deptlist">
                     <input ng-click="finddeptOrDoctInfo();" id="likeSearch" type="text" class="inp-text-search" placeholder="科室、医生姓名或拼音首字母">
 
-                    <div class="bot-line parkinfo-text">
+                    <div class="bot-line parkinfo-text" onclick="findMyCollection()">
                         <a href="#" class="hoffice-link">
                             <span class="icon-span icon0">&nbsp;</span>我的收藏<span class="icon-span icon11 fd-right">&nbsp;</span>
                         </a>
                     </div>
-
-                    <input type="hidden" id="openId" value="">
+                     <input type="hidden" id="openId" value="">
                      <div ng-repeat="x in names">
                         <div class="bot-line parkinfo-text" ng-click="findDeptInfo(x.id);">
                             <a href="#" class="hoffice-link">
@@ -38,6 +37,7 @@
         </div>
     </div>
 </div>
+
 </body>
 <script src="../../../assert/angular/angular.min.js"></script>
 <script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>

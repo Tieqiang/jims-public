@@ -64,7 +64,7 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
                             if(res.err_msg == 'get_brand_wcpay_request:ok'){
                                  // 支付成功后微信会调用 notify_url
                                 //支付成功，后台数据库加入响应挂号操作
-                                window.location.href="/api/clinic-for-regist/regist?idCard="+idCard+"&price="+price+"&clinicForRegistId="+clinicForRegistId+"&openId="+openId;
+                                window.location.href="/api/clinic-for-regist/regist?prepareId="+json.prepareId+"&price="+price+"&clinicForRegistId="+clinicForRegistId+"&openId="+openId;
                             }else{
                                 //支付失败
                                 window.location.href="/views/his/public/app-pay-failed.html";

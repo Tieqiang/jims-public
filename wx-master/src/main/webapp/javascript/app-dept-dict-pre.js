@@ -60,3 +60,7 @@ app.controller('tableCtrl',function ($scope, $http) {
      });
 }
 
+function findMyCollection(){
+    window.location.href="/api/wx-service/find-my-collection?openId="+openId;
+}
+

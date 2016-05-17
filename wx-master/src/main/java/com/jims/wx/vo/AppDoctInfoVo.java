@@ -32,7 +32,16 @@ public class AppDoctInfoVo {
     private String deptName;//科室名称
 
     private Integer doctCount;
+
     private String idCard;
+
+    //新增属性
+
+    private String docId;//医生Id
+
+    private String clinicIndexId;//号别Id
+
+    private String deptAddr;
 
 
     private String scheduleTime;
@@ -174,5 +183,29 @@ public class AppDoctInfoVo {
 
     public void setRegistInfoVOs(List<RegistInfoVO> registInfoVOs) {
         this.registInfoVOs = registInfoVOs;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
+    }
+
+    public String getClinicIndexId() {
+        return clinicIndexId;
+    }
+
+    public void setClinicIndexId(String clinicIndexId) {
+        this.clinicIndexId = clinicIndexId;
+    }
+
+    public String getDeptAddr() {
+        return deptAddr;
+    }
+
+    public void setDeptAddr(String deptAddr) {
+        this.deptAddr = deptAddr;
     }
 }

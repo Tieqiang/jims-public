@@ -21,6 +21,17 @@ var deptId = GetQueryString("deptId");
 //var deptId = GetQueryString("price");
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
+    // 加入我的收藏
+    $scope.collect=function(docId,clinicIndexId){
+        $http.get("/api/doct-info/user-collect?docId=" + docId + "&openId=" + openId+"&clinicIndexId="+clinicIndexId)
+            .success(function (data) {
+                if(data.success){
+                    alert("收藏成功！");
+                }else{
+                    alert("收藏失败！");
+                }
+            });
+    }
     $scope.judgeIsEnabledRegist = function (rid, enabledCount, price, name, title, timeDesc, patName, deptName) {
 //       alert("qqq"+rid);
         var clinicForRegistId =rid;

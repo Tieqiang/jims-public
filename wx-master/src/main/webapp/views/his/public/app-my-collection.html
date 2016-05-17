@@ -8,7 +8,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="../../../style/doct-info.css">
-    <title>预约挂号选择医生</title>
+    <title>我的收藏</title>
 </head>
 <body>
 <div id="js_article" class="rich_media">
@@ -24,42 +24,42 @@
                     <div ng-controller="tableCtrl" id="doctList">
                         <div ng-repeat="x in names">
                             <li class="clearfix">
-                                 <div class="doc-info clearfix">
+                                <div class="doc-info clearfix">
                                     <div class="dochome-photo"><img src="{{x.headUrl}}" id="headUrl"/></div>
                                     <div class="doc-info-main">
                                         <div class="doc-name-wrap">
                                             <span class="doc-name" id="name">{{x.name}}</span>
                                             <span id="title">{{x.title}}</span>
                                         </div>
-                                        <button class="save-btn" ng-click="collect(x.docId,x.clinicIndexId)">收藏</button>
-                                        <span id="deptName">{{x.deptName}}</span>
+                                        <!--<button class="save-btn" ng-click="collect(x.docId,x.clinicIndexId)">收藏</button>-->
+                                        <!--<span id="deptName">{{x.deptName}}</span>-->
                                     </div>
                                 </div>
                                 <div class="bot-line doc-detail">
                                     {{x.description}}
                                 </div>
                                 <div ng-repeat="y in x.registInfoVOs">
-                                        <div class="bot-line parkinfo-text"  ng-click="judgeIsEnabledRegist(y.rid,y.enabledNum,y.price,x.name,x.title,y.timeDesc,x.patName,x.deptName)"/>
-                                            <span class="icon-span icon10">&nbsp;</span>{{y.timeDesc}} 剩余号 <font color="blue;">{{y.enabledNum}}</font>
-                                        </div>
-                                        <div style="display:none;">
-                                            <td><font color="#D3D3D3">已挂号：{{y.currentNum}}</font></td>
-                                            <td>剩余号：<span class="span">{{y.enabledNum}}</span></td>
-                                            <p style="display:none">{{y.rid}}</p>
-                                            <th style="display:none">{{y.price}}</th>
-                                            <p>{{x.patName}}</p>
-                                             <p>{{x.deptName}}</p>
-                                        </div>
-                                 </div>
-                            </li>
+                                    <div class="bot-line parkinfo-text"  ng-click="judgeIsEnabledRegist(y.rid,y.enabledNum,y.price,x.name,x.title,y.timeDesc,x.patName,x.deptName)"/>
+                                    <span class="icon-span icon10">&nbsp;</span>{{y.timeDesc}} 剩余号 <font color="blue;">{{y.enabledNum}}</font>
+                                </div>
+                                <div style="display:none;">
+                                    <td><font color="#D3D3D3">已挂号：{{y.currentNum}}</font></td>
+                                    <td>剩余号：<span class="span">{{y.enabledNum}}</span></td>
+                                    <p style="display:none">{{y.rid}}</p>
+                                    <th style="display:none">{{y.price}}</th>
+                                    <p>{{x.patName}}</p>
+                                    <!--<p>{{x.deptName}}</p>-->
+                                </div>
                         </div>
+                        </li>
                     </div>
-             </ul>
+                </div>
+            </ul>
         </div>
     </div>
 </div>
 </body>
 <script src="../../../assert/angular/angular.min.js"></script>
 <script src="../../../assert/plugins/jQuery/jQuery-2.1.4.min.js"></script>
-<script src="../../../javascript/app-doct-info-pre.js"></script>
+<script src="../../../javascript/app-my-collection.js"></script>
 </html>

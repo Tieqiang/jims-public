@@ -59,4 +59,7 @@ app.controller('tableCtrl',function ($scope, $http) {
         $("#deptdesc").html("    "+data.deptInfo);
      });
 }
+function findMyCollection(){
+    window.location.href="/api/wx-service/find-my-collection?openId="+openId;
+}
 
