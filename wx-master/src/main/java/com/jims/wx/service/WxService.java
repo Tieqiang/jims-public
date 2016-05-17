@@ -626,4 +626,21 @@ public class WxService {
         return "";
     }
 
+    @GET
+    @Path("regist-list")
+    public String registList(@QueryParam("openId") String openId) {
+        try {
+            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+
+            boolean flag = patVsUserFacade.findIsExistsPatInfo(openId);
+            if (flag) {//绑定了患者
+                response.sendRedirect("/views/his/public/app-regist-list.html?openId=" +openId);
+            } else {//没有绑定患者,跳转到用户绑定页面
+                response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }
