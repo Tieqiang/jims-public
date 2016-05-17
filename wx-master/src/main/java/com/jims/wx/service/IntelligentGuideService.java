@@ -53,7 +53,7 @@ public class IntelligentGuideService {
     public List<ClinicSymptom> findSymptom() {
         List<ClinicSymptom> clinicSymptoms = new ArrayList<ClinicSymptom>();
         List<ClinicSymptom> list = clinicSymptomFacade.findAll(ClinicSymptom.class);
-        if (!list.isEmpty()) {
+        if (list!=null&&!list.isEmpty()) {
             Iterator iterator = list.iterator();
             while (iterator.hasNext()) {
                 ClinicSymptom clinicSymptom = (ClinicSymptom) iterator.next();
@@ -75,7 +75,7 @@ public class IntelligentGuideService {
     @Path("find-body-part")
     public List<BodyPart> findBodyPart() {
         List<BodyPart> list = bodyPartFacade.findAll(BodyPart.class);
-        if (!list.isEmpty())
+        if (list!=null&&!list.isEmpty())
             return list;
         return null;
     }
@@ -159,10 +159,10 @@ public class IntelligentGuideService {
         List<ClinicSickness> cs=new ArrayList<ClinicSickness>();
         List<String> list = symptomSicknessFacade.findSicknessBySymptom(ids,sexValue);//疾病 的ids
         List<ClinicSickness> clinicSicknesses =null;
-        if(!list.isEmpty()){
+        if(list!=null&&!list.isEmpty()){
              clinicSicknesses = clinicSickessFacade.findByIds(list);
         }
-         if (!clinicSicknesses.isEmpty()){
+         if (clinicSicknesses!=null&&!clinicSicknesses.isEmpty()){
               for(ClinicSickness clinicSickness:clinicSicknesses) {
                   String deptId = clinicSickness.getDeptId();
                   String deptName = this.deptDictFacade.findDeptDictByDeptId(deptId);
@@ -195,7 +195,7 @@ public class IntelligentGuideService {
     public List<ClinicSickness> findSickness(){
         List<ClinicSickness> clinicSicknesses=new ArrayList<ClinicSickness>();
         List<ClinicSickness> list=clinicSickessFacade.findAll(ClinicSickness.class);
-        if(!list.isEmpty()) {
+        if(list!=null&&!list.isEmpty()) {
             for (ClinicSickness clinicSickness : list) {
                 String deptId = clinicSickness.getDeptId();
                 String deptName = deptDictFacade.findDeptDictByDeptId(deptId);
@@ -279,7 +279,7 @@ public class IntelligentGuideService {
     public List<SymptomVsSickness> findSVS(){
         List<SymptomVsSickness> symptomVsSicknesses=new ArrayList<SymptomVsSickness>();
         List<SymptomVsSickness> list=symptomSicknessFacade.findAll(SymptomVsSickness.class);
-        if(!list.isEmpty()){
+        if(list!=null&&!list.isEmpty()){
             for(SymptomVsSickness symptomVsSickness:list){
                 String symptomName=clinicSymptomFacade.findNameById(symptomVsSickness.getSymptomId());
                 String sicknessName=clinicSickessFacade.findNameById(symptomVsSickness.getSicknessId());

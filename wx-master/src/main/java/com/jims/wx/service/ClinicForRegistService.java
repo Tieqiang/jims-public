@@ -64,8 +64,7 @@ public class ClinicForRegistService {
 
     /**
      * @param price             挂号的价格
-     * @param idCard            idCard
-     * @param clinicForRegistId 号表的id
+      * @param clinicForRegistId 号表的id
      * @return
      * @description 挂号的方法
      */
@@ -604,7 +603,7 @@ public class ClinicForRegistService {
                 appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                 appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
                 List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
-                if (!clinicForRegists.isEmpty()) {
+                if (clinicForRegists!=null&&!clinicForRegists.isEmpty()) {
                     for (ClinicForRegist c : clinicForRegists) {
                         RegistInfoVO registInfoVO = new RegistInfoVO();
                         registInfoVO.setCurrentNum(c.getRegistrationNum());
