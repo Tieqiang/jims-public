@@ -62,7 +62,7 @@ app.controller('tableCtrl', function ($scope, $http) {
 //                alert(data.length);
                     $("#text1").html(data[0].deptName + ":" + data.length + "人");
                 }
-                console.info(data);
+//                console.info(data);
                 $scope.names = data;
             });
     }

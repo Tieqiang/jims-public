@@ -74,13 +74,13 @@ function del(){
             $("#alert").attr("style", "display:none;");
         });
     }else{
-        $.ajax({
+         $.ajax({
             type:"POST",
             url:"/api/pat-info/delete?patId="+patId,
             dataType:"JSON",
             cache:false,
             success:function(data){
-                window.location.href="/views/his/public/user-bangker-success.html";
+                window.location.href="/views/his/public/app-op-success.html";
             },
             error:function(data){
                 window.location.href="/views/his/public/user-bangker-failed.html";

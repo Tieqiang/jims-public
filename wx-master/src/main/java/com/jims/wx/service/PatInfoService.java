@@ -1,4 +1,5 @@
 package com.jims.wx.service;
+
 import com.google.inject.Inject;
 import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
@@ -41,35 +42,40 @@ public class PatInfoService {
     private PatInfoFacade patInfoFacade;
 
     private AppUserFacade appUserFacade;
-    private HttpServletRequest request ;
-    private HttpServletResponse response ;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
     private PatVsUserFacade patVsUserFacade;
     private PatMasterIndexFacade patMasterIndexFacade;
     private MedicalCardMemoFacade medicalCardMemoFacade;
+
     @Inject
-    public PatInfoService(PatInfoFacade patInfoFacade,AppUserFacade appUserFacade,HttpServletRequest request,HttpServletResponse response,PatVsUserFacade patVsUserFacade,PatMasterIndexFacade patMasterIndexFacade,MedicalCardMemoFacade medicalCardMemoFacade) {
+    public PatInfoService(PatInfoFacade patInfoFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, PatVsUserFacade patVsUserFacade, PatMasterIndexFacade patMasterIndexFacade, MedicalCardMemoFacade medicalCardMemoFacade) {
         this.appUserFacade = appUserFacade;
         this.patInfoFacade = patInfoFacade;
         this.request = request;
         this.response = response;
         this.patVsUserFacade = patVsUserFacade;
-        this.patMasterIndexFacade=patMasterIndexFacade;
-        this.medicalCardMemoFacade=medicalCardMemoFacade;
+        this.patMasterIndexFacade = patMasterIndexFacade;
+        this.medicalCardMemoFacade = medicalCardMemoFacade;
     }
+
     /**
      * 通过openId 查询患者的list
+     *
      * @param openId
      * @return
      */
     @GET
     @Path("list")
-    public List<PatInfo> getList(@QueryParam("openId") String openId){
-        List<AppUser> list=appUserFacade.findByOpenId(openId);
-        String appUserId=list.get(0).getId();
+    public List<PatInfo> getList(@QueryParam("openId") String openId) {
+        List<AppUser> list = appUserFacade.findByOpenId(openId);
+        String appUserId = list.get(0).getId();
         return patVsUserFacade.findPatInfosByAppUserId(appUserId);
-     }
-     /**
+    }
+
+    /**
      * 保存患者信息
+     *
      * @param openId
      * @param name
      * @param idCard
@@ -77,28 +83,28 @@ public class PatInfoService {
      */
     @GET
     @Path("save")
-    public void save(@QueryParam("openId")String openId,@QueryParam("name") String name,@QueryParam("idCard") String idCard,@QueryParam("cellphone") String cellphone,@QueryParam("patId") String patId) {
-        PatInfo patInfo=null;
-        String patientId=null;
+    public void save(@QueryParam("openId") String openId, @QueryParam("name") String name, @QueryParam("idCard") String idCard, @QueryParam("cellphone") String cellphone, @QueryParam("patId") String patId) {
+        PatInfo patInfo = null;
+        String patientId = null;
         try {
             AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
-            patientId=patMasterIndexFacade.checkIdCard(idCard);
-            if(patId!=null&&!"".equals(patId)){
-                patInfo= patInfoFacade.findById(patId);
+            patientId = patMasterIndexFacade.checkIdCard(idCard);
+            if (patId != null && !"".equals(patId)) {
+                patInfo = patInfoFacade.findById(patId);
                 patInfo.setCellphone(cellphone);
                 patInfo.setIdCard(idCard);
                 patInfo.setName(name);
                 patInfo.setPatientId(patientId);
                 patInfo = patInfoFacade.save(patInfo);
-                response.sendRedirect("/views/his/public/user-bangker-success.html?patId="+patId);
-             }else{
+                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patId);
+            } else {
                 /**
                  * 查询之前是否绑定次idCard
                  */
-                Boolean isBangker=this.patVsUserFacade.findIsBangker(idCard,openId);
-                if(isBangker){
+                Boolean isBangker = this.patVsUserFacade.findIsBangker(idCard, openId);
+                if (isBangker) {
                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
-                }else{
+                } else {
                     patInfo = new PatInfo();
                     patInfo.setCellphone(cellphone);
                     patInfo.setIdCard(idCard);
@@ -115,20 +121,20 @@ public class PatInfoService {
                          * 如果是第一次绑定的话，那么将此patId 放入appUser表中
                          * 否则就不放
                          */
-                        boolean isFirstBangker=appUserFacade.judgeIsFirstBangker(openId);
-                        if(isFirstBangker){//
+                        boolean isFirstBangker = appUserFacade.judgeIsFirstBangker(openId);
+                        if (isFirstBangker) {//
                             //将patId放入appUser
-                            AppUser appUser1=appUserFacade.findAppUserByOpenId(openId);
+                            AppUser appUser1 = appUserFacade.findAppUserByOpenId(openId);
                             appUser1.setPatId(patInfo.getId());
                             appUserFacade.saveAppUser(appUser1);
                         }
                     }
 
                 }
-                 //为查看详情做准备
-                response.sendRedirect("/views/his/public/user-bangker-success.html?patId="+patInfo.getId());
+                //为查看详情做准备
+                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patInfo.getId());
             }
-         } catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             try {
                 response.sendRedirect("/views/his/public/user-bangker-failed.html");
@@ -137,31 +143,35 @@ public class PatInfoService {
             }
         }
     }
-     /**
+
+    /**
      * 通过用户的openId 查找我的信息
+     *
      * @param openId
      * @return
      */
     @POST
     @Path("find-info-by-open-id")
-    public  PatInfo findPatInfoByOpenId(@QueryParam("openId") String openId){
-        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
-        String patId=appUser.getPatId();
-        PatInfo patInfo=patInfoFacade.findById(patId);
+    public PatInfo findPatInfoByOpenId(@QueryParam("openId") String openId) {
+        AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+        String patId = appUser.getPatId();
+        PatInfo patInfo = patInfoFacade.findById(patId);
         return patInfo;
     }
 
     /**
      * patId 查找patInfo
+     *
      * @param patId
      * @return
      */
     @POST
     @Path("view")
-    public  PatInfo view(@QueryParam("patId") String patId){
-        PatInfo patInfo=patInfoFacade.findById(patId);
+    public PatInfo view(@QueryParam("patId") String patId) {
+        PatInfo patInfo = patInfoFacade.findById(patId);
         return patInfo;
     }
+
     @GET
     @Path("find-all")
     @Produces(MediaType.APPLICATION_JSON)
@@ -172,13 +182,13 @@ public class PatInfoService {
 
     @GET
     @Path("update-pat-id")
-     public String updatePatId(@QueryParam("patId") String patId,@QueryParam("openId") String openId) {
-        try{
-            AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+    public String updatePatId(@QueryParam("patId") String patId, @QueryParam("openId") String openId) {
+        try {
+            AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
             appUser.setPatId(patId);
             appUserFacade.saveAppUser(appUser);
-            response.sendRedirect("/views/his/public/user-bangker-success.html?flag=1");
-        }catch (Exception e){
+            response.sendRedirect("/views/his/public/app-op-success.html");
+        } catch (Exception e) {
             e.printStackTrace();
             try {
                 response.sendRedirect("/views/his/public/user-bangker-failed.html");
@@ -191,40 +201,44 @@ public class PatInfoService {
 
     /**
      * 修改patInfo 信息
+     *
      * @param patInfo
      * @return
      */
     @POST
     @Path("update")
-    public PatInfo update(PatInfo patInfo){
-         patInfo=patInfoFacade.save(patInfo);
-         return patInfo;
+    public PatInfo update(PatInfo patInfo) {
+        patInfo = patInfoFacade.save(patInfo);
+        return patInfo;
     }
+
     /**
      * 删除 信息
+     *
      * @param patId
      * @return
      */
     @POST
     @Path("delete")
-    public PatInfo delete(@QueryParam("patId") String patId){
-        try{
+    public PatInfo delete(@QueryParam("patId") String patId) {
+        try {
             patVsUserFacade.deleteByPatId(patId);
-            PatInfo patInfo=patInfoFacade.findById(patId);
+            PatInfo patInfo = patInfoFacade.findById(patId);
             patInfoFacade.deleteByObject(patInfo);
             return patInfo;
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-     }
-//    check-idCard?idCard="+idCard,\
+    }
+
+    //    check-idCard?idCard="+idCard,\
     @POST
     @Path("check-idCard")
-     public Map<String,Object> checkCard(@QueryParam("idCard") String idCard){
-        Map<String,Object> map=new HashMap<String,Object>();
+    public Map<String, Object> checkCard(@QueryParam("idCard") String idCard) {
+        Map<String, Object> map = new HashMap<String, Object>();
 //        map=patMasterIndexFacade.checkIdCard(idCard);
         return null;
-     }
- }
+    }
+}
 

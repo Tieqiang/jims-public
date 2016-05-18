@@ -135,7 +135,7 @@ $(function () {
         }
     });
      $("#btn_ok2").on("click", function () {
-         alert(1);
+//         alert(1);
         var clinicForRegist = {};
         clinicForRegist.id = $("#bid").val();
         var date = $("#date2").datebox("getValue");
@@ -144,7 +144,7 @@ $(function () {
         clinicForRegist.appointmentLimits = $("#i_appointmentLimits1").textbox("getValue");
         clinicForRegist.currentNo = $("#i_currentRegistNo1").textbox("getValue");
         clinicForRegist.registPrice = $("#registPrice").val();
-         alert($("#registPrice").val());
+//         alert($("#registPrice").val());
         clinicForRegist.registrationNum = $("#i_currentRegistCount1").textbox("getValue");
         var clinicIndexId = getclinicLabel1();
         $.postJSON("/api/clinic-for-regist/update?clinicIndexId=" + clinicIndexId + "&date=" + date, clinicForRegist, function (data) {

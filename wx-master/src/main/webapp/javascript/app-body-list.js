@@ -28,7 +28,7 @@ app.controller('tableCtrl',function ($scope, $http) {
         if(likeSearch==null ||likeSearch==""){
             alert("请输入要查询的科室或者是医生！");
         }else{
-            alert("likeSearch="+likeSearch);
+//            alert("likeSearch="+likeSearch);
             $http.get("/api/dept-dict/query-like?likeSearch="+likeSearch)
                 .success(function (data) {
                     /**

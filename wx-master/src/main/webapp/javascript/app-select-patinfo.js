@@ -33,8 +33,8 @@ var app = angular.module("myApp", []);
  */
 var findPatInfo=function findPatInfo(idCard){
 //     var openId=$("#openId").val();
-    alert("price="+price);
-     alert("clinicForRegistId="+clinicForRegistId);
+//    alert("price="+price);
+//     alert("clinicForRegistId="+clinicForRegistId);
      if(idCard!=null&&idCard!=""){
          var flag=window.confirm("确定要为次绑定患者挂号吗？");
          if(flag){//确定要为次患者挂号
