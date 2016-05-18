@@ -33,7 +33,7 @@ function result(){
         alert("请选择至少一症状！");
     }else{
         for(var i=0;i<arr.length;i++){
-            console.info(arr[i]);
+            //console.info(arr[i]);
             ids+=arr[i].value+",";
         }
     }
@@ -41,7 +41,7 @@ function result(){
         alert("请选择至少一症状！");
     }else{
         ids=ids.substring(0,ids.length-1);//1，2，
-        alert(ids);
+        //alert(ids);
 //        window.location.href="/api/intelligent-guide/find-sickness-by-symptom?ids="+ids;
          window.location.href = "/api/wx-service/query-sickness?ids=" + ids+"&openId="+openId+"&sexValue="+sexValue;
      }

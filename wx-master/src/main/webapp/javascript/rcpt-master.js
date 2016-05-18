@@ -25,6 +25,7 @@ app.controller('tableCtrl', function ($scope, $http) {
 //
 //    }
     $scope.clickTR = function (date) {
+        //alert(1);
         $http.get("/api/rcpt-master/find-by-patient?patientId=" + patId+"&date="+date)
             .success(function (data) {
                 $('#checkName').html(name);
