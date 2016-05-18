@@ -1,39 +1,28 @@
 $(function () {
 
 })
-function getUrlParameter(name) {
-    name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
-    var regexS = "[\\?&]" + name + "=([^&#]*)";
-    var regex = new RegExp(regexS);
-    var results = regex.exec(window.parent.location.href);
-    if (results == null)    return ""; else {
-        return results[1];
-    }
-}
-function GetQueryString(name) {
+ function GetQueryString(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
     if (r != null)return  unescape(r[2]);
     return null;
 }
+var collectionId = GetQueryString("collectionId");
 var openId = GetQueryString("openId");
-
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
     /**
      * 查看医生信息
      * @param id
      */
-    $scope.info=function (rid){
-        　window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
-    }
- //    collectNO  取消收藏
+
+        //    collectNO  取消收藏
     $scope.collectNO = function (doctId, clinicIndexId) {
         $http.get("/api/doct-info/baddon-collection?openId=" + openId + "&doctId=" + doctId)
             .success(function (data) {//appDoctInfoVO
                 if (data != 0) {
                     alert("取消成功！");
-                    $http.get("/api/clinic-for-regist/find-my-collection?&openId=" + openId)
+                    $http.get("/api/clinic-for-regist/find-my-collection?find-my-collection&openId=" + openId)
                         .success(function (data) {//appDoctInfoVO
                             $scope.names = data;
                         });
@@ -56,11 +45,8 @@ app.controller('tableCtrl', function ($scope, $http) {
             window.location.href = "/api/wx-service/get-regist-id?clinicForRegistId=" + clinicForRegistId;
         }
     }
-    $http.get("/api/clinic-for-regist/find-my-collection?openId=" + openId)
+    $http.get("/api/clinic-for-regist/find-collection-doct-info?collectionId=" + collectionId)
         .success(function (data) {//appDoctInfoVO
-            if(data.length>0){
-                $("#text1").html("共收藏"+data.length+"名医生");
-            }
             $scope.names = data;
         });
-});
+ });

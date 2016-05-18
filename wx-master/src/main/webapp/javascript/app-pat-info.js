@@ -14,6 +14,10 @@ var patId=getUrlParameter("patId");
 var openId=getUrlParameter("openId");
 var mid=getUrlParameter("mid");//默认用户patId
 $(function(){
+     var patId=$("#patId").val()
+     if(mid==patId){
+        $("#moren").hide();
+     }
      if(patId==null || patId==""){
         alert("暂时不能查看详情");
       }else{
@@ -87,14 +91,12 @@ function del(){
 /**
  * 挂号
  */
-function regist(){
-    //跳转到科室列表页面  find-dept
-    if(openId!=null&&!""==openId){
-        window.location.href="/api/wx-service/regist-open?openId="+openId;
-    }else{
-        alert("暂时不能挂号！");
-    }
-
+function prepare(){
+//
+    window.location.href="/api/wx-service/find-dept-pre?openId="+openId;
+}
+function today(){
+    window.location.href="/api/wx-service/find-dept?openId="+openId;
 }
 
 

@@ -1,11 +1,9 @@
 package com.jims.wx.service;
 
 import com.jims.wx.entity.AppUser;
+import com.jims.wx.entity.DeptDict;
 import com.jims.wx.entity.PatInfo;
-import com.jims.wx.facade.AppUserFacade;
-import com.jims.wx.facade.PatInfoFacade;
-import com.jims.wx.facade.PatVsUserFacade;
-import com.jims.wx.facade.RcptMasterFacade;
+import com.jims.wx.facade.*;
 import com.jims.wx.vo.ClinicMasterVo;
 import com.jims.wx.vo.OutpBillItemsVo;
 import com.jims.wx.vo.OutpRcptMasterVo;
@@ -29,26 +27,20 @@ public class RcptMasterService {
     private AppUserFacade appUserFacade;
     private PatInfoFacade patInfoFacade;
     private PatVsUserFacade patVsUserFacade;
+    private DeptDictFacade deptDictFacade;
+    private ClinicIndexFacade clinicIndexFacade;
 
 
     @Inject
-    public RcptMasterService(RcptMasterFacade rcptMasterFacade,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade,PatVsUserFacade patVsUserFacade) {
+    public RcptMasterService(RcptMasterFacade rcptMasterFacade,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade,PatVsUserFacade patVsUserFacade,DeptDictFacade deptDictFacade,ClinicIndexFacade clinicIndexFacade) {
         this.rcptMasterFacade = rcptMasterFacade;
         this.appUserFacade=appUserFacade;
         this.patInfoFacade=patInfoFacade;
         this.patVsUserFacade=patVsUserFacade;
+        this.deptDictFacade=deptDictFacade;
+        this.clinicIndexFacade=clinicIndexFacade;
     }
 
-    /**
-     * 根据PATID查询就诊记录
-     * @param patId
-     * @return
-     */
-    @GET
-    @Path("find-by-pat-id")
-    public List<ClinicMasterVo> findById(@QueryParam("patId") String patId){
-        return rcptMasterFacade.getByPatId(patId);
-    }
 
     /**
      * 根据patId查询就诊收费总额
@@ -100,12 +92,41 @@ public class RcptMasterService {
             List<ClinicMasterVo> list= rcptMasterFacade.getByPatId(patInfo.getPatientId());
             if(!list.isEmpty()){
                 for(ClinicMasterVo clinicMasterVo:list){
-                    String clinicLabel=clinicMasterVo.getClinicLabel();
-                    lables.add(clinicLabel);
-                }
+                    String clinicLabel=clinicMasterVo.getClinicLabel();//号别
+                    if(clinicLabel!=null&&!"".equals(clinicLabel)){
+                          String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
+                          DeptDict deptDict=deptDictFacade.findByCode(deptCode);
+                          lables.add(deptDict.getDeptName());
+                    }
+                 }
                 return lables;
             }
         }
         return null;
+    }   /**
+     * 根据PATID查询就诊记录
+     * @param patId
+     * @return
+     */
+    @GET
+    @Path("find-by-pat-id")
+    public List<ClinicMasterVo> findById(@QueryParam("patId") String patId){
+        List<ClinicMasterVo> list= rcptMasterFacade.getByPatId(patId);
+        if(!list.isEmpty()){
+            for(ClinicMasterVo clinicMasterVo:list){
+                String clinicLabel=clinicMasterVo.getClinicLabel();//号别
+                if(clinicLabel!=null&&!"".equals(clinicLabel)){
+                    String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
+                    DeptDict deptDict=deptDictFacade.findByCode(deptCode);
+                    clinicMasterVo.setClinicLabel(deptDict.getDeptName());
+                }
+            }
+            return list;
+        }else{
+            return null;
+        }
     }
+
+
+
 }

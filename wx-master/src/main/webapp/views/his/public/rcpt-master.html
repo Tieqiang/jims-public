@@ -10,21 +10,13 @@
     <title>近期门诊记录</title>
     <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
     <link rel="stylesheet" href="../../../style/rcpt-master.css"/>
-    <!--<style type="text/css">-->
-        <!--p {-->
-            <!--text-indent: 3em;-->
-        <!--}-->
 
-        <!--h3 {-->
-            <!--text-indent: 1em;-->
-        <!--}-->
-    <!--</style>-->
 </head>
 <body>
 <div ng-app="myApp" id="app">
     <div ng-controller="tableCtrl">
         <div id="name" style="display: none">
-            <div align="center" id="head"><h4>您好,近期门诊记录如下<span style="color:red">*</span></h4></div>
+            <div align="center" id="head"><h4>近期门诊记录如下<span style="color:red">*</span></h4></div>
             <div>
                 <div class="weui_cells weui_cells_access">
                     <a class="weui_cell" href="javascript:;" ng-repeat="name in nameList">

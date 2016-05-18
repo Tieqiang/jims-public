@@ -82,4 +82,19 @@ public class UserCollectionFacade extends BaseFacade {
         int count=entityManager.createNativeQuery(sql).executeUpdate();
         return count;
     }
+
+    /**
+     * find by id
+     * @param collectionId
+     * @return
+     */
+    public UserCollection findById(String collectionId) {
+        String sql="from UserCollection where id='"+collectionId+"'";
+        Object obj=entityManager.createQuery(sql).getSingleResult();
+        if(obj!=null&&!"".equals(obj)){
+            UserCollection userCollection=(UserCollection)obj;
+            return userCollection;
+        }
+        return null;
+     }
 }

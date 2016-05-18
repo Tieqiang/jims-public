@@ -103,7 +103,7 @@ public class RcptMasterFacade extends BaseFacade{
             Query qu = entityManager.createNativeQuery(sql);
             List<Objects[]> resultList=qu.getResultList();
             for(Object[] objects:resultList){
-                PatVsUserVo patVsUserVo = new PatVsUserVo(objects[0].toString(),objects[2].toString(),objects[1].toString());
+                PatVsUserVo patVsUserVo = new PatVsUserVo(objects[0]==null?null:objects[0].toString(),objects[2]==null?null:objects[2].toString(),objects[1]==null?null:objects[1].toString());
                 patVsUserVos.add(patVsUserVo);
             }
             return patVsUserVos;

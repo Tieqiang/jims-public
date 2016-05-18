@@ -48,6 +48,8 @@ public class AppDoctInfoVo {
 
     private String registTime;
 
+    private String id;
+
     public String getRegistTime() {
         return registTime;
     }
@@ -207,5 +209,13 @@ public class AppDoctInfoVo {
 
     public void setDeptAddr(String deptAddr) {
         this.deptAddr = deptAddr;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }

@@ -130,4 +130,18 @@ public class ClinicIndexFacade extends BaseFacade {
         this.removeByStringIds(ClinicIndex.class,ids);
         return newUpdateSheet;
     }
+
+    /**
+     *
+     * @param clinicLabel
+     * @return
+     */
+    public String findDeptInfo(String clinicLabel) {
+        String sql="from ClinicIndex where clinicLabel='"+clinicLabel+"'";
+        List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0).getClinicDept();
+        }
+        return "";
+    }
 }

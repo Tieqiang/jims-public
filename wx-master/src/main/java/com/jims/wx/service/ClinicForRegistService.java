@@ -536,7 +536,7 @@ public class ClinicForRegistService {
         if (userCollections != null && !userCollections.isEmpty()) {
             for (UserCollection userCollection : userCollections) {
                 AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
-
+                appDoctInfoVo.setId(userCollection.getId());
                 DoctInfo doctInfo = doctInfoFacade.findById(userCollection.getDoctId());
                 appDoctInfoVo.setDocId(doctInfo == null ? null : doctInfo.getId());
                 appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
@@ -678,9 +678,11 @@ public class ClinicForRegistService {
         }
         return appDoctInfoVos;
     }
+
     /**
      * 模糊查询医生
-     当天挂号
+     * 当天挂号
+     *
      * @param likeSearch
      * @param openId
      * @return
@@ -721,4 +723,45 @@ public class ClinicForRegistService {
         return appDoctInfoVos;
     }
 
+    /**
+     * 收藏显示医生相关信息
+     *
+     * @param collectionId
+     * @return
+     */
+    @GET
+    @Path("find-collection-doct-info")
+    public List<AppDoctInfoVo> findCollectionDoctInfo(@QueryParam("collectionId") String collectionId) {
+        UserCollection userCollection = this.userCollectionFacade.findById(collectionId);
+        if (userCollection != null) {
+            String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+            AppUser appuser = appUserFacade.findAppUserByOpenId(userCollection.getOpenId());
+            PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
+            List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
+            AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
+            appDoctInfoVo.setId(userCollection.getId());
+            DoctInfo doctInfo = doctInfoFacade.findById(userCollection.getDoctId());
+            appDoctInfoVo.setDocId(doctInfo == null ? null : doctInfo.getId());
+            appDoctInfoVo.setName(doctInfo == null ? null : doctInfo.getName());
+            appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
+            appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
+            appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
+            List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoCollection(sdf.format(new Date()), userCollection.getClinicIndexId());
+            List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
+            for (ClinicForRegist c : clinicForRegists) {
+                RegistInfoVO registInfoVO = new RegistInfoVO();
+                registInfoVO.setCurrentNum(c.getRegistrationNum());
+                registInfoVO.setEnabledNum(c.getRegistrationLimits() - c.getRegistrationNum());
+                registInfoVO.setRid(c.getId());
+                registInfoVO.setPrice(c.getRegistPrice());
+                registInfoVO.setTimeDesc(c.getTimeDesc());
+                registInfoVOs.add(registInfoVO);
+            }
+            appDoctInfoVo.setPatName(patInfo.getName());
+            appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
+            appDoctInfoVos.add(appDoctInfoVo);
+            return appDoctInfoVos;
+         }
+        return null;
+    }
 }

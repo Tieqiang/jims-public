@@ -645,16 +645,31 @@ public class WxService {
     }
 //    window.location.href="/api/wx-service/query-doct-like?likeSearch="+likeSearch+"&openId="+openId;
 
+//        　window.location.href="/api/wx-service/query-doct-info?id="+id;
 
     @GET
-    @Path("query-doct-like")
-    public String likeSearch(@QueryParam("likeSearch") String likeSearch,@QueryParam("openId") String openId,@QueryParam("flag") String flag){
+    @Path("query-doct-info")
+    public String queryDoctInfo(@QueryParam("id") String id,@QueryParam("openId") String openId){
           try {
             request.setCharacterEncoding("UTF-8");
             response.setCharacterEncoding("UTF-8");
+            response.sendRedirect("/views/his/public/app-collection-doct-info.html?collectionId="+id+"&openId="+openId);
+         } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+//
+    @GET
+    @Path("query-doct-like")
+    public String likeSearch(@QueryParam("likeSearch") String likeSearch,@QueryParam("openId") String openId,@QueryParam("flag") String flag){
+        try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
             if("pre".equals(flag)){
-                 response.sendRedirect("/views/his/public/app-doct-info-pre.html?likeSearch="+ URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
-             }else{
+                response.sendRedirect("/views/his/public/app-doct-info-pre.html?likeSearch="+ URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
+            }else{
                 response.sendRedirect("/views/his/public/app-doct-info.html?likeSearch="+URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
             }
         } catch (IOException e) {

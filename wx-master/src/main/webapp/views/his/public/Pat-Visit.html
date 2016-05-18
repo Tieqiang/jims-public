@@ -9,17 +9,15 @@
 <body>
 <div ng-app="myApp" id="app">
     <div ng-controller="tableCtrl">
-        <div align="center" id="head"><h4>您好,住院记录如下<span style="color:red">*</span></h4></div>
-        <!--<h3 align="right">姓名：<span id="name"></span></h3>-->
-        <div id="patVisit" style="display: block">
+         <div id="patVisit" style="display: block">
             <div ng-repeat="x in patVisit">
                 <div class="weui_cells">
                     <div class="weui_cell">
                         <div class="weui_cell_bd weui_cell_primary">
-                           住院者姓名 ：<span ng-bind="x.nextOfKin"></span>
+                           患者姓名 ：<span ng-bind="x.nextOfKin"></span>
                         </div>
                     </div>
-                    <div class="weui_cell_bd weui_cell_primary" style="background-color:#d4d4d4">
+                    <div class="weui_cell_bd weui_cell_primary">
                         <h3>住院时间</h3>
                         <span ng-bind="x.admissionDateTime"></span>至
                         <span ng-bind="x.dischargeDateTime"></span>

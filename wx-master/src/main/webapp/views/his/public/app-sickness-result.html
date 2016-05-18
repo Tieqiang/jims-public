@@ -10,31 +10,49 @@
     <link rel="stylesheet" type="text/css" href="../../../style/app-dept.css">
     <link rel="stylesheet" href="../../../assert/weui/style/weui.min.css"/>
     <title>可能疾病以及推荐科室</title>
-    <style>
-        .reg-remind
-        {
-            margin:10px;
-        }
-        .reg-remind-list
-        {
-            background:#fff;
-            border:1px dashed #ccc;
-            border-radius:5px;
-            padding:10px;
-            margin-bottom:10px;
-            font-size:17px;
-        }
-        .wblock-span
-        {
-            display:block;
+	<style>
+	.reg-remind
+	{
+		margin:10px;
+	}
+	.reg-remind-list
+	{
+		background:#fff;
+		border:1px dashed #ccc;
+		border-radius:5px;
+		padding:10px;
+		margin-bottom:10px;
+		font-size:17px;
+	}
+	.wblock-span
+	{
+		display:block;	
 
-        }
-        .margin10-r
-        {
-            margin-right:10px;
-        }
-
-    </style>
+	}
+	.margin10-r
+	{
+		margin-right:10px;
+	}
+	.reg-btn-new
+	{
+		width:47.5%;
+		height:35px;
+		display:inline-block;
+		text-align:center;
+		border:2px solid #3aa1e7;
+		line-height:35px;
+		border-radius:5px;
+	}
+	
+	.weui_btn_area
+	{
+		padding:10px;
+	}
+	.color-green
+	{
+		color:#0a0;		
+	}
+	</style>
 </head>
 <body>
 <div id="js_article" class="rich_media">
@@ -42,24 +60,29 @@
         <div class="reg-remind">
             <div ng-app="myApp">
                 <div ng-controller="tableCtrl" id="deptlist">
+					<div style="background:#fff; padding:10px; margin-bottom:10px;" class="clearfix">
+						<img src="../../../assert/images/icon1.jpg" class="fd-left" style="margin-right:10px;"/>
+						就诊建议：<br/>
+						<span style="font-size:17px;">如果病情持续加重，建议尽快到医院就诊</span>
+					</div>
                     <input type="hidden" id="openId" value="">
                     <div ng-repeat="x in names">
                         <div class="reg-remind-list clearfix" ng-click="haveSelected(x.id);"> <!--ng-click="findDeptInfo(x.id);"-->
                             <a href="#" class="hoffice-link" >
                                 <span style="display:none" class="span">{{x.id}}</span>
-                                <span class="fd-left wblock-span margin10-r">可能疾病：{{x.name}}</span>
-                                <span class="fd-left wblock-span">推荐科室：{{x.deptName}}</span></a>
-                           </div>
-                    </div>
+                                 <span class="wblock-span margin10-r">可能疾病：{{x.name}}</span>
+                                 <span class="wblock-span">推荐科室：{{x.deptName}}</span>
+							</a>
+                          </div>
+                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-<div class="weui_btn_area">
-    <a class="weui_btn weui_btn_primary" onclick="today()" id="today">当天挂号</a>
-    <a class="weui_btn weui_btn_primary" onclick="prepare()" id="prepare">预约挂号</a>
+ <div class="weui_btn_area">
+    <a class="reg-btn-new color-blue" href="" id="today" onclick="today()">当天挂号</a>
+    <a class="reg-btn-new" href="" id="prepare" style="color:#0a0;" onclick="prepare()">预约挂号</a>
 </div>
 
 </body>
