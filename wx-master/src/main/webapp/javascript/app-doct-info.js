@@ -17,6 +17,7 @@ function GetQueryString(name) {
     return null;
 }
 var openId = GetQueryString("openId");
+var likeSearch = getUrlParameter("likeSearch");
 var deptId = GetQueryString("deptId");
 //var deptId = GetQueryString("price");
 var app = angular.module("myApp", []);
@@ -48,13 +49,22 @@ app.controller('tableCtrl', function ($scope, $http) {
             window.location.href="/api/wx-service/get-regist-id?clinicForRegistId="+clinicForRegistId;
         }
     }
-    $http.get("/api/clinic-for-regist/find-by-dept-id?deptId=" + deptId + "&openId=" + openId)
-        .success(function (data) {
-            if (data.length > 0) {
+    if(likeSearch!=null&&likeSearch!=""){//模糊查询
+        $http.get("/api/clinic-for-regist/find-by-dept-id-like?likeSearch=" + likeSearch + "&openId=" + openId)
+            .success(function (data) {
+                $scope.names = data;
+            });
+
+    }else{
+        $http.get("/api/clinic-for-regist/find-by-dept-id?deptId=" + deptId + "&openId=" + openId)
+            .success(function (data) {
+                if (data.length > 0) {
 //                alert(data.length);
-                $("#text1").html(data[0].deptName + ":" + data.length + "人");
-            }
-            console.info(data);
-            $scope.names = data;
-        });
+                    $("#text1").html(data[0].deptName + ":" + data.length + "人");
+                }
+                console.info(data);
+                $scope.names = data;
+            });
+    }
+
 });

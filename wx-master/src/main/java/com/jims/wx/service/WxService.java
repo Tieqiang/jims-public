@@ -438,7 +438,7 @@ public class WxService {
      * @param age
      * @param sexValue
      * @return
-     * @throws IOException
+     * @throws java.io.IOException
      */
     @GET
     @Path("select-body")
@@ -626,4 +626,40 @@ public class WxService {
         return "";
     }
 
+    @GET
+    @Path("regist-list")
+    public String registList(@QueryParam("openId") String openId) {
+        try {
+            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+
+            boolean flag = patVsUserFacade.findIsExistsPatInfo(openId);
+            if (flag) {//绑定了患者
+                response.sendRedirect("/views/his/public/app-regist-list.html?openId=" +openId);
+            } else {//没有绑定患者,跳转到用户绑定页面
+                response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+//    window.location.href="/api/wx-service/query-doct-like?likeSearch="+likeSearch+"&openId="+openId;
+
+
+    @GET
+    @Path("query-doct-like")
+    public String likeSearch(@QueryParam("likeSearch") String likeSearch,@QueryParam("openId") String openId,@QueryParam("flag") String flag){
+          try {
+            request.setCharacterEncoding("UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            if("pre".equals(flag)){
+                 response.sendRedirect("/views/his/public/app-doct-info-pre.html?likeSearch="+ URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
+             }else{
+                response.sendRedirect("/views/his/public/app-doct-info.html?likeSearch="+URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
 }

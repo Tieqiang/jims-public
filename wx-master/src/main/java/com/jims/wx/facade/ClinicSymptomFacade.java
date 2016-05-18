@@ -47,7 +47,7 @@ public class ClinicSymptomFacade extends BaseFacade {
         }else if("0".equals(sexValue)){
             sexValue="男";
         }
-        String sql="from ClinicSymptom where bodyPartId='"+bodyId+"' and (sex='"+sexValue+"' or sex='1')";
+        String sql="from ClinicSymptom where bodyPartId='"+bodyId+"' and (sex='"+sexValue+"' or sex='-1')";
 
         List<ClinicSymptom> list=entityManager.createQuery(sql).getResultList();
 

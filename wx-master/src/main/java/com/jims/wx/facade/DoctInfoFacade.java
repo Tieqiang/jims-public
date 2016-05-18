@@ -89,4 +89,15 @@ public class DoctInfoFacade extends BaseFacade {
         doctInfos=entityManager.createQuery(sql).getResultList();
         return doctInfos;
      }
+
+    /**
+     *
+     * @param likeSearch
+     * @return
+     */
+    public List<DoctInfo> findDoctByLike(String likeSearch) {
+        String sql="from DoctInfo where name like '%"+likeSearch+"%'";
+        List<DoctInfo> list=entityManager.createQuery(sql).getResultList();
+        return list;
+    }
 }

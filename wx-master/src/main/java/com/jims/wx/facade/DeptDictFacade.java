@@ -148,7 +148,7 @@ public class DeptDictFacade extends BaseFacade {
      */
     public List<DeptDict> queryLike(String likeSearch) {
         List<DeptDict>  deptDicts=null;
-        String sql="from DeptDict where deptName like '%"+likeSearch+"%'";
+        String sql="from DeptDict where deptName like '%"+likeSearch+"%' and parentId is null";
         deptDicts=entityManager.createQuery(sql).getResultList();
         return deptDicts;
      }

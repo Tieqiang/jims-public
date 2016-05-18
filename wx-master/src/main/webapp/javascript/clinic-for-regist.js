@@ -135,6 +135,7 @@ $(function () {
         }
     });
      $("#btn_ok2").on("click", function () {
+         alert(1);
         var clinicForRegist = {};
         clinicForRegist.id = $("#bid").val();
         var date = $("#date2").datebox("getValue");

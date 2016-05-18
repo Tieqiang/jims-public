@@ -35,7 +35,7 @@ public class TakeRegistSeqFacade extends BaseFacade {
      * @return
      */
     public TakeRegistSeq findByDate(String registTime) {
-            List<TakeRegistSeq> list=entityManager.createQuery("from takeRegistSeq where registTime like '%"+registTime+"%'").getResultList();
+            List<TakeRegistSeq> list=entityManager.createQuery("from TakeRegistSeq where time like '%"+registTime+"%'").getResultList();
             if(!list.isEmpty()){
                 return list.get(0);
             }else{

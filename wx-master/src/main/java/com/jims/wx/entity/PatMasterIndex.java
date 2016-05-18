@@ -10,7 +10,7 @@ import java.util.Date;
  * Created by cxy on 2016/5/9.
  */
 @Entity
-@Table(name = "pat_master_index", schema = "WX")
+@Table(name = "pat_master_index", schema = "wx")
 public class PatMasterIndex implements Serializable {
 
     private String patientId;//主键

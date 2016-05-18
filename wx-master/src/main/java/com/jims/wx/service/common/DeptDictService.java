@@ -133,7 +133,7 @@ public class DeptDictService {
         return Response.status(Response.Status.OK).entity(dict).build();
     }
 
-
+//    DeptDict
     @DELETE
     @Path("del/{deptId}")
     public Response delDeptDict(@PathParam("deptId") String deptId) {
@@ -149,28 +149,10 @@ public class DeptDictService {
      */
     @GET
     @Path("query-like")
-    public Map<String, Object> queryLike(@QueryParam("likeSearch") String likeSearch) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        List<DoctInfo> doctInfos = null;
+    public List<DeptDict> queryLike(@QueryParam("likeSearch") String likeSearch) {
         List<DeptDict> deptDicts = null;
-        /**
-         * 先去查询科室
-         * 如果存在科室
-         * 则返回科室
-         * 反之查询医生
-         * 如果存在医生返回医生的集合
-         */
         deptDicts = deptDictFacade.queryLike(likeSearch);
-        if (!deptDicts.isEmpty()) {
-            map.put("list", deptDicts);
-            map.put("what", "deptDict");
-            return map;
-        } else {//没有查到科室
-            doctInfos = doctInfoFacade.queryLike(likeSearch);
-            map.put("list", doctInfos);
-            map.put("what", "doctInfo");
-            return map;
-        }
+        return getList(deptDicts);
     }
 
 }
