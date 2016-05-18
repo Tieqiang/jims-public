@@ -10,12 +10,9 @@ function GetQueryString(name) {
 var patId=GetQueryString("patId");
 var openId=GetQueryString("openId");
 var mid=GetQueryString("mid");//默认用户patId
+//alert(patId);
 $(function(){
-     var patId=$("#patId").val()
-     if(mid==patId){
-        $("#moren").hide();
-     }
-     if(patId==null || patId==""){
+      if(patId==null || patId==""){
         alert("暂时不能查看详情");
       }else{
         $.ajax({
@@ -32,6 +29,10 @@ $(function(){
              }
         });
      }
+    //var pId=$("#patId").val();
+    if(mid==patId){
+        $("#moren").hide();
+    }
   })
 /*
 * 修改默认用户

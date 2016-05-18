@@ -23,8 +23,8 @@
                 <div ng-app="myApp">
                     <div ng-controller="tableCtrl" id="doctList">
                         <div ng-repeat="x in names">
-                            <li class="clearfix"
-                                ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,x.timeDesc,x.patName,x.deptName)">
+                            <li class="clearfix">
+
                                  <div class="doc-info clearfix">
                                     <div class="dochome-photo"><img src="{{x.headUrl}}" id="headUrl"/></div>
                                     <div class="doc-info-main">
@@ -39,10 +39,9 @@
                                 <div class="bot-line doc-detail">
                                     {{x.description}}
                                 </div>
-                                <div class="bot-line parkinfo-text">
+                                <div class="bot-line parkinfo-text" ng-click="judgeIsEnabledRegist(x.rid,x.enabledNum,x.price,x.name,x.title,x.timeDesc,x.patName,x.deptName)" >
                                     <span class="icon-span icon10">&nbsp;</span>{{x.timeDesc}} 剩余号 <font color="blue;">{{x.enabledNum}}</font>
-                                    <!--<span-->
-                                        <!--class="icon-span icon11 fd-right">&nbsp;</span>-->
+
                                 </div>
                                 <div style="display:none;">
                                     <td><font color="#D3D3D3">已挂号：{{x.currentNum}}</font></td>
