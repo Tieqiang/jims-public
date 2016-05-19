@@ -99,7 +99,7 @@ public class RcptMasterFacade extends BaseFacade{
         }
         if(appUser != "") {
             String id = appUser;
-            String sql="select a.user_id,b.patient_id,b.name from pat_vs_user a ,pat_info b where a.Pat_id=b.id and USER_ID='"+id+"'";
+            String sql="select a.user_id,b.patient_id,b.name from pat_vs_user a ,pat_info b where a.Pat_id=b.id and USER_ID='"+id+"' and b.flag='0'";
             Query qu = entityManager.createNativeQuery(sql);
             List<Objects[]> resultList=qu.getResultList();
             for(Object[] objects:resultList){

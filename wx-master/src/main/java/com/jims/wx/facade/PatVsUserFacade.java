@@ -118,7 +118,7 @@ public class PatVsUserFacade extends BaseFacade {
      */
     public List<PatInfo> findPatInfosByAppUserId(String appUserId){
         List<PatInfo> patInfos=new ArrayList<PatInfo>();
-        String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appUserId+"'";
+        String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appUserId+"' and p.patInfo.flag='0'";
         return entityManager.createQuery(sql).getResultList();
     }
 
