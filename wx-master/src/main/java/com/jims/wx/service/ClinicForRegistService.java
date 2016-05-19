@@ -568,6 +568,11 @@ public class ClinicForRegistService {
                     registInfoVOs.add(registInfoVO);
                 }
                 appDoctInfoVo.setPatName(patInfo.getName());
+                String deptCode=clinicIndexFacade.findDeptCodeByDoctId(doctInfo.getId());
+                DeptDict deptDict=deptDictFacade.findByCode(deptCode);
+                if(deptDict!=null){
+                    appDoctInfoVo.setDeptName(deptDict.getDeptName());
+                }
                 appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
                 appDoctInfoVos.add(appDoctInfoVo);
             }

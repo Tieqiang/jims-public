@@ -160,5 +160,18 @@ public class ClinicIndexFacade extends BaseFacade {
         return "";
     }
 
-
+    /**
+     * 根据医生Id查询科室代码
+     * @param id
+     * @return
+     */
+    public String findDeptCodeByDoctId(String id) {
+//        ClinicIndex
+        String sql="from ClinicIndex where doctorId='"+id+"'";
+        List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0).getClinicDept();
+        }
+        return "";
+    }
 }

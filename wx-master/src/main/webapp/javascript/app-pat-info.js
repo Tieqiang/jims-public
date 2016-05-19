@@ -60,7 +60,8 @@ function update(){
     }else if(cellphone.trim()=="" || cellphone.trim()==null){
         alert("手机号不能为空！");
     }else{
-        window.location.href="/api/pat-info/save?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&patId="+patId;
+        window.location.href="/api/pat-info/" +
+            "?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&patId="+patId;
     }
  }
 function del(){
