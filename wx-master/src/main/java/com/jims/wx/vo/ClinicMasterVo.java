@@ -19,14 +19,19 @@ public class ClinicMasterVo implements Serializable {
 
     private String doctName;//医生姓名
 
+    private String visitNo;
+
+
+
     public ClinicMasterVo() {
     }
 
-    public ClinicMasterVo(String visitDate, String name, String patientId, String clinicLabel) {
+    public ClinicMasterVo(String visitDate, String name, String patientId, String clinicLabel,String visitNo) {
         this.visitDate = visitDate;
         this.name = name;
         this.patientId = patientId;
         this.clinicLabel = clinicLabel;
+        this.visitNo=visitNo;
 
     }
 
@@ -76,5 +81,13 @@ public class ClinicMasterVo implements Serializable {
 
     public void setRegistDate(String registDate) {
         this.registDate = registDate;
+    }
+
+    public String getVisitNo() {
+        return visitNo;
+    }
+
+    public void setVisitNo(String visitNo) {
+        this.visitNo = visitNo;
     }
 }

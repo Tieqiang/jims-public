@@ -45,7 +45,7 @@ public class RcptMasterFacade extends BaseFacade{
         Query qu = entityManager.createNativeQuery(sql);
         List<Objects[]> resultList=qu.getResultList();
         for(Object[] objects:resultList){
-            ClinicMasterVo clinicMasterVo=new ClinicMasterVo(objects[0].toString(),objects[6].toString(),objects[5].toString(),objects[2].toString());
+            ClinicMasterVo clinicMasterVo=new ClinicMasterVo(objects[0].toString(),objects[6].toString(),objects[5].toString(),objects[2].toString(),objects[1].toString());
             String thisTime=clinicMasterVo.getVisitDate();
             thisTime=thisTime.substring(0,10);
             clinicMasterVo.setVisitDate(thisTime);
@@ -55,7 +55,7 @@ public class RcptMasterFacade extends BaseFacade{
     }
 
     //根据patientId查询门诊收据记录outp_rcpt_master
-    public List<OutpRcptMasterVo> getByPatientId(String patientId,String date){
+    public List<OutpRcptMasterVo> getByPatientId(String patientId,String date,String visitNo){
         if(null != patientId && !patientId.trim().equals("")){
     /**
      * select o.RCPT_NO, o.TOTAL_COSTS, o.TOTAL_CHARGES, v.NAME
@@ -71,14 +71,14 @@ public class RcptMasterFacade extends BaseFacade{
      and b.rcpt_no = o.rcpt_no;
      */
       String sql = "select o.RCPT_NO, o.TOTAL_COSTS, o.TOTAL_CHARGES, v.NAME" +
-              "from wx.OUTP_BILL_ITEMS b, wx.outp_rcpt_master o, wx.clinic_master_view v" +
+              " from wx.OUTP_BILL_ITEMS b, wx.outp_rcpt_master o, wx.clinic_master_view v" +
               " where o.patient_id = '"+patientId+"'" +
               " and v.patient_id = o.patient_id" +
               " and to_char(v.visit_date, 'YYYY-MM-DD') =" +
-              "to_char(o.visit_Date, 'YYYY-MM-DD')" +
+              " to_char(o.visit_Date, 'YYYY-MM-DD')" +
               "   and  to_char(b.visit_date, 'YYYY-MM-DD') =" +
-              "to_char(o.visit_Date, 'YYYY-MM-DD')" +
-              " and  to_char(o.visit_Date, 'YYYY-MM-DD') like '"+date+"'and b.visit_no = v.visit_no and b.rcpt_no = o.rcpt_no";
+              " to_char(o.visit_Date, 'YYYY-MM-DD')" +
+              " and  to_char(o.visit_Date, 'YYYY-MM-DD') like '"+date+"'and b.visit_no = v.visit_no and b.rcpt_no = o.rcpt_no and  v.VISIT_NO='"+visitNo+"'";
             System.out.println("sql------------"+sql);
             List<OutpRcptMasterVo> outpRcptMasterVos = new ArrayList<>() ;
             Query qu = entityManager.createNativeQuery(sql);

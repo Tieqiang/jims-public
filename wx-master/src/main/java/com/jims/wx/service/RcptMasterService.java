@@ -53,8 +53,8 @@ public class RcptMasterService {
 
     @GET
     @Path("find-by-patient")
-    public List<OutpRcptMasterVo> findByPatientId(@QueryParam("patientId") String patientId,@QueryParam("date") String date){
-         return rcptMasterFacade.getByPatientId(patientId,date);
+    public List<OutpRcptMasterVo> findByPatientId(@QueryParam("patientId") String patientId,@QueryParam("date") String date,@QueryParam("visitNo") String visitNo){
+         return rcptMasterFacade.getByPatientId(patientId,date,visitNo);
     }
 
 

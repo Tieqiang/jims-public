@@ -40,7 +40,8 @@
                  </thead>
 
                  <tbody>
-                     <tr ng-repeat="clinic in clinicList" style="height:30px;" ng-click="clickTR(clinic.visitDate)">
+                     <tr ng-repeat="clinic in clinicList" style="height:30px;" ng-click="clickTR(clinic.visitDate,clinic.visitNo)">
+                         <td style="display: none;">{{ clinic.visitNo }}</td>
                         <td style="align:center;">{{ clinic.name }}</td>
                         <td style="align:center;">{{ clinic.clinicLabel }}</td>
                         <td style="align:center;">{{ clinic.visitDate }}</td>

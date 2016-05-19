@@ -15,6 +15,7 @@ app.controller('tableCtrl', function ($scope, $http) {
             $("#clinic").attr("style", "display:none;");
             $("#rcpt").attr("style", "display:none;");
             $("#items").attr("style", "display:none;");
+            console.info(data);
             $scope.nameList = data;
         });
     /**
@@ -24,9 +25,9 @@ app.controller('tableCtrl', function ($scope, $http) {
 //    $scope.clickTR=function(date){
 //
 //    }
-    $scope.clickTR = function (date) {
+    $scope.clickTR = function (date,visitNo) {
         //alert(1);
-        $http.get("/api/rcpt-master/find-by-patient?patientId=" + patId+"&date="+date)
+        $http.get("/api/rcpt-master/find-by-patient?patientId=" + patId+"&date="+date+"&visitNo="+visitNo)
             .success(function (data) {
                 $('#checkName').html(name);
                 $("#name").attr("style", "display:none;");
