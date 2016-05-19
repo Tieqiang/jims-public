@@ -46,24 +46,24 @@ function moren(){
         window.location.href="/api/pat-info/update-pat-id?patId="+patId+"&openId="+openId;
     }
  }
-function update(){
-//alert(1);
-    var patId=$("#patId").val();//patId
-    var name = $("#name").val();
-    var idCard = $("#idCard").val();
-    var cellphone = $("#phone").val();
-//    var openId=v;
-    if(name.trim()=="" || name.trim()==null){
-        alert("姓名不能为空！");
-    }else if(idCard.trim()=="" || idCard.trim()==null){
-        alert("省份证不能为空！");
-    }else if(cellphone.trim()=="" || cellphone.trim()==null){
-        alert("手机号不能为空！");
-    }else{
-        window.location.href="/api/pat-info/" +
-            "?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&patId="+patId;
-    }
- }
+//function update(){
+////alert(1);
+//    var patId=$("#patId").val();//patId
+//    var name = $("#name").val();
+//    var idCard = $("#idCard").val();
+//    var cellphone = $("#phone").val();
+////    var openId=v;
+//    if(name.trim()=="" || name.trim()==null){
+//        alert("姓名不能为空！");
+//    }else if(idCard.trim()=="" || idCard.trim()==null){
+//        alert("省份证不能为空！");
+//    }else if(cellphone.trim()=="" || cellphone.trim()==null){
+//        alert("手机号不能为空！");
+//    }else{
+//        window.location.href="/api/pat-info/" +
+//            "?name="+name+"&idCard="+idCard+"&cellphone="+cellphone+"&patId="+patId;
+//    }
+// }
 function del(){
     var patId=$("#patId").val();//patId
     if(patId==mid){
@@ -91,11 +91,54 @@ function del(){
  * 挂号
  */
 function prepare(){
+    if(patId!=mid){//不是默认用户
+        var flag=window.confirm("确定要把此用户设为默认用户吗?")
+        if(flag){
+            $.ajax({
+                type:"GET",
+                url:"/api/pat-info/update-pat-id?patId="+patId+"&openId="+openId+"&flag=1",
+                cache:false,
+//                dataType:"JSON",
+                success:function(result){
+                    if(result.status==200){
+                    window.location.href="/api/wx-service/find-dept-pre?openId="+openId;}
+                },
+                error:function(result){
+                    if(result.status==200){
+
+                    window.location.href="/api/wx-service/find-dept-pre?openId="+openId;}
+                }
+            });
+        }
+    }else{
+        window.location.href="/api/wx-service/find-dept-pre?openId="+openId;
+    }
 //
-    window.location.href="/api/wx-service/find-dept-pre?openId="+openId;
+
 }
 function today(){
-    window.location.href="/api/wx-service/find-dept?openId="+openId;
+    if(patId!=mid){//不是默认用户
+        var flag=window.confirm("确定要把此用户设为默认用户吗?")
+        if(flag){
+            $.ajax({
+                type:"GET",
+                url:"/api/pat-info/update-pat-id?patId="+patId+"&openId="+openId+"&flag=1",
+                cache:false,
+//                dataType:"JSON",
+                success:function(result){
+//                    alert(1);
+                    if(result.status==200){
+                    window.location.href="/api/wx-service/find-dept?openId="+openId;}
+                },
+                error:function(result){
+                    if(result.status==200){
+                    window.location.href="/api/wx-service/find-dept?openId="+openId;}
+                }
+            });
+        }
+    }else{
+        window.location.href="/api/wx-service/find-dept?openId="+openId;
+    }
 }
 
 

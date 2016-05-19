@@ -182,17 +182,25 @@ public class PatInfoService {
 
     @GET
     @Path("update-pat-id")
-    public String updatePatId(@QueryParam("patId") String patId, @QueryParam("openId") String openId) {
+    public String updatePatId(@QueryParam("patId") String patId, @QueryParam("openId") String openId,@QueryParam("flag") String flag) {
         try {
             AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
             appUser.setPatId(patId);
             appUserFacade.saveAppUser(appUser);
-            response.sendRedirect("/views/his/public/app-op-success.html");
-        } catch (Exception e) {
+            if(flag!=null&&!"".equals(flag)){
+                return "success";
+            }else{
+                response.sendRedirect("/views/his/public/app-op-success.html");
+            }
+         } catch (Exception e) {
             e.printStackTrace();
             try {
-                response.sendRedirect("/views/his/public/user-bangker-failed.html");
-            } catch (IOException e1) {
+                if(flag!=null&&!"".equals(flag)){
+                    return "error";
+                }else{
+                    response.sendRedirect("/views/his/public/user-bangker-failed.html");
+                }
+             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }
