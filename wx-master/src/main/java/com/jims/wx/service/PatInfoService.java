@@ -121,11 +121,15 @@ public class PatInfoService {
                     patInfo.setName(name);
                     patInfo = patInfoFacade.save(patInfo);
                     if (StringUtils.isNotBlank(openId)) {
-                        PatVsUser patVsUser = new PatVsUser();
-                        patVsUser.setAppUser(appUser);
-                        patVsUser.setPatInfo(patInfo);
-                        appUserFacade.savePatVsUser(patVsUser);
-                        /**
+                        if(p!=null&&!"".equals(p)){// flag=1
+
+                        }else{
+                            PatVsUser patVsUser = new PatVsUser();
+                            patVsUser.setAppUser(appUser);
+                            patVsUser.setPatInfo(patInfo);
+                            appUserFacade.savePatVsUser(patVsUser);
+                        }
+                         /**
                          * 查询用户是否是第一次绑定
                          * 如果是第一次绑定的话，那么将此patId 放入appUser表中
                          * 否则就不放
