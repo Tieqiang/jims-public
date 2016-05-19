@@ -87,9 +87,7 @@ public class PatInfoService {
         PatInfo patInfo = null;
         String patientId = null;
         try {
-            AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
-            patientId = patMasterIndexFacade.checkIdCard(idCard);
-            if (patId != null && !"".equals(patId)) {
+             if (patId != null && !"".equals(patId)) {
                 patInfo = patInfoFacade.findById(patId);
                 patInfo.setCellphone(cellphone);
                 patInfo.setIdCard(idCard);
@@ -97,7 +95,9 @@ public class PatInfoService {
                 patInfo.setPatientId(patientId);
                 patInfo = patInfoFacade.save(patInfo);
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patId);
-            } else {
+              }else {
+                 AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+                 patientId = patMasterIndexFacade.checkIdCard(idCard);
                 /**
                  * 查询之前是否绑定次idCard
                  */
