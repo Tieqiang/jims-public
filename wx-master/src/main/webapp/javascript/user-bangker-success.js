@@ -12,6 +12,8 @@ function getUrlParameter(name){
     }
 }
 var patId=getUrlParameter("patId");
+var openId=getUrlParameter("openId");
+
 var flag=getUrlParameter("flag");
  $(function(){
     if(flag!=null&&flag!=""){
@@ -23,7 +25,7 @@ var flag=getUrlParameter("flag");
  */
 function view(){
 //    if(){}
-   window.location.href="/api/wx-service/get-param?patId="+patId;
+   window.location.href="/api/wx-service/get-param?patId="+patId+"&openId="+openId;
 }
 
 

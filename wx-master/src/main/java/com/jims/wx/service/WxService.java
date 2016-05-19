@@ -378,8 +378,8 @@ public class WxService {
 
     @GET
     @Path("get-param")
-    public String getParam(@QueryParam("patId") String patId) throws IOException {
-        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
+    public String getParam(@QueryParam("patId") String patId,@QueryParam("openId") String openId) throws IOException {
+        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId+"&openId="+openId);
         return "";
     }
 

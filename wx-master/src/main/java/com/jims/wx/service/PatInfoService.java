@@ -132,7 +132,7 @@ public class PatInfoService {
 
                 }
                 //为查看详情做准备
-                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patInfo.getId());
+                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patInfo.getId()+"&openId="+openId);
             }
         } catch (Exception e) {
             e.printStackTrace();
