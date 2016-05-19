@@ -57,8 +57,29 @@ public class RcptMasterFacade extends BaseFacade{
     //根据patientId查询门诊收据记录outp_rcpt_master
     public List<OutpRcptMasterVo> getByPatientId(String patientId,String date){
         if(null != patientId && !patientId.trim().equals("")){
-            String sql = "select RCPT_NO,TOTAL_COSTS,TOTAL_CHARGES,NAME from wx.outp_rcpt_master where to_char(visit_Date,'YYYY-MM-DD') like '%"+date+"%'";
-            sql +=" and patient_id='" +patientId+ "'";
+    /**
+     * select o.RCPT_NO, o.TOTAL_COSTS, o.TOTAL_CHARGES, v.NAME
+     from wx.OUTP_BILL_ITEMS b, wx.outp_rcpt_master o, wx.clinic_master_view v
+     where o.patient_id = '15001291'
+     and v.patient_id = o.patient_id
+     and to_char(v.visit_date, 'YYYY-MM-DD') =
+     to_char(o.visit_Date, 'YYYY-MM-DD')
+     and  to_char(b.visit_date, 'YYYY-MM-DD') =
+     to_char(o.visit_Date, 'YYYY-MM-DD')
+     and  to_char(o.visit_Date, 'YYYY-MM-DD') like '2016-05-17'
+     and b.visit_no = v.visit_no
+     and b.rcpt_no = o.rcpt_no;
+     */
+      String sql = "select o.RCPT_NO, o.TOTAL_COSTS, o.TOTAL_CHARGES, v.NAME" +
+              "from wx.OUTP_BILL_ITEMS b, wx.outp_rcpt_master o, wx.clinic_master_view v" +
+              " where o.patient_id = '"+patientId+"'" +
+              " and v.patient_id = o.patient_id" +
+              " and to_char(v.visit_date, 'YYYY-MM-DD') =" +
+              "to_char(o.visit_Date, 'YYYY-MM-DD')" +
+              "   and  to_char(b.visit_date, 'YYYY-MM-DD') =" +
+              "to_char(o.visit_Date, 'YYYY-MM-DD')" +
+              " and  to_char(o.visit_Date, 'YYYY-MM-DD') like '"+date+"'and b.visit_no = v.visit_no and b.rcpt_no = o.rcpt_no";
+            System.out.println("sql------------"+sql);
             List<OutpRcptMasterVo> outpRcptMasterVos = new ArrayList<>() ;
             Query qu = entityManager.createNativeQuery(sql);
             List<Objects[]> resultList=qu.getResultList();
