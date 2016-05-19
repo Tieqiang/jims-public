@@ -34,6 +34,10 @@ public class PatInfo implements java.io.Serializable {
 
     private String patientId;
 
+    private String flag;
+
+
+
 //    private String patId;
 	// Constructors
  	/** default constructor */
@@ -127,5 +131,13 @@ public class PatInfo implements java.io.Serializable {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+    @Column(name="flag")
+    public String getFlag() {
+        return flag;
+    }
+
+    public void setFlag(String flag) {
+        this.flag = flag;
     }
 }

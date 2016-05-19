@@ -98,6 +98,7 @@ public class PatInfoService {
               }else {
                  AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
                  patientId = patMasterIndexFacade.checkIdCard(idCard);
+
                 /**
                  * 查询之前是否绑定次idCard
                  */
@@ -105,13 +106,21 @@ public class PatInfoService {
                 if (isBangker) {
                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
                 } else {
-                    patInfo = new PatInfo();
+                    /**
+                     * 查询之前是否有绑定 但是已经被删掉
+                     * 如果有直接把 flag=1
+                     */
+                    PatInfo p=patInfoFacade.findByFlag(idCard);
+                    if(p!=null&&!"".equals(p)){
+                        patInfo=p;
+                    }else{
+                        patInfo = new PatInfo();
+                     }
                     patInfo.setCellphone(cellphone);
                     patInfo.setIdCard(idCard);
                     patInfo.setName(name);
                     patInfo = patInfoFacade.save(patInfo);
                     if (StringUtils.isNotBlank(openId)) {
-
                         PatVsUser patVsUser = new PatVsUser();
                         patVsUser.setAppUser(appUser);
                         patVsUser.setPatInfo(patInfo);
@@ -230,7 +239,7 @@ public class PatInfoService {
     @Path("delete")
     public PatInfo delete(@QueryParam("patId") String patId) {
         try {
-            patVsUserFacade.deleteByPatId(patId);
+//            patVsUserFacade.deleteByPatId(patId);
             PatInfo patInfo = patInfoFacade.findById(patId);
             patInfoFacade.deleteByObject(patInfo);
             return patInfo;
@@ -241,12 +250,12 @@ public class PatInfoService {
     }
 
     //    check-idCard?idCard="+idCard,\
-    @POST
-    @Path("check-idCard")
-    public Map<String, Object> checkCard(@QueryParam("idCard") String idCard) {
-        Map<String, Object> map = new HashMap<String, Object>();
-//        map=patMasterIndexFacade.checkIdCard(idCard);
-        return null;
-    }
+//    @POST
+//    @Path("check-idCard")
+//    public Map<String, Object> checkCard(@QueryParam("idCard") String idCard) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+////        map=patMasterIndexFacade.checkIdCard(idCard);
+//        return null;
+//    }
 }
 

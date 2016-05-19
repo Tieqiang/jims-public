@@ -278,7 +278,7 @@ public class WxService {
             if (openId == null || openId == "") {
                 AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
                 snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+//                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;

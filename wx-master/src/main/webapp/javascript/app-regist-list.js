@@ -15,7 +15,7 @@ app.controller('tableCtrl', function ($scope, $http) {
              $scope.today = data.today;
 //             console.info( $scope.today);
             $scope.history = data.history;
-             console.info($scope.history);
+//             console.info($scope.history);
         });
 });
 

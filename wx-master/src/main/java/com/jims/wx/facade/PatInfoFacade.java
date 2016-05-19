@@ -29,6 +29,7 @@ public class PatInfoFacade extends BaseFacade {
 
     @Transactional
     public PatInfo save(PatInfo patInfo) {
+        patInfo.setFlag("0");
         return entityManager.merge(patInfo);
     }
 
@@ -51,27 +52,26 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     public PatInfo findById(String patId) {
-        String sql = "from PatInfo where id='" + patId + "'";
+        String sql = "from PatInfo where id='" + patId + "' and flag='0'";
         return (PatInfo) entityManager.createQuery(sql).getSingleResult();
     }
-
-
-    /**
+      /**
      * @param list
      */
     @Transactional
     public void delete(List<PatInfo> list) {
         for (PatInfo patInfo : list) {
-            remove(patInfo);
+              patInfo.setFlag("1");
+              merge(patInfo);
         }
     }
 
     public List<PatInfoVo> findByOpenId(String openId) {
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
 //        appuser.getId();
-        String sql = "select c.id,c.cellphone,c.name,c.sex from  pat_vs_user b ,pat_info c  where  b.pat_id=c.id and  b.user_id='" + appuser.getId() + "'";
+        String sql = "select c.id,c.cellphone,c.name,c.sex from  pat_vs_user b ,pat_info c  where  b.pat_id=c.id and  b.user_id='" + appuser.getId() + "' and c.flag='0'";
 //        String sql="select * from pat_vs_user a ,pat_info b where a.Pat_id=b.id and USER_ID='"+appuser.getId()+"'";
-        System.out.print(sql);
+//        System.out.print(sql);
         List<PatInfoVo> patInfos = new ArrayList<>();
         Query qu = entityManager.createNativeQuery(sql);
         List<Object[]> resultList = qu.getResultList();
@@ -95,8 +95,10 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     @Transactional
-    public void deleteByObject(PatInfo patInfo) {
-        entityManager.remove(patInfo);
+    public void deleteByObject(PatInfo patInfo)
+    {
+        patInfo.setFlag("1");
+        entityManager.merge(patInfo);
     }
 
     /**
@@ -104,7 +106,7 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     public PatInfo findByIdCard(String idCard) {
-        List<PatInfo> list = entityManager.createQuery("from PatInfo where idCard='" + idCard + "'").getResultList();
+        List<PatInfo> list = entityManager.createQuery("from PatInfo where idCard='" + idCard + "' and flag='0'").getResultList();
         if (!list.isEmpty())
             return list.get(0);
         return null;
@@ -116,10 +118,24 @@ public class PatInfoFacade extends BaseFacade {
      */
     public String findByPaientId(String patientId) {
 
-        String sql = "select name from PatInfo where patientId='" + patientId + "'";
+        String sql = "select name from PatInfo where patientId='" + patientId + "' and flag='0'";
         String name = (String) entityManager.createQuery(sql).getSingleResult();
         if (name != null && !"".equals(name))
             return name;
         return "";
+    }
+
+    /**
+     *
+     * @param idCard
+     * @return
+     */
+    public PatInfo findByFlag(String idCard) {
+         String sql="from PatInfo where flag='1' and idCard='"+idCard+"'";
+         List<PatInfo> list = entityManager.createQuery(sql).getResultList();
+         if(list!=null&&!list.isEmpty()){
+             return list.get(0);
+         }
+         return null;
     }
 }
