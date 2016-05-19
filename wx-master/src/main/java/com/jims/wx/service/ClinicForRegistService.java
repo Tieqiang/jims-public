@@ -106,7 +106,7 @@ public class ClinicForRegistService {
                     if (record != null && !"".equals(record)) {
                         sortMath = Integer.parseInt(record.getMath());
                         sortMath++;
-                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath));
+                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath+1));
                         record.setMath(String.valueOf(sortMath));
                         takeRegistSeqFacade.save(record);
                     } else {//今天是第一位取号的人员  1000放入数据库
@@ -115,7 +115,6 @@ public class ClinicForRegistService {
                     }
 
                     patInfo.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath + 1));
-
                     patInfoFacade.save(patInfo);
                 }
                 clinicMaster.setRegistFee(0.0);//设为0
