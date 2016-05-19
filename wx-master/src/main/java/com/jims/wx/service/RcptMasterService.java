@@ -106,8 +106,10 @@ public class RcptMasterService {
                           }else{
                               String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
                               DeptDict deptDict=deptDictFacade.findByCode(deptCode);
-                              lables.add(deptDict.getDeptName());
-                          }
+                              if(deptDict!=null&&!"".equals(deptDict)){
+                                  lables.add(deptDict.getDeptName());
+                              }
+                           }
                      }
                  }
                 return lables;
