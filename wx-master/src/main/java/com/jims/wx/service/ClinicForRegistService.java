@@ -8,7 +8,13 @@ import com.jims.wx.vo.*;
 import freemarker.template.SimpleDate;
 import freemarker.template.utility.StringUtil;
 import org.apache.commons.lang.StringUtils;
+import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.xmlmessage.XMLMessage;
+import weixin.popular.bean.xmlmessage.XMLTextMessage;
+import weixin.popular.util.XMLConverUtil;
 
+import javax.servlet.ServletInputStream;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
@@ -72,6 +78,8 @@ public class ClinicForRegistService {
     @Path("regist")
     public synchronized String regist(@QueryParam("price") String price, @QueryParam("prepareId") String prepareId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("openId") String openId) {
         try {
+            ServletInputStream inputStream = request.getInputStream();
+            ServletOutputStream outputStream = response.getOutputStream();
             if (StringUtils.isNotBlank(price) && StringUtils.isNotBlank(prepareId) && StringUtils.isNotBlank(clinicForRegistId)) {
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
                 /**
@@ -117,7 +125,7 @@ public class ClinicForRegistService {
                 clinicMaster.setTakeStatus("0");//未取号
                 clinicMaster.setRegistDate(new Date());
                 clinicMaster.setVisitDate(sdf.parse(registTime));
-                clinicMaster.setVisitDate(sdf.parse(clinicForRegist.getRegistTime()));
+//                clinicMaster.setVisitDate(sdf.parse(clinicForRegist.getRegistTime()));
                  /*
                  * 跟新号表的数据
                  * */
@@ -132,11 +140,44 @@ public class ClinicForRegistService {
                 ClinicForRegist cfr = clinicForRegistFacade.save(clinicForRegist);
                 if (c != null && cfr != null) {//保存成功
                     //跳转到成功页面
-                    /**
-                     * var openId=GetQueryString("openId");//opemnId
-                     var price=getUrlParameter("price");//挂号价格
-                     var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
-                     */
+                    //转换XML
+                    EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, inputStream);
+                    String key = eventMessage.getFromUserName() + "__"
+                            +eventMessage.getToUserName() + "__"
+                            + eventMessage.getMsgId() + "__"
+                            + eventMessage.getCreateTime();
+                    System.out.println(eventMessage.getContent() );
+                    //创建回复
+                    //创建回复
+                     //拼接一个页面
+                    SimpleDateFormat dateFormat=new SimpleDateFormat("mm月dd日");
+                    StringBuilder sb=new StringBuilder();
+                    sb.append("<!DOCTYPE html>\n" +
+                            "<html>\n" +
+                            "<head><title></title></head>\n" +
+                            "<body>");
+                    sb.append("<h3>挂号单</h3><br/>");
+                    sb.append("<font size='8px'>"+dateFormat.format(new Date())+"</font><br/>");
+                    DoctInfo doctInfo=doctInfoFacade.findById(clinicForRegist.getClinicIndex().getDoctorId());
+                    if(doctInfo!=null&&!"".equals(doctInfo)){
+                        sb.append("医生："+doctInfo.getName()+"<br/>");
+                    }
+                    sb.append("医院：双滦区妇幼保健医院<br/>");
+                    DeptDict deptDict=deptDictFacade.findByCode(clinicForRegist.getClinicIndex().getClinicDept());
+                    if(deptDict!=null){
+                        sb.append("科室:"+deptDict.getDeptName()+"<br/>");
+                        sb.append("科室地址:"+deptDict.getDeptLocation()+"");
+                    }
+                    sb.append("就诊时间:"+registTime+"<br/>");
+                    sb.append("订单号："+prepareId+"<br/>");
+                    sb.append("订单号："+prepareId+"<br/>");
+                    sb.append("</body></html>");
+                    XMLMessage xmlTextMessage = new XMLTextMessage(
+                            openId,
+                            eventMessage.getToUserName(),//开发者微信号
+                            sb.toString());
+                     //回复
+                    xmlTextMessage.outputStreamWrite(outputStream);
                     response.sendRedirect("/views/his/public/app-pay-success.html?clinicForRegistId=" + clinicForRegistId + "&price=" + cfr.getRegistPrice() + "&openId=" + openId + "&prepareId=" + prepareId);
 
                 } else {
