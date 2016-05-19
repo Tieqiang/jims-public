@@ -559,9 +559,13 @@ public class WxService {
 
     @GET
     @Path("find-master")
-    public String findmaster(@QueryParam("openId") String openId) {
+    public String findmaster(@QueryParam("openId") String openId,@QueryParam("doctFlag") String doctFlag) {
         try {
-            response.sendRedirect("/views/his/public/app-master-record.html?openId=" + openId);
+             if(doctFlag!=null&&!"".equals(doctFlag)){
+                 response.sendRedirect("/views/his/public/app-doct-record.html?openId=" + openId);
+              }else{
+                 response.sendRedirect("/views/his/public/app-master-record.html?openId=" + openId);
+             }
         } catch (IOException e) {
             e.printStackTrace();
         }

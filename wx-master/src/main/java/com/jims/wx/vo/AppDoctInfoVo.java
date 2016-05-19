@@ -50,6 +50,8 @@ public class AppDoctInfoVo {
 
     private String id;
 
+    private String collectionDesc;
+
     public String getRegistTime() {
         return registTime;
     }
@@ -217,5 +219,13 @@ public class AppDoctInfoVo {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getCollectionDesc() {
+        return collectionDesc;
+    }
+
+    public void setCollectionDesc(String collectionDesc) {
+        this.collectionDesc = collectionDesc;
     }
 }

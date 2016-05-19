@@ -2,6 +2,7 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.AppUser;
 import com.jims.wx.entity.DeptDict;
+import com.jims.wx.entity.DoctInfo;
 import com.jims.wx.entity.PatInfo;
 import com.jims.wx.facade.*;
 import com.jims.wx.vo.ClinicMasterVo;
@@ -29,16 +30,18 @@ public class RcptMasterService {
     private PatVsUserFacade patVsUserFacade;
     private DeptDictFacade deptDictFacade;
     private ClinicIndexFacade clinicIndexFacade;
+    private DoctInfoFacade doctInfoFacade;
 
 
     @Inject
-    public RcptMasterService(RcptMasterFacade rcptMasterFacade,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade,PatVsUserFacade patVsUserFacade,DeptDictFacade deptDictFacade,ClinicIndexFacade clinicIndexFacade) {
+    public RcptMasterService(RcptMasterFacade rcptMasterFacade,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade,PatVsUserFacade patVsUserFacade,DeptDictFacade deptDictFacade,ClinicIndexFacade clinicIndexFacade,DoctInfoFacade doctInfoFacade) {
         this.rcptMasterFacade = rcptMasterFacade;
         this.appUserFacade=appUserFacade;
         this.patInfoFacade=patInfoFacade;
         this.patVsUserFacade=patVsUserFacade;
         this.deptDictFacade=deptDictFacade;
         this.clinicIndexFacade=clinicIndexFacade;
+        this.doctInfoFacade=doctInfoFacade;
     }
 
 
@@ -84,7 +87,7 @@ public class RcptMasterService {
      */
     @GET
     @Path("find-by-open-id")
-    public List<String> findByOpenId(@QueryParam("openId") String openId){
+    public List<String> findByOpenId(@QueryParam("openId") String openId,@QueryParam("doctFlag") String doctFlag){
         List<String> lables=new ArrayList<String>();
         AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
         List<PatInfo> lst=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
@@ -94,10 +97,18 @@ public class RcptMasterService {
                 for(ClinicMasterVo clinicMasterVo:list){
                     String clinicLabel=clinicMasterVo.getClinicLabel();//号别
                     if(clinicLabel!=null&&!"".equals(clinicLabel)){
-                          String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
-                          DeptDict deptDict=deptDictFacade.findByCode(deptCode);
-                          lables.add(deptDict.getDeptName());
-                    }
+                          if(doctFlag!=null&&!"".equals(doctFlag)){//医生评价
+                                 String doctId=clinicIndexFacade.findDoctInfo(clinicLabel);
+                                 if(doctId!=null&&!"".equals(doctId)){
+                                    DoctInfo doctInfo=doctInfoFacade.findById(doctId);
+                                    lables.add(doctInfo.getName());
+                                 }
+                          }else{
+                              String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
+                              DeptDict deptDict=deptDictFacade.findByCode(deptCode);
+                              lables.add(deptDict.getDeptName());
+                          }
+                     }
                  }
                 return lables;
             }

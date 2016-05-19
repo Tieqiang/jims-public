@@ -31,7 +31,8 @@
                                             <span class="doc-name" id="name">{{x.name}}</span>
                                             <span id="title">{{x.title}}</span>
                                         </div>
-                                        <button class="save-btn" ng-click="collect(x.docId,x.clinicIndexId)">收藏</button>
+                                        <!--<button class="save-btn" ng-click="collect(x.docId,x.clinicIndexId)">收藏</button>-->
+                                        <button class="save-btn" ng-click="collect(x.docId,x.clinicIndexId)">{{x.collectionDesc}}</button>
                                         <span id="deptName">{{x.deptName}}</span>
                                     </div>
                                 </div>

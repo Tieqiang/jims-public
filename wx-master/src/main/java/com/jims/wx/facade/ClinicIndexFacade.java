@@ -144,4 +144,21 @@ public class ClinicIndexFacade extends BaseFacade {
         }
         return "";
     }
+
+
+    /**
+     *
+     * @param clinicLabel
+     * @return
+     */
+    public String findDoctInfo(String clinicLabel) {
+        String sql="from ClinicIndex where clinicLabel='"+clinicLabel+"'";
+        List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0).getDoctorId();
+        }
+        return "";
+    }
+
+
 }

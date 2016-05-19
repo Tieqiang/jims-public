@@ -29,11 +29,28 @@ $(function () {
                 }
             }
         });
-
-    });
+     });
     //医院反馈
     $("#hospital").on('click',function(){
         window.location.href="/api/wx-service/find-content?openId="+openId+"&feedTargetId=123123123";
+    });
+
+
+    $("#doct").on('click',function(){
+         $.ajax({
+            type:"GET",
+            url:"/api/rcpt-master/find-by-open-id?openId="+openId+"&doctFlag=1",
+            dataType:"JSON",
+            cache:false,
+            success:function(data){
+//                alert(data);
+                if(data.length>0){//有医生记录
+                    window.location.href="/api/wx-service/find-master?openId="+openId+"&doctFlag=1";
+                }else{
+                    alert("您目前没有就诊记录！");
+                }
+            }
+        });
     });
  })
 
