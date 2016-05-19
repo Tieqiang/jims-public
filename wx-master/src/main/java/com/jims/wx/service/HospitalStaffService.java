@@ -10,7 +10,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by wei on 2016/4/26.
@@ -34,8 +36,10 @@ public class HospitalStaffService {
 
     @GET
     @Path("find-by-personId")
-    public List<HospitalStaff> findById(@QueryParam("personId")String personId){
-    return hospitalStaffFacade.findById(personId);
+    public Map<String,Object> findById(@QueryParam("personId")String personId,@QueryParam("openId")String openId){
+        Map<String,Object> map=new HashMap<String,Object>();
+        map=hospitalStaffFacade.findById(personId,openId);
+        return map;
     }
 
     @GET

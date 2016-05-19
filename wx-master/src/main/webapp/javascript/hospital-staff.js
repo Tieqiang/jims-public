@@ -13,10 +13,10 @@ app.controller('tableCtrl', function ($scope, $http) {
     $scope.openId = $scope.getQueryString("openId");
     $scope.click = function (personId) {
 
-        $http.get("/api/hospital-staff-service/find-by-personId?personId=" + personId)
+        $http.get("/api/hospital-staff-service/find-by-personId?personId=" + personId+"&openId="+$scope.openId)
             .success(function (data) {
-                console.log(data);
-                if (data.length > 0) {
+
+                if (data.success) {
                     $("#alert1").attr("style", "display:block");
                     $('#no1').click(function () {
                         $('#alert1').hide();
@@ -25,15 +25,10 @@ app.controller('tableCtrl', function ($scope, $http) {
                     hospitalStaff.name = data[0].name;
                     hospitalStaff.personId = data[0].personId;
                     hospitalStaff.openId = $scope.getQueryString("openId");
-
-                } else {
-                    $("#alert2").attr("style", "display:block");
-                    $('#no2').click(function () {
-
-                        $("#alert2").attr("style", "display:none;");
-                    });
+                 }else{
+                    alert(data.message);
                 }
-            });
+             });
     }
     $('#ok').click(function () {
         $http.post("/api/hospital-staff-service/save", hospitalStaff)
@@ -41,7 +36,6 @@ app.controller('tableCtrl', function ($scope, $http) {
                 $('#alert1').hide();
                 $("#app").attr("style", "display:none;");
                 $("#msg").attr("style", "display:block;");
-
-            });
+             });
     });
 });
