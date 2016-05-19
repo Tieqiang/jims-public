@@ -22,6 +22,7 @@ $(function () {
             cache:false,
             success:function(data){
 //                alert(data);
+
                 if(data.length>0){//有就诊记录
                      window.location.href="/api/wx-service/find-master?openId="+openId;
                 }else{

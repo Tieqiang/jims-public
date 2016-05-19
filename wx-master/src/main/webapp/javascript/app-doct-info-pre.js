@@ -28,8 +28,35 @@ app.controller('tableCtrl', function ($scope, $http) {
                 if(data.success==true){
                     alert("收藏成功！");
 
+                    $http.get("/api/clinic-for-regist/find-by-dept-id-pre?deptId=" + deptId + "&openId=" + openId)
+                        .success(function (data) {
+                            if (data.length > 0) {
+//                alert(data.length);
+                                $("#text1").html(data[0].deptName + ":" + data.length + "人");
+                            }
+                            $scope.names = data;
+                        });
+
                 }else{
-                    alert("收藏失败！");
+//                    alert("收藏失败！");取消收藏
+                    $http.get("/api/doct-info/baddon-collection?openId=" + openId + "&doctId=" + docId)
+                        .success(function (data) {//appDoctInfoVO
+                            if (data != 0) {
+                                alert("取消成功！");
+//                                $http.get("/api/clinic-for-regist/find-my-collection?&openId=" + openId)
+//                                    .success(function (data) {//appDoctInfoVO
+//                                        $scope.names = data;
+//                                    });
+                                $http.get("/api/clinic-for-regist/find-by-dept-id-pre?deptId=" + deptId + "&openId=" + openId)
+                                    .success(function (data) {
+                                        if (data.length > 0) {
+//                alert(data.length);
+                                            $("#text1").html(data[0].deptName + ":" + data.length + "人");
+                                        }
+                                        $scope.names = data;
+                                    });
+                            }
+                        });
                 }
             });
     }
