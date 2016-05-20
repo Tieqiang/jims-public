@@ -107,15 +107,16 @@ public class RcptMasterService {
                               String deptCode=clinicIndexFacade.findDeptInfo(clinicLabel);
                               DeptDict deptDict=deptDictFacade.findByCode(deptCode);
                               if(deptDict!=null&&!"".equals(deptDict)){
-                                  lables.add(deptDict.getDeptName());
-                              }
+                                  if(!lables.contains(deptDict.getDeptName())){
+                                      lables.add(deptDict.getDeptName());
+                                  }
+                               }
                            }
                      }
                  }
              }
-            return lables;
-        }
-        return null;
+         }
+        return lables;
     }   /**
      * 根据PATID查询就诊记录
      * @param patId
