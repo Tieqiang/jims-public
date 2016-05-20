@@ -697,4 +697,5 @@ public class WxService {
         return snsToken;
     }
 
+//
 }

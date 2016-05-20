@@ -22,10 +22,11 @@ app.controller('tableCtrl', function ($scope, $http) {
             .success(function (data) {//appDoctInfoVO
                 if (data != 0) {
                     alert("取消成功！");
-                    $http.get("/api/clinic-for-regist/find-my-collection?find-my-collection&openId=" + openId)
-                        .success(function (data) {//appDoctInfoVO
-                            $scope.names = data;
-                        });
+//                    $http.get("/api/clinic-for-regist/find-my-collection?openId=" + openId)
+//                        .success(function (data) {//appDoctInfoVO
+//                            $scope.names = data;
+//                        });
+                    window.location.href="/api/wx-service/find-my-collection?openId="+openId;
                 }
             });
     }
