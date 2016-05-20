@@ -28,7 +28,7 @@ public class ClinicForRegistFacade extends BaseFacade {
     private ClinicIndexFacade clinicIndexFacade;
     private ClinicTypeChargeFacade clinicTypeChargeFacade;
     private ClinicScheduleFacade clinicScheduleFacade;
-    private ThreadLocal<Integer> shareData = new ThreadLocal<Integer>();
+//    private ThreadLocal<Integer> shareData = new ThreadLocal<Integer>();
 
     @Inject
     public ClinicForRegistFacade(EntityManager entityManager, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicScheduleFacade clinicScheduleFacade) {
@@ -58,11 +58,10 @@ public class ClinicForRegistFacade extends BaseFacade {
     @Transactional
     public List<ClinicForRegist> update(List<ClinicForRegist> updateData) {
         List<ClinicForRegist> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
+        if (updateData != null && updateData.size() > 0) {
             for (ClinicForRegist obj : updateData) {
                 ClinicForRegist merge = merge(obj);
                 newUpdateDict.add(merge);
-
             }
         }
         return newUpdateDict;
@@ -77,7 +76,6 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     @Transactional
     public List<String> delete(Class<ClinicForRegist> clazz, String ids) {
-        System.out.println("ids=" + ids);
         List<String> list = new ArrayList<String>();
         String[] idStr = ids.split(",");
         for (int j = 0; j < idStr.length; j++) {
@@ -98,7 +96,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         Map<String, Object> map = new HashMap<String, Object>();
         String sql = "from ClinicSchedule where dayOfWeek between '" + sdf.format(sdf.parse(date)) + "' and '" + sdf.format(sdf.parse(date1)) + "' and clinicIndex.id='" + clinicIndexId + "'";
         List<ClinicSchedule> list = entityManager.createQuery(sql).getResultList();
-        if (list.isEmpty()) {
+        if (list == null) {
             map.put("isRegist", false);
             map.put("msg", "当前日期不能生成号表!");
         } else {
@@ -124,18 +122,18 @@ public class ClinicForRegistFacade extends BaseFacade {
         try {
             List<Object[]> dayTimes = clinicScheduleFacade.queryDayAndTime(clinicIndexId);
             for (int i = 0; i < dayTimes.size(); i++) {
-                System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
+//                System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
                     //判断这个号别 这个时间 是否已经生成了号表
-                    boolean flag=judgeIsExists(clinicIndexId,registdateList.get(j));//
-                    if(!flag){
-                        ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j),registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
+                    boolean flag = judgeIsExists(clinicIndexId, registdateList.get(j));//
+                    if (!flag) {
+                        ClinicForRegist clinicForRegist = saveRecord(dayTimes.get(i)[2].toString(), new Date(), clinicIndexFacade.findById(clinicIndexId), registdateList.get(j), registdateList.get(j) + " " + dayTimes.get(i)[0].toString() + " " + dayTimes.get(i)[1].toString());
                         list.add(clinicForRegist);
                     }
-                 }
+                }
             }
-            if (!list.isEmpty()) {
+            if (list != null && !list.isEmpty()) {
                 map.put("isRegist", true);
             } else {
                 map.put("isRegist", false);
@@ -147,22 +145,21 @@ public class ClinicForRegistFacade extends BaseFacade {
         return map;
     }
 
-    /***
+    /**
      * 判断某个号别 某个时间的号表是否存在
-      * @param clinicIndexId
+     *
+     * @param clinicIndexId
      * @param date
      * @return if 存在 true else false
-     *
      */
     private boolean judgeIsExists(String clinicIndexId, String date) {
-        String hql="from ClinicForRegist where clinicIndex.id='"+clinicIndexId+"'and timeDesc like '%"+date+"%'";
-        System.out.println("hql="+hql);
-        List<ClinicForRegist>  list=entityManager.createQuery(hql).getResultList();
-        if(!list.isEmpty()){//已经存在
+        String hql = "from ClinicForRegist where clinicIndex.id='" + clinicIndexId + "'and timeDesc like '%" + date + "%'";
+//        System.out.println("hql="+hql);
+        List<ClinicForRegist> list = entityManager.createQuery(hql).getResultList();
+        if (list != null && !list.isEmpty())
             return true;
-        }
-        return  false;
-     }
+        return false;
+    }
 
     /**
      * @param parse clinicDate
@@ -171,7 +168,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
-    private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId,String registTime,String desc) {
+    private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId, String registTime, String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
@@ -392,51 +389,54 @@ public class ClinicForRegistFacade extends BaseFacade {
         return (ClinicForRegist) entityManager.createQuery("from  ClinicForRegist where id='" + id + "'").getSingleResult();
     }
 
+//    /**
+//     * 查找当前挂号人数
+//     *
+//     * @param dayOfWeek
+//     * @return
+//     */
+//    private Long findcurrentGuaHaoPs(String dayOfWeek) {
+//        String sql = null;
+//        try {
+//            sql = "select count(*) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        Long count = (Long) entityManager.createQuery(sql).getSingleResult();
+//        return count;
+//    }
     /**
-     * 查找当前挂号人数
-     *
-     * @param dayOfWeek
-     * @return
-     */
-    private Long findcurrentGuaHaoPs(String dayOfWeek) {
-        String sql = null;
-        try {
-            sql = "select count(*) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        Long count = (Long) entityManager.createQuery(sql).getSingleResult();
-        return count;
-    }
+     //     * 查找当前挂号人数
+     //     *
+     //     * @param dayOfWeek
+     //     * @return
+     //     */
+//    private Long findcurrentGuaHaoPs(String dayOfWeek) {
+//        String sql = null;
+//        try {
+//            sql = "select count(*) from ClinicForRegist where clinicDate like '%" + dayOfWeek + "%'";
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        Long count = (Long) entityManager.createQuery(sql).getSingleResult();
+//        return count;
+//    }
 
-    /**
-     * @param id
-     * @param flag
-     * @return
-     */
-    private ClinicForRegist findByclinicIndexIdAndDate(String id, int flag) {
-        List<ClinicForRegist> list = new ArrayList<ClinicForRegist>();
-        try {
-            list = entityManager.createQuery("from ClinicForRegist c where c.id='" + id + "'").getResultList();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return list.get(0);
-    }
+//    /**
+//     * @param id
+//     * @param flag
+//     * @return
+//     */
+//    private ClinicForRegist findByclinicIndexIdAndDate(String id, int flag) {
+//        List<ClinicForRegist> list = new ArrayList<ClinicForRegist>();
+//        try {
+//            list = entityManager.createQuery("from ClinicForRegist c where c.id='" + id + "'").getResultList();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return list.get(0);
+//    }
 
-    /**
-     * 更新当日挂号人数
-     *
-     * @param id
-     * @param i
-     */
-    @Transactional
-    public void updateNumbers(String id, int i) {
-        ClinicForRegist c = (ClinicForRegist) entityManager.createQuery("from ClinicForRegist where id='" + id + "'").getSingleResult();
-        c.setRegistrationNum(shareData.get());
-        save(c);
-        System.out.println("当前挂号人数为:" + shareData);
-    }
 
     /**
      * @param id
@@ -457,24 +457,24 @@ public class ClinicForRegistFacade extends BaseFacade {
         return c;
     }
 
-    /**
-     * 判断号表约束是否存在
-     *
-     * @param clinicTypeId
-     * @param clinicDate
-     * @param i
-     * @return
-     */
-    public Boolean isExists(String clinicTypeId, String clinicDate, int i) throws Exception {
-        String hql = "from ClinicForRegist c where c.clinicDate like '%" + clinicDate + "%'and c.clinicIndex.id='" + clinicTypeId + "'";
-        List<ClinicIndex> list = entityManager.createQuery
-                (hql)
-                .getResultList();
-        if (!list.isEmpty()) {
-            return false;
-        }
-        return true;
-    }
+//    /**
+//     * 判断号表约束是否存在
+//     *
+//     * @param clinicTypeId
+//     * @param clinicDate
+//     * @param i
+//     * @return
+//     */
+//    public Boolean isExists(String clinicTypeId, String clinicDate, int i) throws Exception {
+//        String hql = "from ClinicForRegist c where c.clinicDate like '%" + clinicDate + "%'and c.clinicIndex.id='" + clinicTypeId + "'";
+//        List<ClinicIndex> list = entityManager.createQuery
+//                (hql)
+//                .getResultList();
+//        if (!list.isEmpty()) {
+//            return false;
+//        }
+//        return true;
+//    }
 
     /**
      * 条件查询
@@ -559,31 +559,31 @@ public class ClinicForRegistFacade extends BaseFacade {
     }
 
     /**
-     *查找可以预约的号表
+     * 查找可以预约的号表
      * 从明天开始计算
+     *
      * @param currentDateStr
      * @param clinicIndexId
      * @return
      */
     public List<ClinicForRegist> findRegistInfoPre(String currentDateStr, String clinicIndexId) {
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists=entityManager.createQuery("from ClinicForRegist where registTime>'"+currentDateStr+"'  and clinicIndex.id='"+clinicIndexId+"' order by registTime asc").getResultList();
-        if(!clinicForRegists.isEmpty())
-          return clinicForRegists;
-          return null;
-     }
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>'" + currentDateStr + "'  and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+        if (!clinicForRegists.isEmpty())
+            return clinicForRegists;
+        return null;
+    }
 
     /**
-     *
      * @param date
      * @param clinicIndexId
      * @return
      */
     public List<ClinicForRegist> findRegistInfoCollection(String date, String clinicIndexId) {
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists=entityManager.createQuery("from ClinicForRegist where registTime>='"+date+"'  and clinicIndex.id='"+clinicIndexId+"' order by registTime asc").getResultList();
-        if(!clinicForRegists.isEmpty())
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "'  and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+        if (!clinicForRegists.isEmpty())
             return clinicForRegists;
-            return null;
-       }
+        return null;
+    }
 }

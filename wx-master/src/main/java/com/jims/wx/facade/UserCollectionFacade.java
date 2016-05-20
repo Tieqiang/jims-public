@@ -97,4 +97,19 @@ public class UserCollectionFacade extends BaseFacade {
         }
         return null;
      }
+
+    /**
+     *
+     * @param dodId
+     * @return
+     */
+    public boolean findISCollection(String dodId) {
+
+        String sql="from UserCollection where doctId='"+dodId+"'";
+        List<UserCollection> userCollections=entityManager.createQuery(sql).getResultList();
+        if(userCollections!=null&&!userCollections.isEmpty()){
+            return true;
+        }
+        return false;
+    }
 }

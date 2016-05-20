@@ -219,7 +219,7 @@ public class ClinicForRegistService {
 
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
 
-        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
+//        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
          /*
         * 获取当前日期 String
          */
@@ -260,14 +260,9 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                     appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                     appDoctInfoVo.setPatName(patInfo.getName());
-                    if(userCollections!=null&&!userCollections.isEmpty()) {
-                        for (UserCollection userCollection : userCollections) {
-                            if (userCollection.getDoctId().equals(doctInfo.getId())) {
-                                appDoctInfoVo.setCollectionDesc("已收藏");
-                            } else {
-                                appDoctInfoVo.setCollectionDesc("收藏");
-                            }
-                        }
+                    boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
+                    if(flag){
+                        appDoctInfoVo.setCollectionDesc("已收藏");
                     }else{
                         appDoctInfoVo.setCollectionDesc("收藏");
                     }
@@ -372,44 +367,44 @@ public class ClinicForRegistService {
         return map;
     }
 
-    /**
-     * 保存号表
-     *
-     * @param clinicTypeId
-     * @param date
-     * @param clinicForRegist
-     * @return
-     */
-    @POST
-    @Path("save")
-    public Response saveRequestMsg(@QueryParam("clinicTypeId") String clinicTypeId, @QueryParam("date") String date, ClinicForRegist clinicForRegist) {
-        try {
-            boolean returnVal = clinicForRegistFacade.isExists(clinicTypeId, date, 1);
-            if (returnVal) {
-                ClinicIndex ci = clinicIndexFacade.findById(clinicTypeId);
-                Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date + "00:00:00");
-                clinicForRegist.setClinicDate(d);
-                clinicForRegist.setClinicIndex(ci);
-                clinicForRegist.setCurrentNo(0);
-                clinicForRegist.setRegistrationNum(0);
-                clinicForRegistFacade.save(clinicForRegist);
-                return Response.status(Response.Status.OK).entity(clinicForRegist).build();
-            } else {
-                return Response.status(Response.Status.FORBIDDEN).entity(clinicForRegist).build();
-            }
-        } catch (Exception e) {
-            ErrorException errorException = new ErrorException();
-            errorException.setMessage(e);
-            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
-                errorException.setErrorMessage("输入数据超过长度！");
-            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，提交失败！");
-            } else {
-                errorException.setErrorMessage("提交失败！");
-            }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
-        }
-    }
+//    /**
+//     * 保存号表
+//     *
+//     * @param clinicTypeId
+//     * @param date
+//     * @param clinicForRegist
+//     * @return
+//     */
+//    @POST
+//    @Path("save")
+//    public Response saveRequestMsg(@QueryParam("clinicTypeId") String clinicTypeId, @QueryParam("date") String date, ClinicForRegist clinicForRegist) {
+//        try {
+//            boolean returnVal = clinicForRegistFacade.isExists(clinicTypeId, date, 1);
+//            if (returnVal) {
+//                ClinicIndex ci = clinicIndexFacade.findById(clinicTypeId);
+//                Date d = new SimpleDateFormat("yyyy-MM-dd").parse(date + "00:00:00");
+//                clinicForRegist.setClinicDate(d);
+//                clinicForRegist.setClinicIndex(ci);
+//                clinicForRegist.setCurrentNo(0);
+//                clinicForRegist.setRegistrationNum(0);
+//                clinicForRegistFacade.save(clinicForRegist);
+//                return Response.status(Response.Status.OK).entity(clinicForRegist).build();
+//            } else {
+//                return Response.status(Response.Status.FORBIDDEN).entity(clinicForRegist).build();
+//            }
+//        } catch (Exception e) {
+//            ErrorException errorException = new ErrorException();
+//            errorException.setMessage(e);
+//            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+//                errorException.setErrorMessage("输入数据超过长度！");
+//            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
+//                errorException.setErrorMessage("数据已存在，提交失败！");
+//            } else {
+//                errorException.setErrorMessage("提交失败！");
+//            }
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+//        }
+//    }
 
     /**
      * 批量删除
@@ -640,7 +635,7 @@ public class ClinicForRegistService {
 
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
 
-        List<UserCollection> userCollections=this.userCollectionFacade.findByOpenId(openId);
+//        List<UserCollection> userCollections=this.userCollectionFacade.findByOpenId(openId);
 
 
 
@@ -671,14 +666,9 @@ public class ClinicForRegistService {
                 appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                 appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                 appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                if(userCollections!=null&&!userCollections.isEmpty()){
-                    for(UserCollection userCollection:userCollections){
-                        if(userCollection.getDoctId().equals(doctInfo.getId())){
-                            appDoctInfoVo.setCollectionDesc("已收藏");
-                        }else{
-                            appDoctInfoVo.setCollectionDesc("收藏");
-                        }
-                    }
+                boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
+                if(flag){
+                    appDoctInfoVo.setCollectionDesc("已收藏");
                 }else{
                     appDoctInfoVo.setCollectionDesc("收藏");
                 }
@@ -719,7 +709,7 @@ public class ClinicForRegistService {
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
-        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
+//        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
         for (DoctInfo doctInfo : doctInfos) {
             for (ClinicIndex clinicIndex : list) {
@@ -732,15 +722,9 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                     appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    if(userCollections!=null&&!userCollections.isEmpty())
-                    {
-                        for(UserCollection userCollection:userCollections){
-                            if(userCollection.getDoctId().equals(doctInfo.getId())){
-                                appDoctInfoVo.setCollectionDesc("已收藏");
-                            }else{
-                                appDoctInfoVo.setCollectionDesc("收藏");
-                            }
-                        }
+                    boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
+                    if(flag){
+                        appDoctInfoVo.setCollectionDesc("已收藏");
                     }else{
                         appDoctInfoVo.setCollectionDesc("收藏");
                     }
@@ -783,7 +767,7 @@ public class ClinicForRegistService {
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
-        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
+//        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
         for (DoctInfo doctInfo : doctInfos) {
             for (ClinicIndex clinicIndex : list) {
                 if (clinicIndex.getDoctorId().equals(doctInfo.getId())) {//有号
@@ -803,20 +787,13 @@ public class ClinicForRegistService {
                         appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                         appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                         appDoctInfoVo.setPatName(patInfo.getName());
-                        if(userCollections!=null&&!userCollections.isEmpty())
-                        {
-                            for(UserCollection userCollection:userCollections){
-                                if(userCollection.getDoctId().equals(doctInfo.getId())){
-                                    appDoctInfoVo.setCollectionDesc("已收藏");
-                                }else{
-                                    appDoctInfoVo.setCollectionDesc("收藏");
-                                }
-                            }
-                        }else{
+                        boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
+                        if(flag){
+                            appDoctInfoVo.setCollectionDesc("已收藏");
+                         }else{
                             appDoctInfoVo.setCollectionDesc("收藏");
-                        }
-
-                        appDoctInfoVos.add(appDoctInfoVo);
+                         }
+                         appDoctInfoVos.add(appDoctInfoVo);
                     }
                 }
             }
