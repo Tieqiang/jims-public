@@ -92,6 +92,7 @@ public class MenuDictFacade extends BaseFacade {
 
     /**
      * 根据父ID,POSITION排序查询
+     *
      * @return
      */
     public List<MenuDict> findAllByPosition() {

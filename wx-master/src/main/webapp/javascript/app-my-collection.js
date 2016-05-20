@@ -24,11 +24,14 @@ app.controller('tableCtrl', function ($scope, $http) {
      * 查看医生信息
      * @param id
      */
-    $scope.info2=function (rid) {
-        　window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
-    }
+//    $scope.info2=function (rid){
+//        　window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
+//    }
+      $scope.info2=function(rid){//
+           window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
+      }
   //    collectNO  取消收藏
-    $scope.collectNO = function (doctId, clinicIndexId) {
+    $scope.collectNO = function (doctId, clinicIndexId) {//
         $http.get("/api/doct-info/baddon-collection?openId=" + openId + "&doctId=" + doctId)
             .success(function (data) {//appDoctInfoVO
                 if (data != 0) {

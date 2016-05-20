@@ -9,9 +9,8 @@ import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
 /**
- * ClinicForRegist entity. @author MyEclipse Persistence Tools
+ * ClinicForRegist  MyEclipse Persistence Tools
  */
-//@JsonIgnoreProperties(value={".*hibernateLazyInitializer"})
 @Entity
 @Table(name = "CLINIC_FOR_REGIST", schema = "WX")
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})

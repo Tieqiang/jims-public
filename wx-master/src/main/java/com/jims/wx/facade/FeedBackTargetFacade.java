@@ -20,17 +20,16 @@ public class FeedBackTargetFacade extends BaseFacade {
     }
 
     /**
-     *
      * @param feedTargetId
      * @return
      */
     public FeedBackTarget findByName(String feedTargetId) {
-        String sql="from FeedBackTarget where id='"+feedTargetId+"'";
-        return (FeedBackTarget)entityManager.createQuery(sql).getSingleResult();
-     }
+        String sql = "from FeedBackTarget where id='" + feedTargetId + "'";
+        return (FeedBackTarget) entityManager.createQuery(sql).getSingleResult();
+    }
 
     @Transactional
     public void save(FeedBackTarget feedBackTarget) {
-       merge(feedBackTarget);
-     }
+        merge(feedBackTarget);
+    }
 }

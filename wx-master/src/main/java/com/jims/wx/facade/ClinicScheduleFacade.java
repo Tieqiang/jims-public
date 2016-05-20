@@ -28,6 +28,7 @@ public class ClinicScheduleFacade extends BaseFacade {
         String sqls = "from ClinicSchedule where clinicIndexId=" + "'" + id + "'";
         return entityManager.createQuery(sqls).getResultList();
     }
+
     /**
      * @param clinicIndexId 号别ID
      * @return List<String[]>
@@ -40,6 +41,7 @@ public class ClinicScheduleFacade extends BaseFacade {
         List<Object[]> list = entityManager.createQuery(hql).getResultList();
         return list;
     }
+
     /**
      * 保存增删改
      *
@@ -147,21 +149,20 @@ public class ClinicScheduleFacade extends BaseFacade {
 
     /**
      * 根据号别的id 查询出诊时间
+     *
      * @param clinicIndexId
-     * @return
-     * private String dayOfWeek;
-    private String timeOfDay;
+     * @return private String dayOfWeek;
+     * private String timeOfDay;
      */
     public String findTime(String clinicIndexId) {
-//        ClinicSchedule
-        String time="";
-        String sql="from ClinicSchedule where clinicIndexId='"+clinicIndexId+"'";
-        List<ClinicSchedule> list=entityManager.createQuery(sql).getResultList();
-        for(ClinicSchedule clinicSchedule:list){
-             time+=clinicSchedule.getDayOfWeek()+clinicSchedule.getTimeOfDay()+";";
+        String time = "";
+        String sql = "from ClinicSchedule where clinicIndexId='" + clinicIndexId + "'";
+        List<ClinicSchedule> list = entityManager.createQuery(sql).getResultList();
+        for (ClinicSchedule clinicSchedule : list) {
+            time += clinicSchedule.getDayOfWeek() + clinicSchedule.getTimeOfDay() + ";";
         }
-        if(time!=null&&!"".equals(time)){
-            time=time.substring(0,time.length()-1);
+        if (time != null && !"".equals(time)) {
+            time = time.substring(0, time.length() - 1);
         }
         return time;
     }

@@ -43,7 +43,7 @@ public class AppConfigerBaseinfoFacade extends BaseFacade {
     @Transactional
     public List<AppConfigerBaseinfo> saveAppConfigerBaseinfo(List<AppConfigerBaseinfo> appConfigerBaseinfoList){
         List<AppConfigerBaseinfo> newUpdateDict = new ArrayList<>();
-        if (appConfigerBaseinfoList.size() > 0) {
+        if (appConfigerBaseinfoList!=null&&appConfigerBaseinfoList.size() > 0) {
             for(AppConfigerBaseinfo appConfigerBaseinfo: appConfigerBaseinfoList){
                 AppConfigerBaseinfo merge = merge(appConfigerBaseinfo);
                 newUpdateDict.add(merge);
@@ -66,7 +66,7 @@ public class AppConfigerBaseinfoFacade extends BaseFacade {
     public List<AppConfigerBaseinfo> updateAppConfigerBaseinfo(List<AppConfigerBaseinfo> updateData) {
 
         List<AppConfigerBaseinfo> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
+        if (updateData!=null&&updateData.size() > 0) {
             for (AppConfigerBaseinfo appConfigerBaseinfo : updateData) {
                 AppConfigerBaseinfo merge = merge(appConfigerBaseinfo);
                 newUpdateDict.add(merge);
@@ -80,7 +80,7 @@ public class AppConfigerBaseinfoFacade extends BaseFacade {
     public List<AppConfigerBaseinfo> deleteAppConfigerBaseinfo(List<AppConfigerBaseinfo> deleteData) {
 
         List<AppConfigerBaseinfo> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
+        if (deleteData!=null&&deleteData.size() > 0) {
             List<String> ids = new ArrayList<>();
             for (AppConfigerBaseinfo appConfigerBaseinfo : deleteData) {
                 ids.add(appConfigerBaseinfo.getId());

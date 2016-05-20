@@ -18,47 +18,47 @@ import java.util.Map;
 public class HospitalStaffFacade extends BaseFacade {
 
     private EntityManager entityManager;
+
     @Inject
     public HospitalStaffFacade(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
 
-    public Map<String,Object> findById(String personId,String openId) {
-        Map<String,Object> map=new HashMap<String,Object>();
-        List<HospitalStaff> list=  entityManager.createQuery("from HospitalStaff where personId='"+personId+"'").getResultList();
-        if(list!=null&&!list.isEmpty()){
-            String openIdStr=list.get(0).getOpenId();
-            if(openIdStr.equals(openId)){//已经绑定过
-                map.put("message","您已经绑定！");
-                map.put("success",false);
-            }else if(openIdStr!=null&&!"".equals(openIdStr)&&!openIdStr.equals(openId)){
-                map.put("message","已被别人绑定！");
-                map.put("success",false);
-            }else{
-                map.put("success",true);
+    public Map<String, Object> findById(String personId, String openId) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<HospitalStaff> list = entityManager.createQuery("from HospitalStaff where personId='" + personId + "'").getResultList();
+        if (list != null && !list.isEmpty()) {
+            String openIdStr = list.get(0).getOpenId();
+            if (openIdStr.equals(openId)) {//已经绑定过
+                map.put("message", "您已经绑定！");
+                map.put("success", false);
+            } else if (openIdStr != null && !"".equals(openIdStr) && !openIdStr.equals(openId)) {
+                map.put("message", "已被别人绑定！");
+                map.put("success", false);
+            } else {
+                map.put("success", true);
             }
-        }else{
-            map.put("message","员工idCard不存在！");
-            map.put("success",false);
+        } else {
+            map.put("message", "员工idCard不存在！");
+            map.put("success", false);
         }
         return map;
     }
 
     public List<HospitalStaff> findByOpenId(String openId) {
-//        HospitalStaff
-        return  entityManager.createQuery("from HospitalStaff where openId='"+openId+"'").getResultList();
+        return entityManager.createQuery("from HospitalStaff where openId='" + openId + "'").getResultList();
     }
 
 
     @Transactional
-    public HospitalStaff save(HospitalStaff hospitalStaff){
+    public HospitalStaff save(HospitalStaff hospitalStaff) {
         hospitalStaff = super.merge(hospitalStaff);
         return hospitalStaff;
     }
 
     //根据主键id查询
     public List<HospitalStaff> getById(String id) {
-        return  entityManager.createQuery("from HospitalStaff where id='"+id+"'").getResultList();
+        return entityManager.createQuery("from HospitalStaff where id='" + id + "'").getResultList();
     }
 
     @Transactional

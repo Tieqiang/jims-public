@@ -40,7 +40,6 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     public String findIdCard(String patId) {
-//        PatInfo patInfo;
         String sql = "select p.idCard from PatInfo as p where p.id='" + patId + "'";
         return (String) entityManager.createQuery(sql).getSingleResult();
     }
@@ -53,36 +52,39 @@ public class PatInfoFacade extends BaseFacade {
      */
     public PatInfo findById(String patId) {
         String sql = "from PatInfo where id='" + patId + "' and flag='0'";
-        return (PatInfo) entityManager.createQuery(sql).getSingleResult();
+        Object result = entityManager.createQuery(sql).getSingleResult();
+        if (result != null && !"".equals(result))
+            return (PatInfo) result;
+        return null;
     }
-      /**
+
+    /**
      * @param list
      */
     @Transactional
     public void delete(List<PatInfo> list) {
         for (PatInfo patInfo : list) {
-              patInfo.setFlag("1");
-              merge(patInfo);
+            patInfo.setFlag("1");
+            merge(patInfo);
         }
     }
 
     public List<PatInfoVo> findByOpenId(String openId) {
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
-//        appuser.getId();
         String sql = "select c.id,c.cellphone,c.name,c.sex from  pat_vs_user b ,pat_info c  where  b.pat_id=c.id and  b.user_id='" + appuser.getId() + "' and c.flag='0'";
-//        String sql="select * from pat_vs_user a ,pat_info b where a.Pat_id=b.id and USER_ID='"+appuser.getId()+"'";
-//        System.out.print(sql);
         List<PatInfoVo> patInfos = new ArrayList<>();
         Query qu = entityManager.createNativeQuery(sql);
         List<Object[]> resultList = qu.getResultList();
-        for (Object[] objects : resultList) {
-            objects = objects;
-            PatInfoVo patInfoVo = new PatInfoVo();
-            patInfoVo.setId(objects[0] == null ? null : objects[0].toString());
-            patInfoVo.setCellphone(objects[1] == null ? null : objects[1].toString());
-            patInfoVo.setName(objects[2] == null ? null : objects[2].toString());
-            patInfoVo.setSex(objects[3] == null ? null : objects[3].toString());
-            patInfos.add(patInfoVo);
+        if (resultList != null && !resultList.isEmpty()) {
+            for (Object[] objects : resultList) {
+                objects = objects;
+                PatInfoVo patInfoVo = new PatInfoVo();
+                patInfoVo.setId(objects[0] == null ? null : objects[0].toString());
+                patInfoVo.setCellphone(objects[1] == null ? null : objects[1].toString());
+                patInfoVo.setName(objects[2] == null ? null : objects[2].toString());
+                patInfoVo.setSex(objects[3] == null ? null : objects[3].toString());
+                patInfos.add(patInfoVo);
+            }
         }
 
         return patInfos;
@@ -95,8 +97,7 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     @Transactional
-    public void deleteByObject(PatInfo patInfo)
-    {
+    public void deleteByObject(PatInfo patInfo) {
         patInfo.setFlag("1");
         entityManager.merge(patInfo);
     }
@@ -107,7 +108,7 @@ public class PatInfoFacade extends BaseFacade {
      */
     public PatInfo findByIdCard(String idCard) {
         List<PatInfo> list = entityManager.createQuery("from PatInfo where idCard='" + idCard + "' and flag='0'").getResultList();
-        if (!list.isEmpty())
+        if (list != null && !list.isEmpty())
             return list.get(0);
         return null;
     }
@@ -126,16 +127,14 @@ public class PatInfoFacade extends BaseFacade {
     }
 
     /**
-     *
      * @param idCard
      * @return
      */
     public PatInfo findByFlag(String idCard) {
-         String sql="from PatInfo where flag='1' and idCard='"+idCard+"'";
-         List<PatInfo> list = entityManager.createQuery(sql).getResultList();
-         if(list!=null&&!list.isEmpty()){
-             return list.get(0);
-         }
-         return null;
+        String sql = "from PatInfo where flag='1' and idCard='" + idCard + "'";
+        List<PatInfo> list = entityManager.createQuery(sql).getResultList();
+        if (list != null && !list.isEmpty())
+            return list.get(0);
+        return null;
     }
 }

@@ -20,6 +20,7 @@ import java.util.Set;
 public class ModuleDictFacade extends BaseFacade {
     /**
      * 查找
+     *
      * @param name
      * @return
      */
@@ -28,14 +29,15 @@ public class ModuleDictFacade extends BaseFacade {
         if (name != null && name.trim().length() > 0) {
             hql += " and dict.moduleName like '%" + name.trim() + "%'";
         }
-        if(null !=hospitalId && !hospitalId.trim().equals("")){
-            hql += " and dict.hospitalId='"+hospitalId+"'";
+        if (null != hospitalId && !hospitalId.trim().equals("")) {
+            hql += " and dict.hospitalId='" + hospitalId + "'";
         }
         Query query = entityManager.createQuery(hql);
         List resultList = query.getResultList();
         return resultList;
     }
-    public List<ModulDict> findAllTabs(String loginId,String moduleId, String hospitalId) {
+
+    public List<ModulDict> findAllTabs(String loginId, String moduleId, String hospitalId) {
         //String hql = "select module_load ,menu_name module_name from Modul_Dict,menu_dict where Modul_Dict.MODULE_LOAD = menu_dict.HREF and";
         //if (name != null && name.trim().length() > 0) {
         //    hql += "  Modul_Dict.module_Name like '%" + name.trim() + "%'";
@@ -44,20 +46,21 @@ public class ModuleDictFacade extends BaseFacade {
         //    hql += " and Modul_Dict.hospital_Id='"+hospitalId+"'";
         //}
         //List<ModulDict> nativeQuery = super.createNativeQuery(hql, new ArrayList<Object>(), ModulDict.class);
-        String sql ="select a.module_load, b.menu_name module_name\n" +
+        String sql = "select a.module_load, b.menu_name module_name\n" +
                 "  from modul_dict a, menu_dict b, role_vs_menu c, staff_vs_role d\n" +
                 " where a.module_load = b.href\n" +
                 "   and b.id = c.menu_id\n" +
                 "   and c.role_id = d.role_id\n" +
-                "   and d.staff_id = '"+loginId+"'" +
-                "   and a.id='"+moduleId+"' " +
-                "   and a.hospital_id='"+hospitalId+"'" ;
+                "   and d.staff_id = '" + loginId + "'" +
+                "   and a.id='" + moduleId + "' " +
+                "   and a.hospital_id='" + hospitalId + "'";
         List<ModulDict> nativeQuery = super.createNativeQuery(sql, new ArrayList<Object>(), ModulDict.class);
         return nativeQuery;
     }
 
     /**
      * 根据医院编号和员工编号查询模块列表
+     *
      * @param staffId
      * @param hospitalId
      * @return
@@ -76,6 +79,7 @@ public class ModuleDictFacade extends BaseFacade {
 
     /**
      * 保存模块儿维护信息
+     *
      * @param modulDict
      */
     @Transactional
@@ -85,58 +89,60 @@ public class ModuleDictFacade extends BaseFacade {
         List<ModulDict> updated = modulDict.getUpdated();
         List<ModulDict> deleted = modulDict.getDeleted();
 
-        inserted.addAll(updated) ;
-        for(ModulDict dict:inserted){
+        inserted.addAll(updated);
+        for (ModulDict dict : inserted) {
             dict.setInputCode(PinYin2Abbreviation.cn2py(dict.getModuleName()));
-            merge(dict) ;
+            merge(dict);
         }
 
-        List<String> ids= new ArrayList<>() ;
+        List<String> ids = new ArrayList<>();
 
-        for(ModulDict dict:deleted){
-            ids.add(dict.getId()) ;
+        for (ModulDict dict : deleted) {
+            ids.add(dict.getId());
         }
 
-        if(ids.size()>0){
-            super.removeByStringIds(ModulDict.class,ids);
+        if (ids.size() > 0) {
+            super.removeByStringIds(ModulDict.class, ids);
         }
     }
 
 
     /**
      * 保存模块与菜单的对照关系表
+     *
      * @param moduleId
      * @param menuIds
      * @return
      */
     @Transactional
     public List<ModuleVsMenu> saveModuleVsMenu(String moduleId, List<String> menuIds) {
-        ModulDict modulDict = get(ModulDict.class,moduleId) ;
-        List<ModuleVsMenu> moduleVsMenus = new ArrayList<>() ;
+        ModulDict modulDict = get(ModulDict.class, moduleId);
+        List<ModuleVsMenu> moduleVsMenus = new ArrayList<>();
 
         //先删除已经分配的菜单
         Set<ModuleVsMenu> moduleVsMenus1 = modulDict.getModuleVsMenus();
-        List<String> ids = new ArrayList<>() ;
-        for(ModuleVsMenu moduleVsMenu:moduleVsMenus1){
+        List<String> ids = new ArrayList<>();
+        for (ModuleVsMenu moduleVsMenu : moduleVsMenus1) {
             remove(moduleVsMenu);
         }
 
-        Set<ModuleVsMenu> moduleVsMenuSet = new HashSet<>() ;
-        for(String menuId :menuIds){
-            ModuleVsMenu moduleVsMenu = new ModuleVsMenu() ;
-            MenuDict menuDict = get(MenuDict.class,menuId) ;
+        Set<ModuleVsMenu> moduleVsMenuSet = new HashSet<>();
+        for (String menuId : menuIds) {
+            ModuleVsMenu moduleVsMenu = new ModuleVsMenu();
+            MenuDict menuDict = get(MenuDict.class, menuId);
             moduleVsMenu.setModulDict(modulDict);
             moduleVsMenu.setMenuDict(menuDict);
-            moduleVsMenus.add(moduleVsMenu) ;
-            moduleVsMenuSet.add(moduleVsMenu) ;
+            moduleVsMenus.add(moduleVsMenu);
+            moduleVsMenuSet.add(moduleVsMenu);
         }
         modulDict.setModuleVsMenus(moduleVsMenuSet);
-        merge(modulDict) ;
+        merge(modulDict);
         return moduleVsMenus;
     }
 
     /**
      * 保存模块与staff的对照关系表
+     *
      * @param moduleId
      * @param staffIds
      * @return
@@ -170,6 +176,7 @@ public class ModuleDictFacade extends BaseFacade {
 
     /**
      * 根据模块ID查出所有的模块菜单关系数据
+     *
      * @param moduleId
      * @return
      */

@@ -14,17 +14,21 @@ public class AnswerResultFacade extends BaseFacade {
     private EntityManager entityManager;
 
     @Inject
-    public AnswerResultFacade (EntityManager entityManager){
-        this.entityManager=entityManager;
+    public AnswerResultFacade(EntityManager entityManager) {
+        this.entityManager = entityManager;
     }
 
     @Transactional
-    public AnswerResult save(AnswerResult answerResult){
-        answerResult=super.merge(answerResult);
+    public AnswerResult save(AnswerResult answerResult) {
+        answerResult = super.merge(answerResult);
         return answerResult;
     }
 
     public AnswerResult findById(String id) {
-        return  (AnswerResult)entityManager.createQuery("from AnswerResult where answerSheetId='"+id+"'").getSingleResult();
+        Object result = entityManager.createQuery("from AnswerResult where answerSheetId='" + id + "'").getSingleResult();
+        if (result != null)
+            return (AnswerResult) result;
+        return null;
+
     }
 }

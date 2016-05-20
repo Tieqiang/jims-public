@@ -20,6 +20,7 @@ public class DoctInfoFacade extends BaseFacade {
 
     /**
      * 保存 修改
+     *
      * @param doctInfo
      * @return
      */
@@ -30,15 +31,14 @@ public class DoctInfoFacade extends BaseFacade {
 
     /**
      * 根据 医生姓名和所在编号模糊查询
+     *
      * @param clazz
      * @param name
      * @param hospitalId
      * @return
      */
-    public List<DoctInfo> queryByCondition(Class<DoctInfo> clazz,String name,String hospitalId) {
-        String sql= "from DoctInfo where  1=1";
-//        String property = orderBy.get("property");
-//        String orderMethod = orderBy.get("method");
+    public List<DoctInfo> queryByCondition(Class<DoctInfo> clazz, String name, String hospitalId) {
+        String sql = "from DoctInfo where  1=1";
         if (StringUtils.isNotBlank(name)) {
             sql += " and name like '%" + name + "%'";
         }
@@ -61,6 +61,7 @@ public class DoctInfoFacade extends BaseFacade {
 
     /**
      * 根据 ids 批量或单条删除
+     *
      * @param doctInfoClass
      * @param list
      */
@@ -71,33 +72,34 @@ public class DoctInfoFacade extends BaseFacade {
 
     /**
      * 根据id 查询医生信息
+     *
      * @param doctId
      * @return
      */
     public DoctInfo findById(String doctId) {
-         return (DoctInfo)entityManager.createQuery("from DoctInfo where id='"+doctId+"'").getSingleResult();
+        return (DoctInfo) entityManager.createQuery("from DoctInfo where id='" + doctId + "'").getSingleResult();
     }
 
     /**
      * 模糊查询医生的集合
-     * @param likeSearch
-     * @return
-     */
-    public List<DoctInfo> queryLike(String likeSearch) {
-        List<DoctInfo> doctInfos=null;
-        String sql="from DoctInfo where name like '%"+likeSearch+"%'";
-        doctInfos=entityManager.createQuery(sql).getResultList();
-        return doctInfos;
-     }
-
-    /**
      *
      * @param likeSearch
      * @return
      */
+    public List<DoctInfo> queryLike(String likeSearch) {
+        List<DoctInfo> doctInfos = null;
+        String sql = "from DoctInfo where name like '%" + likeSearch + "%'";
+        doctInfos = entityManager.createQuery(sql).getResultList();
+        return doctInfos;
+    }
+
+    /**
+     * @param likeSearch
+     * @return
+     */
     public List<DoctInfo> findDoctByLike(String likeSearch) {
-        String sql="from DoctInfo where name like '%"+likeSearch+"%'";
-        List<DoctInfo> list=entityManager.createQuery(sql).getResultList();
+        String sql = "from DoctInfo where name like '%" + likeSearch + "%'";
+        List<DoctInfo> list = entityManager.createQuery(sql).getResultList();
         return list;
     }
 }

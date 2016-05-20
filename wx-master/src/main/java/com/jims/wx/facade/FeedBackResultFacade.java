@@ -22,11 +22,11 @@ public class FeedBackResultFacade extends BaseFacade {
 
     @Transactional
     public void save(FeedBackResult f) {
-            merge(f);
+        merge(f);
     }
 
     @Transactional
     public void removeByIds(Class<FeedBackResult> feedBackResultClass, List<String> list) {
-        removeByStringIds(feedBackResultClass,list);
+        removeByStringIds(feedBackResultClass, list);
     }
 }

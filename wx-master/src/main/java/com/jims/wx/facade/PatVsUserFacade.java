@@ -26,6 +26,7 @@ public class PatVsUserFacade extends BaseFacade {
 
 
 
+
     @Transactional
     public PatInfo save(PatInfo patInfo) {
          return entityManager.merge(patInfo);

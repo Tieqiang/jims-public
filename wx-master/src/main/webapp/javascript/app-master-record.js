@@ -14,6 +14,7 @@ var openId = GetQueryString("openId");
 app.controller('tableCtrl', function ($scope, $http) {
     $http.get("/api/rcpt-master/find-by-open-id?openId=" + openId)
         .success(function (data) {
+            console.info(data);
              $scope.nameList = data;
         });
      // 科室名称

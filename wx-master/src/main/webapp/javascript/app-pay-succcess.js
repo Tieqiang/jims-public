@@ -40,7 +40,13 @@ $(function(){
             $("#prepareId").html(prepareId);
         }
     });
+
+
 });
+
+ function myregist(){
+      window.location.href="/api/wx-service/regist-list?openId="+openId;
+ }
 
 
 

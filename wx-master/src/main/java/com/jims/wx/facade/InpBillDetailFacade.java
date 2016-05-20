@@ -17,19 +17,18 @@ import java.util.Objects;
  */
 public class InpBillDetailFacade extends BaseFacade {
 
-    public List<InpBillDetailVo> listInpBillVo(String patientId,double visitId){
+    public List<InpBillDetailVo> listInpBillVo(String patientId, double visitId) {
         String sql = "select  a.patient_id as patientId,a.visit_id as visitId,a.item_name as itemName ," +
                 "a.amount as amount, a.units as units , a.costs as costs,a.charges as charges" +
-                " from INPBILL.inp_bill_detail a where patient_id ='"+patientId+"' and visit_id='"+visitId+"'" ;
-        List<InpBillDetailVo> inpBillDetailVos = new ArrayList<>() ;
+                " from INPBILL.inp_bill_detail a where patient_id ='" + patientId + "' and visit_id='" + visitId + "'";
+        List<InpBillDetailVo> inpBillDetailVos = new ArrayList<>();
         Query qu = createNativeQuery(sql);
         List<Objects[]> resultList = qu.getResultList();
-        for(Object[] objects:resultList){
-            InpBillDetailVo inpBillDetailVo = new InpBillDetailVo(objects[0].toString(),Double.parseDouble(objects[1].toString()),objects[2].toString(),Double.parseDouble(objects[3].toString()),objects[4].toString(),Double.parseDouble(objects[5].toString()),Double.parseDouble(objects[6].toString())) ;
+        for (Object[] objects : resultList) {
+            InpBillDetailVo inpBillDetailVo = new InpBillDetailVo(objects[0].toString(), Double.parseDouble(objects[1].toString()), objects[2].toString(), Double.parseDouble(objects[3].toString()), objects[4].toString(), Double.parseDouble(objects[5].toString()), Double.parseDouble(objects[6].toString()));
             inpBillDetailVos.add(inpBillDetailVo);
         }
         return inpBillDetailVos;
-//        return createNativeQuery(sql,new ArrayList<Object>(),InpBillVo.class) ;
     }
 
 

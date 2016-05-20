@@ -166,9 +166,9 @@ public class AppUserFacade extends BaseFacade {
      */
     public AppUser findAppUserByOpenId(String openId) {
        Object obj=entityManager.createQuery("from AppUser where openId='"+openId+"'").getSingleResult();
-        if(obj!=null){
+        if(obj!=null)
             return (AppUser)obj;
-        }
+
         return null;
      }
 

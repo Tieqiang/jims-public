@@ -22,23 +22,23 @@ public class DeptDictFacade extends BaseFacade {
     public DeptDictFacade(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
+
     /**
-     *
      * @param deptId
      * @return
      */
     public DeptDict findById(String deptId) {
-        if(deptId=="" || deptId==null){
+        if (deptId == "" || deptId == null) {
             return null;
         }
-//        deptId=deptId.replace("","");
-//        Integer deptId2=Integer.parseInt(deptId);
-        DeptDict d=(DeptDict)entityManager.createQuery("select d from DeptDict as d where d.id='"+deptId+"'").getSingleResult();
-        if(d==null){
+
+        DeptDict d = (DeptDict) entityManager.createQuery("select d from DeptDict as d where d.id='" + deptId + "'").getSingleResult();
+        if (d == null) {
             return null;
         }
         return d;
     }
+
     /**
      * 根据 医院获取该医院的所有科室
      *
@@ -46,7 +46,6 @@ public class DeptDictFacade extends BaseFacade {
      * @return
      */
     public List<DeptDict> findByHospitalId(String hospitalId) {
-        //String hql = "from DeptDict as dept where dept.hospitalDict.id='" + hospitalId + "'";
         String hql = "from DeptDict as dept ";
         Query query = entityManager.createQuery(hql);
         List resultList = query.getResultList();
@@ -94,13 +93,14 @@ public class DeptDictFacade extends BaseFacade {
      */
     public List<DeptDict> findByHospitalIdWithRecked(String hospitalId) {
         String hql = "from DeptDict as dept where dept.hospitalDict.id = '" + hospitalId + "' and dept.id not in (select distinct d.deptDictId from AcctDeptVsDeptDict as d )";
-        Query query = entityManager.createQuery(hql) ;
-        return query.getResultList() ;
+        Query query = entityManager.createQuery(hql);
+        return query.getResultList();
     }
 
 
     /**
      * 查询出某一个核算单元对照的科室
+     *
      * @param hospitalId
      * @param acctDeptId
      * @return
@@ -108,7 +108,7 @@ public class DeptDictFacade extends BaseFacade {
     public List<DeptDict> findByHospitalIdAndAcctDeptId(String hospitalId, String acctDeptId) {
 
         String hql = "select dept from DeptDict as dept,AcctDeptVsDeptDict vs where dept.id=vs.deptDictId and " +
-                "vs.acctDeptId='"+acctDeptId+"' and dept.hospitalDict.id='"+hospitalId+"'"  ;
+                "vs.acctDeptId='" + acctDeptId + "' and dept.hospitalDict.id='" + hospitalId + "'";
 
         Query query = entityManager.createQuery(hql);
         return query.getResultList();
@@ -116,26 +116,28 @@ public class DeptDictFacade extends BaseFacade {
 
     /**
      * 根据deptId 查询deptName
+     *
      * @param deptId
      * @return
      */
     public String findDeptDictByDeptId(String deptId) {
 //        DeptDict
-        DeptDict deptDict=(DeptDict)entityManager.createQuery("from DeptDict where id='"+deptId+"'").getSingleResult();
-        if(deptDict!=null)
+        DeptDict deptDict = (DeptDict) entityManager.createQuery("from DeptDict where id='" + deptId + "'").getSingleResult();
+        if (deptDict != null)
             return deptDict.getDeptName();
-            return "";
-     }
+        return "";
+    }
 
     /**
      * 根据科室的deptCode 来查询科室
+     *
      * @param clinicDept
      * @return
      */
     public DeptDict findByCode(String clinicDept) {
-        String sql="from DeptDict where deptCode='"+clinicDept+"'";
-        List<DeptDict> list=entityManager.createQuery(sql).getResultList();
-        if(!list.isEmpty()){
+        String sql = "from DeptDict where deptCode='" + clinicDept + "'";
+        List<DeptDict> list = entityManager.createQuery(sql).getResultList();
+        if (!list.isEmpty()) {
             return list.get(0);
         }
         return null;
@@ -143,22 +145,24 @@ public class DeptDictFacade extends BaseFacade {
 
     /**
      * 模糊查询科室
+     *
      * @param likeSearch
      * @return
      */
     public List<DeptDict> queryLike(String likeSearch) {
-        List<DeptDict>  deptDicts=null;
-        String sql="from DeptDict where deptName like '%"+likeSearch+"%' and parentId is null";
-        deptDicts=entityManager.createQuery(sql).getResultList();
+        List<DeptDict> deptDicts = null;
+        String sql = "from DeptDict where deptName like '%" + likeSearch + "%' and parentId is null";
+        deptDicts = entityManager.createQuery(sql).getResultList();
         return deptDicts;
-     }
+    }
 
     /**
      * 如果有二级科室
+     *
      * @return
      */
     public List<DeptDict> findAllByCondition() {
-        String sql="from DeptDict where parentId is null";
+        String sql = "from DeptDict where parentId is null";
         return entityManager.createQuery(sql).getResultList();
     }
 }

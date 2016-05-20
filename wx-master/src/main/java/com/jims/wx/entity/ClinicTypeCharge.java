@@ -54,16 +54,6 @@ public class ClinicTypeCharge implements java.io.Serializable {
 		this.id = id;
 	}
 
-//    @JsonBackReference
-//	@ManyToOne(fetch = FetchType.LAZY)
-//	@JoinColumn(name = "CLINIC_TYPE_ID")
-	/*public ClinicTypeSetting getClinicTypeSetting() {
-		return this.clinicTypeSetting;
-	}
-
-	public void setClinicTypeSetting(ClinicTypeSetting clinicTypeSetting) {
-		this.clinicTypeSetting = clinicTypeSetting;
-	}*/
 
 	@Column(name = "CLINIC_TYPE_NAME", length = 100)
 	public String getClinicTypeName() {
@@ -110,7 +100,6 @@ public class ClinicTypeCharge implements java.io.Serializable {
 		this.price = price;
 	}
 
-//    @Transient
     @Column(name = "CLINIC_TYPE_ID", length = 64)
     public String getClinicTypeId() {
         return clinicTypeId;

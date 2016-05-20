@@ -21,6 +21,7 @@ public class MedicalCardMemoFacade extends BaseFacade {
 
     /**
      * save
+     *
      * @param medicalCardMemo
      */
     @Transactional

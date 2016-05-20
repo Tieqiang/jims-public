@@ -75,8 +75,7 @@ public class PatInfoService {
 
     /**
      * 保存患者信息
-     *
-     * @param openId
+      * @param openId
      * @param name
      * @param idCard
      * @param cellphone

@@ -28,7 +28,7 @@ public class ClinicMasterFacade extends BaseFacade {
         this.entityManager = entityManager;
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
-        this.patInfoFacade=patInfoFacade;
+        this.patInfoFacade = patInfoFacade;
     }
 
     /**
@@ -119,23 +119,24 @@ public class ClinicMasterFacade extends BaseFacade {
 
     /**
      * 查找我的挂号记录
-       * @param patientIds
+     *
+     * @param patientIds
      * @return
      */
-    public Map<String,Object> findMyRegist(List<String> patientIds) {
-        Map<String,Object> map=new HashMap<String,Object>();
-        List<ClinicMasterVo> today=new ArrayList<ClinicMasterVo>();
-        List<ClinicMasterVo> history=new ArrayList<ClinicMasterVo>();
-        String patientIdStr="";
-        for(String str:patientIds){
-            patientIdStr+="'"+str+"'"+",";
+    public Map<String, Object> findMyRegist(List<String> patientIds) {
+        Map<String, Object> map = new HashMap<String, Object>();
+        List<ClinicMasterVo> today = new ArrayList<ClinicMasterVo>();
+        List<ClinicMasterVo> history = new ArrayList<ClinicMasterVo>();
+        String patientIdStr = "";
+        for (String str : patientIds) {
+            patientIdStr += "'" + str + "'" + ",";
         }
-        if(patientIdStr==null || patientIdStr==""){
+        if (patientIdStr == null || patientIdStr == "") {
             return null;
         }
-        patientIdStr=patientIdStr.substring(0,patientIdStr.length()-1);
-        String  todayHql="from ClinicMaster where patientId in ("+patientIdStr+")and to_char(registDate,'YYYY-MM-DD') like '%" + sdf.format(new Date()) + "%'";
-        List<ClinicMaster> clinicMasters=entityManager.createQuery(todayHql).getResultList();
+        patientIdStr = patientIdStr.substring(0, patientIdStr.length() - 1);
+        String todayHql = "from ClinicMaster where patientId in (" + patientIdStr + ") and to_char(registDate,'YYYY-MM-DD') like '%" + sdf.format(new Date()) + "%'";
+        List<ClinicMaster> clinicMasters = entityManager.createQuery(todayHql).getResultList();
         for (ClinicMaster clinicMaster : clinicMasters) {
             ClinicMasterVo c = new ClinicMasterVo();
             c.setClinicLabel(clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
@@ -143,11 +144,11 @@ public class ClinicMasterFacade extends BaseFacade {
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             today.add(c);
         }
-        map.put("today",today);
+        map.put("today", today);
 
-        String  historyHql="from ClinicMaster where patientId in ("+patientIdStr+") and to_char(registDate,'YYYY-MM-DD') < '"+sdf.format(new Date())+"'";
+        String historyHql = "from ClinicMaster where patientId in (" + patientIdStr + ") and to_char(registDate,'YYYY-MM-DD') < '" + sdf.format(new Date()) + "'";
 
-        List<ClinicMaster> clinicMasters2=entityManager.createQuery(historyHql).getResultList();
+        List<ClinicMaster> clinicMasters2 = entityManager.createQuery(historyHql).getResultList();
 
         for (ClinicMaster clinicMaster : clinicMasters2) {
             ClinicMasterVo c = new ClinicMasterVo();
@@ -156,7 +157,7 @@ public class ClinicMasterFacade extends BaseFacade {
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             history.add(c);
         }
-        map.put("history",history);
+        map.put("history", history);
         return map;
     }
 }

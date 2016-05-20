@@ -112,10 +112,10 @@ public class RcptMasterService {
                            }
                      }
                  }
-                return lables;
+
             }
         }
-        return null;
+        return lables;
     }   /**
      * 根据PATID查询就诊记录
      * @param patId

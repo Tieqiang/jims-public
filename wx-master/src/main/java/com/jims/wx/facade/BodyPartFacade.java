@@ -34,10 +34,10 @@ public class BodyPartFacade extends BaseFacade {
 
         String sql = "select b.name from BodyPart as b where  b.id='" + bodyPartId + "'";
 
-        String bodyPartName = (String) entityManager.createQuery(sql).getSingleResult();
+        Object bodyPartName = entityManager.createQuery(sql).getSingleResult();
 
         if (bodyPartName != null && !"".equals(bodyPartName))
-            return bodyPartName;
+            return (String) bodyPartName;
         return "";
     }
 }

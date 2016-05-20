@@ -22,37 +22,39 @@ public class AnswerSheetFacade extends BaseFacade {
     private SubjectFacade subjectFacade;
 
     @Inject
-    public AnswerSheetFacade(EntityManager entityManager,SubjectFacade subjectFacade){
-        this.entityManager=entityManager;
-        this.subjectFacade=subjectFacade;
+    public AnswerSheetFacade(EntityManager entityManager, SubjectFacade subjectFacade) {
+        this.entityManager = entityManager;
+        this.subjectFacade = subjectFacade;
     }
 
     //find by modelId
-    public List<AnswerSheet> findByModelId(String modelId){
+    public List<AnswerSheet> findByModelId(String modelId) {
         String sqls = "from AnswerSheet where 1=1";
-        if(null != modelId && !modelId.trim().equals("")){
-            sqls +=" and questionnaireId='" +modelId+ "'";
+        if (null != modelId && !modelId.trim().equals("")) {
+            sqls += " and questionnaireId='" + modelId + "'";
         }
         return entityManager.createQuery(sqls).getResultList();
     }
 
-    public List<AnswerResultVo> findById(String id){
-        List<AnswerResultVo> vos=new ArrayList<AnswerResultVo>();
-        List<AnswerResult> list= entityManager.createQuery("from AnswerResult as a where a.answerSheet.id='" + id + "'").getResultList();
-        for(int i=0;i<list.size();i++){
-            AnswerResult ar=list.get(i);
-            List<SubjectOptions> subopt = entityManager.createQuery("from SubjectOptions  where id='" + ar.getAnswer() + "'").getResultList();
-            AnswerResultVo vo=new AnswerResultVo();
-            vo.setSubjectId(ar.getSubject().getId());
-            vo.setSubjectName(ar.getSubject().getQuestionContent());
-            vo.setSheetId(id);
-            vo.setQuestionType(ar.getSubject().getQuestionType());
-            vo.setPreAnswer(ar.getSubject().getPreAnswer());
-            vo.setAnswer(ar.getAnswer());
-            vo.setAnswerContent(subopt.get(0).getOptContent());
-         vo.setImg(ar.getSubject().getImg());
-            vo.setImage(subopt.get(0).getImage());
-            vos.add(vo);
+    public List<AnswerResultVo> findById(String id) {
+        List<AnswerResultVo> vos = new ArrayList<AnswerResultVo>();
+        List<AnswerResult> list = entityManager.createQuery("from AnswerResult as a where a.answerSheet.id='" + id + "'").getResultList();
+        if (list != null && !list.isEmpty()) {
+            for (int i = 0; i < list.size(); i++) {
+                AnswerResult ar = list.get(i);
+                List<SubjectOptions> subopt = entityManager.createQuery("from SubjectOptions  where id='" + ar.getAnswer() + "'").getResultList();
+                AnswerResultVo vo = new AnswerResultVo();
+                vo.setSubjectId(ar.getSubject().getId());
+                vo.setSubjectName(ar.getSubject().getQuestionContent());
+                vo.setSheetId(id);
+                vo.setQuestionType(ar.getSubject().getQuestionType());
+                vo.setPreAnswer(ar.getSubject().getPreAnswer());
+                vo.setAnswer(ar.getAnswer());
+                vo.setAnswerContent(subopt.get(0).getOptContent());
+                vo.setImg(ar.getSubject().getImg());
+                vo.setImage(subopt.get(0).getImage());
+                vos.add(vo);
+            }
         }
         return vos;
     }
@@ -61,17 +63,17 @@ public class AnswerSheetFacade extends BaseFacade {
      * 保存用户答题记录
      */
     @Transactional
-    public AnswerSheetVo saveAll(AnswerSheetVo answerSheetVo){
-        if(null!=answerSheetVo){
-            AnswerSheet answerSheet=new AnswerSheet();
+    public AnswerSheetVo saveAll(AnswerSheetVo answerSheetVo) {
+        if (null != answerSheetVo) {
+            AnswerSheet answerSheet = new AnswerSheet();
             answerSheet.setPatId(answerSheetVo.getPatId());
             answerSheet.setOpenId(answerSheetVo.getOpenId());
             answerSheet.setQuestionnaireId(answerSheetVo.getQuestionnaireId());
             answerSheet.setCreateTime(new Date());
             answerSheet = merge(answerSheet);
-            if(null!=answerSheetVo.getAnswerResults()){
-                for(AnswerResultVo results:answerSheetVo.getAnswerResults()){
-                    AnswerResult answerResult=new AnswerResult();
+            if (null != answerSheetVo.getAnswerResults()) {
+                for (AnswerResultVo results : answerSheetVo.getAnswerResults()) {
+                    AnswerResult answerResult = new AnswerResult();
                     answerResult.setAnswer(results.getAnswer());
                     answerResult.setSubject(subjectFacade.findById(results.getSubjectId()));
                     answerResult.setAnswerSheet(answerSheet);

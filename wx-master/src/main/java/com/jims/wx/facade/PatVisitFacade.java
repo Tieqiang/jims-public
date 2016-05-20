@@ -14,9 +14,9 @@ import java.util.Objects;
  * Created by wei on 2016/4/22.
  */
 public class PatVisitFacade extends BaseFacade {
-    private SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-    public List<PatVisitVo> listPatVisitVo(String patientIds){
+    public List<PatVisitVo> listPatVisitVo(String patientIds) {
         try {
             String sql = "select a.patient_id as patientId,\n" +
                     "      a.visit_id as visitId,\n" +
@@ -49,5 +49,6 @@ public class PatVisitFacade extends BaseFacade {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        return null;    }
+        return null;
+    }
 }

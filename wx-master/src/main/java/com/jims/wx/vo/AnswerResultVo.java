@@ -8,11 +8,11 @@ import java.io.Serializable;
 public class AnswerResultVo implements Serializable {
 
     //答题记录ID
-    private String sheetId ;
+    private String sheetId;
     //问题ID
-    private String subjectId ;
+    private String subjectId;
     //答题选项的ID
-    private String answer ;
+    private String answer;
     //选项的内容
     private String answerContent;
     //题目的名字
