@@ -549,7 +549,7 @@ public class ClinicForRegistFacade extends BaseFacade {
         try {
             Calendar calendar = Calendar.getInstance();
             calendar.setTime(sdf.parse(dateStr));
-            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            calendar.add(Calendar.DAY_OF_MONTH, 15);
             Date nextDay = new Date(calendar.getTimeInMillis());
             nextDayStr = sdf.format(nextDay);
         } catch (ParseException e) {
@@ -567,11 +567,12 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public List<ClinicForRegist> findRegistInfoPre(String currentDateStr, String clinicIndexId) {
+        String nextDayStr=getNextDayStr(currentDateStr);
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>'" + currentDateStr + "'  and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>'" + currentDateStr + "'  and registTime < '"+nextDayStr+"' and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;
-        return null;
+            return null;
     }
 
     /**

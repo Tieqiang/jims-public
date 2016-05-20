@@ -78,8 +78,8 @@ public class ClinicForRegistService {
     @Path("regist")
     public synchronized String regist(@QueryParam("price") String price, @QueryParam("prepareId") String prepareId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("openId") String openId) {
         try {
-            ServletInputStream inputStream = request.getInputStream();
-            ServletOutputStream outputStream = response.getOutputStream();
+//            ServletInputStream inputStream = request.getInputStream();
+//            ServletOutputStream outputStream = response.getOutputStream();
             if (StringUtils.isNotBlank(price) && StringUtils.isNotBlank(prepareId) && StringUtils.isNotBlank(clinicForRegistId)) {
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
                 /**
@@ -106,7 +106,7 @@ public class ClinicForRegistService {
                     if (record != null && !"".equals(record)) {
                         sortMath = Integer.parseInt(record.getMath());
                         sortMath++;
-                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath+1));
+                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath + 1));
                         record.setMath(String.valueOf(sortMath));
                         takeRegistSeqFacade.save(record);
                     } else {//今天是第一位取号的人员  1000放入数据库
@@ -211,7 +211,9 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id")
     public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId, @QueryParam("preFlag") String preFlag) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
-        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+
+        String addr = getRequestUrl();
         /**
          * 查询默认绑定患者
          */
@@ -219,8 +221,7 @@ public class ClinicForRegistService {
 
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
 
-//        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
-         /*
+          /*
         * 获取当前日期 String
          */
         String currentDateStr = sdf.format(new Date());
@@ -260,10 +261,10 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                     appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                     appDoctInfoVo.setPatName(patInfo.getName());
-                    boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
-                    if(flag){
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                    if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
-                    }else{
+                    } else {
                         appDoctInfoVo.setCollectionDesc("收藏");
                     }
                     appDoctInfoVos.add(appDoctInfoVo);
@@ -576,7 +577,8 @@ public class ClinicForRegistService {
     @GET
     @Path("find-my-collection")
     public List<AppDoctInfoVo> findMyCollection(@QueryParam("openId") String openId) {
-        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String addr = getRequestUrl();
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
@@ -603,9 +605,9 @@ public class ClinicForRegistService {
                     registInfoVOs.add(registInfoVO);
                 }
                 appDoctInfoVo.setPatName(patInfo.getName());
-                String deptCode=clinicIndexFacade.findDeptCodeByDoctId(doctInfo.getId());
-                DeptDict deptDict=deptDictFacade.findByCode(deptCode);
-                if(deptDict!=null){
+                String deptCode = clinicIndexFacade.findDeptCodeByDoctId(doctInfo.getId());
+                DeptDict deptDict = deptDictFacade.findByCode(deptCode);
+                if (deptDict != null) {
                     appDoctInfoVo.setDeptName(deptDict.getDeptName());
                 }
                 appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
@@ -627,7 +629,7 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id-pre")
     public List<AppDoctInfoVo> findByDeptIdPre(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
-        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String addr = getRequestUrl();
         /**
          * 查询默认绑定患者
          */
@@ -666,13 +668,13 @@ public class ClinicForRegistService {
                 appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                 appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                 appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
-                if(flag){
+                boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                if (flag) {
                     appDoctInfoVo.setCollectionDesc("已收藏");
-                }else{
+                } else {
                     appDoctInfoVo.setCollectionDesc("收藏");
                 }
-                 List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
+                List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
                 if (clinicForRegists != null && !clinicForRegists.isEmpty()) {
                     for (ClinicForRegist c : clinicForRegists) {
                         RegistInfoVO registInfoVO = new RegistInfoVO();
@@ -705,7 +707,7 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id-pre-like")
     public List<AppDoctInfoVo> findByDeptIdPreLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
-        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String addr = getRequestUrl();
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
@@ -722,13 +724,13 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                     appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
-                    if(flag){
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                    if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
-                    }else{
+                    } else {
                         appDoctInfoVo.setCollectionDesc("收藏");
                     }
-                     List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
+                    List<RegistInfoVO> registInfoVOs = new ArrayList<RegistInfoVO>();
                     if (clinicForRegists != null && !clinicForRegists.isEmpty()) {
                         for (ClinicForRegist c : clinicForRegists) {
                             RegistInfoVO registInfoVO = new RegistInfoVO();
@@ -762,7 +764,8 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id-like")
     public List<AppDoctInfoVo> findByDeptIdLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
-        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+//        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        String addr = getRequestUrl();
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
@@ -787,13 +790,13 @@ public class ClinicForRegistService {
                         appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                         appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                         appDoctInfoVo.setPatName(patInfo.getName());
-                        boolean flag=userCollectionFacade.findISCollection(doctInfo.getId());
-                        if(flag){
+                        boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                        if (flag) {
                             appDoctInfoVo.setCollectionDesc("已收藏");
-                         }else{
+                        } else {
                             appDoctInfoVo.setCollectionDesc("收藏");
-                         }
-                         appDoctInfoVos.add(appDoctInfoVo);
+                        }
+                        appDoctInfoVos.add(appDoctInfoVo);
                     }
                 }
             }
@@ -812,7 +815,7 @@ public class ClinicForRegistService {
     public List<AppDoctInfoVo> findCollectionDoctInfo(@QueryParam("collectionId") String collectionId) {
         UserCollection userCollection = this.userCollectionFacade.findById(collectionId);
         if (userCollection != null) {
-            String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+            String addr = getRequestUrl();
             AppUser appuser = appUserFacade.findAppUserByOpenId(userCollection.getOpenId());
             PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
             List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
@@ -839,7 +842,17 @@ public class ClinicForRegistService {
             appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
             appDoctInfoVos.add(appDoctInfoVo);
             return appDoctInfoVos;
-         }
+        }
         return null;
+    }
+
+    /**
+     * 获取请求的路径
+     *
+     * @return
+     */
+    private String getRequestUrl() {
+        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+        return addr;
     }
 }
