@@ -3,7 +3,7 @@
 <head lang="en">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>就诊记录</title>
+    <title> 住院记录</title>
     <link rel="stylesheet" href="/assert/weui/style/weui.min.css"/>
 </head>
 <body>
@@ -17,11 +17,13 @@
                            患者姓名 ：<span ng-bind="x.nextOfKin"></span>
                         </div>
                     </div>
-                    <div class="weui_cell_bd weui_cell_primary">
-                        <h3>住院时间</h3>
-                        <span ng-bind="x.admissionDateTime"></span>至
-                        <span ng-bind="x.dischargeDateTime"></span>
-                    </div>
+                    <div class="weui_cell">
+                        <div class="weui_cell_bd weui_cell_primary">
+                            住院时间：
+                            <span ng-bind="x.admissionDateTime"></span>至
+                            <span ng-bind="x.dischargeDateTime"></span>
+                        </div>
+                        </div>
                     <div class="weui_cell">
                         <div class="weui_cell_bd weui_cell_primary">
                             入院科室 ：<span ng-bind="x.deptAdmissionTo"></span>

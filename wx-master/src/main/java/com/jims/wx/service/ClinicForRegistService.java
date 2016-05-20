@@ -261,7 +261,7 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                     appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                     appDoctInfoVo.setPatName(patInfo.getName());
-                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
                     if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
                     } else {
@@ -668,7 +668,7 @@ public class ClinicForRegistService {
                 appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                 appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                 appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
                 if (flag) {
                     appDoctInfoVo.setCollectionDesc("已收藏");
                 } else {
@@ -724,7 +724,7 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                     appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
                     if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
                     } else {
@@ -790,7 +790,7 @@ public class ClinicForRegistService {
                         appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                         appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                         appDoctInfoVo.setPatName(patInfo.getName());
-                        boolean flag = userCollectionFacade.findISCollection(doctInfo.getId());
+                        boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
                         if (flag) {
                             appDoctInfoVo.setCollectionDesc("已收藏");
                         } else {

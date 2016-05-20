@@ -92,6 +92,9 @@ public class RcptMasterService {
         AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
         List<PatInfo> lst=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
         for(PatInfo patInfo:lst){
+            if(patInfo.getPatientId()==null || patInfo.getPatientId().equals("")){
+                continue;
+            }
             List<ClinicMasterVo> list= rcptMasterFacade.getByPatId(patInfo.getPatientId());
             if(!list.isEmpty()){
                 for(ClinicMasterVo clinicMasterVo:list){

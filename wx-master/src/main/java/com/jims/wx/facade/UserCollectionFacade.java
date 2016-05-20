@@ -103,9 +103,9 @@ public class UserCollectionFacade extends BaseFacade {
      * @param dodId
      * @return
      */
-    public boolean findISCollection(String dodId) {
+    public boolean findISCollection(String dodId,String openId) {
 
-        String sql="from UserCollection where doctId='"+dodId+"'";
+        String sql="from UserCollection where doctId='"+dodId+"' and openId='"+openId+"'";
         List<UserCollection> userCollections=entityManager.createQuery(sql).getResultList();
         if(userCollections!=null&&!userCollections.isEmpty()){
             return true;
