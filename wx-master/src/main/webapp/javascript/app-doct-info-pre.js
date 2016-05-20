@@ -28,12 +28,8 @@ app.controller('tableCtrl', function ($scope, $http) {
                 if(data.success==true){
                     alert("收藏成功！");
 
-                    $http.get("/api/clinic-for-regist/find-by-dept-id-pre?deptId=" + deptId + "&openId=" + openId)
+                    $http.get("/api/clinic-for-regist/find-by-dept-id-pre-like?likeSearch=" + likeSearch + "&openId=" + openId)
                         .success(function (data) {
-                            if (data.length > 0) {
-//                alert(data.length);
-                                $("#text1").html(data[0].deptName + ":" + data.length + "人");
-                            }
                             $scope.names = data;
                         });
 
@@ -47,12 +43,8 @@ app.controller('tableCtrl', function ($scope, $http) {
 //                                    .success(function (data) {//appDoctInfoVO
 //                                        $scope.names = data;
 //                                    });
-                                $http.get("/api/clinic-for-regist/find-by-dept-id-pre?deptId=" + deptId + "&openId=" + openId)
+                                $http.get("/api/clinic-for-regist/find-by-dept-id-pre-like?likeSearch=" + likeSearch + "&openId=" + openId)
                                     .success(function (data) {
-                                        if (data.length > 0) {
-//                alert(data.length);
-                                            $("#text1").html(data[0].deptName + ":" + data.length + "人");
-                                        }
                                         $scope.names = data;
                                     });
                             }
