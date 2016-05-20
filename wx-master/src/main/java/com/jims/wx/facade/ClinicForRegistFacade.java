@@ -567,12 +567,12 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public List<ClinicForRegist> findRegistInfoPre(String currentDateStr, String clinicIndexId) {
-        String nextDayStr=getNextDayStr(currentDateStr);
+        String nextDayStr = getNextDayStr(currentDateStr);
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>'" + currentDateStr + "'  and registTime < '"+nextDayStr+"' and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>'" + currentDateStr + "'  and registTime < '" + nextDayStr + "' and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;
-            return null;
+        return null;
     }
 
     /**
@@ -582,7 +582,8 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     public List<ClinicForRegist> findRegistInfoCollection(String date, String clinicIndexId) {
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "'  and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "' and  and registTime <'" + getNextDayStr(date) + "' clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;
         return null;
