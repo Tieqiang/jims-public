@@ -583,7 +583,7 @@ public class ClinicForRegistFacade extends BaseFacade {
     public List<ClinicForRegist> findRegistInfoCollection(String date, String clinicIndexId) {
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
 
-        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "' and  and registTime <'" + getNextDayStr(date) + "' clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
+        clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "' and   registTime <'" + getNextDayStr(date) + "' and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;
         return null;
