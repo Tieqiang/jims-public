@@ -112,8 +112,8 @@ public class RcptMasterService {
                            }
                      }
                  }
-                return lables;
-            }
+             }
+            return lables;
         }
         return null;
     }   /**
