@@ -8,7 +8,6 @@ $(function () {
         });
     }
     loadDict();
-
     var reset = function () {
         $("#videoId").textbox("setValue", "");
         $("#title").textbox("setValue", "");

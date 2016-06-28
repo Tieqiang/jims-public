@@ -36,7 +36,7 @@ public class SourceImageFontFacade extends BaseFacade {
      */
     public List<Article> findByIds(String ids) {
          List<Article> articles=new ArrayList<Article>();
-         // todo 根据sourceImageFont 的id 查找将其封装成为Article
+         // 根据sourceImageFont 的id 查找将其封装成为Article
          List<SourceImageFont> list=findSourceImageFontByIds(ids);
          if(list!=null&&!list.isEmpty()){
              for(SourceImageFont sourceImageFont:list){

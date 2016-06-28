@@ -17,12 +17,13 @@ $(function(){
         var digest=UE.getEditor('digest');
 
         var sourceImageFont={};
-        sourceImageFont.title = title.getPlainTxt();
-         sourceImageFont.author = author.getPlainTxt();
-        sourceImageFont.digest=digest.getPlainTxt();
+        sourceImageFont.title = title.getContent();
+        alert(title.getContent());
+         sourceImageFont.author = author.getContent();
+        sourceImageFont.digest=digest.getContent();
         sourceImageFont.thumbMediaId=$("#mediaId").val();
         sourceImageFont.contentSourceUrl=$("#contentSourceUrl").val();
-        var content=content.getPlainTxt();//byte[]
+        var content=content.getContent();//byte[]
         if(sourceImageFont.thumbMediaId==null || sourceImageFont.thumbMediaId==""){
             $.messager.alert("系统提示","请选择图片","error");
             return;

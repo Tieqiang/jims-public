@@ -8,7 +8,6 @@ $(function(){
      * 加载图文消息
      */
      var loadImageFont=function(){
-        //todo  加载图文消息
         $.get("/api/source/load-image-font",function(data){
             $("#data").datagrid("loadData",data);
         });
@@ -67,7 +66,7 @@ $(function(){
             ajaxReq(sendType,sendMessage);
         }else if(sendType==2){//文字
             var sendContent = UE.getEditor('font');
-            var sendContent=sendContent.getContentTxt();
+            var sendContent=sendContent.getContent();
 //            alert(sendContent);
             var sendMessage={};
             sendMessage.content=sendContent;
