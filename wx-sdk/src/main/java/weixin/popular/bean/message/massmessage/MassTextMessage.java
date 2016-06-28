@@ -14,13 +14,13 @@ public class MassTextMessage extends MassMessage{
 		super.msgtype = "text";
 	}
 
-	public Map<String, String> getText() {
-		return text;
-	}
-
-	public void setText(Map<String, String> text) {
-		this.text = text;
-	}
+//	public Map<String, String> getText() {
+//		return text;
+//	}
+//
+//	public void setText(Map<String, String> text) {
+//		this.text = text;
+//	}
 
 
 }

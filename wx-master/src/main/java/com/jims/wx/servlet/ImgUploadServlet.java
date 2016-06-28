@@ -88,11 +88,15 @@ public class ImgUploadServlet extends HttpServlet {
             // 真正写到磁盘上
             item.write(new File(PATH_FOLDER, saveName)); // 第三方提供的
             PrintWriter writer = response.getWriter();
+            /**
+             * 文件大小:11009,imageName:timg.jpg
+             */
             writer.print("{");
-            writer.print("msg:\"文件大小:" + item.getSize() + ",文件名:" + filename + "\"");
+            writer.print("size:\"" + item.getSize() + "\"");
             writer.print(",picUrl:\"" + picUrl + "\"");
+            writer.print(",imageName:\""+ filename + "\"");
+            writer.print(",saveName:\"" + saveName + "\"");
             writer.print("}");
-
             writer.close();
 
         } catch (FileUploadException e) {

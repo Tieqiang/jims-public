@@ -14,14 +14,6 @@ public class MassMPnewsMessage extends MassMessage{
 		super.msgtype = "mpnews";
 	}
 
-	public Map<String, String> getMpnews() {
-		return mpnews;
-	}
-
-	public void setMpnews(Map<String, String> mpnews) {
-		this.mpnews = mpnews;
-	}
-
 
 
 }

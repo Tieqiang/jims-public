@@ -14,13 +14,13 @@ public class MassImageMessage extends MassMessage{
 		super.msgtype = "image";
 	}
 
-	public Map<String, String> getImage() {
-		return image;
-	}
-
-	public void setImage(Map<String, String> image) {
-		this.image = image;
-	}
-
+//	public Map<String, String> getImage() {
+//		return image;
+//	}
+//
+//	public void setImage(Map<String, String> image) {
+//		this.image = image;
+//	}
+//
 
 }

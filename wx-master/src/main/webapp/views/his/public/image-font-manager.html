@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+    <title></title>
+</head>
+
+<body id="lay" class="easyui-layout" style="width: 100%;height:100%" >
+
+<div region="east"   collapsed=false style="height:100%;width: 50%" >
+    <table id="imageList" class="easyui-datagrid"></table>
+</div>
+<div region="center"style="height:1000px;width: 50%"  >
+    <div  >
+        <script id="title" name="title" type="text/plain">
+                请输入标题
+    </script>
+    </div>
+    <div  >
+        <script id="author" name="author" type="text/plain">
+                请输入作者
+     </script>
+    </div>
+    <div  >
+        <script id="content" name="content" type="text/plain">
+               这里写正文
+    </script>
+    </div>
+    <div>
+        <input type="checkbox" id="ywlj"> 原文链接
+        <input type="text" id="contentSourceUrl" >
+    </div>
+    <div>
+        封面：<br/>
+        <a href="" id="thumb">从图片库选择</a>
+        <div id="viewImage" style="display: none;">
+            <input type="hidden" id="mediaId" name="mediaId" value=""/>
+        </div>
+    </div>
+    <div  >
+       <script id="digest" name="digest" type="text/plain">
+                在此处选填摘要，如果不填，默认正文的前46个字。
+      </script>
+    </div>
+    <div>
+
+    </div>
+ </div>
+<div id="foot" style="padding:2px 5px;">
+    <a href="#" id="add" class="easyui-linkbutton" iconCls="icon-add">加入</a>
+    <a href="#" id="save" class="easyui-linkbutton" iconCls="icon-add">保存</a>
+ </div>
+<!-- 加载编辑器的容器 -->
+ <!-- 配置文件 -->
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+ <script type="text/javascript" src="/assert/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/assert/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+<script type="text/javascript" src="../../../javascript/source-image-font.js"></script>
+</body>

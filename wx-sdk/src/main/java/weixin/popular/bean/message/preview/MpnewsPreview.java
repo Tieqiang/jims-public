@@ -6,8 +6,17 @@ import java.util.Map;
 public class MpnewsPreview extends Preview{
 
 	private Map<String,String> mpnews = new HashMap<String,String>();
+    private String mediaId;
 
-	public MpnewsPreview(String media_id) {
+    public String getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(String mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    public MpnewsPreview(String media_id) {
 		super();
 		this.setMsgtype("mpnews");
 		mpnews.put("media_id", media_id);

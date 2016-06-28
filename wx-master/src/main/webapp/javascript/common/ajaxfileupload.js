@@ -124,7 +124,7 @@ jQuery.extend({
                 } catch(e) 
     {
                     status = "error";
-                    jQuery.handleError(s, xml, status, e);
+//                    jQuery.handleError(s, xml, status, e);
                 };                
                 if( s.global )
                 {
