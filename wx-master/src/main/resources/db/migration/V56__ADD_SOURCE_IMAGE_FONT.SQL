@@ -4,7 +4,7 @@ create table SOURCE_IMAGE_FONT
   id                 VARCHAR2(64) not null,
   title              VARCHAR2(200),
   thumb_media_id     VARCHAR2(64),
-  author             VARCHAR2(50),
+  author             VARCHAR2(200),
   digest             VARCHAR2(200),
   show_cover_pic     VARCHAR2(4),
   content            BLOB,
