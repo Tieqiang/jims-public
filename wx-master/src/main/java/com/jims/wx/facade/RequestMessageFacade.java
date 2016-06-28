@@ -96,7 +96,6 @@ public class RequestMessageFacade extends BaseFacade{
         Integer start=0;
         Integer end=0;
         try {
-//            start=(Integer)((simpleDateFormat.parse(startTime).getTime())/1000);
             start=Integer.parseInt(simpleDateFormat.parse(startTime).getTime()/1000+"");
             end=Integer.parseInt(simpleDateFormat.parse(endTime).getTime()/1000+"");
             sql="from RequestMessage where createTime >= "+start+" and createTime <="+end+"";

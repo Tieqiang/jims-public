@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+ <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+    <title></title>
+</head>
+
+<body id="lay" class="easyui-layout" style="width: 100%;height:100%" >
+
+<div region="north"   collapsed=false style="height:80px;width: 100%;text-align: center;" >
+   <br/>
+     <select id="selectType"   style="width:160px;align:center;"  >
+        <option value="1" >图文消息</option>
+        <option value="2"  selected>文字</option>
+        <option value="3">图片</option>
+        <option value="4">语音</option>
+        <option value="5">视频</option>
+   </select>
+</div>
+ <div region="center"style="height:100%;width: 100%"  >
+     <table id="data" class="easyui-datagrid" style="display:none;"></table>
+     <div   id="wenzi">
+         <script id="font" name="font" type="text/plain">
+              请输入你要发送的文字!
+         </script>
+     </div>
+</div>
+<div region="south"style="height:20px;width: 100%"  >
+    <a href="#" id="send" class="easyui-linkbutton" iconCls="icon-add">发送</a>
+</div>
+ <!-- 加载编辑器的容器 -->
+<!-- 配置文件 -->
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="/assert/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/assert/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+<script type="text/javascript" src="../../../javascript/send-all.js"></script>
+</body>

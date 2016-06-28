@@ -47,4 +47,13 @@ public class SourceImageFacade extends BaseFacade {
     public List<SourceImage> findById(String ids) {
         return entityManager.createQuery("from SourceImage where id='"+ids+"'").getResultList();
     }
+
+    /**
+     * 删除图片
+     * @param sourceImage
+     */
+    @Transactional
+    public void delete(SourceImage sourceImage) {
+        super.remove(sourceImage);
+    }
 }

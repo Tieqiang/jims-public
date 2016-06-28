@@ -41,9 +41,7 @@ $(function(){
                  loadStyle();
                  loadImage();
              }else if(newValue==2){//文字
-
-                 $("#wenzi").show();
-                 $("#data").hide();
+                 document.location.reload();
              }
          }
      });
@@ -70,7 +68,7 @@ $(function(){
         }else if(sendType==2){//文字
             var sendContent = UE.getEditor('font');
             var sendContent=sendContent.getContentTxt();
-            alert(sendContent);
+//            alert(sendContent);
             var sendMessage={};
             sendMessage.content=sendContent;
             ajaxReq(sendType,sendMessage);
@@ -119,8 +117,9 @@ $(function(){
                     },
                     {
                         title: 'image',
-                        field: 'image'
-                    }
+                        field: 'image',
+                        width:"60%"
+                     }
                 ]
             ]
         });

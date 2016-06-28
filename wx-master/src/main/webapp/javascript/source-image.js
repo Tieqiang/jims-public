@@ -194,5 +194,19 @@ $(function () {
             }
         })
     }
+
+    /**
+     * 放大图片
+     */
+    $("#addBigBtn").on("click",function(){
+        var selectedImages = $("#image").datagrid("getSelections");
+        if(selectedImages.length!=1){
+            $.messager.alert("系统提示","请选择一张图片进行查看","error");
+            return;
+        }
+        $("#imageDiv").html(selectedImages[0].image);
+        $("#imageDlg").dialog("setTitle","大图");
+        $("#imageDlg").dialog("open");
+    })
 });
 

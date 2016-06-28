@@ -17,12 +17,12 @@ $(function(){
         var digest=UE.getEditor('digest');
 
         var sourceImageFont={};
-        sourceImageFont.title = title.getContentTxt();
-         sourceImageFont.author = author.getContentTxt();
-        sourceImageFont.digest=digest.getContentTxt();
+        sourceImageFont.title = title.getPlainTxt();
+         sourceImageFont.author = author.getPlainTxt();
+        sourceImageFont.digest=digest.getPlainTxt();
         sourceImageFont.thumbMediaId=$("#mediaId").val();
         sourceImageFont.contentSourceUrl=$("#contentSourceUrl").val();
-        var content=content.getContentTxt();//byte[]
+        var content=content.getPlainTxt();//byte[]
         if(sourceImageFont.thumbMediaId==null || sourceImageFont.thumbMediaId==""){
             $.messager.alert("系统提示","请选择图片","error");
             return;
@@ -42,6 +42,10 @@ $(function(){
      * 加入图片操作
      */
     $("#add").on("click",function(){
+        if($("#mediaId").val()!=null&&$("#mediaId").val()!=""){
+            $.messager.alert("系统提示","已经存在封面了","error");
+            return;
+        }
         var selectData=$("#imageList").datagrid("getSelections");
         if(selectData.length!=1){
             $.messager.alert("系统提示","请选择要添加的图片","error");
@@ -51,20 +55,23 @@ $(function(){
         $("#viewImage").show();
         $("#mediaId").val(selectData[0].mediaId);
     })
-
     /**
-     * 选择图片
+     * 移除所选封面
      */
-    $("#thumb").on("click",function(){
-        loadImage();
-    });
-    var loadImage=$.get("/api/source/list", function (data) {
+    $('#remove').on("click",function(){
+        $("#viewImage").hide();
+        $("#viewImage").html("");
+        $("#mediaId").val("");
+    })
+
+    var loadImage=$.get("/api/source/load-image", function (data) {
         $("#imageList").datagrid('loadData', data);
     });
 
     $("#imageList").datagrid({
         idField: "id",
         title: '图片库',
+        singleSelect:true,
         footer:'#foot',
         fit: true,
         columns: [
@@ -87,6 +94,7 @@ $(function(){
                 {
                     title: 'image',
                     field: 'image'
+
                 }
              ]
         ]
