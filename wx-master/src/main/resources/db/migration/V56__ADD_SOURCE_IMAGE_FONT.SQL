@@ -2,7 +2,7 @@
 create table SOURCE_IMAGE_FONT
 (
   id                 VARCHAR2(64) not null,
-  title              VARCHAR2(200),
+  title              VARCHAR2(2000),
   thumb_media_id     VARCHAR2(64),
   author             VARCHAR2(200),
   digest             VARCHAR2(1000),
