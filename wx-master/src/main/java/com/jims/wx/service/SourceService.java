@@ -49,16 +49,17 @@ public class SourceService {
     private SourceImageFontFacade sourceImageFontFacade;
     private RequestMessageFacade requestMessageFacade;
     private HttpServletResponse response;
-
+    private AppUserFacade appUserFacade;
 
     @Inject
-    public SourceService(SourceImageFacade sourceImageFacade, HttpServletRequest request, SourceVideoFacade sourceVideoFacade, SourceImageFontFacade sourceImageFontFacade, RequestMessageFacade requestMessageFacade, HttpServletResponse response) {
+    public SourceService(SourceImageFacade sourceImageFacade, HttpServletRequest request, SourceVideoFacade sourceVideoFacade, SourceImageFontFacade sourceImageFontFacade, RequestMessageFacade requestMessageFacade, HttpServletResponse response,AppUserFacade appUserFacade) {
         this.sourceImageFacade = sourceImageFacade;
         this.request = request;
         this.sourceVideoFacade = sourceVideoFacade;
         this.sourceImageFontFacade = sourceImageFontFacade;
         this.requestMessageFacade = requestMessageFacade;
         this.response = response;
+        this.appUserFacade=appUserFacade;
     }
 
 //    @Inject
@@ -495,7 +496,7 @@ public class SourceService {
         BaseResult baseResult = MessageAPI.messageCustomSend(TokenManager.getDefaultToken(), jsonMessage);
         if (baseResult.getErrcode().equals("0")){
             if(id!=null&&!"".equals(id)){//单条回复成功
-                requestMessageFacade.updateData(id,replyContent);
+                requestMessageFacade.updateData(id, replyContent);
             }
             return Response.status(Response.Status.OK).entity(baseResult).build();
         }
@@ -864,8 +865,101 @@ public class SourceService {
         return Response.status(Response.Status.OK).entity(list).build();
     }
 
-    public static void main(String[] args){
-        long a=new Date().getTime()/1000;
-        System.out.println(a);
+    /**
+     * 同步关注用户
+     * @return
+     */
+    @POST
+    @Path("synch-user")
+    public Response synchUser(){
+        FollowResult followResult=null;
+        try {
+             followResult=UserAPI.userGet(TokenManager.getDefaultToken(),null);
+            FollowResult.Data data=followResult.getData();
+            String [] openIdArr=data.getOpenid();
+            List<String> openIds=Arrays.asList(openIdArr);
+
+            List<AppUser> list=appUserFacade.findAll(AppUser.class);
+            if(list!=null&&!list.isEmpty()?(list.size()==openIds.size()?true:false):false){
+                return Response.status(Response.Status.OK).entity(openIds).build();
+            }
+            if(list!=null&&!list.isEmpty()?(list.size()<openIds.size()?true:false):false){
+                //本地的关注用户小于真实的关注用户
+                List<String> strings=getOpenIds(list);
+                synchAndSaveUser(openIds,strings,"less");
+            }
+
+            if(list!=null&&!list.isEmpty()?(list.size()>openIds.size()?true:false):false)
+            {
+                //本地的多于服务器上的
+                List<String> strings=getOpenIds(list);
+                synchAndSaveUser(strings,openIds,"more");
+            }
+            if(list!=null&&list.isEmpty()?(openIds.size()>0?true:false):false){
+                //本地没有 存在关注用户
+               for(String openId:openIds){
+                   saveUser(openId);
+               }
+            }
+            return Response.status(Response.Status.OK).entity(followResult).build();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(followResult).build();
+        }
+     }
+//    public static void main(String[] args){
+//        long a=new Date().getTime()/1000;
+//        System.out.println(a);
+//    }
+
+    /**
+     * 获取openIds
+     * @param list
+     * @return
+     */
+    private List<String> getOpenIds(List<AppUser> list){
+        List<String> strings=new ArrayList<String>();
+        for(AppUser appUser:list){
+            if(!strings.contains(appUser.getOpenId())){
+                strings.add(appUser.getOpenId());
+            }
+        }
+        return strings;
+    }
+
+    /**
+     * 查找不同步的用户将其保存或者删除
+     * @param openIds
+     * @param strings
+     */
+    private void synchAndSaveUser(List<String> openIds,List<String> strings,String str){
+        for(String openId:openIds){
+            if(!strings.contains(openId)){
+                if(str.equals("less")){
+                    saveUser(openId);
+                }if(str.equals("more")){
+                    appUserFacade.deletebyOpenId(openId);
+                }
+             }
+        }
+    }
+
+    /**
+     * 保存
+     * @param openId
+     */
+    private void saveUser(String openId){
+        User user=UserAPI.userInfo(TokenManager.getDefaultToken(),openId);
+        AppUser appUser=new AppUser();
+        appUser.setOpenId(openId);
+        appUser.setCity(user.getCity());
+        appUser.setCountry(user.getCountry());
+        appUser.setLanguage(user.getLanguage());
+        appUser.setNickName(user.getNickname());
+        appUser.setSex(user.getSex());
+        appUser.setSubscribe(user.getSubscribe());
+        appUser.setHeadImgUrl(user.getHeadimgurl());
+        appUser.setGroupId(user.getGroupid());
+        appUserFacade.saveAppUser(appUser);
     }
 }

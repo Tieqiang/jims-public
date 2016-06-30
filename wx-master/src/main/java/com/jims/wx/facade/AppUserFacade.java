@@ -218,4 +218,11 @@ public class AppUserFacade extends BaseFacade {
     public void deleteByObject(AppUser appUser) {
         remove(appUser);
     }
+
+    @Transactional
+    public int deletebyOpenId(String openId) {
+        String sql="delete from AppUser where openId='"+openId+"'";
+        int count=entityManager.createQuery(sql).executeUpdate();
+        return count;
+    }
 }

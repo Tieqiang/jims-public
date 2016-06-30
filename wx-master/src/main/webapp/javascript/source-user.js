@@ -99,5 +99,18 @@ $(function () {
             }
         })
     })
+    /**
+     * 同步关注用户
+     */
+    $("#synchUser").on("click",function(){
+        $.ajax({
+            url:"/api/source/synch-user",
+            cache:false,
+            type:"POST",
+            success:function(data){
+                $.messager.alert("系统提示","同步完成","info");
+            }
+        })
+    })
 });
 

@@ -7,7 +7,6 @@ package com.jims.wx.vo;
 public class MessageVo {
 
     private String id;
-
     private String fromUserName;//用户
 
     private String content;
