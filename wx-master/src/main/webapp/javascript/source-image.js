@@ -102,7 +102,14 @@ $(function () {
             loadSelectedRowData(arr);
         }
     });
-
+    /**
+     * 同步服务器数据
+     */
+    $("#synchData").on("click",function(){
+        $.postJSON("/api/source/synch-image",function(data){
+            $.messager.alert("系统提示","数据已经同步,请重新加载本地","info");
+        })
+    })
     /**
      * load selectedRowData
      */

@@ -56,3 +56,6 @@ alter table SOURCE_IMAGE
     minextents 1
     maxextents unlimited
   );
+alter table SOURCE_IMAGE
+  add constraint SOURCE_IMAGE_MEDIA_ID_UNIQUE unique (MEDIA_ID)
+  disable;

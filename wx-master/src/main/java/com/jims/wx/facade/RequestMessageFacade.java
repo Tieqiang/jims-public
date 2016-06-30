@@ -6,13 +6,17 @@ import com.jims.wx.entity.RequestMessage;
 import com.jims.wx.entity.ResponseMessage;
 import com.jims.wx.vo.MessageVo;
 import sun.java2d.pipe.hw.AccelDeviceEventNotifier;
+import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
+import weixin.popular.bean.user.User;
+import weixin.popular.support.TokenManager;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -103,16 +107,22 @@ public class RequestMessageFacade extends BaseFacade{
             if(list!=null&&!list.isEmpty()){
                 for(RequestMessage requestMessage:list){
                     MessageVo messageVo=new MessageVo();
-                    messageVo.setFromUserName(requestMessage.getFromUserName());
+                    User user=UserAPI.userInfo(TokenManager.getDefaultToken(),requestMessage.getFromUserName());
+                    messageVo.setFromUserName(user!=null?user.getNickname():"未知");
                     messageVo.setId(requestMessage.getId());
                     messageVo.setMsgType(requestMessage.getMsgType());
-                    messageVo.setCreateTime(simpleDateFormat.format(new Date(requestMessage.getCreateTime())));
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(requestMessage.getCreateTime());
+                    messageVo.setReplyContent(requestMessage.getReplyContent());
+                    messageVo.setReplyFlag(requestMessage.getReplyFlag());
+                    messageVo.setOpenId(requestMessage.getFromUserName());
+                    messageVo.setCreateTime(simpleDateFormat.format(calendar.getTime()));
                     messageVo.setToUserName(requestMessage.getToUserName());
-                    if(requestMessage.getMsgType().equals("text")){//文本
+                    if(requestMessage.getMsgType().equalsIgnoreCase("text")){//文本
                         messageVo.setContent(requestMessage.getContent());
-                    }else if(requestMessage.getMsgType().equals("image")){//图片
-                        messageVo.setContent("<img src="+requestMessage.getPicUrl()+" style=width:100%;/>");
-                    }else if(requestMessage.getMsgType().equals("link")){//链接
+                    }else if(requestMessage.getMsgType().equalsIgnoreCase("image")){//图片
+                        messageVo.setContent("<img src=" + requestMessage.getPicUrl() + " style=width:100%;/>");
+                    }else if(requestMessage.getMsgType().equalsIgnoreCase("link")){//链接
                         StringBuffer sb=new StringBuffer();
                         sb.append("<div>");
                             sb.append("<div>"+"标题"+requestMessage.getTitle()+"</div>");
@@ -120,8 +130,8 @@ public class RequestMessageFacade extends BaseFacade{
                             sb.append("<div>"+"链接"+requestMessage.getUrl()+"</div>");
                         sb.append("</div>");
                         messageVo.setContent(sb.toString());
-                        messageVos.add(messageVo);
-                    }
+                     }
+                    messageVos.add(messageVo);
                 }
             }
         } catch (ParseException e) {
@@ -129,4 +139,15 @@ public class RequestMessageFacade extends BaseFacade{
         }
         return messageVos;
     }
+
+    @Transactional
+    public void updateData(String id,String replyContent) {
+        String sql="from RequestMessage where id='"+id+"'";
+       RequestMessage requestMessage= (RequestMessage) entityManager.createQuery(sql).getSingleResult();
+       if(requestMessage!=null) {
+           requestMessage.setReplyContent(replyContent);
+           requestMessage.setReplyFlag("1");
+           save(requestMessage);
+       }
+     }
 }

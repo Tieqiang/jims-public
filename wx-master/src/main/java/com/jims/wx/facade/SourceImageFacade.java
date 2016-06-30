@@ -56,4 +56,13 @@ public class SourceImageFacade extends BaseFacade {
     public void delete(SourceImage sourceImage) {
         super.remove(sourceImage);
     }
+
+    public SourceImage findByMediaId(String mediaId) {
+        String sql="from SourceImage where mediaId='"+mediaId+"'";
+        List<SourceImage> list=entityManager.createQuery(sql).getResultList();
+        if(list!=null&&!list.isEmpty()){
+            return list.get(0);
+        }
+        return null;
+    }
 }

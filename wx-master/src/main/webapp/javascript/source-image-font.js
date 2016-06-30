@@ -17,13 +17,14 @@ $(function(){
         var digest=UE.getEditor('digest');
 
         var sourceImageFont={};
-        sourceImageFont.title = title.getContent();
-        alert(title.getContent());
-         sourceImageFont.author = author.getContent();
-        sourceImageFont.digest=digest.getContent();
+        sourceImageFont.title = title.getPlainTxt();
+        alert(sourceImageFont.title);
+//        alert(title.getContent());
+         sourceImageFont.author = author.getPlainTxt();
+        sourceImageFont.digest=digest.getPlainTxt();
         sourceImageFont.thumbMediaId=$("#mediaId").val();
         sourceImageFont.contentSourceUrl=$("#contentSourceUrl").val();
-        var content=content.getContent();//byte[]
+        var content=content.getPlainTxt();//byte[]
         if(sourceImageFont.thumbMediaId==null || sourceImageFont.thumbMediaId==""){
             $.messager.alert("系统提示","请选择图片","error");
             return;
@@ -35,7 +36,7 @@ $(function(){
             $.messager.alert("系统提示", "保存成功", "info");
             $('#imageList').datagrid('unselectAll');
         }, function (data, status) {
-            $.messager.alert("系统提示",data.errorMessage, "error");
+            $.messager.alert("系统提示","保存失败", "error");
         })
 
     });
@@ -94,7 +95,8 @@ $(function(){
                 },
                 {
                     title: 'image',
-                    field: 'image'
+                    field: 'image',
+                    width:"100%"
 
                 }
              ]

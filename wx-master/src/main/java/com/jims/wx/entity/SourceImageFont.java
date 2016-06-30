@@ -143,6 +143,18 @@ public class SourceImageFont implements java.io.Serializable {
     public void setImage(String image) {
         this.image = image;
     }
+
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj!=null?(obj instanceof  SourceImage?true:false):false){
+            obj=(SourceImage)obj;
+            if(((SourceImage) obj).getMediaId().equals(this.mediaId))
+                return true;
+            return false;
+        }
+        return false;
+    }
 }
 
 

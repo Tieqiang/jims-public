@@ -5,7 +5,7 @@ create table SOURCE_IMAGE_FONT
   title              VARCHAR2(200),
   thumb_media_id     VARCHAR2(64),
   author             VARCHAR2(200),
-  digest             VARCHAR2(200),
+  digest             VARCHAR2(1000),
   show_cover_pic     VARCHAR2(4),
   content            BLOB,
   content_source_url VARCHAR2(200),
@@ -17,7 +17,14 @@ create table SOURCE_IMAGE_FONT
 tablespace USERS
   pctfree 10
   initrans 1
-  maxtrans 255;
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
 -- Add comments to the table
 comment on table SOURCE_IMAGE_FONT
   is '图文消息表';
@@ -53,4 +60,25 @@ alter table SOURCE_IMAGE_FONT
   tablespace USERS
   pctfree 10
   initrans 2
-  maxtrans 255;
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );
+alter table SOURCE_IMAGE_FONT
+  add constraint IMAGE_FONT_MEDIA_ID_UNIQUE_KEY unique (MEDIA_ID)
+  using index
+  tablespace USERS
+  pctfree 10
+  initrans 2
+  maxtrans 255
+  storage
+  (
+    initial 64K
+    next 1M
+    minextents 1
+    maxextents unlimited
+  );

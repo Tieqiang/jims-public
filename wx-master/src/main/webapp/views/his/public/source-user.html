@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head lang="en">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="robots" content="noindex, nofollow"/>
+    <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/color.css">
+    <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
+    <link rel="stylesheet" href="/style/common.css">
+</head>
+<body>
+
+ <table id="user" class="easyui-datagrid"></table>
+
+
+ <div id="tb" style="padding:2px 5px;">
+    <a href="#" id="send" class="easyui-linkbutton" iconCls="icon-edit">发送消息</a>
+ </div>
+
+
+ <div id="sendMessageDlg" modal="true" draggable="true"  class="easyui-dialog" style="width:500px;height: 500px;"
+      closed="true"  data-options="modal:true"  buttons="#dlg-buttons">
+      <script id="sendMessage" name="sendMessage" type="text/plain">
+                请输入要发送的消息!
+     </script>
+ </div>
+ <div id="dlg-buttons">
+     <a href="javascript:void(0)" id="submit" class="easyui-linkbutton c6" iconCls="icon-ok" >确定</a>
+     <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel"
+        onclick="javascript:$('#sendMessageDlg').dialog('close')" >关闭</a>
+ </div>
+
+<script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
+ <script type="text/javascript" src="/assert/ueditor/ueditor.config.js"></script>
+ <script type="text/javascript" src="/assert/ueditor/ueditor.all.js"></script>
+<script type="text/javascript" src="../../../javascript/source-user.js" charset="UTF-8"></script>
+<script type="text/javascript" src="/javascript/tool.js"></script>
+</body>
+</html>

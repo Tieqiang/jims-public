@@ -33,6 +33,10 @@ $(function () {
                     title: 'id',
                     field: 'id',
                     hidden: true
+                }, {
+                    title: 'openId',
+                    field: 'openId',
+                    hidden: true
                 },
                 {
                     title: 'toUserName',
@@ -54,11 +58,26 @@ $(function () {
                 {
                     title: '消息内容',
                     field: 'content'
+                },
+                {
+                    title: '回复内容',
+                    field: 'replyContent'
+                },
+                {
+                    title: '是否回复',
+                    field: 'replyFlag',
+                    formatter:function(index,value){
+//                        alert(value.replyFlag);
+                        if(value.replyFlag=="1"){
+                            return "已回复";
+                        }else{
+                            return "未回复";
+                        }
+                    }
                 }
             ]
         ]
     });
-
     var loadData = function () {
         var startTime = $("#startTime").datetimebox("getValue");
         var endTime = $("#endTime").datetimebox("getValue");
@@ -87,20 +106,30 @@ $(function () {
             return;
         }
         editor = UE.getEditor("content");
-        $("#replyDlg").dialog("open");
+        $("#replyDlg").dialog("open").dialog("setTitle","回复消息");
     })
     $("#saveBtn").on("click", function () {
-        var fromUserName = rowDatas[0].fromUserName;//openId
+        var rowDatas = $("#message").datagrid("getSelections");
+        var fromUserName = rowDatas[0].openId;//openId
         var toUserName = rowDatas[0].toUserName;//公众号
-        var content = editor.getContent();
+        var id=rowDatas[0].id;
+        var content = editor.getPlainTxt();
         if (content == null || content == "") {
             $.messager.alert("系统提示", "请填写需要回复的内容", "error");
             return;
         }
-        $.postJSON("/api/source/reply-user?openId=" + fromUserName + "&replyContent=" + content + "&toUserName=" + toUserName, function (data) {
-            $.messager.alert("系统提示", "回复成功", "info");
-        }, function (data, status) {
-            $.messager.alert("系统提示", data.errorMessage, "error");
-        });
+        $.ajax({
+            url:"/api/source/reply-user?replyContet="+content+"&openId="+fromUserName+"&id="+id,
+            type:"POST",
+            cache:false,
+            success:function(data){
+                $('#replyDlg').dialog('close');
+                loadData();
+                $.messager.alert("系统提示","发送成功","info");
+            },
+            error:function(data){
+                $.messager.alert("系统提示","该用户24小时之内未联系过您,您不能对其发送消息！","info");
+            }
+        })
     })
 });

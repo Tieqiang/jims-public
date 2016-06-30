@@ -7,15 +7,21 @@ import com.jims.wx.facade.*;
 import com.jims.wx.vo.MessageVo;
 import weixin.popular.api.MaterialAPI;
 import weixin.popular.api.MessageAPI;
-import weixin.popular.bean.material.Description;
-import weixin.popular.bean.material.MaterialBatchgetResult;
-import weixin.popular.bean.material.MaterialBatchgetResultItem;
-import weixin.popular.bean.material.MaterialcountResult;
+import weixin.popular.api.UserAPI;
+import weixin.popular.bean.BaseResult;
+import weixin.popular.bean.material.*;
 import weixin.popular.bean.media.Media;
 import weixin.popular.bean.media.MediaType;
 import weixin.popular.bean.message.*;
 import weixin.popular.bean.message.Article;
 import weixin.popular.bean.message.massmessage.*;
+import weixin.popular.bean.message.preview.ImagePreview;
+import weixin.popular.bean.message.preview.MpnewsPreview;
+import weixin.popular.bean.message.preview.Preview;
+import weixin.popular.bean.message.preview.TextPreview;
+import weixin.popular.bean.user.FollowResult;
+import weixin.popular.bean.user.User;
+import weixin.popular.bean.user.UserInfoList;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
 import weixin.popular.support.TokenManager;
@@ -29,10 +35,7 @@ import javax.ws.rs.core.Response;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * cxy
@@ -58,6 +61,12 @@ public class SourceService {
         this.response = response;
     }
 
+//    @Inject
+//    public SourceService(SourceImageFacade sourceImageFacade,SourceImageFontFacade sourceImageFontFacade){
+//        this.sourceImageFacade=sourceImageFacade;
+//        this.sourceImageFontFacade=sourceImageFontFacade;
+//    }
+
     /**
      * 上传图文消息
      * 一次保存一个
@@ -82,7 +91,7 @@ public class SourceService {
             article.setShow_cover_pic("1");//默认显示封面
             articles.add(article);
             Media media = MaterialAPI.materialAdd_news(TokenManager.getDefaultToken(), articles);
-            if (media.getErrmsg() != null && !"".equals(media.getErrcode())) {
+            if ("".equals(media.getMedia_id())) {
                 ErrorException errorException = new ErrorException();
                 errorException.setMessage(new IllegalArgumentException());
                 errorException.setErrorMessage(media.getErrmsg());
@@ -128,7 +137,7 @@ public class SourceService {
                     if (file1.getName().equals(saveName)) {
                         InputStream inputStream = new FileInputStream(file1);
                         Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.image, inputStream, new Description());
-                        if (media.getErrmsg() != null && !"".equals(media.getErrcode())) {
+                        if (media.getErrcode().equals("0")) {
                             sourceImage.setImageWxUrl(media.getUrl());
                             sourceImage.setMediaId(media.getMedia_id());
                             sourceImage = sourceImageFacade.save(sourceImage);
@@ -162,71 +171,11 @@ public class SourceService {
     @GET
     @Path("list")
     public List<SourceImage> list() {
-        //  如果从微信公众号上操作 本地将保存新增的图片素材
-        List<String> medias = new ArrayList<String>();
-        //获取微信服务器上的总数
-        MaterialcountResult materialcountResult = getWxSourceCount();
-        Integer imageCount = materialcountResult.getImage_count();
-        if (imageCount <= 20) {
-            MaterialBatchgetResult materialBatchgetResult = getWxSource("image", 0, imageCount);
-            medias = getWxSourceMedias(materialBatchgetResult, medias);
-        } else {
-            int count = imageCount / 20 + 1;//拿几回
-            int countSy = imageCount;//剩余数量
-            //45
-            for (int i = 1; i <= count; i++) {
-                MaterialBatchgetResult materialBatchgetResult = getWxSource("image", i == 1 ? (i - 1) * 20 : (i - 1) * 20 + 1, i == 1 ? 20 : (i == count ? countSy : 20));
-                medias = getWxSourceMedias(materialBatchgetResult, medias);
-                countSy = countSy - 20;
-            }
-        }
         String addr = getRequestUrl();
         List<SourceImage> list = sourceImageFacade.findAll(SourceImage.class);//查找本地保存的图片
-        //获取微信服务器上的图片
-
-            if (list.size() == medias.size()) {
-                for (SourceImage sourceImage : list) {
-                    sourceImage.setImage("<img src=" + (addr + sourceImage.getImageLocalUrl()) + " style='width:40px;height:40px'/>");
-                }
-                return list;
-            }
-            if (list.size() > medias.size()) {//本地的数量多余服务器上的数量
-                for (SourceImage sourceImage : list) {
-                    byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), sourceImage.getMediaId());
-                    if (image != null && !"".equals(image)) {//服务器上也存在这个图片
-                        sourceImage.setImage("<img src=" + (addr + sourceImage.getImageLocalUrl()) + " style='width:40px;height:40px;'/>");
-                    } else {
-                        list.remove(sourceImage);
-                        //从本地删除
-                        sourceImageFacade.delete(sourceImage);
-                    }
-                }
-                return list;
-            }
-            if (list.size() < medias.size()) {//本地的数量小于服务器上的数量
-                List<String> result = new ArrayList<String>();
-                for (SourceImage sourceImage : list) {
-                    result.add(sourceImage.getMediaId());
-                }
-                for (String media : medias) {
-                    SourceImage sourceImage=null;
-                    if (!result.contains(media)) {
-                        byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), media);
-                        // 将image上传到自己的服务器
-                         try{
-                             sourceImage=uploadWxSourceAndSave(image,media);
-                             if(!list.contains(sourceImage)){
-                                 sourceImage.setImage("<img src=" + (addr + sourceImage.getImageLocalUrl()) + " style='width:40px;height:40px;'/>");
-                                 list.add(sourceImage);
-                             }
-                          }
-                         catch(Exception e){
-                             continue;
-                         }
-                     }
-                }
-            }
-
+        for (SourceImage sourceImage : list) {
+            sourceImage.setImage("<img src=" + (addr + sourceImage.getImageLocalUrl()) + " style='width:100%;height:100%'/>");
+        }
         return list;
     }
 
@@ -259,7 +208,7 @@ public class SourceService {
                         description.setTitle(sourceVideo.getTitle());
                         description.setIntroduction(new String(sourceVideo.getDescription(), "UTF-8"));
                         Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.video, file1, description);
-                        if (media.getErrmsg() != null && !"".equals(media.getErrcode())) {
+                        if (!"0".equals(media.getErrcode())) {
                             ErrorException errorException = new ErrorException();
                             errorException.setMessage(new IllegalArgumentException());
                             errorException.setErrorMessage(media.getErrmsg());
@@ -297,6 +246,8 @@ public class SourceService {
     @Path("list-video")
     public List<SourceVideo> listVideo() {
         //todo 保证本地的素材和微信服务器上素材是同步的
+        //拿到服务器上的数量
+
         String addr = getRequestUrl();
         List<SourceVideo> list = sourceVideoFacade.findAll(SourceVideo.class);
         return list;
@@ -320,7 +271,7 @@ public class SourceService {
             massMessage.setMpnews(new Mpnews(list.get(0).getMediaId()));
             massMessage.setMsgtype("mpnews");
             MessageSendResult messageSendResult = MessageAPI.messageMassSendall(TokenManager.getDefaultToken(), massMessage);
-            if (messageSendResult.getErrcode() == null) {
+            if (messageSendResult.getErrcode().equals("0")) {
                 return Response.status(Response.Status.OK).entity(messageSendResult).build();
             } else {
                 ErrorException errorException = new ErrorException();
@@ -335,8 +286,8 @@ public class SourceService {
             massMessage.setText(new Text(sendMessage.getContent()));
             massMessage.setMsgtype("text");
             MessageSendResult messageSendResult = MessageAPI.messageMassSendall(TokenManager.getDefaultToken(), massMessage);
-            if (messageSendResult.getErrcode() == null) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(messageSendResult).build();
+            if (messageSendResult.getErrcode().equals("0")) {
+                return Response.status(Response.Status.OK).entity(messageSendResult).build();
             }
             ErrorException errorException = new ErrorException();
             errorException.setMessage(new IllegalArgumentException());
@@ -350,8 +301,8 @@ public class SourceService {
             massMessage.setImage(new Image(list.get(0).getMediaId()));
             massMessage.setMsgtype("image");
             MessageSendResult messageSendResult = MessageAPI.messageMassSendall(TokenManager.getDefaultToken(), massMessage);
-            if (messageSendResult.getErrcode() == null) {
-                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(messageSendResult).build();
+            if (messageSendResult.getErrcode().equals("0")) {
+                return Response.status(Response.Status.OK).entity(messageSendResult).build();
             }
             ErrorException errorException = new ErrorException();
             errorException.setMessage(new IllegalArgumentException());
@@ -360,7 +311,7 @@ public class SourceService {
         }
         return null;
     }
-     /**
+    /**
      * 获取永久素材根据mediaId
      */
 //    @POST
@@ -389,10 +340,68 @@ public class SourceService {
     @GET
     @Path("load-image-font")
     public List<ImageVo> loadImageFont() {
-        // todo 保证本地服务器上图文素材和微信服务器上图文素材是同步的
+        //  保证本地服务器上图文素材和微信服务器上图文素材是同步的
         String addr = getRequestUrl();
         List<ImageVo> imageVos = new ArrayList<ImageVo>();
         List<SourceImageFont> list = sourceImageFontFacade.findAll(SourceImageFont.class);
+
+
+//        MaterialcountResult materialcountResult = getWxSourceCount();
+//        Integer newsCount = materialcountResult.getNews_count();//图文消息的总数
+//        MaterialBatchgetResult materialBatchgetResult = null;
+//        List<String> medias = new ArrayList<String>();
+//        if (newsCount != null ? (newsCount <= 20 && newsCount != 0 ? true : false) : false) {
+//            materialBatchgetResult = getWxSource("news", 0, newsCount);//从第一个开始取，取newsCount个
+//            medias = getWxSourceMedias(materialBatchgetResult, medias);
+//
+//        }
+//        if (newsCount != null ? (newsCount > 20 ? true : false) : false) {
+//            int count = newsCount / 20 + 1;//可以取几次
+//            int amout = newsCount;//剩余数量
+//            for (int i = 1; i <= count; i++) {
+//                materialBatchgetResult = getWxSource("news", i == 1 ? 0 : (20 * (i - 1)) + 1, amout);//从第一个开始取，取newsCount个
+//                medias = getWxSourceMedias(materialBatchgetResult, medias);
+//                if (i == count) {
+//                    amout = 0;
+//                    break;
+//                }
+//                amout = amout - 20;
+//            }
+//        }
+//        if (list != null ? (list.size() == medias.size() ? true : false) : false) {// 是同步的
+//            return imageVos;
+//        }
+//        if (list != null ? (list.size() > medias.size() ? true : false) : false) {
+//            for (SourceImageFont sourceImageFont : list) {
+//                if (!medias.contains(sourceImageFont.getMediaId())) {//服务器上没有这个图文
+//                    //将本地删除
+//                    sourceImageFontFacade.delete(sourceImageFont);
+//                    //list 集合删除
+//                    list.remove(sourceImageFont);
+//                }
+//            }
+//
+//        }
+//        if (list != null ? (list.size() < medias.size() ? true : false) : false) {//微信服务去上数量多余本地
+//            //找出缺失的些
+//            List<String> result = new ArrayList<String>();
+//            for (SourceImageFont sourceImageFont : list) {
+//                if (!result.contains(sourceImageFont.getMediaId()))
+//                    result.add(sourceImageFont.getMediaId());
+//            }
+//            for (String media : medias) {
+//                if (!result.contains(media)) {
+//                    NewsItem newsItem = MaterialAPI.materialGet_material_newsItem(TokenManager.getDefaultToken(), media);
+//                    List<Article> articles = newsItem.getNews_item();
+//                    list = findWxAndsaveLocal(list, media);
+//                }
+//            }
+//        }
+//        if (list == null && list.isEmpty() ? (medias.size() > 0 ? true : false) : false) {
+//            for (String media : medias) {
+//                list = findWxAndsaveLocal(list, media);
+//            }
+//        }
         for (SourceImageFont sourceImageFont : list) {
             ImageVo imageVo = new ImageVo();
             imageVo.setId(sourceImageFont.getId());
@@ -401,7 +410,7 @@ public class SourceService {
             StringBuffer sb = new StringBuffer();
             sb.append("<div>");
             sb.append("<div>" + sourceImageFont.getTitle() + "</div>");
-            sb.append("<div><img src=" + imageLocalUrl + " style=width:40px,height:40px;></div>");
+            sb.append("<div><img src=" + imageLocalUrl + " style=width:100%,height:100%;></div>");
             sb.append("<div>" + sourceImageFont.getDigest() + "</div>");
             sb.append("</div>");
             imageVo.setImage(sb.toString());
@@ -424,7 +433,7 @@ public class SourceService {
         if (list != null && !list.isEmpty()) {
             for (SourceImage sourceImage : list) {
                 ImageVo imageVo = new ImageVo();
-                imageVo.setImage("<img src='" + (addr + sourceImage.getImageLocalUrl()) + "' style=width:40px,height:40px;>");
+                imageVo.setImage("<img src='" + (addr + sourceImage.getImageLocalUrl()) + "' style=width:100%,height:100%;>");
                 imageVo.setMediaId(sourceImage.getMediaId());
                 imageVo.setId(sourceImage.getId());
                 imageVos.add(imageVo);
@@ -478,21 +487,19 @@ public class SourceService {
      */
     @POST
     @Path("reply-user")
-    public Response repplyUser(@QueryParam("openId") String fromUserName, @QueryParam("replyContet") String replyContent, @QueryParam("toUserName") String toUserName) {
-        ServletOutputStream outputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-        } catch (IOException e) {
-            e.printStackTrace();
+    public Response repplyUser(@QueryParam("openId") String fromUserName, @QueryParam("replyContet") String replyContent, @QueryParam("toUserName") String toUserName,@QueryParam("id") String id) {
+        if (toUserName == null || toUserName.equals("")) {
+            toUserName = "jimscloud";
         }
-        //创建回复
-        XMLMessage xmlTextMessage = new XMLTextMessage(
-                toUserName,
-                fromUserName,
-                replyContent);
-        //回复
-        xmlTextMessage.outputStreamWrite(outputStream);
-        return Response.status(Response.Status.OK).entity(xmlTextMessage).build();
+        String jsonMessage = "{\"touser\":\"" + fromUserName + "\",\"msgtype\":\"text\",\"text\":{\"content\":\"" + replyContent + "\"}} ";
+        BaseResult baseResult = MessageAPI.messageCustomSend(TokenManager.getDefaultToken(), jsonMessage);
+        if (baseResult.getErrcode().equals("0")){
+            if(id!=null&&!"".equals(id)){//单条回复成功
+                requestMessageFacade.updateData(id,replyContent);
+            }
+            return Response.status(Response.Status.OK).entity(baseResult).build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(baseResult).build();
     }
 
     /**
@@ -559,36 +566,37 @@ public class SourceService {
 
     /**
      * 获取upload 文件夹的真实路径
+     *
      * @return
      */
-    private String getUploadPath(){
-        return  request.getSession().getServletContext().getRealPath("upload");
+    private String getUploadPath() {
+        return request.getSession().getServletContext().getRealPath("upload");
     }
 
     /**
-     *将微信服务器上的图片放到项目上
+     * 将微信服务器上的图片放到项目上
      * 并且保存相关信息到数据库
      */
-    private SourceImage uploadWxSourceAndSave(byte[] image,String media){
-        long imageUploadName=new Date().getTime();
-        File imageFile=new File(getUploadPath()+"//"+imageUploadName+".jpg");
-        if(!imageFile.exists()){
+    private SourceImage uploadWxSourceAndSave(byte[] image, String media) {
+        long imageUploadName = new Date().getTime();
+        File imageFile = new File(getUploadPath() + "//" + imageUploadName + ".jpg");
+        if (!imageFile.exists()) {
             try {
                 imageFile.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        FileOutputStream outputStream=null;
+        FileOutputStream outputStream = null;
         try {
-            outputStream= new FileOutputStream(imageFile);
+            outputStream = new FileOutputStream(imageFile);
             outputStream.write(image);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
-        }finally{
-            if(outputStream!=null){
+        } finally {
+            if (outputStream != null) {
                 try {
                     outputStream.close();
                 } catch (IOException e) {
@@ -598,9 +606,266 @@ public class SourceService {
         }
         SourceImage sourceImage = new SourceImage();
         sourceImage.setMediaId(media);//媒体ID
-        sourceImage.setImageName(String.valueOf(imageUploadName)+".jpg");
-        sourceImage.setImageLocalUrl("/upload/"+imageUploadName+".jpg");
+        sourceImage.setImageName(String.valueOf(imageUploadName) + ".jpg");
+        sourceImage.setImageLocalUrl("/upload/" + imageUploadName + ".jpg");
         sourceImage.setImageSize(String.valueOf(image.length));
         return sourceImageFacade.save(sourceImage);
+    }
+
+    /**
+     * @param list
+     * @param media
+     * @return
+     */
+    private List<SourceImageFont> findWxAndsaveLocal(List<SourceImageFont> list, String media) {
+        NewsItem newsItem = MaterialAPI.materialGet_material_newsItem(TokenManager.getDefaultToken(), media);
+        List<Article> articles = newsItem.getNews_item();
+        //将其保存到数据库
+        if (articles != null && !articles.isEmpty()) {
+            SourceImageFont sourceImageFont = new SourceImageFont();
+            try {
+                sourceImageFont.setContent(articles.get(0).getContent().getBytes("UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            sourceImageFont.setMediaId(media);
+            sourceImageFont.setAuthor(articles.get(0).getAuthor());
+            sourceImageFont.setContentSourceUrl(articles.get(0).getContent_source_url());
+            sourceImageFont.setDelFlag("0");
+            sourceImageFont.setDigest(articles.get(0).getDigest());
+            sourceImageFont.setShowCoverPic(articles.get(0).getShow_cover_pic());
+            sourceImageFont.setThumbMediaId(articles.get(0).getThumb_media_id());
+            sourceImageFont.setTitle(articles.get(0).getTitle());
+            String localUrl = sourceImageFontFacade.findByMediaId(articles.get(0).getThumb_media_id());
+            if (localUrl != null ? true : false) {
+                sourceImageFont.setLocalUrl(localUrl);
+            }
+            sourceImageFont = sourceImageFontFacade.save(sourceImageFont);
+            list.add(sourceImageFont);
+            return list;
+        }
+        return null;
+    }
+
+    /**
+     * 预览
+     *
+     * @return
+     */
+    @POST
+    @Path("preview")
+    public MessageSendResult preview(@QueryParam("selectedType") String selectedType, @QueryParam("mediaId") String mediaId, @QueryParam("sendContent") String sendContent,@QueryParam("openId") String openId) {
+        if (selectedType.equals("1")) {//图文
+            MpnewsPreview mpnewsPreview = new MpnewsPreview(mediaId);
+            mpnewsPreview.setTouser(openId);
+            return MessageAPI.messageMassPreview(TokenManager.getDefaultToken(), mpnewsPreview);
+        } else if (selectedType.equals("2")) {//文本
+            TextPreview textPreview = new TextPreview(sendContent);
+            textPreview.setTouser(openId);
+            return MessageAPI.messageMassPreview(TokenManager.getDefaultToken(), textPreview);
+        }
+        ImagePreview imagePreview = new ImagePreview(mediaId);
+        imagePreview.setTouser(openId);
+        MessageSendResult messageSendResult = MessageAPI.messageMassPreview(TokenManager.getDefaultToken(), imagePreview);
+        return messageSendResult;
+    }
+
+    /**
+     * 删除永久素材
+     *
+     * @param mediaId
+     * @param sendType
+     * @return
+     */
+    @POST
+    @Path("delete-source")
+    public Response deletSource(@QueryParam("mediaId") String mediaId, @QueryParam("sendType") String sendType) {
+        if (sendType.equals("3")) {
+            //先将本地删除
+            sourceImageFacade.delete(sourceImageFacade.findByMediaId(mediaId));
+            return returnDeleteResult(mediaId);
+        } else if (sendType.equals("1")) {
+            SourceImageFont sourceImageFont = sourceImageFontFacade.findEntityByMediaId(mediaId);
+            sourceImageFontFacade.delete(sourceImageFont);
+            return returnDeleteResult(mediaId);
+        }
+        return null;
+    }
+
+    /**
+     * @param mediaId
+     * @return
+     */
+    private Response returnDeleteResult(String mediaId) {
+        BaseResult baseResult = MaterialAPI.materialDel_material(TokenManager.getDefaultToken(), mediaId);
+        if (baseResult.getErrcode().equals("0")) {
+            return Response.status(Response.Status.OK).entity(baseResult).build();
+        }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(baseResult).build();
+    }
+
+
+    /**
+     * 获取关注列表以及信息
+     *
+     * @return
+     */
+    @GET
+    @Path("source-user")
+    public List<User> sourceUserList() {
+        FollowResult followResult = UserAPI.userGet(TokenManager.getDefaultToken(), null);
+        FollowResult.Data data = followResult.getData();
+        String[] openIds = data.getOpenid();
+        List<String> openIdss = Arrays.asList(openIds);
+        UserInfoList userInfoList = UserAPI.userInfoBatchget(TokenManager.getDefaultToken(), "zh-CN", openIdss);
+        return userInfoList.getUser_info_list();
+    }
+
+    /**
+     * 同步本地和服务器上的图文消息
+     * listener 调用的方法
+     */
+    @POST
+    @Path("synch-image-font")
+    public Response threadMethod() {
+        String addr = getRequestUrl();
+        List<ImageVo> imageVos = new ArrayList<ImageVo>();
+        List<SourceImageFont> list = sourceImageFontFacade.findAll(SourceImageFont.class);
+        MaterialcountResult materialcountResult = getWxSourceCount();
+        Integer newsCount = materialcountResult.getNews_count();//图文消息的总数
+        MaterialBatchgetResult materialBatchgetResult = null;
+        List<String> medias = new ArrayList<String>();
+        if (newsCount != null ? (newsCount <= 20 && newsCount != 0 ? true : false) : false) {
+            materialBatchgetResult = getWxSource("news", 0, newsCount);//从第一个开始取，取newsCount个
+            medias = getWxSourceMedias(materialBatchgetResult, medias);
+        }
+        if (newsCount != null ? (newsCount > 20 ? true : false) : false) {
+            int count = newsCount / 20 + 1;//可以取几次
+            int amout = newsCount;//剩余数量
+            for (int i = 1; i <= count; i++) {
+                materialBatchgetResult = getWxSource("news", i == 1 ? 0 : (20 * (i - 1)) + 1, amout);//从第一个开始取，取newsCount个
+                medias = getWxSourceMedias(materialBatchgetResult, medias);
+                if (i == count) {
+                    amout = 0;
+                    break;
+                }
+                amout = amout - 20;
+            }
+        }
+        if (list != null ? (list.size() == medias.size() ? true : false) : false) {// 是同步的
+
+        }
+        if (list != null ? (list.size() > medias.size() ? true : false) : false) {
+            for (SourceImageFont sourceImageFont : list) {
+                if (!medias.contains(sourceImageFont.getMediaId())) {//服务器上没有这个图文
+                    //将本地删除
+                    sourceImageFontFacade.delete(sourceImageFont);
+                    //list 集合删除
+                    list.remove(sourceImageFont);
+                }
+            }
+
+        }
+        if (list != null ? (list.size() < medias.size() ? true : false) : false) {//微信服务去上数量多余本地
+            //找出缺失的些
+            List<String> result = new ArrayList<String>();
+            for (SourceImageFont sourceImageFont : list) {
+                if (!result.contains(sourceImageFont.getMediaId()))
+                    result.add(sourceImageFont.getMediaId());
+            }
+            for (String media : medias) {
+                if (!result.contains(media)) {
+                    NewsItem newsItem = MaterialAPI.materialGet_material_newsItem(TokenManager.getDefaultToken(), media);
+                    List<Article> articles = newsItem.getNews_item();
+                    list = findWxAndsaveLocal(list, media);
+                }
+            }
+        }
+        if (list!=null && list.isEmpty() ? (medias.size() > 0 ? true : false) : false) {
+            for (String media : medias) {
+                list = findWxAndsaveLocal(list, media);
+            }
+        }
+        return Response.status(Response.Status.OK).entity(list).build();
+    }
+
+    /**
+     * 同步图片消息
+     */
+    @POST
+    @Path("synch-image")
+    public Response threadMethod2() {
+        List<String> medias = new ArrayList<String>();
+        //获取微信服务器上的总数
+        MaterialcountResult materialcountResult = getWxSourceCount();
+        Integer imageCount = materialcountResult.getImage_count();
+        if (imageCount != null ? (imageCount <= 20 ? true : false) : false) {
+            MaterialBatchgetResult materialBatchgetResult = getWxSource("image", 0, imageCount);
+            medias = getWxSourceMedias(materialBatchgetResult, medias);
+        }
+        if (imageCount != null ? (imageCount > 20 ? true : false) : false) {
+            int count = imageCount / 20 + 1;//拿几回
+            int countSy = imageCount;//剩余数量
+            //45
+            for (int i = 1; i <= count; i++) {
+                MaterialBatchgetResult materialBatchgetResult = getWxSource("image", i == 1 ? (i - 1) * 20 : (i - 1) * 20 + 1, i == 1 ? 20 : (i == count ? countSy : 20));
+                medias = getWxSourceMedias(materialBatchgetResult, medias);
+                countSy = countSy - 20;
+            }
+        }
+        String addr = getRequestUrl();
+        List<SourceImage> list = sourceImageFacade.findAll(SourceImage.class);//查找本地保存的图片
+        //获取微信服务器上的图片
+        if (list != null && !list.isEmpty() ? (list.size() == medias.size() ? true : false) : false) {
+
+        }
+        if (list != null && !list.isEmpty() ? (list.size() > medias.size() ? true : false) : false) {//本地的数量多余服务器上的数量
+            for (SourceImage sourceImage : list) {
+                byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), sourceImage.getMediaId());
+                if (image != null && !"".equals(image)) {//服务器上也存在这个图片
+
+                } else {
+                    list.remove(sourceImage);
+                    //从本地删除
+                    sourceImageFacade.delete(sourceImage);
+                }
+            }
+        }
+        if (list != null && !list.isEmpty() ? (list.size() < medias.size() ? true : false) : false) {//本地的数量小于服务器上的数量
+            List<String> result = new ArrayList<String>();
+            for (SourceImage sourceImage : list) {
+                result.add(sourceImage.getMediaId());
+            }
+            for (String media : medias) {
+                SourceImage sourceImage = null;
+                if (!result.contains(media)) {
+                    byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), media);
+                    // 将image上传到自己的服务器
+                    try {
+                        sourceImage = uploadWxSourceAndSave(image, media);
+                    } catch (Exception e) {
+                        continue;
+                    }
+                }
+            }
+        }
+        if (list!=null && list.isEmpty() ? (medias != null && medias.size() > 0 ? true : false) : false) {
+            for (String media : medias) {
+                SourceImage sourceImage = null;
+                byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), media);
+                // 将image上传到自己的服务器
+                try {
+                    sourceImage = uploadWxSourceAndSave(image, media);
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+        }
+        return Response.status(Response.Status.OK).entity(list).build();
+    }
+
+    public static void main(String[] args){
+        long a=new Date().getTime()/1000;
+        System.out.println(a);
     }
 }

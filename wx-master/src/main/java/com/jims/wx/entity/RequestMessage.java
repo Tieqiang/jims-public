@@ -45,6 +45,9 @@ public class RequestMessage implements java.io.Serializable {
 	private String longitude;
 	private String precision;
 
+    private String replyFlag="0";
+    private String replyContent;
+
 	// Constructors
 
 	/** default constructor */
@@ -324,4 +327,21 @@ public class RequestMessage implements java.io.Serializable {
 		this.precision = precision;
 	}
 
+
+    @Column(name="reply_flag")
+    public String getReplyFlag() {
+        return replyFlag;
+    }
+
+    public void setReplyFlag(String replyFlag) {
+        this.replyFlag = replyFlag;
+    }
+    @Column(name="reply_content")
+    public String getReplyContent() {
+        return replyContent;
+    }
+
+    public void setReplyContent(String replyContent) {
+        this.replyContent = replyContent;
+    }
 }
