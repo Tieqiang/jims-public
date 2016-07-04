@@ -144,5 +144,18 @@ public class User extends BaseResult{
 		this.remark = remark;
 	}
 
-	
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null){
+            return false;
+        }
+        if(obj instanceof User){
+            obj=(User)obj;
+            if(((User) obj).getOpenid().equals(this.openid)){
+                return true;
+            }
+        }
+        return false;
+    }
 }

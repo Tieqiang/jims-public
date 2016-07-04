@@ -5,18 +5,17 @@ package weixin.popular.bean.message.massmessage;
  */
 public class Mpnews {
 
-    private String mediaId;
+    private String media_id;
 
-    public Mpnews(String mediaId) {
-        this.mediaId = mediaId;
+    public Mpnews(String media_id) {
+        this.media_id = media_id;
     }
 
-    public String getMediaId() {
-
-        return mediaId;
+    public String getMedia_id() {
+        return media_id;
     }
 
-    public void setMediaId(String mediaId) {
-        this.mediaId = mediaId;
+    public void setMedia_id(String media_id) {
+        this.media_id = media_id;
     }
 }

@@ -11,11 +11,13 @@ public abstract class BaseAPI {
 	protected static final String QRCODE_DOWNLOAD_URI = "https://mp.weixin.qq.com";
 	protected static final String MCH_URI = "https://api.mch.weixin.qq.com";
 	protected static final String OPEN_URI = "https://open.weixin.qq.com";
-
-	protected static Header jsonHeader = new BasicHeader(HttpHeaders.CONTENT_TYPE,ContentType.APPLICATION_JSON.toString());
+ 	protected static Header jsonHeader = new BasicHeader(HttpHeaders.CONTENT_TYPE,ContentType.APPLICATION_JSON.toString());
 	protected static Header xmlHeader = new BasicHeader(HttpHeaders.CONTENT_TYPE,ContentType.APPLICATION_XML.toString());
-	
-	protected static final String PARAM_ACCESS_TOKEN = "access_token";
+    protected static Header jsonHeader2 = new BasicHeader(HttpHeaders.ACCEPT,"/");
+    protected static Header jsonHeader3= new BasicHeader(HttpHeaders.CONNECTION,"Keep-Alive");
+    protected static Header jsonHeader4= new BasicHeader(HttpHeaders.USER_AGENT,"Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)");
+
+    protected static final String PARAM_ACCESS_TOKEN = "access_token";
 	protected static final String PARAM_AUTHORIZER_ACCESS_TOKEN = "authorizer_access_token";
 	
 	/**

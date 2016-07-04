@@ -50,9 +50,10 @@ public class SourceService {
     private RequestMessageFacade requestMessageFacade;
     private HttpServletResponse response;
     private AppUserFacade appUserFacade;
+    private MediaService mediaService;
 
     @Inject
-    public SourceService(SourceImageFacade sourceImageFacade, HttpServletRequest request, SourceVideoFacade sourceVideoFacade, SourceImageFontFacade sourceImageFontFacade, RequestMessageFacade requestMessageFacade, HttpServletResponse response,AppUserFacade appUserFacade) {
+    public SourceService(SourceImageFacade sourceImageFacade, HttpServletRequest request, SourceVideoFacade sourceVideoFacade, SourceImageFontFacade sourceImageFontFacade, RequestMessageFacade requestMessageFacade, HttpServletResponse response,AppUserFacade appUserFacade,MediaService mediaService) {
         this.sourceImageFacade = sourceImageFacade;
         this.request = request;
         this.sourceVideoFacade = sourceVideoFacade;
@@ -60,6 +61,7 @@ public class SourceService {
         this.requestMessageFacade = requestMessageFacade;
         this.response = response;
         this.appUserFacade=appUserFacade;
+        this.mediaService=mediaService;
     }
 
 //    @Inject
@@ -78,7 +80,7 @@ public class SourceService {
      */
     @POST
     @Path("save-image-font")
-    public Response saveImageFont(SourceImageFont sourceImageFont, @QueryParam("content") String content) {
+    public Response saveImageFont( SourceImageFont sourceImageFont, @QueryParam("content") String content) {
         try {
             byte[] bytes = content.getBytes("UTF-8");
             sourceImageFont.setContent(bytes);
@@ -101,6 +103,7 @@ public class SourceService {
             sourceImageFont.setMediaId(media.getMedia_id());
             sourceImageFont.setContent(bytes);
             sourceImageFont = sourceImageFontFacade.save(sourceImageFont);
+//            MessageSendResult messageSendResult=send(sourceImageFont);
             return Response.status(Response.Status.OK).entity(sourceImageFont).build();
         } catch (Exception e) {
             ErrorException errorException = new ErrorException();
@@ -125,7 +128,7 @@ public class SourceService {
      */
     @POST
     @Path("save")
-    public Response save(@QueryParam("update") String updateFlag, SourceImage sourceImage, @QueryParam("saveName") String saveName) {
+    public Response save(@QueryParam("update")  String updateFlag, SourceImage sourceImage, @QueryParam("saveName") String saveName) {
         try {
             if (updateFlag != null && !"".equals(updateFlag)) {
                 sourceImage = sourceImageFacade.save(sourceImage);
@@ -137,13 +140,15 @@ public class SourceService {
                 for (File file1 : files) {
                     if (file1.getName().equals(saveName)) {
                         InputStream inputStream = new FileInputStream(file1);
-                        Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.image, inputStream, new Description());
-                        if (media.getErrcode().equals("0")) {
+                        Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.thumb, inputStream, new Description());
+                        inputStream.close();
+                        if (media.getMedia_id()!=null) {
                             sourceImage.setImageWxUrl(media.getUrl());
                             sourceImage.setMediaId(media.getMedia_id());
                             sourceImage = sourceImageFacade.save(sourceImage);
                             return Response.status(Response.Status.OK).entity(sourceImage).build();
                         }
+
                         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(sourceImage).build();
                     }
                 }
@@ -266,13 +271,9 @@ public class SourceService {
     public Response sendAll(@QueryParam("sendType") String sendType, SendMessage sendMessage) {
         if (sendType.equals("1")) {//图文
             List<SourceImageFont> list = sourceImageFontFacade.findSourceImageFontByIds(sendMessage.getIds());
-            MassMessage massMessage = new MassMessage();
-            Filter filter = new Filter(true, "");
-            massMessage.setFilter(filter);
-            massMessage.setMpnews(new Mpnews(list.get(0).getMediaId()));
-            massMessage.setMsgtype("mpnews");
-            MessageSendResult messageSendResult = MessageAPI.messageMassSendall(TokenManager.getDefaultToken(), massMessage);
-            if (messageSendResult.getErrcode().equals("0")) {
+             MessageSendResult messageSendResult=send(list.get(0));
+//           MessageSendResult messageSendResult = MessageAPI.messageMassSend(TokenManager.getDefaultToken(), massMessage);
+             if (messageSendResult.getErrcode().equals("0")) {
                 return Response.status(Response.Status.OK).entity(messageSendResult).build();
             } else {
                 ErrorException errorException = new ErrorException();
@@ -282,7 +283,7 @@ public class SourceService {
             }
         } else if (sendType.equals("2")) {//文字
             MassMessage massMessage = new MassMessage();
-            Filter filter = new Filter(true, "");
+            Filter filter = new Filter(true,null);
             massMessage.setFilter(filter);
             massMessage.setText(new Text(sendMessage.getContent()));
             massMessage.setMsgtype("text");
@@ -296,7 +297,7 @@ public class SourceService {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(messageSendResult).build();
         } else if (sendType.equals("3")) {//图片
             MassMessage massMessage = new MassMessage();
-            Filter filter = new Filter(true, "");
+            Filter filter = new Filter(true,null);
             massMessage.setFilter(filter);
             List<SourceImage> list = sourceImageFacade.findById(sendMessage.getIds());
             massMessage.setImage(new Image(list.get(0).getMediaId()));
@@ -718,9 +719,33 @@ public class SourceService {
         FollowResult.Data data = followResult.getData();
         String[] openIds = data.getOpenid();
         List<String> openIdss = Arrays.asList(openIds);
-        UserInfoList userInfoList = UserAPI.userInfoBatchget(TokenManager.getDefaultToken(), "zh-CN", openIdss);
-        return userInfoList.getUser_info_list();
-    }
+        if(openIdss!=null&&openIdss.size()<=100){
+            UserInfoList userInfoList = UserAPI.userInfoBatchget(TokenManager.getDefaultToken(), "zh-CN", openIdss);
+            return userInfoList.getUser_info_list();
+        }else{
+             int count=openIdss.size()/100+1;//总共取几次
+             int coutSy=openIdss.size();//总共有几个
+             List<User> returnVal=new ArrayList<User>();
+            //167   2
+             for(int i=1;i<=count;i++){
+                  List<String> target=openIdss.subList(i==1?0:(i-1)*100,i==1?100:(i==count?coutSy:i*100));
+                  UserInfoList userInfoList=UserAPI.userInfoBatchget(TokenManager.getDefaultToken(),"zh-cn",target);
+                  if(userInfoList.getUser_info_list()!=null) {
+                      for(User user:userInfoList.getUser_info_list()){
+                          if(!returnVal.contains(user)){
+                              returnVal.add(user);
+                          }
+                      }
+//                      if(i==count){
+//                              coutSy=0;
+//                              break;
+//                      }
+//                      coutSy-=100;
+                  }
+             }
+             return returnVal;
+        }
+     }
 
     /**
      * 同步本地和服务器上的图文消息
@@ -820,18 +845,18 @@ public class SourceService {
         if (list != null && !list.isEmpty() ? (list.size() == medias.size() ? true : false) : false) {
 
         }
-        if (list != null && !list.isEmpty() ? (list.size() > medias.size() ? true : false) : false) {//本地的数量多余服务器上的数量
-            for (SourceImage sourceImage : list) {
-                byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), sourceImage.getMediaId());
-                if (image != null && !"".equals(image)) {//服务器上也存在这个图片
-
-                } else {
-                    list.remove(sourceImage);
-                    //从本地删除
-                    sourceImageFacade.delete(sourceImage);
-                }
-            }
-        }
+//        if (list != null && !list.isEmpty() ? (list.size() > medias.size() ? true : false) : false) {//本地的数量多余服务器上的数量
+//            for (SourceImage sourceImage : list) {
+//                byte[] image = MaterialAPI.materialGet_material(TokenManager.getDefaultToken(), sourceImage.getMediaId());
+//                if (image != null && !"".equals(image)) {//服务器上也存在这个图片
+//
+//                } else {
+//                    list.remove(sourceImage);
+//                    //从本地删除
+//                    sourceImageFacade.delete(sourceImage);
+//                }
+//            }
+//        }
         if (list != null && !list.isEmpty() ? (list.size() < medias.size() ? true : false) : false) {//本地的数量小于服务器上的数量
             List<String> result = new ArrayList<String>();
             for (SourceImage sourceImage : list) {
@@ -874,7 +899,7 @@ public class SourceService {
     public Response synchUser(){
         FollowResult followResult=null;
         try {
-             followResult=UserAPI.userGet(TokenManager.getDefaultToken(),null);
+            followResult=UserAPI.userGet(TokenManager.getDefaultToken(),null);
             FollowResult.Data data=followResult.getData();
             String [] openIdArr=data.getOpenid();
             List<String> openIds=Arrays.asList(openIdArr);
@@ -962,4 +987,27 @@ public class SourceService {
         appUser.setGroupId(user.getGroupid());
         appUserFacade.saveAppUser(appUser);
     }
+
+    /**
+     * 发送消息
+     * @param sourceImageFont
+     * @return
+     */
+    private MessageSendResult send(SourceImageFont sourceImageFont){
+        MassMessage massMessage = new MassMessage();
+        Filter filter = new Filter(true,null);
+        massMessage.setFilter(filter);
+//            Set<String> set=new HashSet<String>();
+//            set.add("ogtZUw0uS2KiPorCm1zdp-FmelQY");
+//            set.add("ogtZUw_hUp_C7s4bm4yzL-2viQ8w");
+//            set.add("ogtZUw6CDDKCTkF61a4mxRZzfcS8");
+//            massMessage.setTouser(set);
+        massMessage.setMpnews(new Mpnews(sourceImageFont.getMediaId()));
+        massMessage.setMsgtype("mpnews");
+//            messageMassSend
+       return  MessageAPI.messageMassSendall(TokenManager.getDefaultToken(), massMessage);
+    }
+
+
+
 }

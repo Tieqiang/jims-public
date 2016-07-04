@@ -111,8 +111,11 @@ public class MessageAPI extends BaseAPI{
 	 */
 	public static MessageSendResult messageMassSendall(String access_token,String messageJson){
 		HttpUriRequest httpUriRequest = RequestBuilder.post()
-										.setHeader(jsonHeader)
-										.setUri(BASE_URI+"/cgi-bin/message/mass/sendall")
+//										.setHeader(jsonHeader)
+//                                        .setHeader(jsonHeader2)
+//                                        .setHeader(jsonHeader3)
+//                                        .setHeader(jsonHeader4)
+ 										.setUri(BASE_URI+"/cgi-bin/message/mass/sendall")
 										.addParameter(getATPN(), access_token)
 										.setEntity(new StringEntity(messageJson,Charset.forName("utf-8")))
 										.build();

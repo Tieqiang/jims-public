@@ -177,6 +177,9 @@ public class WxService {
             if ("VIEW".equals(event) && "event".equals(msgType)) {
 
             }
+            if("MASSSENDJOBFINISH".equalsIgnoreCase(event)&&"event".equalsIgnoreCase(msgType)){
+                //群发结果
+            }
             //创建回复
             //创建回复
             XMLMessage xmlTextMessage = new XMLTextMessage(
