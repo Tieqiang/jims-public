@@ -8,57 +8,77 @@
     <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
     <link rel="stylesheet" href="/style/common.css">
     <title></title>
+    <style>
+        table {
+            margin-bottom: 10px;
+            border-collapse: collapse;
+            display: table;
+            border: 0px dashed #ddd
+        }
+
+        #test td {
+            padding: 5px;
+            border: 1px solid #DDD;
+        }
+    </style>
 </head>
 
-<body id="lay" class="easyui-layout" style="width: 100%;height:100%" >
+<body id="lay" class="easyui-layout" style="width: 100%;height:100%">
 
-<div region="east"   collapsed=false style="height:100%;width: 50%" >
+<div region="east" collapsed=false style="height:100%;width:22%">
     <table id="imageList" class="easyui-datagrid"></table>
 </div>
-<div region="center"style="height:1000px;width: 50%"  >
-    <div  >
-        <script id="title" name="title" type="text/plain">
-                请输入标题
-    </script>
-    </div>
-    <div  >
-        <script id="author" name="author" type="text/plain">
-                请输入作者
-     </script>
-    </div>
-    <div  >
-        <script id="content" name="content" type="text/plain">
-               这里写正文
-    </script>
-    </div>
+<div region="center" style="height:1000px;width: 78%">
+    <table id="test">
+        <tr>
+            <td class="content" id="title">
+                <script id="editor1" type="text/plain" style="width:1024px;height:200px;">请输入标题</script>
+            </td>
+        </tr>
+        <tr>
+            <td class="content" id="author">请输入作者</td>
+        </tr>
+        <tr>
+            <td class="content" id="content">请输入正文</td>
+        </tr>
+        <tr>
+            <td class="content" id="digest">请输入摘要</td>
+        </tr>
+        <tr>
+            <td class="content" id="contentSourceUrl">请输入原文链接</td>
+        </tr>
+    </table>
     <div>
-        <input type="checkbox" id="ywlj"> 原文链接
-        <input type="text" id="contentSourceUrl" >
-    </div>
-    <div>
-        封面：<br/>
+        <!--封面：<br/>-->
         <div id="viewImage" style="display: none;">
             <input type="hidden" id="mediaId" name="mediaId" value=""/>
         </div>
     </div>
-    <div  >
-       <script id="digest" name="digest" type="text/plain">
-                在此处选填摘要，如果不填，默认正文的前46个字。
-      </script>
-    </div>
-  </div>
+    <!--原文链接：<input  id="contentSourceUrl" style="width:100px;" class="easyui-textbox"/>-->
+    <!--<div  >-->
+    <!--<script id="digest" name="digest" type="text/plain">-->
+    <!--在此处选填摘要，如果不填，默认正文的前46个字。-->
+    <!--</script>-->
+    <!--</div>-->
+</div>
 <div id="foot" style="padding:2px 5px;">
-    <a href="#" id="add" class="easyui-linkbutton" iconCls="icon-add">加入</a>
-    <a href="#" id="save" class="easyui-linkbutton" iconCls="icon-add">保存</a>
-    <a href="#" id="remove" class="easyui-linkbutton" iconCls="icon-add">移除所选封面</a>
- </div>
-<!-- 加载编辑器的容器 -->
- <!-- 配置文件 -->
+    <A style="color: rgb(183, 179, 112); margin-right: 10px;" href="#" id="add">加入</A>
+    <A style="color: rgb(183, 183, 183); margin-right: 10px;" href="#" id="save">保存</A>
+    <A style="color: rgb(183, 183, 183); margin-right: 10px;" href="#" id="remove">移除</A>
+    <A style="color: rgb(183, 183, 183); margin-right: 10px;" href="#" id="bigBtn">放大</A>
 
+    <!--<a href="#" id="enable" class="easyui-linkbutton" iconCls="icon-add">可以编辑</a>-->
+</div>
+<!-- 加载编辑器的容器 -->
+<!-- 配置文件 -->
+<div id="imageDlg" modal="true" draggable="false" class="easyui-dialog" style="width:100%;height:100%;padding:10px 20px"
+     closed="true" data-options="modal:true">
+    <div id="imageDiv"></div>
+</div>
 <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/locale/easyui-lang-zh_CN.js"></script>
- <script type="text/javascript" src="/assert/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="/assert/ueditor/ueditor.config.js"></script>
 <script type="text/javascript" src="/assert/ueditor/ueditor.all.js"></script>
 <script type="text/javascript" src="/javascript/tool.js"></script>
 <script type="text/javascript" src="../../../javascript/source-image-font.js"></script>

@@ -1,57 +1,104 @@
 /**
  * Created by admin on 2016/6/24.
  */
-$(function(){
-     var title = UE.getEditor('title');
-     var author = UE.getEditor('author');
-     var content=UE.getEditor('content');
-     var digest=UE.getEditor('digest');
+$(function () {
+    var ue = UE.getEditor('editor1');
+    ue.ready(function () {
+        //
 
+
+        $(this.container).click(function (e) {
+            e.stopPropagation();
+        })
+    });
+    $('.content').click(function (e) {
+        var $target = $(this);
+        var content = $target.html();
+
+        var currentParnet = ue.container.parentNode.parentNode;
+        var currentContent = ue.getContent();
+        $target.html('');
+        $target.append(ue.container.parentNode);
+//        ue.reset();
+        setTimeout(function () {
+            ue.setContent(content);
+        }, 200)
+        $(currentParnet).html(currentContent);
+        if (content.indexOf("正文") == -1) {
+            ue.setDisabled('fullscreen');
+        }
+    })
+    /**
+     * 可以编辑
+     */
+    $("#enable").on("click", function () {
+        var content = ue.getContent();
+        alert(content);
+        if (content.indexOf("正文") != -1) {//包含正文则启用编辑器
+            ue.setEnabled();
+            return;
+        }
+        $.messager.alert("系统提示", "不是正文不允许使用编辑器", "error");
+    })
     /**
      * 保存图文消息
      */
-    $("#save").on("click",function(){
-        var title = UE.getEditor('title');
-        var author = UE.getEditor('author');
-        var content=UE.getEditor('content');
-        var digest=UE.getEditor('digest');
+    $("#save").on("click", function () {
+//        alert($("#title").text());
+//        return;
+        var sourceImageFont = {};
+        sourceImageFont.title = $("#title").text();
+        if (sourceImageFont.title.indexOf("自定义标题") != -1) {
+            sourceImageFont.title = ue.getPlainTxt();
+            alert(ue.getPlainTxt());
+        }
+//        sourceImageFont.title.contains("自定义标题");
 
-        var sourceImageFont={};
-        sourceImageFont.title = title.getPlainTxt();
-        alert(sourceImageFont.title);
-//        alert(title.getContent());
-         sourceImageFont.author = author.getPlainTxt();
-        sourceImageFont.digest=digest.getPlainTxt();
-        sourceImageFont.thumbMediaId=$("#mediaId").val();
-        sourceImageFont.contentSourceUrl=$("#contentSourceUrl").val();
-        var content=content.getPlainTxt();//byte[]
-        if(sourceImageFont.thumbMediaId==null || sourceImageFont.thumbMediaId==""){
-            $.messager.alert("系统提示","请选择图片","error");
+        sourceImageFont.author = $("#author").text();
+        if (sourceImageFont.author.indexOf("自定义标题") != -1) {
+            sourceImageFont.author = ue.getPlainTxt();
+        }
+        sourceImageFont.digest = $("#digest").text();
+        if (sourceImageFont.digest.indexOf("自定义标题") != -1) {
+            sourceImageFont.digest = ue.getPlainTxt();
+        }
+
+        sourceImageFont.thumbMediaId = $("#mediaId").val();
+        sourceImageFont.contentSourceUrl = $("#contentSourceUrl").text();
+        if (sourceImageFont.contentSourceUrl.indexOf("自定义标题") != -1) {
+            sourceImageFont.contentSourceUrl = ue.getPlainTxt();
+        }
+        var content = $("#content").text();//byte[]
+        if (content.indexOf("自定义标题") != -1) {
+            content = ue.getPlainTxt();
+        }
+        if (sourceImageFont.thumbMediaId == null || sourceImageFont.thumbMediaId == "") {
+            $.messager.alert("系统提示", "请选择图片", "error");
             return;
         }
-        if(sourceImageFont.digest==null || sourceImageFont.digest==""){
-            sourceImageFont.digest=content.substring("0","47");
+        if (sourceImageFont.digest == null || sourceImageFont.digest == "") {
+            sourceImageFont.digest = content.substring("0", "47");
         }
-        $.postJSON("/api/source/save-image-font?content="+content,sourceImageFont, function (data) {
+        $.postJSON("/api/source/save-image-font?content=" + content, sourceImageFont, function (data) {
             $.messager.alert("系统提示", "保存成功", "info");
             $('#imageList').datagrid('unselectAll');
         }, function (data, status) {
-            $.messager.alert("系统提示","保存失败", "error");
+            $.messager.alert("系统提示", "保存失败", "error");
         })
 
     });
     /**
      * 加入图片操作
      */
-    $("#add").on("click",function(){
-        if($("#mediaId").val()!=null&&$("#mediaId").val()!=""){
-            $.messager.alert("系统提示","已经存在封面了","error");
+    $("#add").on("click", function () {
+        if ($("#mediaId").val() != null && $("#mediaId").val() != "") {
+            $.messager.alert("系统提示", "已经存在封面了", "error");
             return;
         }
-        var selectData=$("#imageList").datagrid("getSelections");
-        if(selectData.length!=1){
-            $.messager.alert("系统提示","请选择要添加的图片","error");
-            return ;
+        var selectData = $("#imageList").datagrid("getSelections");
+        if (selectData.length != 1) {
+            $.messager.alert("系统提示", "请选择要添加的图片", "error");
+            return;
         }
         $("#viewImage").append(selectData[0].image);
         $("#viewImage").show();
@@ -60,21 +107,21 @@ $(function(){
     /**
      * 移除所选封面
      */
-    $('#remove').on("click",function(){
+    $('#remove').on("click", function () {
         $("#viewImage").hide();
         $("#viewImage").html("");
         $("#mediaId").val("");
     })
 
-    var loadImage=$.get("/api/source/load-image", function (data) {
+    var loadImage = $.get("/api/source/load-image", function (data) {
         $("#imageList").datagrid('loadData', data);
     });
 
     $("#imageList").datagrid({
         idField: "id",
         title: '图片库',
-        singleSelect:true,
-        footer:'#foot',
+        singleSelect: true,
+        footer: '#foot',
         fit: true,
         columns: [
             [
@@ -94,16 +141,29 @@ $(function(){
                     hidden: true
                 },
                 {
-                    title: 'image',
                     field: 'image',
-                    width:"100%"
+                    width: "100%"
 
                 }
-             ]
+            ]
         ]
     });
-
-
+    /**
+     * 放大按钮
+     */
+    $("#bigBtn").on("click", function () {
+        var selectedDatas = $("#imageList").datagrid("getSelections");
+        if (selectedDatas.length != 1) {
+            $.messager.alert("系统提示", "请选择一张图片进行放大", "error");
+            return;
+        }
+//        <div id="imageDlg" modal="true" draggable="false" class="easyui-dialog" style="width:100%;height:100%;padding:10px 20px"
+//        closed="true"  data-options="modal:true">
+//            <div id="imageDiv"></div>
+//        </div>
+        $("#imageDiv").html(selectedDatas[0].image);
+        $("#imageDlg").dialog("open").dialog("setTitle", "图片放大");
+    })
 
 
 })

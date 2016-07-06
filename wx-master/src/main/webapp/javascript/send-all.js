@@ -4,6 +4,7 @@
 
 $(function () {
     var sendContent = UE.getEditor('font');
+//    sendContent.setDisabled('fullscreen');
     /**
      * 加载图文消息
      */
@@ -109,6 +110,11 @@ $(function () {
         }
         var mediaId = selectedDatas[0].mediaId;
         $.postJSON("/api/source/delete-source?mediaId=" + mediaId + "&sendType=" + sendType, function () {
+             if(sendType==1){
+                 loadImageFont();
+             }else if(sendType==3){
+                 loadImage();
+             }
             $.messager.alert("系统提示", "删除成功", "info");
         }, function (data, status) {
             $.messager.alert("系统提示", "删除成功", "info");
@@ -132,7 +138,7 @@ $(function () {
 //        } else {
 //            content = sendContent.getPlainTxt();
 //        }
-        $("#userDlg").dialog("open").dialog("setTitle","请选择预览人员！");
+        $("#userDlg").dialog("open").dialog("setTitle", "请选择预览人员！");
         initUser();
         loadDict();
 //        var  selectUsers=$("#user").datagrid("getSelections");
@@ -152,7 +158,7 @@ $(function () {
     /**
      * 确定预览
      */
-    $("#submit").on("click",function(){
+    $("#submit").on("click", function () {
         var selectedDatas = $("#data").datagrid("getSelections");
         var content;
         if (selectedType != 2) {//不是文字消息
@@ -161,14 +167,14 @@ $(function () {
             content = sendContent.getPlainTxt();
         }
         var selectedType = $("#selectType").combobox("getValue");
-        var  selectUsers=$("#user").datagrid("getSelections");
-        if(selectUsers.length!=1){
+        var selectUsers = $("#user").datagrid("getSelections");
+        if (selectUsers.length != 1) {
             $.messager.alert("系统提示", "只能选择一名用户,进行预览!", "error");
             return;
         }
         $("#userDlg").dialog("close");
-        var openId=selectUsers[0].openid;
-        $.postJSON("/api/source/preview?selectedType=" + selectedType + "&mediaId=" + mediaId + "&sendContent=" + content+"&openId="+openId, function (data) {
+        var openId = selectUsers[0].openid;
+        $.postJSON("/api/source/preview?selectedType=" + selectedType + "&mediaId=" + mediaId + "&sendContent=" + content + "&openId=" + openId, function (data) {
                 $.messager.alert("系统提示", "已发送到指定预览的手机,请注意查收", "info");
             }, function (data, status) {
                 $.messager.alert("系统提示", "已发送到指定预览的手机,请注意查收", "info");
@@ -183,7 +189,7 @@ $(function () {
             idField: "id",
             title: '素材库列表',
             footer: '#foot',
-            singleSelect:true,
+            singleSelect: true,
             fit: true,
             columns: [
                 [
@@ -194,12 +200,13 @@ $(function () {
                     },
                     {
                         title: 'mediaId',
-                        field: 'mediaId'
+                        field: 'mediaId',
+                        hidden: true
                     },
                     {
                         title: 'image',
                         field: 'image',
-                        width: "60%"
+                        width: "100%"
                     }
                 ]
             ]
@@ -209,21 +216,21 @@ $(function () {
     /**
      * 同步服务器素材
      */
-    $("#down").on("click",function(){
-        var selectType=$("#selectType").combobox("getValue");
-        var url="";
-        if(selectType==1){
-            url="/api/source/synch-image-font";
-        }else if(selectType==3){
-            url="/api/source/synch-image";
-        }else{
-            $.messager.alert("系统提示","您选择的是文本,不能进行同步！");
+    $("#down").on("click", function () {
+        var selectType = $("#selectType").combobox("getValue");
+        var url = "";
+        if (selectType == 1) {
+            url = "/api/source/synch-image-font";
+        } else if (selectType == 3) {
+            url = "/api/source/synch-image";
+        } else {
+            $.messager.alert("系统提示", "您选择的是文本,不能进行同步！");
             return;
         }
-        $.postJSON(url,function(data){
-            $.messager.alert("系统提示","数据已同步到本地，请重新加载！","info");
-        },function(data,status){
-            $.messager.alert("系统提示","数据已同步到本地，请重新加载！","info");
-         })
+        $.postJSON(url, function (data) {
+            $.messager.alert("系统提示", "数据已同步到本地，请重新加载！", "info");
+        }, function (data, status) {
+            $.messager.alert("系统提示", "数据已同步到本地，请重新加载！", "info");
+        })
     })
 });

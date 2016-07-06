@@ -1,9 +1,16 @@
 $(function () {
+//    $.foucs({ direction: 'right' });
     /**
      * load datagrid data
      */
     var loadDict = function () {
         $.get("/api/source/list", function (data) {
+//            var  html="";
+////            for(var i=0;i<data.length;i++){
+////              html+="<li class='hero'>"+data[i].image+"</li>";
+////            }
+//            console.info(html);
+//            $("#ul").html(html);
             $("#image").datagrid('loadData', data);
         });
     }
@@ -47,16 +54,19 @@ $(function () {
                 },
                 {
                     field: 'imageLocalUrl',
-                    title: '图片本地路径'
+                    title: '图片本地路径',
+                    hidden: 'true'
                 },
                 {
                     field: 'imageWxUrl',
-                    title: '图片服务器端路径'
+                    title: '图片服务器端路径',
+                    hidden: 'true'
 
                 },
                 {
                     field: 'imageSize',
-                    title: '图片大小'
+                    title: '图片大小',
+                    hidden: 'true'
                 }
             ]
         ]
@@ -105,11 +115,11 @@ $(function () {
     /**
      * 同步服务器数据
      */
-    $("#synchData").on("click",function(){
-        $.postJSON("/api/source/synch-image",function(data){
-            $.messager.alert("系统提示","数据已经同步,请重新加载本地","info");
-        },function(data,status){
-            $.messager.alert("系统提示","数据已经同步,请重新加载本地","info");
+    $("#synchData").on("click", function () {
+        $.postJSON("/api/source/synch-image", function (data) {
+            $.messager.alert("系统提示", "数据已经同步,请重新加载本地", "info");
+        }, function (data, status) {
+            $.messager.alert("系统提示", "数据已经同步,请重新加载本地", "info");
         })
     })
     /**
@@ -157,9 +167,9 @@ $(function () {
     $("#uploadBtn").on('click', function () {
         var fileToUpload = document.getElementById("fileToUpload");
         var suffer = fileToUpload.value.substring(fileToUpload.value.indexOf(".") + 1);
-        var fileSize=fileToUpload.files[0].size;
-        alert(fileSize);
-        if(fileSize>2*1024*1000){
+        var fileSize = fileToUpload.files[0].size;
+//        alert(fileSize);
+        if (fileSize > 2 * 1024 * 1000) {
             $.messager.alert("系统提示", "请选择小于2M的图片", "error");
             return;
         }
@@ -192,6 +202,7 @@ $(function () {
                 sourceImage.imageName = data1.imageName;
                 sourceImage.imageLocalUrl = data1.picUrl;
                 $.postJSON("/api/source/save?saveName=" + data1.saveName, sourceImage, function (data) {
+//                    $("#showImage").html(data.image);
                     $('#dlg').dialog('close');
                     $.messager.alert("系统提示", "操作成功！", "info");
                     loadDict();
@@ -207,14 +218,14 @@ $(function () {
     /**
      * 放大图片
      */
-    $("#addBigBtn").on("click",function(){
+    $("#addBigBtn").on("click", function () {
         var selectedImages = $("#image").datagrid("getSelections");
-        if(selectedImages.length!=1){
-            $.messager.alert("系统提示","请选择一张图片进行查看","error");
+        if (selectedImages.length != 1) {
+            $.messager.alert("系统提示", "请选择一张图片进行查看", "error");
             return;
         }
         $("#imageDiv").html(selectedImages[0].image);
-        $("#imageDlg").dialog("setTitle","大图");
+        $("#imageDlg").dialog("setTitle", "大图");
         $("#imageDlg").dialog("open");
     })
 });
