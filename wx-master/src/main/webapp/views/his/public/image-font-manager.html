@@ -7,11 +7,62 @@
     <link rel="stylesheet" href="/assert/easyui/themes/color.css">
     <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
     <link rel="stylesheet" href="/style/common.css">
+    <!--<link href="/style/login.css" type="text/css" rel="stylesheet"/>-->
     <title></title>
     <style>
         table{margin-bottom:10px;border-collapse:collapse;display:table;border:0px dashed #ddd}
         #test td{padding:5px;border: 1px solid #DDD;}
-    </style>
+        #title{
+            border: 0;
+            font-size: 22px;
+            line-height: 20px;
+            margin-left:5%;
+            outline: 0;
+        }
+
+        #oauth{
+            border: 0;
+            font-size: 14px;
+            margin-left:5%;
+            line-height: 20px;
+            outline: 0;
+        }
+        hr{
+            width:90%;
+            margin-left:5%;
+            margin-right:5% ;
+            margin-bottom: 0px;
+
+        }
+        iframe{
+            margin-left:4%;
+            margin-right:5%;
+        }
+        .tile-p
+        {
+            padding: 30px 0px 10px;
+            position: relative;
+        }
+        .u_logo {
+            background: url("images/username.png") no-repeat;
+            padding: 10px 10px;
+            position: absolute;
+            top: 43px;
+            left: 40px;
+        }
+        .ipt {
+            border: 1px solid #d3d3d3;
+            padding: 10px 10px;
+            width: 290px;
+            border-radius: 4px;
+            padding-left: 35px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s
+        }
+     </style>
 </head>
 
 <body id="lay" class="easyui-layout" style="width: 100%;height:100%" >
@@ -22,35 +73,21 @@
 <div region="center"style="height:1000px;width: 78%"  >
     <table id="test">
         <tr>
-            <td class="content" id="title">
-                <script id="editor1" type="text/plain" style="width:1024px;height:200px;">请输入标题</script></td>
-        </tr>
-        <tr>
-            <td class="content" id="author">请输入作者</td>
-        </tr>
-        <tr>
-            <td class="content" id="content">请输入正文</td>
-        </tr>
-        <tr>
-            <td class="content" id="digest">请输入摘要</td>
-        </tr>
-        <tr>
-            <td class="content" id="contentSourceUrl">请输入原文链接</td>
+            <td class="content">
+            <script id="editor1" type="text/plain" style="width:1024px;height:350px;">请输入正文</script></td>
         </tr>
     </table>
-    <div>
-        <!--封面：<br/>-->
-        <div id="viewImage" style="display: none;">
-            <input type="hidden" id="mediaId" name="mediaId" value=""/>
-        </div>
+
+    <P class="tile-p">
+        &nbsp;&nbsp;<SPAN class="u_logo"></SPAN> <INPUT id="contentSourceUrl" class="ipt" type="text" placeholder="请输入原文链接" value="">
+    </P>
+    <P class="tile-p">
+        &nbsp;&nbsp;<SPAN class="u_logo"></SPAN> <textarea id="digest" class="ipt" type="text" placeholder="请输入摘要" value=""></textarea>
+    </P>
+    <div id="viewImage" style="display: none;">
+        <input type="hidden" id="mediaId" name="mediaId" value=""/>
     </div>
-    <!--原文链接：<input  id="contentSourceUrl" style="width:100px;" class="easyui-textbox"/>-->
-    <!--<div  >-->
-       <!--<script id="digest" name="digest" type="text/plain">-->
-                <!--在此处选填摘要，如果不填，默认正文的前46个字。-->
-      <!--</script>-->
-    <!--</div>-->
-  </div>
+   </div>
 <div id="foot" style="padding:2px 5px;">
     <A style="color: rgb(183, 179, 112); margin-right: 10px;" href="#" id="add">加入</A>
     <A style="color: rgb(183, 183, 183); margin-right: 10px;" href="#" id="save">保存</A>

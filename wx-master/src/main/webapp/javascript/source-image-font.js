@@ -7,24 +7,24 @@ $(function(){
         //
 
 
-        $(this.container).click(function(e){
-            e.stopPropagation();
-        })
+//        $(this.container).click(function(e){
+//            e.stopPropagation();
+//        })
     });
-    $('.content').click(function(e){
-        var $target = $(this);
-        var content = $target.html();
-
-        var currentParnet = ue.container.parentNode.parentNode;
-        var currentContent = ue.getContent();
-        $target.html('');
-        $target.append(ue.container.parentNode);
-        ue.reset();
-        setTimeout(function(){
-            ue.setContent(content);
-        },200)
-        $(currentParnet).html(currentContent);
-      })
+//    $('.content').click(function(e){
+//        var $target = $(this);
+//        var content = $target.html();
+//
+//        var currentParnet = ue.container.parentNode.parentNode;
+//        var currentContent = ue.getContent();
+//        $target.html('');
+//        $target.append(ue.container.parentNode);
+//        ue.reset();
+//        setTimeout(function(){
+//            ue.setContent(content);
+//        },200)
+//        $(currentParnet).html(currentContent);
+//      })
     /**
      * 可以编辑
      */
@@ -41,40 +41,24 @@ $(function(){
      * 保存图文消息
      */
     $("#save").on("click",function(){
-//        alert($("#title").text());
-//        return;
-         var sourceImageFont={};
-        sourceImageFont.title = $("#title").text();
-        if(sourceImageFont.title.indexOf("自定义标题")!=-1){
-            sourceImageFont.title=ue.getPlainTxt();
-            alert(ue.getPlainTxt());
-        }
-//        sourceImageFont.title.contains("自定义标题");
-
-        sourceImageFont.author = $("#author").text();
-        if(sourceImageFont.author.indexOf("自定义标题")!=-1){
-            sourceImageFont.author=ue.getPlainTxt();
-        }
-        sourceImageFont.digest=$("#digest").text();
-        if(sourceImageFont.digest.indexOf("自定义标题")!=-1){
-            sourceImageFont.digest=ue.getPlainTxt();
-        }
-
+        var sourceImageFont={};
         sourceImageFont.thumbMediaId=$("#mediaId").val();
-        sourceImageFont.contentSourceUrl=$("#contentSourceUrl").text();
-        if(sourceImageFont.contentSourceUrl.indexOf("自定义标题")!=-1){
-            sourceImageFont.contentSourceUrl=ue.getPlainTxt();
-        }
-        var content=$("#content").text();//byte[]
-        if(content.indexOf("自定义标题")!=-1){
-            content=ue.getPlainTxt();
-        }
+        sourceImageFont.contentSourceUrl=$("#contentSourceUrl").val();
+        var content=ue.getContent();//byte[]
         if(sourceImageFont.thumbMediaId==null || sourceImageFont.thumbMediaId==""){
             $.messager.alert("系统提示","请选择图片","error");
             return;
         }
+        sourceImageFont.title=document.getElementById("title").value;
+//        alert(title.value);
+//        sourceImageFont.title=$("#title").text();
+        sourceImageFont.author=document.getElementById("oauth").value;
+        sourceImageFont.digest=$("#digest").text();
+//        alert($("#oauth").text());
         if(sourceImageFont.digest==null || sourceImageFont.digest==""){
+            if(content.length>47)
             sourceImageFont.digest=content.substring("0","47");
+            sourceImageFont.digest=content.substring("0",content.length);
         }
         $.postJSON("/api/source/save-image-font?content="+content,sourceImageFont, function (data) {
             $.messager.alert("系统提示", "保存成功", "info");

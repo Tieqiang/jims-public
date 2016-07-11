@@ -1,7 +1,7 @@
 /*!
- * UEditor
- * version: ueditor
- * build: Tue Aug 25 2015 15:27:16 GMT+0800 (CST)
+ * ueditor
+ * version: 2.0.0
+ * build: Mon Jul 11 2016 14:54:11 GMT+0800 (中国标准时间)
  */
 
 (function(){
@@ -13,20 +13,14 @@ var baidu = window.baidu || {};
 
 window.baidu = baidu;
 
-window.UE = baidu.editor =  window.UE || {};
-
-UE.plugins = {};
-
-UE.commands = {};
-
-UE.instants = {};
-
-UE.I18N = {};
-
-UE._customizeUI = {};
-
-UE.version = "1.4.3";
-
+window.UE = baidu.editor = {
+    plugins:{},
+    commands:{},
+    instants:{},
+    I18N:{},
+    _customizeUI:{},
+    version:'1.5.0'
+};
 var dom = UE.dom = {};
 
 // core/browser.js
@@ -55,7 +49,7 @@ var browser = UE.browser = function(){
          * }
          * ```
          */
-        ie		:  /(msie\s|trident.*rv:)([\w.]+)/.test(agent),
+        ie		:  /(msie\s|trident.*rv:)([\w.]+)/i.test(agent),
 
         /**
          * @property {boolean} opera 检测当前浏览器是否为Opera
@@ -737,7 +731,7 @@ var utils = UE.utils = {
     },
 
     /**
-     * 将str中的html符号转义,将转义“'，&，<，"，>”五个字符
+     * 将str中的html符号转义,将转义“'，&，<，"，>，”，“”七个字符
      * @method unhtml
      * @param { String } str 需要转义的字符串
      * @return { String } 转义后的字符串
@@ -751,7 +745,7 @@ var utils = UE.utils = {
      * ```
      */
     unhtml:function (str, reg) {
-        return str ? str.replace(reg || /[&<">'](?:(amp|lt|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
+        return str ? str.replace(reg || /[&<">'](?:(amp|lt|ldquo|rdquo|quot|gt|#39|nbsp|#\d+);)?/g, function (a, b) {
             if (b) {
                 return a;
             } else {
@@ -759,6 +753,8 @@ var utils = UE.utils = {
                     '<':'&lt;',
                     '&':'&amp;',
                     '"':'&quot;',
+                     '“':'&ldquo;',
+                    '”':'&rdquo;',
                     '>':'&gt;',
                     "'":'&#39;'
                 }[a]
@@ -784,11 +780,13 @@ var utils = UE.utils = {
      * ```
      */
     html:function (str) {
-        return str ? str.replace(/&((g|l|quo)t|amp|#39|nbsp);/g, function (m) {
+        return str ? str.replace(/&((g|l|quo|ldquo|rdquo)t|amp|#39|nbsp);/g, function (m) {
             return {
                 '&lt;':'<',
                 '&amp;':'&',
                 '&quot;':'"',
+                '&ldquo;':'“',
+                '&rdquo;':'”',  
                 '&gt;':'>',
                 '&#39;':"'",
                 '&nbsp;':' '
@@ -1483,6 +1481,7 @@ utils.each(['String', 'Function', 'Array', 'Number', 'RegExp', 'Object', 'Date']
     }
 });
 
+
 // core/EventBase.js
 /**
  * UE采用的事件基类
@@ -1676,7 +1675,7 @@ var dtd = dom.dtd = (function() {
         D = X( {iframe:1}, C ),
         E = _({hr:1,ul:1,menu:1,div:1,blockquote:1,noscript:1,table:1,center:1,address:1,dir:1,pre:1,h5:1,dl:1,h4:1,noframes:1,h6:1,ol:1,h1:1,h3:1,h2:1}),
         F = _({ins:1,del:1,script:1,style:1}),
-        G = X( _({b:1,acronym:1,bdo:1,'var':1,'#':1,abbr:1,code:1,br:1,i:1,cite:1,kbd:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,dfn:1,span:1}), F ),
+        G = X( _({mark:1,b:1,acronym:1,bdo:1,'var':1,'#':1,abbr:1,code:1,br:1,i:1,cite:1,kbd:1,u:1,strike:1,s:1,tt:1,strong:1,q:1,samp:1,em:1,dfn:1,span:1}), F ),
         H = X( _({sub:1,img:1,embed:1,object:1,sup:1,basefont:1,map:1,applet:1,font:1,big:1,small:1}), G ),
         I = X( _({p:1}), H ),
         J = X( _({iframe:1}), H, B ),
@@ -1830,7 +1829,8 @@ var dtd = dom.dtd = (function() {
         pre : X( G, C ),
         p : X(_({'a':1}),L),
         em :L,
-        dfn : L
+        dfn : L,
+        mark:L
     });
 })();
 
@@ -5534,6 +5534,12 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                         domUtils.setAttributes(elm, attrs);
                     }
                     elm.appendChild(frag);
+                    //针对嵌套span的全局样式指定，做容错处理
+                    if(elm.tagName == 'SPAN' && attrs && attrs.style){
+                        utils.each(elm.getElementsByTagName('span'),function(s){
+                            s.style.cssText = s.style.cssText + ';' + attrs.style;
+                        })
+                    }
                     range.insertNode(list ? top : elm);
                     //处理下滑线在a上的情况
                     var aNode;
@@ -6521,8 +6527,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
      */
     function setValue(form, editor) {
         var textarea;
-        if (editor.textarea) {
-            if (utils.isString(editor.textarea)) {
+        if (editor.options.textarea) {
+            if (utils.isString(editor.options.textarea)) {
                 for (var i = 0, ti, tis = domUtils.getElementsByTagName(form, 'textarea'); ti = tis[i++];) {
                     if (ti.id == 'ueditor_textarea_' + editor.options.textarea) {
                         textarea = ti;
@@ -6895,7 +6901,8 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 container.style.zIndex = options.zIndex;
 
                 var html = ( ie && browser.version < 9  ? '' : '<!DOCTYPE html>') +
-                    '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' ><head>' +
+                    '<html xmlns=\'http://www.w3.org/1999/xhtml\' class=\'view\' >' +
+                    '<head>' +
                     '<style type=\'text/css\'>' +
                     //设置四周的留边
                     '.view{padding:0;word-wrap:break-word;cursor:text;height:90%;}\n' +
@@ -6904,12 +6911,23 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     'body{margin:8px;font-family:sans-serif;font-size:16px;}' +
                     //设置段落间距
                     'p{margin:5px 0;}</style>' +
-                    ( options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
+                    (options.iframeCssUrl ? '<link rel=\'stylesheet\' type=\'text/css\' href=\'' + utils.unhtml(options.iframeCssUrl) + '\'/>' : '' ) +
                     (options.initialStyle ? '<style>' + options.initialStyle + '</style>' : '') +
-                    '</head><body class=\'view\' ></body>' +
+                    '</head>' +
+                    '<body class=\'view\' ></body>' +
                     '<script type=\'text/javascript\' ' + (ie ? 'defer=\'defer\'' : '' ) +' id=\'_initialScript\'>' +
                     'setTimeout(function(){editor = window.parent.UE.instants[\'ueditorInstant' + me.uid + '\'];editor._setup(document);},0);' +
-                    'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);</script></html>';
+                    'var _tmpScript = document.getElementById(\'_initialScript\');_tmpScript.parentNode.removeChild(_tmpScript);' +
+                    '</script>' +
+                    (options.iframeJsUrl ? ('<script type=\'text/javascript\' src=\'' + utils.unhtml(options.iframeJsUrl) + '\'></script>'):'') +
+                    '</html>';
+                //标题
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="title" type="text" placeholder="请输入标题">'}))
+                //作者
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="oauth" type="text" placeholder="请输入作者">'}))
+                //添加横线
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<hr>'}))
+
                 container.appendChild(domUtils.createElement(document, 'iframe', {
                     id: 'ueditor_' + me.uid,
                     width: "100%",
@@ -7566,6 +7584,7 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                 return 0;
             } else if (cmdFn) {
                 return cmdFn.apply(this, args);
+
             }
         },
 
@@ -8610,7 +8629,7 @@ var filterWord = UE.filterWord = function () {
      *     type:'element',
      *     tagName:'span',
      *     attrs:{style:'font-size:14px;'}
-     * }
+     * })
      * ```
      */
     var uNode = UE.uNode = function (obj) {
@@ -9532,7 +9551,6 @@ var htmlparser = UE.htmlparser = function (htmlstr,ignoreBlank) {
     return root;
 };
 
-
 // core/filternode.js
 /**
  * UE过滤节点的静态方法
@@ -9949,7 +9967,8 @@ UE.plugins['defaultfilter'] = function () {
     var me = this;
     me.setOpt({
         'allowDivTransToP':true,
-        'disabledTableInTable':true
+        'disabledTableInTable':true,
+        'rgb2Hex':true
     });
     //默认的过滤处理
     //进入编辑器的内容处理
@@ -10151,6 +10170,24 @@ UE.plugins['defaultfilter'] = function () {
                         val = node.getAttr('id');
                         if(val && /^_baidu_bookmark_/i.test(val)){
                             node.parentNode.removeChild(node)
+                        }
+                        //将color的rgb格式转换为#16进制格式
+                        if(me.getOpt('rgb2Hex')){
+                            var cssStyle = node.getAttr('style');
+                            if(cssStyle){
+                                node.setAttr('style',cssStyle.replace(/rgba?\(([\d,\s]+)\)/g,function(a,value){
+                                    var array = value.split(",");
+                                    if (array.length > 3)
+                                        return "";
+                                    value = "#";
+                                    for (var i = 0, color; color = array[i++];) {
+                                        color = parseInt(color.replace(/[^\d]/gi, ''), 10).toString(16);
+                                        value += color.length == 1 ? "0" + color : color;
+                                    }
+                                    return value.toUpperCase();
+
+                                }))
+                            }
                         }
                         break;
                     case 'img':
@@ -12651,12 +12688,12 @@ UE.plugins['paragraph'] = function() {
                         }
 
                         //trace:1706 选择的就是h1-6要删除
-                        if(attrs && /h\d/i.test(parent.tagName) && !/h\d/i.test(para.tagName) ){
+                        if( attrs && /h\d/i.test(parent.tagName) && !/h\d/i.test(para.tagName) ){
                             domUtils.setAttributes(parent,attrs);
                             if(sourceCmdName && sourceCmdName == 'customstyle' && attrs.style){
                                 parent.style.cssText = attrs.style;
                             }
-                            domUtils.remove(para,true);
+                            domUtils.remove(para.parentNode,true);
                             para = parent;
                         }else{
                             domUtils.remove( para.parentNode, true );
@@ -13733,6 +13770,12 @@ UE.plugin.register('anchor', function (){
            utils.each(root.getNodesByTagName('a'),function(a){
                var val;
                if((val = a.getAttr('name')) && !a.getAttr('href')){
+                   //过滤掉word冗余标签
+                   //_Toc\d+有可能勿命中
+                   if(/^\_Toc\d+$/.test(val)){
+                       a.parentNode.removeChild(a);
+                       return;
+                   }
                    a.tagName = 'img';
                    a.setAttr({
                        anchorname :a.getAttr('name'),
@@ -14427,16 +14470,22 @@ UE.plugin.register('copy', function () {
         // hover事件传递到target
         client.on('mouseover mouseout', function (e) {
             var target = e.target;
-            if (e.type == 'mouseover') {
-                domUtils.addClass(target, 'edui-state-hover');
-            } else if (e.type == 'mouseout') {
-                domUtils.removeClasses(target, 'edui-state-hover');
+            if (target) {
+                if (e.type == 'mouseover') {
+                    domUtils.addClass(target, 'edui-state-hover');
+                } else if (e.type == 'mouseout') {
+                    domUtils.removeClasses(target, 'edui-state-hover');
+                }
             }
         });
         // flash加载不成功
         client.on('wrongflash noflash', function () {
             ZeroClipboard.destroy();
         });
+
+        // 触发事件
+        me.fireEvent('zeroclipboardready', client);
+
     }
 
     return {
@@ -16767,6 +16816,14 @@ UE.plugins['keystrokes'] = function() {
                 }
             }
         }
+
+        /* 修复在编辑区域快捷键 (Mac:meta+alt+I; Win:ctrl+shift+I) 打不开 chrome 控制台的问题 */
+        browser.chrome && me.on('keydown', function(type, e){
+            var keyCode = e.keyCode || e.which;
+            if (((e.metaKey && e.altKey) || (e.ctrlKey && e.shiftKey)) && keyCode == 73) {
+                return true;
+            }
+        });
     });
     me.addListener('keyup', function(type, evt) {
         var keyCode = evt.keyCode || evt.which,
@@ -17708,6 +17765,11 @@ UE.plugins['video'] = function (){
     me.commands["insertvideo"] = {
         execCommand: function (cmd, videoObjs, type){
             videoObjs = utils.isArray(videoObjs)?videoObjs:[videoObjs];
+
+            if(me.fireEvent('beforeinsertvideo', videoObjs) === true){
+                return;
+            }
+
             var html = [],id = 'tmpVedio', cl;
             for(var i=0,vi,len = videoObjs.length;i<len;i++){
                 vi = videoObjs[i];
@@ -17722,6 +17784,8 @@ UE.plugins['video'] = function (){
                 rng.selectNode(img).select();
                 me.execCommand('imagefloat',videoObjs[i].align)
             }
+
+            me.fireEvent('afterinsertvideo', videoObjs);
         },
         queryCommandState : function(){
             var img = me.selection.getRange().getClosedNode(),
@@ -17834,8 +17898,8 @@ UE.plugins['video'] = function (){
         //在table或者td边缘有可能存在选中tr的情况
         var cell = start && domUtils.findParentByTagName(start, ["td", "th"], true),
             tr = cell && cell.parentNode,
-            caption = start && domUtils.findParentByTagName(start, 'caption', true),
-            table = caption ? caption.parentNode : tr && tr.parentNode.parentNode;
+            table = tr && domUtils.findParentByTagName(tr, ["table"]),
+            caption = table && table.getElementsByTagName('caption')[0];
 
         return {
             cell:cell,
@@ -18501,6 +18565,7 @@ UE.plugins['video'] = function (){
             var numCols = this.colsNum,
                 table = this.table,
                 row = table.insertRow(rowIndex), cell,
+                thead = null,
                 isInsertTitle = typeof sourceCell == 'string' && sourceCell.toUpperCase() == 'TH';
 
             function replaceTdToTh(colIndex, cell, tableRow) {
@@ -18531,6 +18596,11 @@ UE.plugins['video'] = function (){
                     cell.getAttribute('vAlign') && cell.setAttribute('vAlign', cell.getAttribute('vAlign'));
                     row.appendChild(cell);
                     if(!isInsertTitle) replaceTdToTh(colIndex, cell, row);
+                }
+                
+                if(isInsertTitle) {
+                    thead = table.createTHead();
+                    thead.insertBefore(row, thead.firstChild);
                 }
             } else {
                 var infoRow = this.indexTable[rowIndex],
@@ -18872,6 +18942,7 @@ UE.plugins['video'] = function (){
     function showError(e) {
     }
 })();
+
 
 // plugins/table.cmds.js
 /**
@@ -19810,7 +19881,6 @@ UE.plugins['video'] = function (){
         }
     }
 })();
-
 
 // plugins/table.action.js
 /**
@@ -21872,7 +21942,9 @@ UE.plugins['tablesort'] = function () {
 
 UE.plugins['contextmenu'] = function () {
     var me = this;
-    me.setOpt('enableContextMenu',true);
+    
+    me.setOpt('enableContextMenu', me.getOpt('enableContextMenu') || true);
+    
     if(me.getOpt('enableContextMenu') === false){
         return;
     }
@@ -22792,21 +22864,37 @@ UE.plugin.register('searchreplace',function(){
 
     var _blockElm = {'table':1,'tbody':1,'tr':1,'ol':1,'ul':1};
 
+    var lastRng = null;
+
+    function getText(node){
+        var text = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
+        return text.replace(domUtils.fillChar,'')
+    }
+
     function findTextInString(textContent,opt,currentIndex){
         var str = opt.searchStr;
+
+        var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),
+            match;
+
         if(opt.dir == -1){
+
+            textContent = textContent.substr(0,currentIndex);
             textContent = textContent.split('').reverse().join('');
             str = str.split('').reverse().join('');
-            currentIndex = textContent.length - currentIndex;
+            match = reg.exec(textContent);
+            if(match){
+                return currentIndex - match.index - str.length;
+            }
 
-        }
-        var reg = new RegExp(str,'g' + (opt.casesensitive ? '' : 'i')),match;
-
-        while(match = reg.exec(textContent)){
-            if(match.index >= currentIndex){
-                return opt.dir == -1 ? textContent.length - match.index - opt.searchStr.length : match.index;
+        }else{
+            textContent = textContent.substr(currentIndex);
+            match = reg.exec(textContent);
+            if(match){
+                return match.index + currentIndex;
             }
         }
+
         return  -1
     }
     function findTextBlockElm(node,currentIndex,opt){
@@ -22816,7 +22904,7 @@ UE.plugin.register('searchreplace',function(){
         }
         var first = 1;
         while(node){
-            textContent = node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent'];
+            textContent = getText(node);
             index = findTextInString(textContent,opt,currentIndex );
             first = 0;
             if(index!=-1){
@@ -22830,7 +22918,7 @@ UE.plugin.register('searchreplace',function(){
                 node = domUtils[methodName](node,true);
             }
             if(node){
-                currentIndex = opt.dir == -1 ? (node.nodeType == 3 ? node.nodeValue : node[browser.ie ? 'innerText' : 'textContent']).length : 0;
+                currentIndex = opt.dir == -1 ? getText(node).length : 0;
             }
 
         }
@@ -22842,7 +22930,7 @@ UE.plugin.register('searchreplace',function(){
             result;
         while(currentNode){
             if(currentNode.nodeType == 3){
-                currentNodeLength = currentNode.nodeValue.replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
+                currentNodeLength = getText(currentNode).replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
                 currentIndex += currentNodeLength;
                 if(currentIndex >= index){
                     return {
@@ -22851,7 +22939,7 @@ UE.plugin.register('searchreplace',function(){
                     }
                 }
             }else if(!dtd.$empty[currentNode.tagName]){
-                currentNodeLength = currentNode[browser.ie ? 'innerText' : 'textContent'].replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length
+                currentNodeLength = getText(currentNode).replace(/(^[\t\r\n]+)|([\t\r\n]+$)/,'').length;
                 currentIndex += currentNodeLength;
                 if(currentIndex >= index){
                     result = findNTextInBlockElm(currentNode,currentNodeLength - (currentIndex - index),str);
@@ -22867,7 +22955,7 @@ UE.plugin.register('searchreplace',function(){
 
     function searchReplace(me,opt){
 
-        var rng = me.selection.getRange(),
+        var rng = lastRng || me.selection.getRange(),
             startBlockNode,
             searchStr = opt.searchStr,
             span = me.document.createElement('span');
@@ -22895,7 +22983,7 @@ UE.plugin.register('searchreplace',function(){
         rng.insertNode(span);
         rng.enlargeToBlockElm(true);
         startBlockNode = rng.startContainer;
-        var currentIndex = startBlockNode[browser.ie ? 'innerText' : 'textContent'].indexOf('$$ueditor_searchreplace_key$$');
+        var currentIndex = getText(startBlockNode).indexOf('$$ueditor_searchreplace_key$$');
         rng.setStartBefore(span);
         domUtils.remove(span);
         var result = findTextBlockElm(startBlockNode,currentIndex,opt);
@@ -22931,7 +23019,7 @@ UE.plugin.register('searchreplace',function(){
                     },true);
                     var num = 0;
                     if(opt.all){
-
+                        lastRng = null;
                         var rng = me.selection.getRange(),
                             first = me.body.firstChild;
                         if(first && first.nodeType == 1){
@@ -22946,6 +23034,8 @@ UE.plugin.register('searchreplace',function(){
                         }
                         while(searchReplace(this,opt)){
                             num++;
+                            lastRng = me.selection.getRange();
+                            lastRng.collapse(opt.dir == -1)
                         }
                         if(num){
                             me.fireEvent('saveScene');
@@ -22955,7 +23045,9 @@ UE.plugin.register('searchreplace',function(){
                             me.fireEvent('saveScene');
                         }
                         if(searchReplace(this,opt)){
-                            num++
+                            num++;
+                            lastRng = me.selection.getRange();
+                            lastRng.collapse(opt.dir == -1)
                         }
                         if(num){
                             me.fireEvent('saveScene');
@@ -22966,6 +23058,11 @@ UE.plugin.register('searchreplace',function(){
                     return num;
                 },
                 notNeedUndo:1
+            }
+        },
+        bindEvents:{
+            clearlastSearchResult:function(){
+                lastRng = null;
             }
         }
     }
@@ -23706,27 +23803,26 @@ UE.plugin.register('autoupload', function (){
 
         if (filetype == 'image') {
             loadingHtml = '<img class="loadingclass" id="' + loadingId + '" src="' +
-                me.options.themePath + me.options.theme +
-                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >';
+                me.options.themePath + me.options.theme + '/images/spacer.gif">';
             successHandler = function(data) {
                 var link = urlPrefix + data.url,
                     loader = me.document.getElementById(loadingId);
                 if (loader) {
+                    domUtils.removeClasses(loader, 'loadingclass');
                     loader.setAttribute('src', link);
                     loader.setAttribute('_src', link);
-                    loader.setAttribute('title', data.title || '');
                     loader.setAttribute('alt', data.original || '');
                     loader.removeAttribute('id');
-                    domUtils.removeClasses(loader, 'loadingclass');
+                    me.trigger('contentchange',loader);
                 }
             };
         } else {
             loadingHtml = '<p>' +
                 '<img class="loadingclass" id="' + loadingId + '" src="' +
-                me.options.themePath + me.options.theme +
-                '/images/spacer.gif" title="' + (me.getLang('autoupload.loading') || '') + '" >' +
+                me.options.themePath + me.options.theme + '/images/spacer.gif">' +
                 '</p>';
             successHandler = function(data) {
+
                 var link = urlPrefix + data.url,
                     loader = me.document.getElementById(loadingId);
 
@@ -23740,7 +23836,6 @@ UE.plugin.register('autoupload', function (){
 
         /* 插入loading的占位符 */
         me.execCommand('inserthtml', loadingHtml);
-
         /* 判断后端配置是否没有加载成功 */
         if (!me.getOpt(filetype + 'ActionName')) {
             errorHandler(me.getLang('autoupload.errorLoadConfig'));
@@ -23804,11 +23899,16 @@ UE.plugin.register('autoupload', function (){
             });
         },
         bindEvents:{
+            defaultOptions: {
+                //默认间隔时间
+                enableDragUpload: true,
+                enablePasteUpload: true
+            },
             //插入粘贴板的图片，拖放插入图片
             'ready':function(e){
                 var me = this;
                 if(window.FormData && window.FileReader) {
-                    domUtils.on(me.body, 'paste drop', function(e){
+                    var handler = function(e){
                         var hasImg = false,
                             items;
                         //获取粘贴板文件列表或者拖放文件列表
@@ -23827,13 +23927,28 @@ UE.plugin.register('autoupload', function (){
                             hasImg && e.preventDefault();
                         }
 
-                    });
-                    //取消拖放图片时出现的文字光标位置提示
-                    domUtils.on(me.body, 'dragover', function (e) {
-                        if(e.dataTransfer.types[0] == 'Files') {
-                            e.preventDefault();
+                    };
+
+                    if (me.getOpt('enablePasteUpload') !== false) {
+                        domUtils.on(me.body, 'paste ', handler);
+                    }
+                    if (me.getOpt('enableDragUpload') !== false) {
+                        domUtils.on(me.body, 'drop', handler);
+                        //取消拖放图片时出现的文字光标位置提示
+                        domUtils.on(me.body, 'dragover', function (e) {
+                            if(e.dataTransfer.types[0] == 'Files') {
+                                e.preventDefault();
+                            }
+                        });
+                    } else {
+                        if (browser.gecko) {
+                            domUtils.on(me.body, 'drop', function(e){
+                                if (getDropImage(e)) {
+                                    e.preventDefault();
+                                }
+                            });
                         }
-                    });
+                    }
 
                     //设置loading的样式
                     utils.cssRule('loading',
@@ -23899,7 +24014,8 @@ UE.plugin.register('autosave', function (){
     return {
         defaultOptions: {
             //默认间隔时间
-            saveInterval: 500
+            saveInterval: 500,
+            enableAutoSave: true
         },
         bindEvents:{
             'ready':function(){
@@ -23919,6 +24035,10 @@ UE.plugin.register('autosave', function (){
             },
 
             'contentchange': function () {
+
+                if (!me.getOpt('enableAutoSave')) {
+                    return;
+                }
 
                 if ( !saveKey ) {
                     return;
@@ -24458,7 +24578,7 @@ UE.plugin.register('simpleupload', function (){
                 var allowFiles = me.getOpt('imageAllowFiles');
 
                 me.focus();
-                me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif" title="' + (me.getLang('simpleupload.loading') || '') + '" >');
+                me.execCommand('inserthtml', '<img class="loadingclass" id="' + loadingId + '" src="' + me.options.themePath + me.options.theme +'/images/spacer.gif">');
 
                 function callback(){
                     try{
@@ -24469,12 +24589,12 @@ UE.plugin.register('simpleupload', function (){
                         link = me.options.imageUrlPrefix + json.url;
                         if(json.state == 'SUCCESS' && json.url) {
                             loader = me.document.getElementById(loadingId);
+                            domUtils.removeClasses(loader, 'loadingclass');
                             loader.setAttribute('src', link);
                             loader.setAttribute('_src', link);
-                            loader.setAttribute('title', json.title || '');
                             loader.setAttribute('alt', json.original || '');
                             loader.removeAttribute('id');
-                            domUtils.removeClasses(loader, 'loadingclass');
+                            me.fireEvent('contentchange');
                         } else {
                             showErrorLoader && showErrorLoader(json.state);
                         }
@@ -24570,6 +24690,7 @@ UE.plugin.register('simpleupload', function (){
         }
     }
 });
+
 
 // plugins/serverparam.js
 /**
@@ -24667,9 +24788,9 @@ UE.plugin.register('serverparam', function (){
                             serverParam[key] = value;
                         }
                     } else if (utils.isObject(key)) { //传入对象,覆盖列表项
-                        utils.extend(serverParam, key, true);
+                        utils.extend(serverParam, key, false);
                     } else if (utils.isFunction(key)){ //传入函数,添加列表项
-                        utils.extend(serverParam, key(), true);
+                        utils.extend(serverParam, key(), false);
                     }
                 },
                 queryCommandValue: function(){
@@ -24730,6 +24851,10 @@ UE.plugin.register('insertfile', function (){
                 execCommand: function (command, filelist){
                     filelist = utils.isArray(filelist) ? filelist : [filelist];
 
+                    if(me.fireEvent('beforeinsertfile',filelist) === true){
+                        return;
+                    }
+
                     var i, item, icon, title,
                         html = '',
                         URL = me.getOpt('UEDITOR_HOME_URL'),
@@ -24744,6 +24869,8 @@ UE.plugin.register('insertfile', function (){
                             '</p>';
                     }
                     me.execCommand('insertHtml', html);
+
+                    me.fireEvent('afterinsertfile',filelist);
                 }
             }
         }
@@ -25731,7 +25858,7 @@ UE.ui = baidu.editor.ui = {};
                 if(!options.className){
                     options.className =  'edui-for-' + btnName;
                 }
-                options.cssRules = '.edui-default  .edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
+                options.cssRules = '.edui-' + (options.theme || 'default') + ' .edui-toolbar .edui-button.edui-for-'+ btnName +' .edui-icon {'+ cssRules +'}'
             }
             this.initOptions(options);
             this.initButton();
@@ -26809,7 +26936,7 @@ UE.ui = baidu.editor.ui = {};
                     options.className =  'edui-for-' + name;
                 }
                 if(cssRules){
-                    options.cssRules = '.edui-default .edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
+                    options.cssRules = '.edui-for-'+ name +' .edui-dialog-content  {'+ cssRules +'}'
                 }
             }
             this.initOptions(utils.extend({
@@ -26835,6 +26962,7 @@ UE.ui = baidu.editor.ui = {};
             var me = this,
                 theme=this.editor.options.theme;
             if(this.cssRules){
+                this.cssRules = '.edui-' + theme + ' ' + this.cssRules;
                 utils.cssRule('edui-customize-'+this.name+'-style',this.cssRules);
             }
             this.initUIBase();
@@ -28573,13 +28701,13 @@ UE.ui = baidu.editor.ui = {};
 
             var pastePop, isPaste = false, timer;
             editor.addListener("afterpaste", function () {
-                if(editor.queryCommandState('pasteplain'))
+                if (editor.queryCommandState('pasteplain'))
                     return;
-                if(baidu.editor.ui.PastePicker){
+                if (baidu.editor.ui.PastePicker) {
                     pastePop = new baidu.editor.ui.Popup({
-                        content:new baidu.editor.ui.PastePicker({editor:editor}),
-                        editor:editor,
-                        className:'edui-wordpastepop'
+                        content: new baidu.editor.ui.PastePicker({editor: editor}),
+                        editor: editor,
+                        className: 'edui-wordpastepop'
                     });
                     pastePop.render();
                 }
@@ -28590,17 +28718,17 @@ UE.ui = baidu.editor.ui = {};
                 clearTimeout(timer);
                 timer = setTimeout(function () {
                     if (pastePop && (isPaste || editor.ui._isTransfer)) {
-                        if(pastePop.isHidden()){
+                        if (pastePop.isHidden()) {
                             var span = domUtils.createElement(editor.document, 'span', {
-                                    'style':"line-height:0px;",
-                                    'innerHTML':'\ufeff'
+                                    'style': "line-height:0px;",
+                                    'innerHTML': '\ufeff'
                                 }),
                                 range = editor.selection.getRange();
                             range.insertNode(span);
-                            var tmp= getDomNode(span, 'firstChild', 'previousSibling');
+                            var tmp = getDomNode(span, 'firstChild', 'previousSibling');
                             tmp && pastePop.showAnchor(tmp.nodeType == 3 ? tmp.parentNode : tmp);
                             domUtils.remove(span);
-                        }else{
+                        } else {
                             pastePop.show();
                         }
                         delete editor.ui._isTransfer;
@@ -28614,19 +28742,23 @@ UE.ui = baidu.editor.ui = {};
             editor.addListener('keydown', function (t, evt) {
                 if (pastePop)    pastePop.dispose(evt);
                 var keyCode = evt.keyCode || evt.which;
-                if(evt.altKey&&keyCode==90){
+                if (evt.altKey && keyCode == 90) {
                     UE.ui.buttons['fullscreen'].onclick();
                 }
+
+//                if(keyCode==8){
+//                    evt.preventDefault() ;
+//                }
             });
             editor.addListener('wordcount', function (type) {
-                setCount(this,me);
+                setCount(this, me);
             });
-            function setCount(editor,ui) {
+            function setCount(editor, ui) {
                 editor.setOpt({
-                    wordCount:true,
-                    maximumWords:10000,
-                    wordCountMsg:editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
-                    wordOverFlowMsg:editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
+                    wordCount: true,
+                    maximumWords: 10000,
+                    wordCountMsg: editor.options.wordCountMsg || editor.getLang("wordCountMsg"),
+                    wordOverFlowMsg: editor.options.wordOverFlowMsg || editor.getLang("wordOverFlowMsg")
                 });
                 var opt = editor.options,
                     max = opt.maximumWords,
@@ -28655,24 +28787,24 @@ UE.ui = baidu.editor.ui = {};
                 }
             });
             var popup = new baidu.editor.ui.Popup({
-                editor:editor,
-                content:'',
-                className:'edui-bubble',
-                _onEditButtonClick:function () {
+                editor: editor,
+                content: '',
+                className: 'edui-bubble',
+                _onEditButtonClick: function () {
                     this.hide();
                     editor.ui._dialogs.linkDialog.open();
                 },
-                _onImgEditButtonClick:function (name) {
+                _onImgEditButtonClick: function (name) {
                     this.hide();
                     editor.ui._dialogs[name] && editor.ui._dialogs[name].open();
 
                 },
-                _onImgSetFloat:function (value) {
+                _onImgSetFloat: function (value) {
                     this.hide();
                     editor.execCommand("imagefloat", value);
 
                 },
-                _setIframeAlign:function (value) {
+                _setIframeAlign: function (value) {
                     var frame = popup.anchorEl;
                     var newFrame = frame.cloneNode(true);
                     switch (value) {
@@ -28691,9 +28823,9 @@ UE.ui = baidu.editor.ui = {};
                     popup.anchorEl = newFrame;
                     popup.showAnchor(popup.anchorEl);
                 },
-                _updateIframe:function () {
+                _updateIframe: function () {
                     var frame = editor._iframe = popup.anchorEl;
-                    if(domUtils.hasClass(frame, 'ueditor_baidumap')) {
+                    if (domUtils.hasClass(frame, 'ueditor_baidumap')) {
                         editor.selection.getRange().selectNode(frame).select();
                         editor.ui._dialogs.mapDialog.open();
                         popup.hide();
@@ -28702,11 +28834,11 @@ UE.ui = baidu.editor.ui = {};
                         popup.hide();
                     }
                 },
-                _onRemoveButtonClick:function (cmdName) {
+                _onRemoveButtonClick: function (cmdName) {
                     editor.execCommand(cmdName);
                     this.hide();
                 },
-                queryAutoHide:function (el) {
+                queryAutoHide: function (el) {
                     if (el && el.ownerDocument == editor.document) {
                         if (el.tagName.toLowerCase() == 'img' || domUtils.findParentByTagName(el, 'a', true)) {
                             return el !== popup.anchorEl;
@@ -28722,7 +28854,7 @@ UE.ui = baidu.editor.ui = {};
                     var el = evt.target || evt.srcElement;
                     if (editor.ui._dialogs.insertframeDialog && /iframe/ig.test(el.tagName)) {
                         var html = popup.formatHtml(
-                            '<nobr>' + editor.getLang("property") + ': <span onclick=$$._setIframeAlign(-2) class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(-1) class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(1) class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
+                                '<nobr>' + editor.getLang("property") + ': <span onclick=$$._setIframeAlign(-2) class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(-1) class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;<span onclick=$$._setIframeAlign(1) class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
                                 ' <span onclick="$$._updateIframe( this);" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>');
                         if (html) {
                             popup.getDom('content').innerHTML = html;
@@ -28758,7 +28890,7 @@ UE.ui = baidu.editor.ui = {};
                         if (img.getAttribute("anchorname")) {
                             dialogName = "anchorDialog";
                             html = popup.formatHtml(
-                                '<nobr>' + editor.getLang("property") + ': <span onclick=$$._onImgEditButtonClick("anchorDialog") class="edui-clickable">' + editor.getLang("modify") + '</span>&nbsp;&nbsp;' +
+                                    '<nobr>' + editor.getLang("property") + ': <span onclick=$$._onImgEditButtonClick("anchorDialog") class="edui-clickable">' + editor.getLang("modify") + '</span>&nbsp;&nbsp;' +
                                     '<span onclick=$$._onRemoveButtonClick(\'anchor\') class="edui-clickable">' + editor.getLang("delete") + '</span></nobr>');
                         }
                         if (img.getAttribute("word_img")) {
@@ -28766,17 +28898,17 @@ UE.ui = baidu.editor.ui = {};
                             editor.word_img = [img.getAttribute("word_img")];
                             dialogName = "wordimageDialog"
                         }
-                        if(domUtils.hasClass(img, 'loadingclass') || domUtils.hasClass(img, 'loaderrorclass')) {
+                        if (domUtils.hasClass(img, 'loadingclass') || domUtils.hasClass(img, 'loaderrorclass')) {
                             dialogName = "";
                         }
                         if (!dialogs[dialogName]) {
                             return;
                         }
-                        str = '<nobr>' + editor.getLang("property") + ': '+
+                        str = '<nobr>' + editor.getLang("property") + ': ' +
                             '<span onclick=$$._onImgSetFloat("none") class="edui-clickable">' + editor.getLang("default") + '</span>&nbsp;&nbsp;' +
                             '<span onclick=$$._onImgSetFloat("left") class="edui-clickable">' + editor.getLang("justifyleft") + '</span>&nbsp;&nbsp;' +
                             '<span onclick=$$._onImgSetFloat("right") class="edui-clickable">' + editor.getLang("justifyright") + '</span>&nbsp;&nbsp;' +
-                            '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;'+
+                            '<span onclick=$$._onImgSetFloat("center") class="edui-clickable">' + editor.getLang("justifycenter") + '</span>&nbsp;&nbsp;' +
                             '<span onclick="$$._onImgEditButtonClick(\'' + dialogName + '\');" class="edui-clickable">' + editor.getLang("modify") + '</span></nobr>';
 
                         !html && (html = popup.formatHtml(str))
@@ -28784,6 +28916,7 @@ UE.ui = baidu.editor.ui = {};
                     }
                     if (editor.ui._dialogs.linkDialog) {
                         var link = editor.queryCommandValue('link');
+                        console.log("link" + link);
                         var url;
                         if (link && (url = (link.getAttribute('_href') || link.getAttribute('href', 2)))) {
                             var txt = url;
@@ -28794,9 +28927,10 @@ UE.ui = baidu.editor.ui = {};
                                 html += '<div style="height:5px;"></div>'
                             }
                             html += popup.formatHtml(
-                                '<nobr>' + editor.getLang("anthorMsg") + ': <a target="_blank" href="' + url + '" title="' + url + '" >' + txt + '</a>' +
+                                    '<nobr>' + editor.getLang("anthorMsg") + ': <a target="_blank" href="' + url + '" title="' + url + '" >' + txt + '</a>' +
                                     ' <span class="edui-clickable" onclick="$$._onEditButtonClick();">' + editor.getLang("modify") + '</span>' +
                                     ' <span class="edui-clickable" onclick="$$._onRemoveButtonClick(\'unlink\');"> ' + editor.getLang("clear") + '</span></nobr>');
+                            html += popup.formatHtml('<nobr><h1>这是本大爷添加的内容，卧槽，不服来咬我</h1>\n    <ul>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n        <li>测试内容1</li>\n    </ul>\n</nobr>');
                             popup.showAnchor(link);
                         }
                     }
@@ -28812,13 +28946,14 @@ UE.ui = baidu.editor.ui = {};
             }
 
         },
-        _initToolbars:function () {
+        _initToolbars: function () {
             var editor = this.editor;
             var toolbars = this.toolbars || [];
             var toolbarUis = [];
+            var extraUIs = [];
             for (var i = 0; i < toolbars.length; i++) {
                 var toolbar = toolbars[i];
-                var toolbarUi = new baidu.editor.ui.Toolbar({theme:editor.options.theme});
+                var toolbarUi = new baidu.editor.ui.Toolbar({theme: editor.options.theme});
                 for (var j = 0; j < toolbar.length; j++) {
                     var toolbarItem = toolbar[j];
                     var toolbarItemUi = null;
@@ -28827,13 +28962,31 @@ UE.ui = baidu.editor.ui = {};
                         if (toolbarItem == '|') {
                             toolbarItem = 'Separator';
                         }
-                        if(toolbarItem == '||'){
+                        if (toolbarItem == '||') {
                             toolbarItem = 'Breakline';
                         }
-                        if (baidu.editor.ui[toolbarItem]) {
-                            toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
+                        var ui = baidu.editor.ui[toolbarItem];
+                        if (ui) {
+                            if (utils.isFunction(ui)) {
+                                toolbarItemUi = new baidu.editor.ui[toolbarItem](editor);
+                            } else {
+                                if (ui.id && ui.id != editor.key) {
+                                    continue;
+                                }
+                                var itemUI = ui.execFn.call(editor, editor, toolbarItem);
+                                if (itemUI) {
+                                    if (ui.index === undefined) {
+                                        toolbarUi.add(itemUI);
+                                        continue;
+                                    } else {
+                                        extraUIs.push({
+                                            index: ui.index,
+                                            itemUI: itemUI
+                                        })
+                                    }
+                                }
+                            }
                         }
-
                         //fullscreen这里单独处理一下，放到首行去
                         if (toolbarItem == 'fullscreen') {
                             if (toolbarUis && toolbarUis[0]) {
@@ -28841,10 +28994,7 @@ UE.ui = baidu.editor.ui = {};
                             } else {
                                 toolbarItemUi && toolbarUi.items.splice(0, 0, toolbarItemUi);
                             }
-
                             continue;
-
-
                         }
                     } else {
                         toolbarItemUi = toolbarItem;
@@ -28859,30 +29009,18 @@ UE.ui = baidu.editor.ui = {};
 
             //接受外部定制的UI
 
-            utils.each(UE._customizeUI,function(obj,key){
-                var itemUI,index;
-                if(obj.id && obj.id != editor.key){
-                   return false;
-                }
-                itemUI = obj.execFn.call(editor,editor,key);
-                if(itemUI){
-                    index = obj.index;
-                    if(index === undefined){
-                        index = toolbarUi.items.length;
-                    }
-                    toolbarUi.add(itemUI,index)
-                }
+            utils.each(extraUIs, function (obj) {
+                toolbarUi.add(obj.itemUI, obj.index)
             });
-
             this.toolbars = toolbarUis;
         },
-        getHtmlTpl:function () {
+        getHtmlTpl: function () {
             return '<div id="##" class="%%">' +
                 '<div id="##_toolbarbox" class="%%-toolbarbox">' +
                 (this.toolbars.length ?
                     '<div id="##_toolbarboxouter" class="%%-toolbarboxouter"><div class="%%-toolbarboxinner">' +
-                        this.renderToolbarBoxHtml() +
-                        '</div></div>' : '') +
+                    this.renderToolbarBoxHtml() +
+                    '</div></div>' : '') +
                 '<div id="##_toolbarmsg" class="%%-toolbarmsg" style="display:none;">' +
                 '<div id = "##_upload_dialog" class="%%-toolbarmsg-upload" onclick="$$.showWordImageDialog();">' + this.editor.getLang("clickToUpload") + '</div>' +
                 '<div class="%%-toolbarmsg-close" onclick="$$.hideToolbarMsg();">x</div>' +
@@ -28902,17 +29040,17 @@ UE.ui = baidu.editor.ui = {};
                 '<div id="##_scalelayer"></div>' +
                 '</div>';
         },
-        showWordImageDialog:function () {
+        showWordImageDialog: function () {
             this._dialogs['wordimageDialog'].open();
         },
-        renderToolbarBoxHtml:function () {
+        renderToolbarBoxHtml: function () {
             var buff = [];
             for (var i = 0; i < this.toolbars.length; i++) {
                 buff.push(this.toolbars[i].renderHtml());
             }
             return buff.join('');
         },
-        setFullScreen:function (fullscreen) {
+        setFullScreen: function (fullscreen) {
 
             var editor = this.editor,
                 container = editor.container.parentNode.parentNode;
@@ -28944,7 +29082,7 @@ UE.ui = baidu.editor.ui = {};
                     document.documentElement.style.overflow = 'hidden';
                     //修复，滚动条不收起的问题
 
-                    window.scrollTo(0,window.scrollY);
+                    window.scrollTo(0, window.scrollY);
                     this._bakCssText = this.getDom().style.cssText;
                     this._bakCssText1 = this.getDom('iframeholder').style.cssText;
                     editor.iframe.parentNode.style.width = '';
@@ -28982,31 +29120,31 @@ UE.ui = baidu.editor.ui = {};
                     }, 0)
                 }
 
-                if(editor.body.contentEditable === 'true'){
+                if (editor.body.contentEditable === 'true') {
                     this.editor.fireEvent('fullscreenchanged', fullscreen);
                     this.triggerLayout();
                 }
 
             }
         },
-        _updateFullScreen:function () {
+        _updateFullScreen: function () {
             if (this._fullscreen) {
                 var vpRect = uiUtils.getViewportRect();
                 this.getDom().style.cssText = 'border:0;position:absolute;left:0;top:' + (this.editor.options.topOffset || 0) + 'px;width:' + vpRect.width + 'px;height:' + vpRect.height + 'px;z-index:' + (this.getDom().style.zIndex * 1 + 100);
-                uiUtils.setViewportOffset(this.getDom(), { left:0, top:this.editor.options.topOffset || 0 });
-                this.editor.setHeight(vpRect.height - this.getDom('toolbarbox').offsetHeight - this.getDom('bottombar').offsetHeight - (this.editor.options.topOffset || 0),true);
+                uiUtils.setViewportOffset(this.getDom(), { left: 0, top: this.editor.options.topOffset || 0 });
+                this.editor.setHeight(vpRect.height - this.getDom('toolbarbox').offsetHeight - this.getDom('bottombar').offsetHeight - (this.editor.options.topOffset || 0), true);
                 //不手动调一下，会导致全屏失效
-                if(browser.gecko){
-                    try{
+                if (browser.gecko) {
+                    try {
                         window.onresize();
-                    }catch(e){
+                    } catch (e) {
 
                     }
 
                 }
             }
         },
-        _updateElementPath:function () {
+        _updateElementPath: function () {
             var bottom = this.getDom('elementpath'), list;
             if (this.elementPathEnabled && (list = this.editor.queryCommandValue('elementpath'))) {
 
@@ -29020,20 +29158,20 @@ UE.ui = baidu.editor.ui = {};
                 bottom.style.display = 'none'
             }
         },
-        disableElementPath:function () {
+        disableElementPath: function () {
             var bottom = this.getDom('elementpath');
             bottom.innerHTML = '';
             bottom.style.display = 'none';
             this.elementPathEnabled = false;
 
         },
-        enableElementPath:function () {
+        enableElementPath: function () {
             var bottom = this.getDom('elementpath');
             bottom.style.display = '';
             this.elementPathEnabled = true;
             this._updateElementPath();
         },
-        _scale:function () {
+        _scale: function () {
             var doc = document,
                 editor = this.editor,
                 editorHolder = editor.container,
@@ -29107,7 +29245,7 @@ UE.ui = baidu.editor.ui = {};
                     editor.ui._actualFrameWidth = scalelayer.offsetWidth - 2;
                     editorHolder.style.width = editor.ui._actualFrameWidth + 'px';
 
-                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2,true);
+                    editor.setHeight(scalelayer.offsetHeight - bottombar.offsetHeight - toolbarBox.offsetHeight - 2, true);
                 }
                 if (scalelayer) {
                     scalelayer.style.display = "none";
@@ -29138,10 +29276,10 @@ UE.ui = baidu.editor.ui = {};
                 domUtils.un(scale, "mousedown", down);
             };
         },
-        isFullScreen:function () {
+        isFullScreen: function () {
             return this._fullscreen;
         },
-        postRender:function () {
+        postRender: function () {
             UIBase.prototype.postRender.call(this);
             for (var i = 0; i < this.toolbars.length; i++) {
                 this.toolbars[i].postRender();
@@ -29162,7 +29300,7 @@ UE.ui = baidu.editor.ui = {};
                 clearTimeout(timerId);
             })
         },
-        showToolbarMsg:function (msg, flag) {
+        showToolbarMsg: function (msg, flag) {
             this.getDom('toolbarmsg_label').innerHTML = msg;
             this.getDom('toolbarmsg').style.display = '';
             //
@@ -29171,13 +29309,13 @@ UE.ui = baidu.editor.ui = {};
                 w.style.display = 'none';
             }
         },
-        hideToolbarMsg:function () {
+        hideToolbarMsg: function () {
             this.getDom('toolbarmsg').style.display = 'none';
         },
-        mapUrl:function (url) {
+        mapUrl: function (url) {
             return url ? url.replace('~/', this.editor.options.UEDITOR_HOME_URL || '') : ''
         },
-        triggerLayout:function () {
+        triggerLayout: function () {
             var dom = this.getDom();
             if (dom.style.zoom == '1') {
                 dom.style.zoom = '100%';
@@ -29196,10 +29334,10 @@ UE.ui = baidu.editor.ui = {};
         var editor = new UE.Editor(options);
         editor.options.editor = editor;
         utils.loadFile(document, {
-            href:editor.options.themePath + editor.options.theme + "/css/ueditor.css",
-            tag:"link",
-            type:"text/css",
-            rel:"stylesheet"
+            href: editor.options.themePath + editor.options.theme + "/css/ueditor.css",
+            tag: "link",
+            type: "text/css",
+            rel: "stylesheet"
         });
 
         var oldRender = editor.render;
@@ -29212,7 +29350,7 @@ UE.ui = baidu.editor.ui = {};
                 editor.langIsReady ? renderUI() : editor.addListener("langReady", renderUI);
                 function renderUI() {
                     editor.setOpt({
-                        labelMap:editor.options.labelMap || editor.getLang('labelMap')
+                        labelMap: editor.options.labelMap || editor.getLang('labelMap')
                     });
                     new EditorUI(editor.options);
                     if (holder) {
@@ -29240,9 +29378,9 @@ UE.ui = baidu.editor.ui = {};
 
 
                             }
-                            if(holder.id){
+                            if (holder.id) {
                                 newDiv.id = holder.id;
-                                domUtils.removeAttributes(holder,'id');
+                                domUtils.removeAttributes(holder, 'id');
                             }
                             holder = newDiv;
                             holder.innerHTML = '';
@@ -29254,9 +29392,9 @@ UE.ui = baidu.editor.ui = {};
                     var opt = editor.options;
                     //给实例添加一个编辑器的容器引用
                     editor.container = editor.ui.getDom();
-                    var parents = domUtils.findParents(holder,true);
+                    var parents = domUtils.findParents(holder, true);
                     var displays = [];
-                    for(var i = 0 ,ci;ci=parents[i];i++){
+                    for (var i = 0 , ci; ci = parents[i]; i++) {
                         displays[i] = ci.style.display;
                         ci.style.display = 'block'
                     }
@@ -29265,7 +29403,7 @@ UE.ui = baidu.editor.ui = {};
                     } else {
                         opt.minFrameWidth = opt.initialFrameWidth = holder.offsetWidth;
                         var styleWidth = holder.style.width;
-                        if(/%$/.test(styleWidth)) {
+                        if (/%$/.test(styleWidth)) {
                             opt.initialFrameWidth = styleWidth;
                         }
                     }
@@ -29274,12 +29412,12 @@ UE.ui = baidu.editor.ui = {};
                     } else {
                         opt.initialFrameHeight = opt.minFrameHeight = holder.offsetHeight;
                     }
-                    for(var i = 0 ,ci;ci=parents[i];i++){
-                        ci.style.display =  displays[i]
+                    for (var i = 0 , ci; ci = parents[i]; i++) {
+                        ci.style.display = displays[i]
                     }
                     //编辑器最外容器设置了高度，会导致，编辑器不占位
                     //todo 先去掉，没有找到原因
-                    if(holder.style.height){
+                    if (holder.style.height) {
                         holder.style.height = ''
                     }
                     editor.container.style.width = opt.initialFrameWidth + (/%$/.test(opt.initialFrameWidth) ? '' : 'px');
@@ -29332,12 +29470,12 @@ UE.ui = baidu.editor.ui = {};
         }
     };
 
-    UE.registerUI = function(uiName,fn,index,editorId){
+    UE.registerUI = function (uiName, fn, index, editorId) {
         utils.each(uiName.split(/\s+/), function (name) {
-            UE._customizeUI[name] = {
-                id : editorId,
-                execFn:fn,
-                index:index
+            baidu.editor.ui[name] = {
+                id: editorId,
+                execFn: fn,
+                index: index
             };
         })
 
@@ -29353,6 +29491,11 @@ UE.registerUI('message', function(editor) {
     var holder;
     var _messageItems = [];
     var me = editor;
+
+    me.setOpt('enableMessageShow', true);
+    if (me.getOpt('enableMessageShow') === false) {
+        return;
+    }
 
     me.addListener('ready', function(){
         holder = document.getElementById(me.ui.id + '_message_holder');
@@ -29396,6 +29539,7 @@ UE.registerUI('message', function(editor) {
     });
 
     function updateHolderPos(){
+        if (!holder || !me.ui) return;
         var toolbarbox = me.ui.getDom('toolbarbox');
         if (toolbarbox) {
             holder.style.top = toolbarbox.offsetHeight + 3 + 'px';
