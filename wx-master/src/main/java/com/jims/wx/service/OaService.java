@@ -32,6 +32,9 @@ public class OaService {
     @GET
     public Response sendOaMessage(@QueryParam("id") String id ,@QueryParam("message") String message,@QueryParam("code") String code) throws IOException {
         //根据personId获取 openId
+        if(id==null || id==""){
+            throw new IllegalArgumentException("人员id为空！！");
+        }
         String[] idsArray = id.split(",");
         System.out.println(idsArray.length);
         String [] openId = new String[idsArray.length];

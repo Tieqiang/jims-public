@@ -76,12 +76,13 @@ public class ClinicForRegistService {
      */
     @GET
     @Path("regist")
-    public synchronized String regist(@QueryParam("price") String price, @QueryParam("prepareId") String prepareId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("openId") String openId) {
+    public String regist(@QueryParam("price") String price, @QueryParam("prepareId") String prepareId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("openId") String openId) {
         try {
-//            ServletInputStream inputStream = request.getInputStream();
-//            ServletOutputStream outputStream = response.getOutputStream();
             if (StringUtils.isNotBlank(price) && StringUtils.isNotBlank(prepareId) && StringUtils.isNotBlank(clinicForRegistId)) {
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
+                if (clinicForRegist == null) {
+                    throw new IllegalArgumentException("非法的号表主键=" + clinicForRegistId);
+                }
                 /**
                  *向clinic_master表中写入一条数据
                  */
@@ -91,9 +92,15 @@ public class ClinicForRegistService {
                 //             * 查找Idcard
                 //             */
                 AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+                if (appUser == null) {
+                    throw new IllegalArgumentException("非法的openId=" + openId);
+                }
                 String patId = appUser.getPatId();//appuser主键
                 //            String idCard2 = patVsUserFacade.findPatIdById(appuserId);
                 PatInfo patInfo = patInfoFacade.findById(patId);
+                if (patInfo == null) {
+                    throw new IllegalArgumentException("非法的patId=" + patId);
+                }
                 //            String idCard2 = patInfoFacade.findIdCard(patId);
                 String patientId = patInfo.getPatientId();
                 String registTime = clinicForRegist.getRegistTime();//就诊日期
@@ -138,57 +145,14 @@ public class ClinicForRegistService {
                 clinicForRegist.setAppointmentLimits(clinicForRegist.getAppointmentLimits() - 1);
                 ClinicForRegist cfr = clinicForRegistFacade.save(clinicForRegist);
                 if (c != null && cfr != null) {//保存成功
-                    //跳转到成功页面
-//                    //转换XML
-//                    EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, inputStream);
-//                    String key = eventMessage.getFromUserName() + "__"
-//                            +eventMessage.getToUserName() + "__"
-//                            + eventMessage.getMsgId() + "__"
-//                            + eventMessage.getCreateTime();
-//                    System.out.println(eventMessage.getContent() );
-//                    //创建回复
-//                    //创建回复
-//                     //拼接一个页面
-//                    SimpleDateFormat dateFormat=new SimpleDateFormat("mm月dd日");
-//                    StringBuilder sb=new StringBuilder();
-//                    sb.append("<!DOCTYPE html>\n" +
-//                            "<html>\n" +
-//                            "<head><title></title></head>\n" +
-//                            "<body>");
-//                    sb.append("<h3>挂号单</h3><br/>");
-//                    sb.append("<font size='8px'>"+dateFormat.format(new Date())+"</font><br/>");
-//                    DoctInfo doctInfo=doctInfoFacade.findById(clinicForRegist.getClinicIndex().getDoctorId());
-//                    if(doctInfo!=null&&!"".equals(doctInfo)){
-//                        sb.append("医生："+doctInfo.getName()+"<br/>");
-//                    }
-//                    sb.append("医院：双滦区妇幼保健医院<br/>");
-//                    DeptDict deptDict=deptDictFacade.findByCode(clinicForRegist.getClinicIndex().getClinicDept());
-//                    if(deptDict!=null){
-//                        sb.append("科室:"+deptDict.getDeptName()+"<br/>");
-//                        sb.append("科室地址:"+deptDict.getDeptLocation()+"");
-//                    }
-//                    sb.append("就诊时间:"+registTime+"<br/>");
-//                    sb.append("订单号："+prepareId+"<br/>");
-//                    sb.append("订单号："+prepareId+"<br/>");
-//                    sb.append("</body></html>");
-//                    XMLMessage xmlTextMessage = new XMLTextMessage(
-//                            openId,
-//                            eventMessage.getToUserName(),//开发者微信号
-//                            sb.toString());
-//                     //回复
-//                    xmlTextMessage.outputStreamWrite(outputStream);
                     response.sendRedirect("/views/his/public/app-pay-success.html?clinicForRegistId=" + clinicForRegistId + "&price=" + cfr.getRegistPrice() + "&openId=" + openId + "&prepareId=" + prepareId);
-
                 } else {
-
                     //跳转到操作失败页面
                     response.sendRedirect("/views/his/public/app-pay-failed.html");
-
                 }
             } else {
-
+                System.out.println("请求参数非法！");
                 response.sendRedirect("/views/his/public/app-pay-failed.html");
-
             }
         } catch (ParseException e) {
             e.printStackTrace();
@@ -198,9 +162,7 @@ public class ClinicForRegistService {
         return "";
     }
 
-
     /**
-     * 选择科室：---》deptInfo
      * 查询所有的号别 clinicIndex
      * 根据号别的Id查询号表信息
      *
@@ -211,19 +173,15 @@ public class ClinicForRegistService {
     @Path("find-by-dept-id")
     public List<AppDoctInfoVo> findByDeptId(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId, @QueryParam("preFlag") String preFlag) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
-//        String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
-
         String addr = getRequestUrl();
         /**
          * 查询默认绑定患者
          */
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
-
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
-
-          /*
-        * 获取当前日期 String
-         */
+        if (patInfo == null) {
+            throw new IllegalArgumentException("没有找到默认绑定的患者！patId非法");
+        }
         String currentDateStr = sdf.format(new Date());
         deptId = deptId.replaceAll("\\s*", "");
         deptId = deptId.replaceAll("", "");
@@ -232,6 +190,9 @@ public class ClinicForRegistService {
         String deptName = deptDict.getDeptName();
         String deptCode = deptDict.getDeptCode();
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
+        if (list == null || list.isEmpty()) {
+            throw new IllegalArgumentException("号别集合为空！退出程序！");
+        }
         for (ClinicIndex clinicIndex : list) {
             DoctInfo doctInfo = null;
             //一个号别只有一个doct     clinicDept code
@@ -261,7 +222,7 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                     appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                     appDoctInfoVo.setPatName(patInfo.getName());
-                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
                     if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
                     } else {
@@ -668,7 +629,7 @@ public class ClinicForRegistService {
                 appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                 appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                 appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
+                boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
                 if (flag) {
                     appDoctInfoVo.setCollectionDesc("已收藏");
                 } else {
@@ -724,7 +685,7 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                     appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
+                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
                     if (flag) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
                     } else {
@@ -790,7 +751,7 @@ public class ClinicForRegistService {
                         appDoctInfoVo.setPrice(clinicForRegist == null ? 0 : clinicForRegist.getRegistPrice());
                         appDoctInfoVo.setRid(clinicForRegist == null ? null : clinicForRegist.getId());
                         appDoctInfoVo.setPatName(patInfo.getName());
-                        boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(),openId);
+                        boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
                         if (flag) {
                             appDoctInfoVo.setCollectionDesc("已收藏");
                         } else {

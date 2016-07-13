@@ -6921,12 +6921,12 @@ var fillCharReg = new RegExp(domUtils.fillChar, 'g');
                     '</script>' +
                     (options.iframeJsUrl ? ('<script type=\'text/javascript\' src=\'' + utils.unhtml(options.iframeJsUrl) + '\'></script>'):'') +
                     '</html>';
-//                //标题
-//                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="title" type="text" placeholder="请输入标题">'}))
-//                //作者
-//                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="oauth" type="text" placeholder="请输入作者">'}))
-//                //添加横线
-//                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<hr>'}))
+                //标题
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="title" type="text" placeholder="请输入标题">'}))
+                //作者
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<input id="oauth" type="text" placeholder="请输入作者">'}))
+                //添加横线
+                container.appendChild(domUtils.createElement(document,'p',{innerHTML:'<hr>'}))
 
                 container.appendChild(domUtils.createElement(document, 'iframe', {
                     id: 'ueditor_' + me.uid,
