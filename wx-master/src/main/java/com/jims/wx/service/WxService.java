@@ -64,10 +64,10 @@ public class WxService {
     private PatVsUserFacade patVsUserFacade;
     private HospitalInfoFacade hospitalInfoFacade;
     private PatInfoFacade patInfoFacade;
-    private static final String MCH_ID = " ";//微信支付商号
-    private static final String KEY = " ";//API密钥 or 商户支付密钥
-    private static final String APP_ID = " ";//商户的APP_ID
-    private static final String APP_SERECT = " ";
+    private static final String MCH_ID = "1318000301";//微信支付商号
+    private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
+    private static final String APP_ID = "wx890edf605415aaec";//商户的APP_ID
+    private static final String APP_SERECT = "0e9446b7e5690138e6f8b1d07bb04a02";
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
 
@@ -177,9 +177,6 @@ public class WxService {
             if ("VIEW".equals(event) && "event".equals(msgType)) {
 
             }
-            if("MASSSENDJOBFINISH".equalsIgnoreCase(event)&&"event".equalsIgnoreCase(msgType)){
-                //群发结果
-            }
             //创建回复
             //创建回复
             XMLMessage xmlTextMessage = new XMLTextMessage(
@@ -205,10 +202,12 @@ public class WxService {
         try {
             outputStream.write(text.getBytes("utf-8"));
         } catch (UnsupportedEncodingException e) {
-             e.printStackTrace();
+            // TODO Auto-generated catch block
+            e.printStackTrace();
             return false;
         } catch (IOException e) {
-             e.printStackTrace();
+            // TODO Auto-generated catch block
+            e.printStackTrace();
             return false;
         }
         return true;
@@ -224,9 +223,8 @@ public class WxService {
     @GET
     @Path("questionnaire-survey")
     public String test(@QueryParam("code") String code) throws IOException {
-//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        SnsToken snsToken =getSnsToken(code);
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
         String patId = "";
         if (appList.size() > 0) {
@@ -239,11 +237,11 @@ public class WxService {
     @GET
     @Path("pat-visit")
     public String inp(@QueryParam("code") String code) throws IOException {
-//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
 //        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
 
-        SnsToken snsToken =getSnsToken(code);
+
         response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid());
         return "http://www.baidu.com/";
     }
@@ -253,9 +251,8 @@ public class WxService {
     public String userBangker(@QueryParam("code") String code) {
 //        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
         //测试用
-//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-          SnsToken snsToken =getSnsToken(code);
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         try {
             response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
         } catch (IOException e) {
@@ -279,10 +276,9 @@ public class WxService {
             String openIdStr = "";
             SnsToken snsToken = null;
             if (openId == null || openId == "") {
-//                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-//                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
-                  snsToken =getSnsToken(code);
+                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
@@ -328,9 +324,8 @@ public class WxService {
     @GET
     @Path("rcpt-list")
     public String rcpt(@QueryParam("code") String code) throws IOException {
-//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        SnsToken snsToken =getSnsToken(code);
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
         String patId = "";
         if (appList.size() > 0) {
@@ -360,9 +355,8 @@ public class WxService {
     @GET
     @Path("find-pat-info")
     public String findPatInfo(@QueryParam("code") String code) throws IOException {
-//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        SnsToken snsToken =getSnsToken(code);
+        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         response.sendRedirect("/views/his/public/app-my-information.html?openId=" + snsToken.getOpenid());
         return "";
     }
@@ -384,8 +378,8 @@ public class WxService {
 
     @GET
     @Path("get-param")
-    public String getParam(@QueryParam("patId") String patId,@QueryParam("openId") String openId) throws IOException {
-        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId+"&openId="+openId);
+    public String getParam(@QueryParam("patId") String patId) throws IOException {
+        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
         return "";
     }
 
@@ -444,7 +438,7 @@ public class WxService {
      * @param age
      * @param sexValue
      * @return
-     * @throws java.io.IOException
+     * @throws IOException
      */
     @GET
     @Path("select-body")
@@ -481,7 +475,9 @@ public class WxService {
         try {
             // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
             //测试用
-            SnsToken snsToken=getSnsToken(code);
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
             response.sendRedirect("/views/his/public/app-select-body.html?openId=" + snsToken.getOpenid());
         } catch (IOException e) {
             e.printStackTrace();
@@ -504,10 +500,9 @@ public class WxService {
             SnsToken snsToken = null;
             String openIdStr = "";
             if (openId == null || openId == "") {
-//                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-//                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
-                snsToken= getSnsToken(code);
+                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
@@ -546,10 +541,9 @@ public class WxService {
         try {
             // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
             //测试用
-//            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-//            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
-            SnsToken snsToken =getSnsToken(code);
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
             boolean flag = patVsUserFacade.findIsExistsPatInfo(snsToken.getOpenid());
             if (flag) {//绑定和患者
                 response.sendRedirect("/views/his/public/app-feed-back.html?openId=" + snsToken.getOpenid());
@@ -565,13 +559,9 @@ public class WxService {
 
     @GET
     @Path("find-master")
-    public String findmaster(@QueryParam("openId") String openId,@QueryParam("doctFlag") String doctFlag) {
+    public String findmaster(@QueryParam("openId") String openId) {
         try {
-             if(doctFlag!=null&&!"".equals(doctFlag)){
-                 response.sendRedirect("/views/his/public/app-doct-record.html?openId=" + openId);
-              }else{
-                 response.sendRedirect("/views/his/public/app-master-record.html?openId=" + openId);
-             }
+            response.sendRedirect("/views/his/public/app-master-record.html?openId=" + openId);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -605,10 +595,9 @@ public class WxService {
     public String myMaster(@QueryParam("code") String code) {
         try {
             // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-//            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-//            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-//            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
-            SnsToken snsToken= getSnsToken(code);
+            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
             boolean flag = patVsUserFacade.findIsExistsPatInfo(snsToken.getOpenid());
             if (flag) {//绑定了患者
                 response.sendRedirect("/views/his/public/app-regist-list.html?openId=" + snsToken.getOpenid());
@@ -654,51 +643,4 @@ public class WxService {
         }
         return "";
     }
-//    window.location.href="/api/wx-service/query-doct-like?likeSearch="+likeSearch+"&openId="+openId;
-
-//        　window.location.href="/api/wx-service/query-doct-info?id="+id;
-
-    @GET
-    @Path("query-doct-info")
-    public String queryDoctInfo(@QueryParam("id") String id,@QueryParam("openId") String openId){
-          try {
-            request.setCharacterEncoding("UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            response.sendRedirect("/views/his/public/app-collection-doct-info.html?collectionId="+id+"&openId="+openId);
-         } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-//
-    @GET
-    @Path("query-doct-like")
-    public String likeSearch(@QueryParam("likeSearch") String likeSearch,@QueryParam("openId") String openId,@QueryParam("flag") String flag){
-        try {
-            request.setCharacterEncoding("UTF-8");
-            response.setCharacterEncoding("UTF-8");
-            if("pre".equals(flag)){
-                response.sendRedirect("/views/his/public/app-doct-info-pre.html?likeSearch="+ URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
-            }else{
-                response.sendRedirect("/views/his/public/app-doct-info.html?likeSearch="+URLEncoder.encode(likeSearch,"UTF-8")+"&openId="+openId);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    /**
-     * 获取snsToken
-     * @param code
-     * @return
-     */
-    private SnsToken getSnsToken(String code){
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        return snsToken;
-    }
-
-//
 }
