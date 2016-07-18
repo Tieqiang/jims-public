@@ -24,15 +24,12 @@ public class CorsFilter implements Filter {
         res.addHeader("Access-Control-Allow-Headers", "Content-Type,X-Requested-With");
         res.addHeader("Access-Control-Max-Age", "600000");
         res.setCharacterEncoding("UTF-8");
-//        String requestUrl=request.getR
-         request = (HttpServletRequest) request;
-         String path=((HttpServletRequest) request).getRequestURI();
-         if(path.contains("login.html") || path.contains("wx-service")){
+        String path=((HttpServletRequest) request).getRequestURI();
+        if(path.contains("login.html") || path.contains("wx-service")){
              filterChain.doFilter(request, res);
-         }
+        }
          servletResponse.getWriter().write("请求的路径不合法");
       }
-
     @Override
     public void destroy() {
 

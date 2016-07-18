@@ -33,7 +33,7 @@ public class Main {
         root.setResourceBase(webappDirLocation);
         root.setParentLoaderPriority(true);
         server.setHandler(root);
-        //migrationDb();
+//        migrationDb();
         server.start();
         server.join();
     }

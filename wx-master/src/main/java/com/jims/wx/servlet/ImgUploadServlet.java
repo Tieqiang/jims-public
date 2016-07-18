@@ -98,7 +98,7 @@ public class ImgUploadServlet extends HttpServlet {
             writer.print(",saveName:\"" + saveName + "\"");
             writer.print("}");
             writer.close();
-
+            item.delete();
         } catch (FileUploadException e) {
             e.printStackTrace();
         } catch (Exception e) {
