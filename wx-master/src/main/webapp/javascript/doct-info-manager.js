@@ -92,17 +92,17 @@ $(function () {
     /**
      * init combobox
      */
-    $("#cc").combobox({
-        width: 160,
-        listWidth: 150,
-        listHeight: 100,
-        url:'/api/hospital-dict/list',
-        method:"GET",
-        mode: 'remote',
-        valueField:'id',
-        textField:'hospitalName'
-        //editable: false
-    });
+//    $("#cc").combobox({
+//        width: 160,
+//        listWidth: 150,
+//        listHeight: 100,
+//        url:'/api/hospital-dict/list',
+//        method:"GET",
+//        mode: 'remote',
+//        valueField:'id',
+//        textField:'hospitalName'
+//        //editable: false
+//    });
     /**
      * getValue from comboboox
      * @returns {*|jQuery}

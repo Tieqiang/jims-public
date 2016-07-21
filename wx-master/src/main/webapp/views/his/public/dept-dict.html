@@ -35,7 +35,7 @@
 </div>
 
 
-<div id="dlg" class="easyui-dialog" style="width:800px;height:500px;padding:10px 20px"
+<div id="dlg" class="easyui-dialog" style="width:90%;height:500px;padding:10px 20px"
      closed="true" buttons="#dlg-buttons" data-options="modal:true">
     <div class="ftitle">科室信息维护</div>
     <form id="fm" method="post" novalidate>
@@ -50,34 +50,34 @@
             <tr>
                 <td>&nbsp;&nbsp;<label>科室别名:</label></td>
                 <td><input name="deptAlis" id="deptAlis" class="easyui-textbox"></td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>临床属性:</label>
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室属性:</label>
                 <input name="deptAttr" id="deptAttr" class="easyui-textbox" data-options="validType:'length[1,2]'" ></td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;<label>门诊住院:</label></td>
-                <td><select id="deptOutpInp" class="easyui-combobox" name="deptOutpInp" style="width: 160px"></select></td>
+                <td><select id="deptOutpInp" class="easyui-combobox" editable="false" name="deptOutpInp" style="width: 160px"></select></td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室位置:</label>
                 <input name="deptLocation" id="deptLocation" class="easyui-textbox"></td>
             </tr>
             <tr>
                 <td>&nbsp;&nbsp;<label>是否停用:</label></td>
                 <td>
-                    <select style="width: 160px" class="easyui-combobox" name="deptStopFlag" id="deptStopFlag" required="true">
+                    <select style="width: 160px" class="easyui-combobox" name="deptStopFlag" editable="false" id="deptStopFlag" required="true">
                     </select>
                 </td>
                 <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>是否末级:</label>
-                    <select style="width: 160px" class="easyui-combobox" name="endDept" id="endDept" required="true">
+                    <select editable="false" style="width: 160px" class="easyui-combobox" name="endDept" id="endDept" required="true">
                     </select>
                 </td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;<label>部门类型:</label></td>
+                <td>&nbsp;&nbsp;<label>科室类型:</label></td>
                 <td>
-                    <select style="width: 160px" class="easyui-combobox" name="deptType" id="deptType" required="true">
+                    <select editable="false" style="width: 160px" class="easyui-combobox" name="deptType" id="deptType" required="true">
                     </select>
                 </td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>部门类别:</label>
-                    <select style="width: 160px" class="easyui-combobox" name="deptClass" id="deptClass" required="true">
+                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室类别:</label>
+                    <select editable="false" style="width: 160px" class="easyui-combobox" name="deptClass" id="deptClass" required="true">
                     </select>
                 </td>
             </tr>

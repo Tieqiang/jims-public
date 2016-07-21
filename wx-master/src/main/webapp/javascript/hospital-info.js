@@ -78,7 +78,6 @@ $(function () {
         hospitalInfo.metchId = $("#metchId").val();
         hospitalInfo.key = $("#key").val();
         hospitalInfo.hospitalImg=$("#hospitalImg").val();
-        alert(hospitalInfo.hospitalId);
         var tranContent = $("#tranContent").val();
         var oEditor = CKEDITOR.instances.tranContent;
         var tranContent1 = oEditor.getData();
@@ -87,6 +86,8 @@ $(function () {
             $.postJSON("/api/hospital-info/merge?tranContent=" + tranContent, hospitalInfo, function (data) {
                 $.messager.alert("系统提示", "保存成功", "info");
                 show();
+            },function(status,data){
+                $.messager.alert("系统提示", "保存成功", "info");
             });
         } else {
             $.messager.alert("系统提示", "医院链接错误!!", "error");
