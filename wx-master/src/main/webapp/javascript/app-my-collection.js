@@ -24,9 +24,6 @@ app.controller('tableCtrl', function ($scope, $http) {
      * 查看医生信息
      * @param id
      */
-//    $scope.info2=function (rid){
-//        　window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
-//    }
       $scope.info2=function(rid){//
            window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
       }
@@ -35,7 +32,7 @@ app.controller('tableCtrl', function ($scope, $http) {
         $http.get("/api/doct-info/baddon-collection?openId=" + openId + "&doctId=" + doctId)
             .success(function (data) {//appDoctInfoVO
                 if (data != 0) {
-                    alert("取消成功！");
+//                    alert("取消成功！");
                     $http.get("/api/clinic-for-regist/find-my-collection?&openId=" + openId)
                         .success(function (data) {//appDoctInfoVO
                             $scope.names = data;

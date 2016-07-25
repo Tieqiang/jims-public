@@ -102,7 +102,7 @@ public class PatInfoService {
                 patInfo.setName(name);
                 patInfo.setPatientId(patientId);
                 patInfo = patInfoFacade.save(patInfo);
-                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patId);
+                response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patId+"&openId="+openId);
               }else {
                  AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
                  if(appUser==null){

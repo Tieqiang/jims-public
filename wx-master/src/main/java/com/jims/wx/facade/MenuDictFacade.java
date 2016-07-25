@@ -50,6 +50,9 @@ public class MenuDictFacade extends BaseFacade {
      */
     @Transactional
     public MenuDict deleteMenuDictById(String id) {
+        if(id==null){
+            return null;
+        }
         String hql = "from MenuDict as md  where md.id='" + id + "'";
         Query query = entityManager.createQuery(hql);
         MenuDict menuDict = (MenuDict) query.getSingleResult();

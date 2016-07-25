@@ -177,7 +177,19 @@ public class ClinicForRegistService {
         /**
          * 查询默认绑定患者
          */
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("openid 为空!");
+        }
+        if(deptId==null || deptId.equals("")){
+            throw new IllegalArgumentException("deptId 为空!");
+        }
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
+        if(appuser==null){
+            throw new IllegalArgumentException("appuser 不存在!");
+        }
+        if(appuser.getPatId()==null || "".equals(appuser.getPatId())){
+            throw new IllegalArgumentException("没有绑定默认的患者");
+        }
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
         if (patInfo == null) {
             throw new IllegalArgumentException("没有找到默认绑定的患者！patId非法");
@@ -187,6 +199,9 @@ public class ClinicForRegistService {
         deptId = deptId.replaceAll("", "");
         deptId = deptId.trim();
         DeptDict deptDict = this.deptDictFacade.findById(deptId);
+        if(deptDict==null){
+            throw new IllegalArgumentException("deptDict 没有找到！");
+        }
         String deptName = deptDict.getDeptName();
         String deptCode = deptDict.getDeptCode();
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
@@ -200,13 +215,14 @@ public class ClinicForRegistService {
                 String doctId = clinicIndex.getDoctorId();
                 if (doctId != null && !"".equals(doctId)) {
                     doctInfo = this.doctInfoFacade.findById(doctId);
+                    if(doctInfo==null){
+                        continue;
+                    }
                 }
-                /**
-                 * 预约：如果这个医生当天有出诊就显示当天
-                 * 如果没有就显示里今天最近的一天
-                 * 当天挂号
-                 */
                 ClinicForRegist clinicForRegist = clinicForRegistFacade.findRegistInfo(currentDateStr, clinicIndex.getId());
+                if(clinicForRegist==null){
+                    continue;
+                }
                 if (clinicForRegist != null && !"".equals(clinicForRegist)) {
                     AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
                     appDoctInfoVo.setClinicIndexId(clinicIndex == null ? null : clinicIndex.getId());
@@ -589,19 +605,25 @@ public class ClinicForRegistService {
     @GET
     @Path("find-by-dept-id-pre")
     public List<AppDoctInfoVo> findByDeptIdPre(@QueryParam("deptId") String deptId, @QueryParam("openId") String openId) {
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("非法的openId,openId 为空！");
+        }
+        if(deptId==null || "".equals(deptId)){
+            throw new IllegalArgumentException("非法的deptId，deptId为空！");
+        }
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
         String addr = getRequestUrl();
-        /**
-         * 查询默认绑定患者
-         */
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
-
+        if(appuser==null){
+            throw new IllegalArgumentException("appuser 为空");
+        }
+        if(appuser.getPatId()==null || "".equals(appuser.getPatId())){
+            throw new IllegalArgumentException("appuser 不存在默认的绑定患者！");
+        }
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
-
-//        List<UserCollection> userCollections=this.userCollectionFacade.findByOpenId(openId);
-
-
-
+        if(patInfo==null){
+            throw new IllegalArgumentException("patInfo 为空！");
+        }
          /*
         * 获取当前日期 String
          */
@@ -610,9 +632,16 @@ public class ClinicForRegistService {
         deptId = deptId.replaceAll("", "");
         deptId = deptId.trim();
         DeptDict deptDict = this.deptDictFacade.findById(deptId);
+        if(deptDict==null){
+            throw new IllegalArgumentException("deptDict 为空！");
+        }
         String deptName = deptDict.getDeptName();
         String deptCode = deptDict.getDeptCode();
+        //号表中有多少可以挂号的号别
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
+        if(list==null || list.isEmpty()){
+            return null;
+        }
         for (ClinicIndex clinicIndex : list) {
             DoctInfo doctInfo = null;
             //一个号别只有一个doct     clinicDept code
@@ -620,8 +649,15 @@ public class ClinicForRegistService {
                 String doctId = clinicIndex.getDoctorId();
                 if (doctId != null && !"".equals(doctId)) {
                     doctInfo = this.doctInfoFacade.findById(doctId);
+                    if(doctInfo==null){
+                        continue;
+                    }
                 }
+                //查找这个号别 15天之内 对于这个科室的号表。
                 List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoPre(currentDateStr, clinicIndex.getId());
+                if(clinicForRegists==null || clinicForRegists.isEmpty()){
+                   continue;
+                }
                 AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
                 appDoctInfoVo.setClinicIndexId(clinicIndex == null ? null : clinicIndex.getId());
                 appDoctInfoVo.setDocId(doctInfo == null ? null : doctInfo.getId());
@@ -666,17 +702,39 @@ public class ClinicForRegistService {
      */
     @GET
     @Path("find-by-dept-id-pre-like")
-    public List<AppDoctInfoVo> findByDeptIdPreLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId) {
+    public List<AppDoctInfoVo> findByDeptIdPreLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId,@QueryParam("deptId") String deptId) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
         String addr = getRequestUrl();
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("openId 为空!");
+        }
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
+        if(appuser==null){
+            throw new IllegalArgumentException("appuser 为空！");
+        }
+        if(appuser.getPatId()==null || "".equals(appuser.getPatId())){
+            throw new IllegalArgumentException("没有绑定默认的患者！");
+        }
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
+        if(patInfo==null){
+            throw new IllegalArgumentException("patInfo 为空！");
+        }
         List<DoctInfo> doctInfos = doctInfoFacade.queryByCondition(DoctInfo.class,likeSearch);
-//        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
+        if(doctInfos==null || doctInfos.isEmpty()){//没有查找的结果
+            return null;
+        }
+        //查找所有存在号表的号别
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
+        if(deptId==null || "".equals(deptId)){
+            throw new IllegalArgumentException("deptId 为空！");
+        }
+        DeptDict deptDict=this.deptDictFacade.findById(deptId);
+        if(deptDict==null){
+            throw new IllegalArgumentException("deptDict 为空！");
+        }
         for (DoctInfo doctInfo : doctInfos) {
             for (ClinicIndex clinicIndex : list) {
-                if (clinicIndex.getDoctorId().equals(doctInfo.getId())) {//有号
+                if (clinicIndex.getDoctorId().equals(doctInfo.getId())&&clinicIndex.getClinicDept().equals(deptDict.getDeptCode())) {//有号
                     List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoPre(sdf.format(new Date()), clinicIndex.getId());
                     AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
                     appDoctInfoVo.setClinicIndexId(clinicIndex == null ? null : clinicIndex.getId());
@@ -703,12 +761,12 @@ public class ClinicForRegistService {
                             registInfoVOs.add(registInfoVO);
                         }
                     }
+                    appDoctInfoVo.setDeptName(deptDict.getDeptName());
                     appDoctInfoVo.setPatName(patInfo.getName());
                     appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
                     appDoctInfoVos.add(appDoctInfoVo);
                 }
-//                return appDoctInfoVos;
-            }
+             }
         }
         return appDoctInfoVos;
     }

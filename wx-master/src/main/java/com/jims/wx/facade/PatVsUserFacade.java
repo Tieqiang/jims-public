@@ -17,11 +17,13 @@ import java.util.List;
 public class PatVsUserFacade extends BaseFacade {
     private EntityManager entityManager;
     private AppUserFacade appUserFacade ;
+    private PatInfoFacade patInfoFacade;
 
     @Inject
-    public PatVsUserFacade(EntityManager entityManager,AppUserFacade appUserFacade){
+    public PatVsUserFacade(EntityManager entityManager,AppUserFacade appUserFacade,PatInfoFacade patInfoFacade){
         this.entityManager=entityManager;
         this.appUserFacade=appUserFacade;
+        this.patInfoFacade=patInfoFacade;
     }
 
 
@@ -71,7 +73,8 @@ public class PatVsUserFacade extends BaseFacade {
         AppUser appUser= appUserFacade.findAppUserByOpenId(openid);
         if(appUser!=null){
             String patId=appUser.getPatId();
-            if(patId!=null&&!"".equals(patId)){
+            PatInfo patInfo=patInfoFacade.findById(patId);
+            if(patInfo!=null&&!"".equals(patInfo)){
                 return true;
             }else{
                 return false;

@@ -121,8 +121,10 @@ public class DeptDictFacade extends BaseFacade {
      * @return
      */
     public String findDeptDictByDeptId(String deptId) {
-//        DeptDict
-        DeptDict deptDict = (DeptDict) entityManager.createQuery("from DeptDict where id='" + deptId + "'").getSingleResult();
+        if(deptId==null || "".equals(deptId)){
+            return null;
+        }
+         DeptDict deptDict = (DeptDict) entityManager.createQuery("from DeptDict where id='" + deptId + "'").getSingleResult();
         if (deptDict != null)
             return deptDict.getDeptName();
         return "";
@@ -135,6 +137,9 @@ public class DeptDictFacade extends BaseFacade {
      * @return
      */
     public DeptDict findByCode(String clinicDept) {
+        if(clinicDept==null || "".equals(clinicDept)){
+            return null;
+        }
         String sql = "from DeptDict where deptCode='" + clinicDept + "'";
         List<DeptDict> list = entityManager.createQuery(sql).getResultList();
         if (!list.isEmpty()) {

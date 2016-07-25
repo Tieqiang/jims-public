@@ -25,6 +25,12 @@ public class HospitalStaffFacade extends BaseFacade {
     }
 
     public Map<String, Object> findById(String personId, String openId) {
+        if(personId==null || "".equals(personId)){
+            return null;
+        }
+        if(openId==null || "".equals(openId)){
+            return null;
+        }
         Map<String, Object> map = new HashMap<String, Object>();
         List<HospitalStaff> list = entityManager.createQuery("from HospitalStaff where personId='" + personId + "'").getResultList();
         if (list != null && !list.isEmpty()) {

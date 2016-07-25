@@ -40,6 +40,9 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     public String findIdCard(String patId) {
+        if(patId==null || "".equals(patId)){
+            return null;
+        }
         String sql = "select p.idCard from PatInfo as p where p.id='" + patId + "'";
         return (String) entityManager.createQuery(sql).getSingleResult();
     }
@@ -51,6 +54,9 @@ public class PatInfoFacade extends BaseFacade {
      * @return
      */
     public PatInfo findById(String patId) {
+        if(patId==null || "".equals(patId)){
+            return null;
+        }
         String sql = "from PatInfo where id='" + patId + "' and flag='0'";
         List<PatInfo> result = entityManager.createQuery(sql).getResultList();
         if (result != null && !result.isEmpty())

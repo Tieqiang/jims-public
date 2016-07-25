@@ -24,6 +24,9 @@ public class FeedBackTargetFacade extends BaseFacade {
      * @return
      */
     public FeedBackTarget findByName(String feedTargetId) {
+        if(feedTargetId==null || "".equals(feedTargetId)){
+            return null;
+        }
         String sql = "from FeedBackTarget where id='" + feedTargetId + "'";
         return (FeedBackTarget) entityManager.createQuery(sql).getSingleResult();
     }

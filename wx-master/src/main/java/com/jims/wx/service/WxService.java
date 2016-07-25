@@ -46,8 +46,8 @@ public class WxService {
     private PatInfoFacade patInfoFacade;
     private static final String MCH_ID = "1318000301";//微信支付商号
     private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
-    private static final String APP_ID = "wx890edf605415aaec";//商户的APP_ID
-    private static final String APP_SERECT = "0e9446b7e5690138e6f8b1d07bb04a02";
+    private static final String APP_ID = "wx1b3cf470d135a830";//商户的APP_ID
+    private static final String APP_SERECT = "df933603351f378c54883853e05dd228";
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
 
@@ -100,7 +100,7 @@ public class WxService {
                     + eventMessage.getToUserName() + "__"
                     + eventMessage.getMsgId() + "__"
                     + eventMessage.getCreateTime();
-            System.out.println(eventMessage.getContent());
+//            System.out.println(eventMessage.getContent());
             if (expireKey.exists(key)) {
                 //重复通知不作处理
                 return;
@@ -143,6 +143,7 @@ public class WxService {
                 }else{
                     throw new IllegalArgumentException("删除appUser失败！appUser 为空！");
                 }
+                return;
              }
             if ("text".equals(msgType) || "image".equals(msgType) || "voice".equals(msgType)
                     || "video".equals(msgType) || "shortvideo".equals(msgType)) {//普通消息
@@ -370,11 +371,14 @@ public class WxService {
 
     @GET
     @Path("get-param")
-    public String getParam(@QueryParam("patId") String patId) throws IOException {
+    public String getParam(@QueryParam("patId") String patId,@QueryParam("openId") String openId) throws IOException {
         if(patId==null || "".equals(patId)){
             throw new IllegalArgumentException("参数非法,patId="+patId);
         }
-        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数非法,openId="+openId);
+        }
+        response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId+"&openId="+openId);
         return "";
     }
 
@@ -495,7 +499,13 @@ public class WxService {
             //测试用
             AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
             SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+//            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+            if(snsToken==null){
+                throw new IllegalArgumentException("snsToken非法 ，snsToken 为空！");
+            }
+            if(snsToken.getOpenid()==null){
+                throw new IllegalArgumentException("openId非法 ，openId 为空！");
+            }
             response.sendRedirect("/views/his/public/app-select-body.html?openId=" + snsToken.getOpenid());
         } catch (IOException e) {
             e.printStackTrace();
@@ -513,16 +523,18 @@ public class WxService {
     @Path("find-dept-pre")
     public String findDeptPre(@QueryParam("code") String code, @QueryParam("openId") String openId) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-            //测试用
             SnsToken snsToken = null;
             String openIdStr = "";
-            if (openId == null || openId == "") {
+            if (openId == null || "".equals(openId)) {
                 AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+//                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+                snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
+            }
+            if(openIdStr==null || "".equals(openIdStr)){
+                throw new IllegalArgumentException("openIdStr 为空!");
             }
             /**
              * 如果次微信用户有绑定的患者，则跳到挂号页面，否则跳到绑卡页面
@@ -542,6 +554,12 @@ public class WxService {
     @GET
     @Path("query-string-pre")
     public String queryStringPre(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("openId 为空！");
+        }
+        if(deptId==null || "".equals(deptId)){
+            throw new IllegalArgumentException("deptId 为空！");
+        }
         response.sendRedirect("/views/his/public/app-doct-info-pre.html?openId=" + openId + "&deptId=" + deptId);
         return "";
     }
@@ -634,6 +652,24 @@ public class WxService {
         return "";
     }
 
+    /**
+     *
+     * @param openId
+     * @return
+     */
+    @GET
+    @Path("query-doct-like")
+    public String queryDoctLike(@QueryParam("openId") String openId,@QueryParam("likeSearch") String likeSearch){
+        try {
+            if(openId==null || "".equals(openId)){
+                throw new IllegalArgumentException("openId为空！");
+            }
+            response.sendRedirect("/views/his/public/app-doct-info.html?openId="+openId+"&likeSearch="+likeSearch);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
     /**
      * 我的收藏
      * @param openId

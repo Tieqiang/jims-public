@@ -9,6 +9,7 @@ import com.jims.wx.vo.BeanChangeVo;
 
 import javax.persistence.EntityManager;
 import javax.ws.rs.core.Response;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,9 @@ public class ClinicTypeChargeFacade extends BaseFacade {
      * @return
      */
     public List<ClinicTypeCharge> findById(String id) {
+        if(id==null || "".equals(id)){
+            return null;
+        }
         String sqls = "from ClinicTypeCharge c where 1=1";
         if (null != id && !id.trim().equals("")) {
             sqls += " and c.clinicTypeId='" + id.trim() + "'";
@@ -76,12 +80,15 @@ public class ClinicTypeChargeFacade extends BaseFacade {
      * @return
      */
     public Double findPriceByClinicTypeSettingId(String clinicTypeId) {
-        Double priceCount = 0.0;
+//        Double priceCount = 0.0;
+        BigDecimal result=new BigDecimal(0.0);
         String sql = "from ClinicTypeCharge where clinicTypeId='" + clinicTypeId + "'";
         List<ClinicTypeCharge> list = entityManager.createQuery(sql).getResultList();
         for (ClinicTypeCharge c : list) {
-            priceCount = priceCount + c.getPrice();
+//             priceCount = priceCount + c.getPrice();
+             BigDecimal bigDecimal=new BigDecimal(c.getPrice());
+             result=result.add(bigDecimal);
         }
-        return priceCount;
+        return result.doubleValue();
     }
 }

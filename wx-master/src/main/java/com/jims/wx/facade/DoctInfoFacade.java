@@ -63,6 +63,9 @@ public class DoctInfoFacade extends BaseFacade {
      * @return
      */
     public DoctInfo findById(String doctId) {
+        if(doctId==null || "".equals(doctId)){
+            return null;
+        }
         return (DoctInfo) entityManager.createQuery("from DoctInfo where id='" + doctId + "'").getSingleResult();
     }
  }

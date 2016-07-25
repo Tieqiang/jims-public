@@ -24,7 +24,7 @@ $("#openId").val(v);
     var idCard = $("#idCard").val();
     var cellphone = $("#cellphone").val();
     var openId = v;
-    alert(openId);
+//    alert(openId);
     var returnResult = isCardID(idCard);
     var myreg = /^(((13[0-9]{1})|(15[0-9]{1})|(18[0-9]{1}))+\d{8})$/;//phone
 //     alert(cellphone);

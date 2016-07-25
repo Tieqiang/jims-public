@@ -19,6 +19,9 @@ import java.util.Objects;
 public class InpBillDetailFacade extends BaseFacade {
 
     public List<InpBillDetailVo> listInpBillVo(String patientId, double visitId) {
+        if(patientId==null || "".equals(patientId) ){
+            return null;
+        }
         String sql = "select  a.patient_id as patientId,a.visit_id as visitId,a.item_name as itemName ," +
                 "a.amount as amount, a.units as units , a.costs as costs,a.charges as charges" +
                 " from INPBILL.inp_bill_detail a where patient_id ='" + patientId + "' and visit_id='" + visitId + "'";

@@ -39,7 +39,7 @@ $(function () {
         footer: '#tb',
         fitColumns: true,
         title: "科室维护",
-        columns: [[{
+         columns: [[{
             title: 'id',
             field: 'id',
             hidden: true
@@ -48,19 +48,30 @@ $(function () {
             field: 'imgUrl2',
             hidden: true
         }, {
+             title: '科室名称',
+             field: 'deptName',
+             width: "10%"
+         }, {
             title: '科室图标',
             field: 'img',
             width: "10%"
         }, {
-            title: '科室名称',
-            field: 'deptName',
-            width: "10%"
-        }, {
+             title: '是否停用',
+             field: 'deptStopFlag',
+             width: "5%",
+             formatter: function(value,row,index){
+                 if (row.deptStopFlag == 1){
+                     return "否";
+                 } else {
+                     return "是";
+                 }
+             }
+         }, {
             title: '科室别名',
             field: 'deptAlis',
             hidden: true
         }, {
-            title: '科室临床属性',
+            title: '科室属性',
             field: 'deptAttr',
             width: "10%"
         }, {
@@ -85,7 +96,7 @@ $(function () {
         }, {
             title: '科室位置',
             field: 'deptLocation',
-            width: "10%"
+            width: "15%"
         }, {
             title: '科室类别',
             field: 'deptClass',
@@ -100,7 +111,7 @@ $(function () {
         }, {
             title: '科室类型',
             field: 'deptType',
-            width: "10%",
+            width: "15%",
             formatter: function(value,row,index){
                 if (row.deptType == 1){
                     return "医疗技术类科室";
@@ -108,17 +119,6 @@ $(function () {
                     return "医疗辅助类科室";
                 }else{
                     return "管理类科室";
-                }
-            }
-        }, {
-            title: '是否停用',
-            field: 'deptStopFlag',
-            width: "10%",
-            formatter: function(value,row,index){
-                if (row.deptStopFlag == 1){
-                    return "否";
-                } else {
-                    return "是";
                 }
             }
         }, {
@@ -135,9 +135,14 @@ $(function () {
         }, {
             title: '科室简介',
             field: 'deptInfo',
-            width: "10%"
-        }]]
-    });
+            hidden:true
+        }]],
+        onClickRow:function(row){
+//            alert(row);
+            $("#deptDescDlg").html(row.deptInfo);
+            $("#deptDescDlg").dialog("open").dialog("setTitle","科室简介");
+        }
+     });
 
     /**
      * 加载科室信息表
@@ -146,9 +151,7 @@ $(function () {
         var depts = [];
         var treeDepts = [];
         var loadPromise = $.get("/api/dept-dict/list", function (data) {
-            //$("#tt").treegrid('loadData',data);
-            $.each(data, function (index, item) {
-//                console.info(item);
+             $.each(data, function (index, item) {
                 var obj = {};
                 obj.deptCode = item.deptCode;
                 obj.id = item.id;
@@ -168,7 +171,6 @@ $(function () {
                 obj.img = item.img;
                 obj.imgUrl2=item.imgUrl2;
                 obj.children = [];
-//                obj.
                 depts.push(obj);
             });
         });
