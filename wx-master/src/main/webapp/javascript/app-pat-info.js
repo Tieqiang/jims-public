@@ -124,9 +124,8 @@ function today(){
                 type:"GET",
                 url:"/api/pat-info/update-pat-id?patId="+patId+"&openId="+openId+"&flag=1",
                 cache:false,
-//                dataType:"JSON",
                 success:function(result){
-//                    alert(1);
+                    alert(result);
                     if(result.status==200){
                     window.location.href="/api/wx-service/find-dept?openId="+openId;}
                 },

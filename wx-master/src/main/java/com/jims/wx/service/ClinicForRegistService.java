@@ -491,11 +491,26 @@ public class ClinicForRegistService {
     @GET
     @Path("take-regist")
     public AppDoctInfoVo takeRegist(@QueryParam("idCard") String idCard, @QueryParam("patientId") String patientId, @QueryParam("clinicMasterId") String clinicMasterId) {
+        if(idCard==null || "".equals(idCard)){
+            throw new IllegalArgumentException("idCard 不能为空！");
+        }
+        if(patientId==null || "".equals(patientId)){
+            throw new IllegalArgumentException("patientId 不能为空！");
+        }
+        if(clinicMasterId==null || "".equals(clinicMasterId)){
+            throw new IllegalArgumentException("clinicMasterId 不能为空！");
+        }
         if (idCard != null && !"".equals(idCard) && patientId != null && !"".equals(patientId)) {
             AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
             PatInfo patInfo = patInfoFacade.findByIdCard(idCard);
+            if(patInfo==null){
+                throw new IllegalArgumentException("非法的idCard,没有找到patInfo");
+            }
             if (patInfo != null && !"".equals(patInfo)) {
                 ClinicMaster clinicMaster = clinicMasterFacade.updateTakeRegistStatus(clinicMasterId);
+                if(clinicMaster==null){
+                    throw new IllegalArgumentException("非法的clinicMasterId,没有找到ClinicMaster");
+                }
                 if (clinicMaster != null && !"".equals(clinicMaster)) {//取票成功
                     patInfo.setPatientId(patientId);
                     patInfoFacade.save(patInfo);

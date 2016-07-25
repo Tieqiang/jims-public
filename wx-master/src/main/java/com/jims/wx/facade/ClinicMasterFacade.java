@@ -109,10 +109,11 @@ public class ClinicMasterFacade extends BaseFacade {
             throw new IllegalArgumentException("参数非法clinicmasterId为空@");
         }
         String sql = "from ClinicMaster where takeStatus='0' and  id='" + clinicMasterId + "'";
-        ClinicMaster clinicMaster = (ClinicMaster) entityManager.createQuery(sql).getSingleResult();
-        if (clinicMaster != null && !"".equals(clinicMaster)) {
+        List<ClinicMaster> clinicMasters = entityManager.createQuery(sql).getResultList();
+        if (clinicMasters != null && !clinicMasters.isEmpty()) {
+            ClinicMaster clinicMaster= clinicMasters.get(0);
             clinicMaster.setTakeStatus("1");
-            clinicMaster = saveRecord(clinicMaster);
+            clinicMaster  =saveRecord(clinicMasters.get(0));
             return clinicMaster;
         } else {
             return null;
