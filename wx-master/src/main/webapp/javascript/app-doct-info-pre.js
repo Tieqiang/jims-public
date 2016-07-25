@@ -27,7 +27,7 @@ app.controller('tableCtrl', function ($scope, $http) {
             .success(function (data) {
                 if(data.success==true){
 //                    alert("收藏成功！");
-                    alert("deptId="+deptId);
+//                    alert("deptId="+deptId);
                     $http.get("/api/clinic-for-regist/find-by-dept-id-pre-like?likeSearch=" + likeSearch + "&openId=" + openId+"&deptId="+deptId)
                         .success(function (data) {
                             if(data.length>0){
@@ -69,7 +69,7 @@ app.controller('tableCtrl', function ($scope, $http) {
     }
     if(likeSearch!=null&&likeSearch!=""){
 //        alert(likeSearch);
-        $http.get("/api/clinic-for-regist/find-by-dept-id-pre-like?likeSearch=" + likeSearch + "&openId=" + openId)
+        $http.get("/api/clinic-for-regist/find-by-dept-id-pre-like?likeSearch=" + likeSearch + "&openId=" + openId+"&flag=pre")
             .success(function (data) {
                  $scope.names = data;
             });

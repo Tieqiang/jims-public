@@ -702,7 +702,7 @@ public class ClinicForRegistService {
      */
     @GET
     @Path("find-by-dept-id-pre-like")
-    public List<AppDoctInfoVo> findByDeptIdPreLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId,@QueryParam("deptId") String deptId) {
+    public List<AppDoctInfoVo> findByDeptIdPreLike(@QueryParam("likeSearch") String likeSearch, @QueryParam("openId") String openId,@QueryParam("deptId") String deptId,@QueryParam("flag") String flag) {
         List<AppDoctInfoVo> appDoctInfoVos = new ArrayList<AppDoctInfoVo>();
         String addr = getRequestUrl();
         if(openId==null || "".equals(openId)){
@@ -725,16 +725,19 @@ public class ClinicForRegistService {
         }
         //查找所有存在号表的号别
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
-        if(deptId==null || "".equals(deptId)){
+        if((deptId==null || "".equals(deptId))&&"".equals(flag)){
             throw new IllegalArgumentException("deptId 为空！");
         }
-        DeptDict deptDict=this.deptDictFacade.findById(deptId);
-        if(deptDict==null){
-            throw new IllegalArgumentException("deptDict 为空！");
+        DeptDict deptDict=null;
+        if(flag==null || "".equals(flag)){
+             deptDict=this.deptDictFacade.findById(deptId);
+            if(deptDict==null){
+                throw new IllegalArgumentException("deptDict 为空！");
+            }
         }
         for (DoctInfo doctInfo : doctInfos) {
             for (ClinicIndex clinicIndex : list) {
-                if (clinicIndex.getDoctorId().equals(doctInfo.getId())&&clinicIndex.getClinicDept().equals(deptDict.getDeptCode())) {//有号
+                 if (flag.equalsIgnoreCase("pre")?clinicIndex.getDoctorId().equals(doctInfo.getId()):clinicIndex.getDoctorId().equals(doctInfo.getId())&&clinicIndex.getClinicDept().equals(deptDict.getDeptCode())) {//有号
                     List<ClinicForRegist> clinicForRegists = clinicForRegistFacade.findRegistInfoPre(sdf.format(new Date()), clinicIndex.getId());
                     AppDoctInfoVo appDoctInfoVo = new AppDoctInfoVo();
                     appDoctInfoVo.setClinicIndexId(clinicIndex == null ? null : clinicIndex.getId());
@@ -743,8 +746,8 @@ public class ClinicForRegistService {
                     appDoctInfoVo.setTitle(doctInfo == null ? null : doctInfo.getTitle());
                     appDoctInfoVo.setHeadUrl(doctInfo == null ? null : addr + doctInfo.getHeadUrl());
                     appDoctInfoVo.setDescription(doctInfo == null ? null : doctInfo.getTranDescription2());
-                    boolean flag = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
-                    if (flag) {
+                    boolean flag1 = userCollectionFacade.findISCollection(doctInfo.getId(), openId);
+                    if (flag1) {
                         appDoctInfoVo.setCollectionDesc("已收藏");
                     } else {
                         appDoctInfoVo.setCollectionDesc("收藏");
@@ -761,7 +764,7 @@ public class ClinicForRegistService {
                             registInfoVOs.add(registInfoVO);
                         }
                     }
-                    appDoctInfoVo.setDeptName(deptDict.getDeptName());
+                    appDoctInfoVo.setDeptName(deptDict==null?null:deptDict.getDeptName());
                     appDoctInfoVo.setPatName(patInfo.getName());
                     appDoctInfoVo.setRegistInfoVOs(registInfoVOs);
                     appDoctInfoVos.add(appDoctInfoVo);

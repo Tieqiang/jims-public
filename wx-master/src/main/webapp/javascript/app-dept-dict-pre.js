@@ -33,8 +33,7 @@ app.controller('tableCtrl',function ($scope, $http) {
                     if(data.length>0){
                         $scope.names = data;
                     }else{
-//                        alert("没有相关结果！");
-                          window.location.href="/api/wx-service/query-doct-like?likeSearch="+likeSearch+"&openId="+openId+"&flag=pre";
+                         window.location.href="/api/wx-service/query-doct-like?likeSearch="+likeSearch+"&openId="+openId+"&flag=pre";
                     }
                   }//success
             );//function

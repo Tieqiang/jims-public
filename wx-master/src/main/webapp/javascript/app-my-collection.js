@@ -20,13 +20,13 @@ var openId = GetQueryString("openId");
 
 var app = angular.module("myApp", []);
 app.controller('tableCtrl', function ($scope, $http) {
-    /**
-     * 查看医生信息
-     * @param id
-     */
-      $scope.info2=function(rid){//
-           window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
-      }
+//    /**
+//     * 查看医生信息
+//     * @param id
+//     */
+//      $scope.info2=function(rid){//
+//           window.location.href="/api/wx-service/query-doct-info?id="+rid+"&openId="+openId;
+//      }
   //    collectNO  取消收藏
     $scope.collectNO = function (doctId, clinicIndexId) {//
         $http.get("/api/doct-info/baddon-collection?openId=" + openId + "&doctId=" + doctId)
@@ -49,7 +49,8 @@ app.controller('tableCtrl', function ($scope, $http) {
 //                window.location.href="/views/his/public/app-select-patinfo.html?openId="+openId+"&price=" + price + "&clinicForRegistId=" + rid ;
 //               //根据默认患者挂号
 //             window.location.href="/views/his/public/app-pay.html?openId="+openId+"&price=" + price + "&clinicForRegistId=" + rid ;
-            window.location.href = "/api/wx-service/app-pay?openId=" + openId + "&price=" + price + "&clinicForRegistId=" + rid
+            window.location.href = "/api/wx-service/a" +
+                "pp-pay?openId=" + openId + "&price=" + price + "&clinicForRegistId=" + rid
         } else {
 //            alert("rid="+clinicForRegistId);
             //医生详情 clinicForRegistId

@@ -46,7 +46,7 @@ app.controller('tableCtrl',function ($scope, $http) {
          $("#deptname").html(data.deptName);
          $("#deptAlis").html(data.deptAlis);
          $("#deptLocation").html(data.deptLocation);
-        $("#deptdesc").html("    "+data.deptInfo);
+         $("#deptdesc").html("    "+data.deptInfo);
      });
 }
 function findMyCollection(){

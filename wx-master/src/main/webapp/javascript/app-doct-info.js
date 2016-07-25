@@ -66,7 +66,7 @@ app.controller('tableCtrl', function ($scope, $http) {
         }
     }
     if(likeSearch!=null&&likeSearch!=""){//模糊查询
-        $http.get("/api/clinic-for-regist/find-by-dept-id-like?likeSearch=" + likeSearch + "&openId=" + openId)
+         $http.get("/api/clinic-for-regist/find-by-dept-id-like?likeSearch=" + likeSearch + "&openId=" + openId)
             .success(function (data) {
                 $scope.names = data;
             });
@@ -78,7 +78,6 @@ app.controller('tableCtrl', function ($scope, $http) {
 //                alert(data.length);
                     $("#text1").html(data[0].deptName + ":" + data.length + "人");
                 }
-//                console.info(data);
                 $scope.names = data;
             });
     }

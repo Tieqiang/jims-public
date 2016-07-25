@@ -28,6 +28,7 @@ import javax.ws.rs.*;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * Created by heren on 2016/2/24.
@@ -659,12 +660,16 @@ public class WxService {
      */
     @GET
     @Path("query-doct-like")
-    public String queryDoctLike(@QueryParam("openId") String openId,@QueryParam("likeSearch") String likeSearch){
+    public String queryDoctLike(@QueryParam("openId") String openId,@QueryParam("likeSearch") String likeSearch,@QueryParam("flag") String flag){
         try {
             if(openId==null || "".equals(openId)){
                 throw new IllegalArgumentException("openId为空！");
             }
-            response.sendRedirect("/views/his/public/app-doct-info.html?openId="+openId+"&likeSearch="+likeSearch);
+            if(flag!=null&&!"".equals(flag)&&flag.equalsIgnoreCase("pre")){
+                response.sendRedirect("/views/his/public/app-doct-info-pre.html?openId="+openId+"&likeSearch="+ URLEncoder.encode(likeSearch));
+            }else{
+                response.sendRedirect("/views/his/public/app-doct-info.html?openId="+openId+"&likeSearch="+ URLEncoder.encode(likeSearch));
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -706,5 +711,24 @@ public class WxService {
             e.printStackTrace();
         }
         return "";
+    }
+
+
+
+
+    @GET
+    @Path("query-doct-info")
+    public String queryDoctInfo(@QueryParam("id") String id,@QueryParam("openId") String openId){
+        try {
+            if(openId!=null&&!"".equals(openId)){
+                response.sendRedirect("/views/his/public/app-doct-info.html?openId="+openId);
+            }else{
+                throw new IllegalArgumentException("openId 为空！");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 }
