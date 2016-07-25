@@ -6,6 +6,7 @@ import com.jims.wx.entity.HospitalInfo;
 import com.jims.wx.entity.WxOpenAccountConfig;
 import com.jims.wx.vo.AppSetVo;
 import com.jims.wx.vo.InpBillDetailVo;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Query;
 import java.util.ArrayList;

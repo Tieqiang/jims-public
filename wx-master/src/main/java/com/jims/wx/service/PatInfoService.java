@@ -60,17 +60,18 @@ public class PatInfoService {
     }
 
     /**
-     * 通过openId 查询患者的list
-     *
+     * 通过openId 查询绑定患者的list
      * @param openId
      * @return
      */
     @GET
     @Path("list")
     public List<PatInfo> getList(@QueryParam("openId") String openId) {
-        List<AppUser> list = appUserFacade.findByOpenId(openId);
-        String appUserId = list.get(0).getId();
-        return patVsUserFacade.findPatInfosByAppUserId(appUserId);
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("openId为空");
+        }
+        AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+        return patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
     }
 
     /**
@@ -83,6 +84,14 @@ public class PatInfoService {
     @GET
     @Path("save")
     public void save(@QueryParam("openId") String openId, @QueryParam("name") String name, @QueryParam("idCard") String idCard, @QueryParam("cellphone") String cellphone, @QueryParam("patId") String patId) {
+        if(openId==null || openId.trim().equals("")){
+            try {
+                response.sendRedirect("/views/his/public/user-bangker-failed.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new IllegalArgumentException("openId为空，请重试！");
+         }
         PatInfo patInfo = null;
         String patientId = null;
         try {
@@ -96,9 +105,12 @@ public class PatInfoService {
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patId);
               }else {
                  AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
+                 if(appUser==null){
+                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
+                     throw new IllegalArgumentException("appUser为空，请重试！");
+                 }
                  patientId = patMasterIndexFacade.checkIdCard(idCard);
-
-                /**
+                 /**
                  * 查询之前是否绑定次idCard
                  */
                 Boolean isBangker = this.patVsUserFacade.findIsBangker(idCard, openId);
@@ -114,7 +126,7 @@ public class PatInfoService {
                         patInfo=p;
                     }else{
                         patInfo = new PatInfo();
-                     }
+                    }
                     patInfo.setCellphone(cellphone);
                     patInfo.setIdCard(idCard);
                     patInfo.setName(name);
@@ -165,8 +177,14 @@ public class PatInfoService {
     @POST
     @Path("find-info-by-open-id")
     public PatInfo findPatInfoByOpenId(@QueryParam("openId") String openId) {
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("openId为空!");
+        }
         AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
         String patId = appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            throw new IllegalArgumentException("此appUser 的patid为空，openid="+appUser.getOpenId());
+        }
         PatInfo patInfo = patInfoFacade.findById(patId);
         return patInfo;
     }
@@ -180,6 +198,9 @@ public class PatInfoService {
     @POST
     @Path("view")
     public PatInfo view(@QueryParam("patId") String patId) {
+        if(patId==null || "".equals(patId)){
+            throw new IllegalArgumentException("patId为空！");
+        }
         PatInfo patInfo = patInfoFacade.findById(patId);
         return patInfo;
     }
@@ -188,14 +209,26 @@ public class PatInfoService {
     @Path("find-all")
     @Produces(MediaType.APPLICATION_JSON)
     public List<PatInfoVo> listByOpenId(@QueryParam("openId") String openId) {
+        if(openId==null ||"".equals(openId)){
+            throw new IllegalArgumentException("openId为空!");
+        }
         return patInfoFacade.findByOpenId(openId);
     }
 
-
+    /**
+     * 修改默认绑定的用户
+     * @param patId
+     * @param openId
+     * @param flag
+     * @return
+     */
     @GET
     @Path("update-pat-id")
     public String updatePatId(@QueryParam("patId") String patId, @QueryParam("openId") String openId,@QueryParam("flag") String flag) {
         try {
+            if(openId==null || "".equals(openId) || patId==null || "".equals(patId)){
+                throw new IllegalArgumentException("参数非法！openId="+openId+"&patid="+patId);
+            }
             AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
             appUser.setPatId(patId);
             appUserFacade.saveAppUser(appUser);
@@ -242,7 +275,9 @@ public class PatInfoService {
     @Path("delete")
     public PatInfo delete(@QueryParam("patId") String patId) {
         try {
-//            patVsUserFacade.deleteByPatId(patId);
+            if(patId==null || "".equals(patId)){
+                throw new IllegalArgumentException("patId为空！");
+            }
             PatInfo patInfo = patInfoFacade.findById(patId);
             patInfoFacade.deleteByObject(patInfo);
             return patInfo;

@@ -88,9 +88,16 @@ public class RcptMasterService {
     @GET
     @Path("find-by-open-id")
     public List<String> findByOpenId(@QueryParam("openId") String openId,@QueryParam("doctFlag") String doctFlag){
+        if(openId==null || "".equals(openId))
+        {
+            throw new IllegalArgumentException("openId 为空!");
+        }
         List<String> lables=new ArrayList<String>();
         AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
         List<PatInfo> lst=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
+        if(lst==null || lst.isEmpty()){
+            return null;
+        }
         for(PatInfo patInfo:lst){
             if(patInfo.getPatientId()==null || patInfo.getPatientId().equals("")){
                 continue;
@@ -128,6 +135,9 @@ public class RcptMasterService {
     @GET
     @Path("find-by-pat-id")
     public List<ClinicMasterVo> findById(@QueryParam("patId") String patId){
+        if(patId==null || "".equals(patId)){
+            throw new IllegalArgumentException("patId 为空！");
+        }
         List<ClinicMasterVo> list= rcptMasterFacade.getByPatId(patId);
         if(!list.isEmpty()){
             for(ClinicMasterVo clinicMasterVo:list){

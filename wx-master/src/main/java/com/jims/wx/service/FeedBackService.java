@@ -44,6 +44,9 @@ public class FeedBackService {
     @GET
     @Path("find-content-by-name")
     public FeedBackTarget getInfo(@QueryParam("feedTargetId") String feedTargetId){
+        if(feedTargetId==null || "".equals(feedTargetId)){
+            throw new IllegalArgumentException("参数无效,feedtargetId 为空！");
+        }
         return this.feedBackTargetFacade.findByName(feedTargetId);
     }
      /**

@@ -35,6 +35,9 @@ public class WxOpenAccountConfigService {
         return wxOpenAccountConfigFacade.findById(hospitalId);
     }
 
+    public List<WxOpenAccountConfig> findAll(){
+        return wxOpenAccountConfigFacade.findAll(WxOpenAccountConfig.class);
+    }
     /**
      * 保存公众号信息
      * @param beanChangeVo

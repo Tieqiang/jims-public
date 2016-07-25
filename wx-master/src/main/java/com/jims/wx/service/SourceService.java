@@ -186,79 +186,78 @@ public class SourceService {
         return list;
     }
 
-    /**
-     * 上传视频素材
-     *
-     * @param sourceVideo
-     * @param updateFlag
-     * @param saveName
-     * @param videoDescription
-     * @return
-     */
-    @POST
-    @Path("save-video")
-    public Response saveVideo(SourceVideo sourceVideo, @QueryParam("update") String updateFlag, @QueryParam("saveName") String saveName, @QueryParam("videoDescription") String videoDescription) {
-        try {
-            byte[] bytes = videoDescription.getBytes("UTF-8");
-            sourceVideo.setDescription(bytes);
-            if (updateFlag != null && !"".equals(updateFlag)) {
-                sourceVideoFacade.save(sourceVideo);
-            }
-            if (updateFlag == null || "".equals(updateFlag)) {//新加的要上传到微信服务器
-                String path = request.getSession().getServletContext().getRealPath("/upload");
-                File file = new File(path);
-                File[] files = file.listFiles();
-                for (File file1 : files) {
-                    if (file1.getName().equals(saveName)) {
-                        InputStream inputStream = new FileInputStream(file1);
-                        Description description = new Description();
-                        description.setTitle(sourceVideo.getTitle());
-                        description.setIntroduction(new String(sourceVideo.getDescription(), "UTF-8"));
-                        Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.video, file1, description);
-                        if (!"0".equals(media.getErrcode())) {
-                            ErrorException errorException = new ErrorException();
-                            errorException.setMessage(new IllegalArgumentException());
-                            errorException.setErrorMessage(media.getErrmsg());
-                            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
-                        } else {
-                            sourceVideo.setVideoWxUrl(media.getUrl());
-                            sourceVideo.setMediaId(media.getMedia_id());
-                            sourceVideo = sourceVideoFacade.save(sourceVideo);
-                        }
-                        break;
-                    }
-                }
-            }
-            return Response.status(Response.Status.OK).entity(sourceVideo).build();
-        } catch (Exception e) {
-            ErrorException errorException = new ErrorException();
-            errorException.setMessage(e);
-            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
-                errorException.setErrorMessage("输入数据超过长度！");
-            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
-                errorException.setErrorMessage("数据已存在，保存失败！");
-            } else {
-                errorException.setErrorMessage("保存失败！");
-            }
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
-        }
-    }
+//    /**
+//     * 上传视频素材
+//     *
+//     * @param sourceVideo
+//     * @param updateFlag
+//     * @param saveName
+//     * @param videoDescription
+//     * @return
+//     */
+//    @POST
+//    @Path("save-video")
+//    public Response saveVideo(SourceVideo sourceVideo, @QueryParam("update") String updateFlag, @QueryParam("saveName") String saveName, @QueryParam("videoDescription") String videoDescription) {
+//        try {
+//            byte[] bytes = videoDescription.getBytes("UTF-8");
+//            sourceVideo.setDescription(bytes);
+//            if (updateFlag != null && !"".equals(updateFlag)) {
+//                sourceVideoFacade.save(sourceVideo);
+//            }
+//            if (updateFlag == null || "".equals(updateFlag)) {//新加的要上传到微信服务器
+//                String path = request.getSession().getServletContext().getRealPath("/upload");
+//                File file = new File(path);
+//                File[] files = file.listFiles();
+//                for (File file1 : files) {
+//                    if (file1.getName().equals(saveName)) {
+//                        InputStream inputStream = new FileInputStream(file1);
+//                        Description description = new Description();
+//                        description.setTitle(sourceVideo.getTitle());
+//                        description.setIntroduction(new String(sourceVideo.getDescription(), "UTF-8"));
+//                        Media media = MaterialAPI.materialAdd_material(TokenManager.getDefaultToken(), MediaType.video, file1, description);
+//                        if (!"0".equals(media.getErrcode())) {
+//                            ErrorException errorException = new ErrorException();
+//                            errorException.setMessage(new IllegalArgumentException());
+//                            errorException.setErrorMessage(media.getErrmsg());
+//                            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+//                        } else {
+//                            sourceVideo.setVideoWxUrl(media.getUrl());
+//                            sourceVideo.setMediaId(media.getMedia_id());
+//                            sourceVideo = sourceVideoFacade.save(sourceVideo);
+//                        }
+//                        break;
+//                    }
+//                }
+//            }
+//            return Response.status(Response.Status.OK).entity(sourceVideo).build();
+//        } catch (Exception e) {
+//            ErrorException errorException = new ErrorException();
+//            errorException.setMessage(e);
+//            if (errorException.getErrorMessage().toString().indexOf("最大值") != -1) {
+//                errorException.setErrorMessage("输入数据超过长度！");
+//            } else if (errorException.getErrorMessage().toString().indexOf("唯一") != -1) {
+//                errorException.setErrorMessage("数据已存在，保存失败！");
+//            } else {
+//                errorException.setErrorMessage("保存失败！");
+//            }
+//            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(errorException).build();
+//        }
+//    }
 
     /**
      * 获取视频列表
      *
      * @return
      */
-    @GET
-    @Path("list-video")
-    public List<SourceVideo> listVideo() {
-        //todo 保证本地的素材和微信服务器上素材是同步的
-        //拿到服务器上的数量
-
-        String addr = getRequestUrl();
-        List<SourceVideo> list = sourceVideoFacade.findAll(SourceVideo.class);
-        return list;
-    }
+//    @GET
+//    @Path("list-video")
+//    public List<SourceVideo> listVideo() {
+ //        //拿到服务器上的数量
+//
+//        String addr = getRequestUrl();
+//        List<SourceVideo> list = sourceVideoFacade.findAll(SourceVideo.class);
+//        return list;
+//    }
 
     /**
      * 群发消息
@@ -969,7 +968,7 @@ public class SourceService {
                     saveUser(openId);
                 }
                 if (str.equals("more")) {
-                    appUserFacade.deletebyOpenId(openId);
+                     appUserFacade.deleteByObject(appUserFacade.findAppUserByOpenId(openId));
                 }
             }
         }

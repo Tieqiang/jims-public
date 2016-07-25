@@ -42,15 +42,15 @@
 
         <table class="fitem">
             <tr>
-                <td>&nbsp;&nbsp;<label>科室编码:</label></td>
+                <td><label>科室编码:</label></td>
                 <td><input id="deptCode" name="deptCode" class="easyui-textbox" required="true"></td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室名称:</label>
+                <td><label>科室名称:</label>
                 <input id="deptName" name="deptName" class="easyui-textbox" required="true"></td>
             </tr>
             <tr>
-                <td>&nbsp;&nbsp;<label>科室别名:</label></td>
+                <td><label>科室别名:</label></td>
                 <td><input name="deptAlis" id="deptAlis" class="easyui-textbox"></td>
-                <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<label>科室属性:</label>
+                <td><label>科室属性:</label>
                 <input name="deptAttr" id="deptAttr" class="easyui-textbox" data-options="validType:'length[1,2]'" ></td>
             </tr>
             <tr>
@@ -97,15 +97,8 @@
                 </td>
              </tr>
         </table>
-        <!--<div class="fitem" id="uploadDiv" style="align:center;">-->
-            <!--<label></label>-->
-            <!--<input id="fileToUpload" type="file" size="45" name="fileToUpload">-->
-            <!--<a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6" iconCls="icon-ok" >上传</a>-->
-            <!--<br/>-->
-            <!--<img src="" id="viewImg"/>-->
-        <!--</div>-->
+
          <div class="fitem">
-            <!--<div style="height:100px;float:left;">科室简介</div>-->
             <span><h4>科室简介:</h4>
             <textarea id="deptInfo" name="deptInfo"></textarea>
             <script type="text/javascript">CKEDITOR.replace('deptInfo');</script></span>
@@ -122,6 +115,9 @@
        onclick="javascript:$('#dlg').dialog('close')" style="width:90px">关闭</a>
 </div>
 
+<div id="deptDescDlg" class="easyui-dialog" closed="true" style="width: 400px;height: 260px;" >
+
+</div>
 
 <script type="text/javascript" src="/assert/easyui/jquery.min.js"></script>
 <script type="text/javascript" src="/assert/easyui/jquery.easyui.min.js"></script>

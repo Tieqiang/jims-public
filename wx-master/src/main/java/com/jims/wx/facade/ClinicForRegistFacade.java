@@ -28,7 +28,6 @@ public class ClinicForRegistFacade extends BaseFacade {
     private ClinicIndexFacade clinicIndexFacade;
     private ClinicTypeChargeFacade clinicTypeChargeFacade;
     private ClinicScheduleFacade clinicScheduleFacade;
-//    private ThreadLocal<Integer> shareData = new ThreadLocal<Integer>();
 
     @Inject
     public ClinicForRegistFacade(EntityManager entityManager, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicScheduleFacade clinicScheduleFacade) {
@@ -49,23 +48,23 @@ public class ClinicForRegistFacade extends BaseFacade {
         return merge(saveData);
     }
 
-    /**
-     * 修改对象内容
-     *
-     * @param updateData
-     * @return
-     */
-    @Transactional
-    public List<ClinicForRegist> update(List<ClinicForRegist> updateData) {
-        List<ClinicForRegist> newUpdateDict = new ArrayList<>();
-        if (updateData != null && updateData.size() > 0) {
-            for (ClinicForRegist obj : updateData) {
-                ClinicForRegist merge = merge(obj);
-                newUpdateDict.add(merge);
-            }
-        }
-        return newUpdateDict;
-    }
+//    /**
+//     * 修改对象内容
+//     *
+//     * @param updateData
+//     * @return
+//     */
+//    @Transactional
+//    public List<ClinicForRegist> update(List<ClinicForRegist> updateData) {
+//        List<ClinicForRegist> newUpdateDict = new ArrayList<>();
+//        if (updateData != null && updateData.size() > 0) {
+//            for (ClinicForRegist obj : updateData) {
+//                ClinicForRegist merge = merge(obj);
+//                newUpdateDict.add(merge);
+//            }
+//        }
+//        return newUpdateDict;
+//    }
 
     /**
      * 批量删除
@@ -76,38 +75,38 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     @Transactional
     public List<String> delete(Class<ClinicForRegist> clazz, String ids) {
-        List<String> list = new ArrayList<String>();
         String[] idStr = ids.split(",");
-        for (int j = 0; j < idStr.length; j++) {
-            list.add(idStr[j]);
+        if (idStr != null && !"".equals(idStr) && idStr.length > 0) {
+            super.removeByStringIds(clazz, Arrays.asList(idStr));
+            return Arrays.asList(idStr);
+        } else {
+            return null;
         }
-        super.removeByStringIds(clazz, list);
-        return list;
     }
 
-    /**
-     * 判断是否能生成号表
-     *
-     * @param date
-     * @param clinicIndexId
-     * @return
-     */
-    public Map<String, Object> judgeIsRegist(String date, String clinicIndexId, String date1, Integer flag) throws Exception {
-        Map<String, Object> map = new HashMap<String, Object>();
-        String sql = "from ClinicSchedule where dayOfWeek between '" + sdf.format(sdf.parse(date)) + "' and '" + sdf.format(sdf.parse(date1)) + "' and clinicIndex.id='" + clinicIndexId + "'";
-        List<ClinicSchedule> list = entityManager.createQuery(sql).getResultList();
-        if (list == null) {
-            map.put("isRegist", false);
-            map.put("msg", "当前日期不能生成号表!");
-        } else {
-            map.put("isRegist", true);
-            map.put("msg", "号表可以生成！");
-            if (flag != 1) {
-                map.put("list", list);
-            }
-        }
-        return map;
-    }
+//    /**
+//     * 判断是否能生成号表
+//     *
+//     * @param date
+//     * @param clinicIndexId
+//     * @return
+//     */
+////    public Map<String, Object> judgeIsRegist(String date, String clinicIndexId, String date1, Integer flag) throws Exception {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        String sql = "from ClinicSchedule where dayOfWeek between '" + sdf.format(sdf.parse(date)) + "' and '" + sdf.format(sdf.parse(date1)) + "' and clinicIndex.id='" + clinicIndexId + "'";
+//        List<ClinicSchedule> list = entityManager.createQuery(sql).getResultList();
+//        if (list == null) {
+//            map.put("isRegist", false);
+//            map.put("msg", "当前日期不能生成号表!");
+//        } else {
+//            map.put("isRegist", true);
+//            map.put("msg", "号表可以生成！");
+//            if (flag != 1) {
+//                map.put("list", list);
+//            }
+//        }
+//        return map;
+//    }
 
     /**
      * @param date
@@ -122,7 +121,6 @@ public class ClinicForRegistFacade extends BaseFacade {
         try {
             List<Object[]> dayTimes = clinicScheduleFacade.queryDayAndTime(clinicIndexId);
             for (int i = 0; i < dayTimes.size(); i++) {
-//                System.out.println("可以出诊的时间为：" + dayTimes.get(i)[0].toString() + dayTimes.get(i)[1].toString());
                 List<String> registdateList = getNumbersOfWeekJ(date, date1, dayTimes.get(i)[0].toString(), dayTimes.get(i)[1].toString());
                 for (int j = 0; j < registdateList.size(); j++) {
                     //判断这个号别 这个时间 是否已经生成了号表
@@ -154,7 +152,6 @@ public class ClinicForRegistFacade extends BaseFacade {
      */
     private boolean judgeIsExists(String clinicIndexId, String date) {
         String hql = "from ClinicForRegist where clinicIndex.id='" + clinicIndexId + "'and timeDesc like '%" + date + "%'";
-//        System.out.println("hql="+hql);
         List<ClinicForRegist> list = entityManager.createQuery(hql).getResultList();
         if (list != null && !list.isEmpty())
             return true;
@@ -168,18 +165,17 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @author chenxiaaoyang
      * @Description保存号表记录
      */
+    @Transactional
     private ClinicForRegist saveRecord(String limits, Date parse, ClinicIndex byId, String registTime, String desc) {
         ClinicForRegist c = new ClinicForRegist();
         c.setClinicDate(parse);
         c.setClinicIndex(byId);
-//        String limits = clinicScheduleFacade.findLimitsByClinicIndexId(byId.getId()).toString();
         if (limits.contains(".")) {
             limits = limits.substring(0, limits.indexOf("."));
         }
         c.setRegistrationLimits(Integer.parseInt(limits));
         c.setRegistrationNum(0);
         c.setAppointmentLimits(Integer.parseInt(limits));
-//        Integer preNo = countHaveRegistedRecord(byId.getId()).intValue();
         c.setCurrentNo(0);
         c.setTimeDesc(desc);
         Double price = clinicTypeChargeFacade.findPriceByClinicTypeSettingId(byId.getClinicTypeId());
@@ -189,14 +185,14 @@ public class ClinicForRegistFacade extends BaseFacade {
         return clinicForRegist;
     }
 
-    /**
-     * @param id
-     * @return
-     * @description 通过号别id统计已经生成的号表
-     */
-    private Long countHaveRegistedRecord(String id) {
-        return (Long) entityManager.createQuery("select count(*) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
-    }
+//    /**
+//     * @param id
+//     * @return
+//     * @description 通过号别id统计已经生成的号表
+//     */
+//    private Long countHaveRegistedRecord(String id) {
+//        return (Long) entityManager.createQuery("select count(*) from ClinicForRegist where clinicIndex.id='" + id + "'").getSingleResult();
+//    }
 
     /**
      * @param startTime yyyy-MM-dd HH:mm:ss
@@ -215,22 +211,23 @@ public class ClinicForRegistFacade extends BaseFacade {
             String dow = revert(dayForWeek);
             if (dow.equals(dayOfWeek)) {
                 //出诊安排在上午 你选择的是12点之后
-                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 12) {
+                Integer time = Integer.parseInt(startTime.substring(11, 13));
+                if (timeOfDay.equals(TimeOfDay.上午.toString()) && time > 12) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 18) {
+                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && time > 18) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(12, 14)) > 22) {
+                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && time > 22) {
                     list.remove(sdf.format(sdf.parse(startTime)));
                 }
             }
             int dayForWeek2 = dayForWeek(endTime);
             String dow2 = revert(dayForWeek2);
             if (dow.equals(dayOfWeek)) {
-                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 8) {
+                if (timeOfDay.equals(TimeOfDay.上午.toString()) && Integer.parseInt(startTime.substring(11, 13)) < 8) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 14) {
+                } else if (timeOfDay.equals(TimeOfDay.下午.toString()) && Integer.parseInt(startTime.substring(11, 13)) < 14) {
                     list.remove(sdf.format(sdf.parse(startTime)));
-                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(12, 14)) < 18) {
+                } else if (timeOfDay.equals(TimeOfDay.晚上.toString()) && Integer.parseInt(startTime.substring(11, 13)) < 18) {
                     list.remove(sdf.format(sdf.parse(startTime)));
                 }
             }
@@ -386,7 +383,14 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public ClinicForRegist findById(String id) {
-        return (ClinicForRegist) entityManager.createQuery("from  ClinicForRegist where id='" + id + "'").getSingleResult();
+        if (id == null || "".equals(id)) {
+            return null;
+        }
+        List<ClinicForRegist> list = entityManager.createQuery("from  ClinicForRegist where id='" + id + "'").getResultList();
+        if (list != null && !list.isEmpty()) {
+            return list.get(0);
+        }
+        return null;
     }
 
 //    /**
@@ -444,8 +448,14 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @description 查询号表的详细信息
      */
     public ClinicForRegistVO findInfo(String id) {
+        if (id == null || "".equals(id)) {
+            return null;
+        }
         ClinicForRegistVO c = new ClinicForRegistVO();
         ClinicForRegist cc = (ClinicForRegist) entityManager.createQuery("from ClinicForRegist where id='" + id + "'").getSingleResult();
+        if (cc == null) {
+            return null;
+        }
         c.setRegistTime(sdf.format(cc.getClinicDate()));
         c.setAppointmentLimits(cc.getAppointmentLimits() == null ? 0 : cc.getAppointmentLimits());
         c.setRegistrationLimits(cc.getRegistrationLimits());
@@ -476,40 +486,40 @@ public class ClinicForRegistFacade extends BaseFacade {
 //        return true;
 //    }
 
-    /**
-     * 条件查询
-     *
-     * @param clinicForRegistClass
-     * @return
-     */
-    public List<ClinicForRegist> findAllData(Class<ClinicForRegist> clinicForRegistClass, String clinicIndexName, String date) {
-        String hql = "from ClinicForRegist where 1=1 ";
-        if (clinicIndexName != null && !"".equals(clinicIndexName)) {
-            hql += " and timeDesc like '%" + clinicIndexName + "%'";
-        }
-        if (date != null && !"".equals(date)) {
-            try {
-                SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
-                String likeDate = sd.format(sdf.parse(date));
-                hql += " and clinicDate like'%" + likeDate + "%'";
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            hql += " order by currentNo asc";
-        }
-        List<ClinicForRegist> list = entityManager.createQuery(hql).getResultList();
-        if (!list.isEmpty()) {
-            for (int i = 0; i < list.size(); i++) {
-                ClinicIndex clinicIndex = clinicIndexFacade.findById(list.get(i).getClinicIndex().getId());
-                ClinicIndex c = new ClinicIndex();
-                c.setId(clinicIndex.getId());
-                c.setClinicDept(clinicIndex.getClinicDept());
-                c.setClinicLabel(clinicIndex.getClinicLabel());
-                list.get(i).setClinicIndex(c);
-            }
-        }
-        return list;
-    }
+//    /**
+//     * 条件查询
+//     *
+//     * @param clinicForRegistClass
+//     * @return
+//     */
+//    public List<ClinicForRegist> findAllData(Class<ClinicForRegist> clinicForRegistClass, String clinicIndexName, String date) {
+//        String hql = "from ClinicForRegist where 1=1 ";
+//        if (clinicIndexName != null && !"".equals(clinicIndexName)) {
+//            hql += " and timeDesc like '%" + clinicIndexName + "%'";
+//        }
+//        if (date != null && !"".equals(date)) {
+//            try {
+//                SimpleDateFormat sd = new SimpleDateFormat("yyyy/MM/dd");
+//                String likeDate = sd.format(sdf.parse(date));
+//                hql += " and clinicDate like'%" + likeDate + "%'";
+//            } catch (ParseException e) {
+//                e.printStackTrace();
+//            }
+//            hql += " order by currentNo asc";
+//        }
+//        List<ClinicForRegist> list = entityManager.createQuery(hql).getResultList();
+//        if (!list.isEmpty()) {
+//            for (int i = 0; i < list.size(); i++) {
+//                ClinicIndex clinicIndex = clinicIndexFacade.findById(list.get(i).getClinicIndex().getId());
+//                ClinicIndex c = new ClinicIndex();
+//                c.setId(clinicIndex.getId());
+//                c.setClinicDept(clinicIndex.getClinicDept());
+//                c.setClinicLabel(clinicIndex.getClinicLabel());
+//                list.get(i).setClinicIndex(c);
+//            }
+//        }
+//        return list;
+//    }
 
     /**
      * 查找号别新消息
@@ -527,13 +537,14 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public ClinicForRegist findRegistInfo(String currentDateStr, String clinicIndexId) {
+        if (clinicIndexId == null || "".equals(clinicIndexId)) {
+            return null;
+        }
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
         ClinicForRegist clinicForRegist = null;
         String sql = "from ClinicForRegist where timeDesc like '%" + currentDateStr + "%' and clinicIndex.id='" + clinicIndexId + "'";
         clinicForRegists = entityManager.createQuery(sql).getResultList();
         if (clinicForRegists.isEmpty()) {
-            //预约
-//            return findRegistInfo(getNextDayStr(currentDateStr), clinicIndexId);
             return null;
         } else {
             return clinicForRegists.get(0);
@@ -581,8 +592,10 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public List<ClinicForRegist> findRegistInfoCollection(String date, String clinicIndexId) {
+        if (clinicIndexId == null || "".equals(clinicIndexId)) {
+            return null;
+        }
         List<ClinicForRegist> clinicForRegists = new ArrayList<ClinicForRegist>();
-
         clinicForRegists = entityManager.createQuery("from ClinicForRegist where registTime>='" + date + "' and   registTime <'" + getNextDayStr(date) + "' and clinicIndex.id='" + clinicIndexId + "' order by registTime asc").getResultList();
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;

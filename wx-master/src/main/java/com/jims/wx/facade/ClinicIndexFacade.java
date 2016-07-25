@@ -28,6 +28,9 @@ public class ClinicIndexFacade extends BaseFacade {
      * @return
      */
     public ClinicIndex findById(String clinicIndexId) {
+        if(clinicIndexId==null|| "".equals(clinicIndexId)){
+            return null;
+        }
         List<ClinicIndex> list=entityManager.createQuery("from ClinicIndex where id='"+clinicIndexId+"'").getResultList();
         return list.get(0);
     }
@@ -36,6 +39,9 @@ public class ClinicIndexFacade extends BaseFacade {
      * @return
      */
     public List<ComboboxVo> findClinicIndexType(String typeId) {
+        if(typeId==null || "".equals(typeId)){
+            return null;
+        }
          List<ComboboxVo> comboboxVoList=new ArrayList<ComboboxVo>();
          String sql="from ClinicIndex as c";
         if(typeId!=null&&!"".equals(typeId)){
@@ -55,6 +61,9 @@ public class ClinicIndexFacade extends BaseFacade {
     }
     //find by typeId
     public List<ClinicIndex> findByTypeId(String typeId){
+        if(typeId==null || "".equals(typeId)){
+            return null;
+        }
         String sqls = "from ClinicIndex where 1=1";
         if(null != typeId && !typeId.trim().equals("")){
             sqls +=" and clinicTypeId='" +typeId+ "'";
@@ -113,7 +122,6 @@ public class ClinicIndexFacade extends BaseFacade {
         List<ClinicIndex> inserted =beanChangeVo.getInserted();
         List<ClinicIndex> updated =beanChangeVo.getUpdated();
         List<ClinicIndex> deleted =beanChangeVo.getDeleted();
-//        inserted.
         for (ClinicIndex sheet:inserted){
             ClinicIndex merge =merge(sheet);
             newUpdateSheet.add(merge);
@@ -166,7 +174,9 @@ public class ClinicIndexFacade extends BaseFacade {
      * @return
      */
     public String findDeptCodeByDoctId(String id) {
-//        ClinicIndex
+        if(id==null || "".equals(id)){
+            return null;
+        }
         String sql="from ClinicIndex where doctorId='"+id+"'";
         List<ClinicIndex> list=entityManager.createQuery(sql).getResultList();
         if(list!=null&&!list.isEmpty()){

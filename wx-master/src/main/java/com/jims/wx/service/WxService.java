@@ -3,37 +3,20 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.AppUser;
 
-import com.jims.wx.entity.PatInfo;
-import com.jims.wx.entity.WxOpenAccountConfig;
 import com.jims.wx.facade.*;
-import com.jims.wx.util.Bare;
 import com.jims.wx.util.WeiXinPayUtils;
 import com.jims.wx.vo.AppSetVo;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.client.methods.RequestBuilder;
-import org.eclipse.jetty.client.HttpClient;
-import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.util.ssl.SslContextFactory;
-import org.eclipse.jetty.util.thread.QueuedThreadPool;
 import org.springframework.web.bind.annotation.RequestBody;
-import weixin.popular.api.SnsAPI;
-import weixin.popular.api.TokenAPI;
-import com.jims.wx.vo.AppSetVo;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
-import weixin.popular.bean.pay.PayPackage;
 import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 import weixin.popular.bean.xmlmessage.XMLMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
-import weixin.popular.client.LocalHttpClient;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.TokenManager;
 import weixin.popular.support.expirekey.DefaultExpireKey;
-import weixin.popular.util.PayUtil;
-import weixin.popular.util.SignatureUtil;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.inject.Inject;
@@ -42,12 +25,9 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.net.URLEncoder;
 
 /**
  * Created by heren on 2016/2/24.
@@ -88,12 +68,12 @@ public class WxService {
     @GET
     public String checkSignature(@QueryParam("signature") String signature, @QueryParam("timestamp") String timestamp,
                                  @QueryParam("nonce") String nonce, @QueryParam("echostr") String echostr) {
-        System.out.println(signature);
-        System.out.println(timestamp);
-        System.out.println(nonce);
-        System.out.println(echostr);
-        System.out.println(request.toString());
-        System.out.println(response.toString());
+//        System.out.println(signature);
+//        System.out.println(timestamp);
+//        System.out.println(nonce);
+//        System.out.println(echostr);
+//        System.out.println(request.toString());
+//        System.out.println(response.toString());
         return echostr;
     }
 
@@ -113,7 +93,6 @@ public class WxService {
             outputStreamWrite(outputStream, echostr);
             return;
         }
-
         if (inputStream != null) {
             //转换XML
             EventMessage eventMessage = XMLConverUtil.convertToObject(EventMessage.class, inputStream);
@@ -135,9 +114,12 @@ public class WxService {
                 //公众号订阅
                 String fromUser = eventMessage.getFromUserName();
                 User user = UserAPI.userInfo(this.getToken(), fromUser);
+                if(user==null){
+                    throw new IllegalArgumentException("参数非法！user="+user);
+                }
                 AppUser appUser = appUserFacade.createUser(user);
                 if (appUser != null && !"".equals(appUser)) {//关注成功
-                    String message = "欢迎关注，详情点击" + "<a href='/views/his/public/app-dept-dict-info.html'>详情</a>";
+                    String message = "你好，欢迎关注双滦区人民医院微信公众号。";
                     //创建回复
                     XMLMessage xmlTextMessage = new XMLTextMessage(
                             eventMessage.getFromUserName(),
@@ -152,16 +134,16 @@ public class WxService {
             if ("unsubscribe".equals(event) && "event".equals(msgType)) {
                 //取消订阅公众号
                 String fromUser = eventMessage.getFromUserName();
-//                User user = UserAPI.userInfo(this.getToken(), fromUser);
+                if (fromUser==null || "".equals(fromUser)){
+                    throw new IllegalArgumentException("openid 为空！");
+                }
                 AppUser appUser = appUserFacade.findAppUserByOpenId(fromUser);
-//                List<PatInfo> list=patVsUserFacade.findPatInfosByAppUserId(appUser.getId());
-//                patInfoFacade.delete(list);
                 if (appUser != null) {
                     appUserFacade.deleteByObject(appUser);
+                }else{
+                    throw new IllegalArgumentException("删除appUser失败！appUser 为空！");
                 }
-                //                patVsUserFacade.deleteByAppUserId(appUser.getId());
-            }
-
+             }
             if ("text".equals(msgType) || "image".equals(msgType) || "voice".equals(msgType)
                     || "video".equals(msgType) || "shortvideo".equals(msgType)) {//普通消息
                 requestMessageFacade.saveMsg(eventMessage);
@@ -185,7 +167,6 @@ public class WxService {
                     "您所发送消息已经收到，会尽快回复您");
             //回复
             xmlTextMessage.outputStreamWrite(outputStream);
-
             return;
         }
         outputStreamWrite(outputStream, "");
@@ -193,7 +174,6 @@ public class WxService {
 
     /**
      * 数据流输出
-     *
      * @param outputStream
      * @param text
      * @return
@@ -225,10 +205,13 @@ public class WxService {
     public String test(@QueryParam("code") String code) throws IOException {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
+        if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+            throw new IllegalArgumentException("系统饭繁忙,请重试！snsToken.getOpenId()="+null);
+        }
+        AppUser appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
         String patId = "";
-        if (appList.size() > 0) {
-            patId = appList.get(0).getPatId();
+        if (appUser!=null) {
+            patId = appUser.getPatId();
         }
         response.sendRedirect("/views/his/public/questionnaire-survey.html?openId=" + snsToken.getOpenid() + "&patId=" + patId);
         return "http://www.baidu.com/";
@@ -239,9 +222,6 @@ public class WxService {
     public String inp(@QueryParam("code") String code) throws IOException {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-//        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
-
-
         response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid());
         return "http://www.baidu.com/";
     }
@@ -249,11 +229,13 @@ public class WxService {
     @GET
     @Path("user-bangker")
     public String userBangker(@QueryParam("code") String code) {
-//        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-        //测试用
+         //测试用
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         try {
+            if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+                throw new IllegalArgumentException("系统繁忙，snsToken.getOpenid()="+snsToken.getOpenid());
+            }
             response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
         } catch (IOException e) {
             e.printStackTrace();
@@ -263,7 +245,6 @@ public class WxService {
 
     /**
      * app当天挂号选择科室
-     *
      * @param code
      * @return
      */
@@ -271,17 +252,17 @@ public class WxService {
     @Path("find-dept")
     public String findDept(@QueryParam("code") String code, @QueryParam("openId") String openId) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-            //测试用
             String openIdStr = "";
             SnsToken snsToken = null;
             if (openId == null || openId == "") {
                 AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
                 snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
+            }
+            if(openIdStr==null || "".equals(openIdStr)){
+                throw new IllegalArgumentException("参数违法，openId 为空!");
             }
             /**
              * 如果次微信用户有绑定的患者，则跳到挂号页面，否则跳到绑卡页面
@@ -317,6 +298,9 @@ public class WxService {
         } else {//integer
             price = String.valueOf(Integer.valueOf(price) * 100);
         }
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数异常！ 非法的openId="+openId);
+        }
         json = WeiXinPayUtils.weiXinPayNeedJson(price, openId, body, notifyUrl, ip);
         return json;
     }
@@ -326,37 +310,39 @@ public class WxService {
     public String rcpt(@QueryParam("code") String code) throws IOException {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        List<AppUser> appList = appUserFacade.findByOpenId(snsToken.getOpenid());
+        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
         String patId = "";
-        if (appList.size() > 0) {
-            patId = appList.get(0).getPatId();
+        if (appUser!=null) {
+            patId = appUser.getPatId();
         }
         response.sendRedirect("/views/his/public/rcpt-master.html?openId=" + snsToken.getOpenid());
         return "http://www.baidu.com/";
     }
-
-    @POST
-    @Path("pay-jsp")
-    public String payJs2() {
-        PayPackage packageParams = new PayPackage();
-        packageParams.setBank_type("WX");
-        packageParams.setBody("挂号");
-        packageParams.setFee_type("CHM");
-        packageParams.setInput_charset("UTF-8");
-        packageParams.setNotify_url(" http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-pay-success.html");
-        packageParams.setOut_trade_no("1");
-        packageParams.setPartner(MCH_ID);
-        packageParams.setSpbill_create_ip(request.getRemoteHost());
-        packageParams.setTotal_fee("10");
-        String json = PayUtil.generatePayJsRequestJson(packageParams, "wx890edf605415aaec", KEY, KEY);
-        return json;
-    }
+//    @POST
+//    @Path("pay-jsp")
+//    public String payJs2() {
+//        PayPackage packageParams = new PayPackage();
+//        packageParams.setBank_type("WX");
+//        packageParams.setBody("挂号");
+//        packageParams.setFee_type("CHM");
+//        packageParams.setInput_charset("UTF-8");
+//        packageParams.setNotify_url("http://9tvafbgbdf.proxy.qqbrowser.cc/views/his/public/app-pay-success.html");
+//        packageParams.setOut_trade_no("1");
+//        packageParams.setPartner(MCH_ID);
+//        packageParams.setSpbill_create_ip(request.getRemoteHost());
+//        packageParams.setTotal_fee("10");
+//        String json = PayUtil.generatePayJsRequestJson(packageParams, "wx890edf605415aaec", KEY, KEY);
+//        return json;
+//    }
 
     @GET
     @Path("find-pat-info")
     public String findPatInfo(@QueryParam("code") String code) throws IOException {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+            throw new IllegalArgumentException("系统繁忙，请稍后，openId="+null);
+        }
         response.sendRedirect("/views/his/public/app-my-information.html?openId=" + snsToken.getOpenid());
         return "";
     }
@@ -365,6 +351,9 @@ public class WxService {
     @GET
     @Path("query-string")
     public String queryString(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
+        if(openId==null || "".equals(openId) || deptId==null || "".equals(deptId)){
+            throw new IllegalArgumentException("参数非法,openId="+openId+"&deptId="+deptId);
+        }
         response.sendRedirect("/views/his/public/app-doct-info.html?openId=" + openId + "&deptId=" + deptId);
         return "";
     }
@@ -372,6 +361,9 @@ public class WxService {
     @GET
     @Path("app-pay")
     public String appPay(@QueryParam("openId") String openId, @QueryParam("clinicForRegistId") String clinicForRegistId, @QueryParam("price") String price) throws IOException {
+        if(openId==null || "".equals(openId) || clinicForRegistId==null || "".equals(clinicForRegistId)){
+            throw new IllegalArgumentException("参数非法,openId="+openId+"&clinicForRegistId="+clinicForRegistId);
+        }
         response.sendRedirect("/views/his/public/app-pay.html?openId=" + openId + "&price=" + price + "&clinicForRegistId=" + clinicForRegistId);
         return "";
     }
@@ -379,6 +371,9 @@ public class WxService {
     @GET
     @Path("get-param")
     public String getParam(@QueryParam("patId") String patId) throws IOException {
+        if(patId==null || "".equals(patId)){
+            throw new IllegalArgumentException("参数非法,patId="+patId);
+        }
         response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId);
         return "";
     }
@@ -387,6 +382,9 @@ public class WxService {
     @GET
     @Path("get-regist-id")
     public String getRegistId(@QueryParam("clinicForRegistId") String clinicForRegistId) throws IOException {
+        if(clinicForRegistId==null || "".equals(clinicForRegistId)){
+            throw new IllegalArgumentException("参数非法,clinicForRegistId="+clinicForRegistId);
+        }
         response.sendRedirect("/views/his/public/app-regist-doct-info.html?clinicForRegistId=" + clinicForRegistId);
         return "";
     }
@@ -394,6 +392,9 @@ public class WxService {
     @GET
     @Path("find-by-id")
     public String findById(@QueryParam("patId") String patId, @QueryParam("openId") String openId, @QueryParam("mid") String mid) throws IOException {
+        if(patId==null || "".equals(patId) || openId==null || "".equals(openId) || mid==null || "".equals(mid)){
+            throw new IllegalArgumentException("参数非法,patId="+patId+"&openId="+openId+"&mid="+mid);
+        }
         response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId + "&openId=" + openId + "&mid=" + mid);
         return "";
     }
@@ -402,6 +403,9 @@ public class WxService {
     @GET
     @Path("query-dept")
     public String queryDept(@QueryParam("deptId") String deptId) throws IOException {
+        if(deptId==null || "".equals(deptId)){
+            throw new IllegalArgumentException("参数为空！deptId="+deptId);
+        }
         response.sendRedirect("/views/his/public/app-dept-info.html?deptId=" + deptId);
         return "";
     }
@@ -409,6 +413,9 @@ public class WxService {
     @GET
     @Path("change")
     public String change(@QueryParam("openId") String openId) throws IOException {
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数为空！openId="+openId);
+        }
         response.sendRedirect("/views/his/public/app-my-information.html?openId=" + openId);
         return "";
     }
@@ -417,6 +424,9 @@ public class WxService {
     @GET
     @Path("query-open")
     public String queryOpen(@QueryParam("openId") String openId) throws IOException {
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数为空！openId="+openId);
+        }
         response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
         return "";
     }
@@ -424,7 +434,9 @@ public class WxService {
     @GET
     @Path("regist-open")
     public String registOpen(@QueryParam("openId") String openId) throws IOException {
-
+        if(openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数为空！openId="+openId);
+        }
         boolean flag = patVsUserFacade.findIsExistsPatInfo(openId);
         if (flag) {//绑定和患者
             response.sendRedirect("/views/his/public/app-dept-dict.html?param=" + openId);
@@ -443,6 +455,9 @@ public class WxService {
     @GET
     @Path("select-body")
     public String selectBody(@QueryParam("age") String age, @QueryParam("sexValue") String sexValue) throws IOException {
+        if(sexValue==null || "".equals(sexValue) || age==null || "".equals(age)){
+            throw new IllegalArgumentException("参数为空！sexValue="+sexValue+"&age="+age);
+        }
         if (sexValue == "1")//男性
             response.sendRedirect("/views/his/public/app-select-body.html?age=" + age + "&sexValue=" + sexValue);
         response.sendRedirect("/views/his/public/app-select-body-woman.html?age=" + age + "&sexValue=" + sexValue);
@@ -453,6 +468,9 @@ public class WxService {
     @GET
     @Path("query-symptom")
     public String querySymptom(@QueryParam("bodyId") String bodyId,@QueryParam("openId") String openId,@QueryParam("sexValue") String sexValue) throws IOException {
+        if(sexValue==null || "".equals(sexValue) || bodyId==null || "".equals(bodyId) || openId==null || "".equals(openId)){
+            throw new IllegalArgumentException("参数为空！sexValue="+sexValue+"&bodyId="+bodyId+"&openId="+openId);
+        }
         response.sendRedirect("/views/his/public/app-select-symptom.html?bodyId=" + bodyId + "&openId=" + openId+"&sexValue="+sexValue);
         return "";
     }
@@ -502,7 +520,6 @@ public class WxService {
             if (openId == null || openId == "") {
                 AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
                 snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-                System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
@@ -543,7 +560,9 @@ public class WxService {
             //测试用
             AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
             SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+            if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+                throw new IllegalArgumentException("系统繁忙,snsToken.getOpenId()="+snsToken.getOpenid());
+            }
             boolean flag = patVsUserFacade.findIsExistsPatInfo(snsToken.getOpenid());
             if (flag) {//绑定和患者
                 response.sendRedirect("/views/his/public/app-feed-back.html?openId=" + snsToken.getOpenid());
@@ -561,6 +580,9 @@ public class WxService {
     @Path("find-master")
     public String findmaster(@QueryParam("openId") String openId) {
         try {
+            if(openId==null || "".equals(openId)){
+                throw new IllegalArgumentException("openId 为空");
+            }
             response.sendRedirect("/views/his/public/app-master-record.html?openId=" + openId);
         } catch (IOException e) {
             e.printStackTrace();
@@ -597,7 +619,9 @@ public class WxService {
             // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
             AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
             SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
+            if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+                throw new IllegalArgumentException("系统繁忙,snsToken.getOpenId()="+snsToken.getOpenid());
+            }
             boolean flag = patVsUserFacade.findIsExistsPatInfo(snsToken.getOpenid());
             if (flag) {//绑定了患者
                 response.sendRedirect("/views/his/public/app-regist-list.html?openId=" + snsToken.getOpenid());
@@ -619,6 +643,9 @@ public class WxService {
     @Path("find-my-collection")
     public String findMyCollection(@QueryParam("openId") String openId){
         try {
+            if(openId==null || "".equals(openId)){
+                throw new IllegalArgumentException("openId为空！");
+            }
             response.sendRedirect("/views/his/public/app-my-collection.html?openId="+openId);
         } catch (IOException e) {
             e.printStackTrace();
@@ -630,8 +657,9 @@ public class WxService {
     @Path("regist-list")
     public String registList(@QueryParam("openId") String openId) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-
+            if(openId==null || "".equals(openId)){
+                throw new IllegalArgumentException("openId为空！");
+            }
             boolean flag = patVsUserFacade.findIsExistsPatInfo(openId);
             if (flag) {//绑定了患者
                 response.sendRedirect("/views/his/public/app-regist-list.html?openId=" +openId);

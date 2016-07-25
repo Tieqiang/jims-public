@@ -68,7 +68,7 @@ public class PatVsUserFacade extends BaseFacade {
      * @return
      */
     public boolean findIsExistsPatInfo(String openid) {
-        AppUser appUser= appUserFacade.getAppUserByOpenId(openid);
+        AppUser appUser= appUserFacade.findAppUserByOpenId(openid);
         if(appUser!=null){
             String patId=appUser.getPatId();
             if(patId!=null&&!"".equals(patId)){
@@ -89,9 +89,9 @@ public class PatVsUserFacade extends BaseFacade {
     public Boolean findIsBangker(String idCard,String openId) {
         // find appUserId by openId
         String appUserId=null;
-        List<AppUser> appUsers=appUserFacade.findByOpenId(openId);
-        if(!appUsers.isEmpty()){
-            appUserId=appUsers.get(0).getId();
+        AppUser appUsers=appUserFacade.findAppUserByOpenId(openId);
+        if(appUsers!=null){
+            appUserId=appUsers.getId();
         }
         List<PatInfo> list=findPatInfosByAppUserId(openId);
         if(!list.isEmpty()){//绑定了患者

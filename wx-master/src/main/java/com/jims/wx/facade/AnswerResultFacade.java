@@ -6,6 +6,7 @@ import com.jims.wx.entity.AnswerResult;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * Created by zhu on 2016/3/16.
@@ -25,10 +26,10 @@ public class AnswerResultFacade extends BaseFacade {
     }
 
     public AnswerResult findById(String id) {
-        Object result = entityManager.createQuery("from AnswerResult where answerSheetId='" + id + "'").getSingleResult();
-        if (result != null)
-            return (AnswerResult) result;
-        return null;
+        List<AnswerResult> result = entityManager.createQuery("from AnswerResult where answerSheetId='" + id + "'").getResultList();
+        if (result != null&&!result.isEmpty())
+            return result.get(0);
+            return null;
 
     }
 }

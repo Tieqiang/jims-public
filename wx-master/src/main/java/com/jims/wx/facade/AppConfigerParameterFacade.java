@@ -29,7 +29,7 @@ public class AppConfigerParameterFacade extends BaseFacade {
     @Transactional
     public List<AppConfigerParameter> saveAppConfigerParameter(List<AppConfigerParameter> insertData){
         List<AppConfigerParameter> newUpdateDict = new ArrayList<>();
-        if (insertData.size() > 0) {
+        if (insertData!=null&&insertData.size() > 0) {
             for(AppConfigerParameter appConfigerParameter: insertData){
                 AppConfigerParameter merge = merge(appConfigerParameter);
                 newUpdateDict.add(merge);
@@ -49,7 +49,7 @@ public class AppConfigerParameterFacade extends BaseFacade {
     public List<AppConfigerParameter> updateAppConfigerParameter(List<AppConfigerParameter> updateData) {
 
         List<AppConfigerParameter> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
+        if (updateData!=null&&updateData.size() > 0) {
             for (AppConfigerParameter dict : updateData) {
                 AppConfigerParameter merge = merge(dict);
                 newUpdateDict.add(merge);
@@ -61,9 +61,8 @@ public class AppConfigerParameterFacade extends BaseFacade {
     //删除(数组)
     @Transactional
     public List<AppConfigerParameter> deleteAppConfigerParameter(List<AppConfigerParameter> deleteData) {
-
         List<AppConfigerParameter> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
+        if (deleteData!=null&&deleteData.size() > 0) {
             List<String> ids = new ArrayList<>();
             for (AppConfigerParameter appConfigerParameter : deleteData) {
                 ids.add(appConfigerParameter.getId());

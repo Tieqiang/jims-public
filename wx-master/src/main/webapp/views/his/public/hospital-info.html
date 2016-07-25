@@ -2,7 +2,6 @@
 <html>
 <head lang="en">
     <meta charset="UTF-8">
-    <title>产品编码描述字典维护</title>
     <link rel="stylesheet" href="/assert/easyui/themes/default/easyui.css">
     <link rel="stylesheet" href="/assert/easyui/themes/color.css">
     <link rel="stylesheet" href="/assert/easyui/themes/icon.css">
@@ -21,29 +20,26 @@
                 <input type="hidden" value="" id="hospitalId">
                 <tr>
                     <td>医院名称：</td>
-                    <td><input id="hospitalName" class="easyui-textbox" value=""></td>
-                    <td>APPID：</td>
-                    <td><input id="appId" class="easyui-textbox" value=""></td>
-                    <td>SECRET:</td>
-                    <td><input id="appSecret" class="easyui-textbox"></td>
-
-                </tr>
-                <tr>
+                    <td><input id="hospitalName" class="easyui-textbox" value="" disabled="DISABLED"></td>
                     <td>公众号名：</td>
                     <td><input id="openName" class="easyui-textbox" value=""></td>
-                    <td>appToken：</td>
-                    <td><input id="appToken" class="easyui-textbox" value=""></td>
-                    <td>商号ID:</td>
-                    <td><input id="metchId" class="easyui-textbox"></td>
+                 </tr>
+                <tr>
+                    <td>公众号(appId)：</td>
+                    <td><input id="appId" class="easyui-textbox" value=""></td>
+                    <td>公众号密钥(appSerect):</td>
+                    <td><input id="appSecret" class="easyui-textbox"></td>
                 </tr>
                 <tr>
-                    <td>介绍链接：</td>
-                    <td><input id="infoUrl" class="easyui-textbox" value=""></td>
-                    <td>商号KEY:</td>
+                    <td>微信支付商号(MCH_ID)：</td>
+                    <td><input id="metchId" class="easyui-textbox"></td>
+                    <td>商户支付密钥(key):</td>
                     <td><input id="key" class="easyui-textbox"></td>
                 </tr>
                 <tr>
-                    <td>上传图片：</td>
+                    <td>介绍链接：</td>
+                    <td><input id="infoUrl" class="easyui-textbox"  value=""></td>
+                    <td>医院图片：</td>
                     <td><input id="fileToUpload" type="file" size="45" name="fileToUpload">
                         <a href="javascript:void(0)" id="uploadBtn" class="easyui-linkbutton c6"
                            iconCls="icon-ok">上传</a></td>

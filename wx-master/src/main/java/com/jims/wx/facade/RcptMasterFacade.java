@@ -101,10 +101,10 @@ public class RcptMasterFacade extends BaseFacade {
 
     public List<PatVsUserVo> getByAppUser(String openId) {
         List<PatVsUserVo> patVsUserVos = new ArrayList<>();
-        List<AppUser> appUserList = appUserFacade.findByOpenId(openId);
+        AppUser appUserList = appUserFacade.findAppUserByOpenId(openId);
         String appUser = "";
-        if (appUserList.size() > 0) {
-            appUser = appUserList.get(0).getId();
+        if (appUserList!=null) {
+            appUser = appUserList.getId();
         }
         if (appUser != "") {
             String id = appUser;

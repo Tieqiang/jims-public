@@ -260,19 +260,19 @@ public class ClinicForRegistService {
         return list;
     }
 
-    /**
-     * 号表查询
-     *
-     * @param clinicIndexName
-     * @param date
-     * @return
-     */
-    @GET
-    @Path("list-all")
-    public List<ClinicForRegist> listAll(@QueryParam("likeName") String clinicIndexName, @QueryParam("likeDate") String date) {
-        List<ClinicForRegist> list = this.clinicForRegistFacade.findAllData(ClinicForRegist.class, clinicIndexName, date);
-        return list;
-    }
+//    /**
+//     * 号表查询
+//     *
+//     * @param clinicIndexName
+//     * @param date
+//     * @return
+//     */
+//    @GET
+//    @Path("list-all")
+//    public List<ClinicForRegist> listAll(@QueryParam("likeName") String clinicIndexName, @QueryParam("likeDate") String date) {
+//        List<ClinicForRegist> list = this.clinicForRegistFacade.findAll(ClinicForRegist.class, clinicIndexName, date);
+//        return list;
+//    }
 
     /**
      * 查询号别信息
@@ -286,25 +286,25 @@ public class ClinicForRegistService {
         return list;
     }
 
-    /**
-     * 判断是否可以生成号表
-     *
-     * @param date
-     * @param clinicIndexId
-     * @param date1
-     * @return
-     */
-    @GET
-    @Path("judge-is-regist")
-    public Map<String, Object> judgeIsRegist(@QueryParam("date") String date, @QueryParam("clinicIndexId") String clinicIndexId, @QueryParam("date1") String date1) {
-        Map<String, Object> map = new HashMap<String, Object>();
-        try {
-            map = clinicForRegistFacade.judgeIsRegist(date, clinicIndexId, date1, 1);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
+//    /**
+//     * 判断是否可以生成号表
+//     *
+//     * @param date
+//     * @param clinicIndexId
+//     * @param date1
+//     * @return
+//     */
+//    @GET
+//    @Path("judge-is-regist")
+//    public Map<String, Object> judgeIsRegist(@QueryParam("date") String date, @QueryParam("clinicIndexId") String clinicIndexId, @QueryParam("date1") String date1) {
+//        Map<String, Object> map = new HashMap<String, Object>();
+//        try {
+//            map = clinicForRegistFacade.judgeIsRegist(date, clinicIndexId, date1, 1);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return map;
+//    }
 
     /**
      * 生成号表
@@ -671,7 +671,7 @@ public class ClinicForRegistService {
         String addr = getRequestUrl();
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
-        List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
+        List<DoctInfo> doctInfos = doctInfoFacade.queryByCondition(DoctInfo.class,likeSearch);
 //        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
         for (DoctInfo doctInfo : doctInfos) {
@@ -729,7 +729,7 @@ public class ClinicForRegistService {
         String addr = getRequestUrl();
         AppUser appuser = appUserFacade.findAppUserByOpenId(openId);
         PatInfo patInfo = patInfoFacade.findById(appuser.getPatId());
-        List<DoctInfo> doctInfos = doctInfoFacade.findDoctByLike(likeSearch);
+        List<DoctInfo> doctInfos = doctInfoFacade.queryByCondition(DoctInfo.class,likeSearch);
         List<ClinicIndex> list = clinicForRegistFacade.findClinicIndexAll();
 //        List<UserCollection> userCollections=userCollectionFacade.findByOpenId(openId);
         for (DoctInfo doctInfo : doctInfos) {

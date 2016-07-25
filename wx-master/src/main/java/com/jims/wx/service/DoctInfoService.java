@@ -65,12 +65,15 @@ public class DoctInfoService {
      */
     @GET
     @Path("get-list")
-    public List<DoctInfo> getList() {
+    public List<DoctInfo> getList(@QueryParam("docName") String docName) {
+        if(docName.equals("undefined")){
+            docName="";
+        }
         String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         List<DoctInfo> deptDicts = new ArrayList<DoctInfo>();
-        List<DoctInfo> list= doctInfoFacade.findAll(DoctInfo.class);
+        List<DoctInfo> list= doctInfoFacade.queryByCondition(DoctInfo.class,docName);
         for(DoctInfo doctInfo:list){
-            doctInfo.setHospitalName(hospitalDictFacade.findHospitalDictById(doctInfo.getHospitalId()).getHospitalName());
+            doctInfo.setHospitalName("双滦区人民医院");
             doctInfo.setImg(addr+doctInfo.getHeadUrl());
             deptDicts.add(doctInfo);
          }
@@ -80,13 +83,12 @@ public class DoctInfoService {
     /**
      * 条件查询医生相关信息
      * @param name
-     * @param hospitalId
      * @return
      */
     @GET
     @Path("query-by-condition")
-    public List<DoctInfo> queryByCondition(@QueryParam("name") String name,@QueryParam("hospitalId") String hospitalId) {
-        return  doctInfoFacade.queryByCondition(DoctInfo.class,name,hospitalId);
+    public List<DoctInfo> queryByCondition(@QueryParam("name") String name) {
+        return  doctInfoFacade.queryByCondition(DoctInfo.class,name);
     }
     /**
      * 保存增改

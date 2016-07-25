@@ -37,9 +37,10 @@ public class ClinicMasterFacade extends BaseFacade {
      * @param saveData
      * @return
      */
+    @Transactional
     public List<ClinicMaster> save(List<ClinicMaster> saveData) {
         List<ClinicMaster> newUpdateDict = new ArrayList<>();
-        if (saveData.size() > 0) {
+        if (saveData == null && saveData.size() > 0) {
             for (ClinicMaster obj : saveData) {
                 ClinicMaster merge = merge(obj);
                 newUpdateDict.add(merge);
@@ -56,13 +57,11 @@ public class ClinicMasterFacade extends BaseFacade {
      */
     @Transactional
     public List<ClinicMaster> update(List<ClinicMaster> updateData) {
-
         List<ClinicMaster> newUpdateDict = new ArrayList<>();
-        if (updateData.size() > 0) {
+        if (updateData == null && updateData.size() > 0) {
             for (ClinicMaster obj : updateData) {
                 ClinicMaster merge = merge(obj);
                 newUpdateDict.add(merge);
-
             }
         }
         return newUpdateDict;
@@ -76,9 +75,8 @@ public class ClinicMasterFacade extends BaseFacade {
      */
     @Transactional
     public List<ClinicMaster> delete(List<ClinicMaster> deleteData) {
-
         List<ClinicMaster> newUpdateDict = new ArrayList<>();
-        if (deleteData.size() > 0) {
+        if (deleteData == null && deleteData.size() > 0) {
             List<String> ids = new ArrayList<>();
             for (ClinicMaster obj : deleteData) {
                 ids.add(obj.getId());
@@ -105,8 +103,12 @@ public class ClinicMasterFacade extends BaseFacade {
      *
      * @param clinicMasterId
      */
+    @Transactional
     public ClinicMaster updateTakeRegistStatus(String clinicMasterId) {
-        String sql = "from ClinicMaster where takeStatus='1' and  id='" + clinicMasterId + "'";
+        if (clinicMasterId == null || "".equals(clinicMasterId)) {
+            throw new IllegalArgumentException("参数非法clinicmasterId为空@");
+        }
+        String sql = "from ClinicMaster where takeStatus='0' and  id='" + clinicMasterId + "'";
         ClinicMaster clinicMaster = (ClinicMaster) entityManager.createQuery(sql).getSingleResult();
         if (clinicMaster != null && !"".equals(clinicMaster)) {
             clinicMaster.setTakeStatus("1");
@@ -131,7 +133,7 @@ public class ClinicMasterFacade extends BaseFacade {
         for (String str : patientIds) {
             patientIdStr += "'" + str + "'" + ",";
         }
-        if (patientIdStr == null || patientIdStr == "") {
+        if (patientIdStr == null || patientIdStr == "" || patientIdStr.length() == 0) {
             return null;
         }
         patientIdStr = patientIdStr.substring(0, patientIdStr.length() - 1);
@@ -139,20 +141,17 @@ public class ClinicMasterFacade extends BaseFacade {
         List<ClinicMaster> clinicMasters = entityManager.createQuery(todayHql).getResultList();
         for (ClinicMaster clinicMaster : clinicMasters) {
             ClinicMasterVo c = new ClinicMasterVo();
-            c.setClinicLabel(clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
+            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
             c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             today.add(c);
         }
         map.put("today", today);
-
         String historyHql = "from ClinicMaster where patientId in (" + patientIdStr + ") and to_char(registDate,'YYYY-MM-DD') < '" + sdf.format(new Date()) + "'";
-
         List<ClinicMaster> clinicMasters2 = entityManager.createQuery(historyHql).getResultList();
-
         for (ClinicMaster clinicMaster : clinicMasters2) {
             ClinicMasterVo c = new ClinicMasterVo();
-            c.setClinicLabel(clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
+            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
             c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             history.add(c);

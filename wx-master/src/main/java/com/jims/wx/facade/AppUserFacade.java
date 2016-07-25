@@ -4,6 +4,7 @@ import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.AppUser;
 import com.jims.wx.entity.AppUserGroups;
+import com.jims.wx.entity.PatInfo;
 import com.jims.wx.entity.PatVsUser;
 import weixin.popular.bean.user.User;
 
@@ -74,23 +75,29 @@ public class AppUserFacade extends BaseFacade {
         return result;
     }
 
-    /**
-     * 根据分组openId查找用户
-     * @param openId
-     * @return
-     */
-    public List<AppUser> findByOpenId(String openId){
-        String hql = "FROM AppUser u WHERE 1=1";
-        if (openId != null && !openId.equals("")) {
-            hql += " and u.openId = '" + openId + "'";
-        }
-
-        List<AppUser> result = entityManager.createQuery(hql).getResultList();
-        return result;
-    }
+//    /**
+//     * 根据分组openId查找用户
+//     * @param openId
+//     * @return
+//     */
+//    public List<AppUser> findByOpenId(String openId){
+//        String hql = "FROM AppUser u WHERE 1=1";
+//        if (openId != null && !openId.equals("")) {
+//            hql += " and u.openId = '" + openId + "'";
+//        }
+//
+//        List<AppUser> result = entityManager.createQuery(hql).getResultList();
+//        return result;
+//    }
 
     @Transactional
     public AppUser createUser(User user) {
+        if(user==null){
+            return null;
+        }
+        if(user.getOpenid()==null || "".equals(user.getOpenid())){
+            return null;
+        }
         String hql = "from AppUser as user where user.openId = '"+user.getOpenid()+"'" ;
         AppUser appUser =null ;
         List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
@@ -99,7 +106,7 @@ public class AppUserFacade extends BaseFacade {
         }else{
             appUser = new AppUser() ;
         }
-         appUser.setCity(user.getCity());
+        appUser.setCity(user.getCity());
         appUser.setCountry(user.getCountry());
         appUser.setGroupId(user.getGroupid());
         appUser.setHeadImgUrl(user.getHeadimgurl());
@@ -111,7 +118,6 @@ public class AppUserFacade extends BaseFacade {
         appUser.setRemark(user.getRemark());
         appUser.setSubscribe(user.getSubscribe());
         appUser.setSubscrbeTime(user.getSubscribe_time());
-//        merge(appUser);
         AppUser appUser1=saveAppUser(appUser) ;
         return appUser1;
     }
@@ -119,7 +125,7 @@ public class AppUserFacade extends BaseFacade {
     @Transactional
     public AppUser saveAppUser(AppUser appUser) {
          AppUser appUser1=entityManager.merge(appUser);
-        return appUser1;
+         return appUser1;
     }
 
     /***
@@ -130,7 +136,7 @@ public class AppUserFacade extends BaseFacade {
      */
     @Transactional
     public void updateGroup(String openId, String targetId, String currentId) {
-        AppUser appUser = getAppUserByOpenId(openId) ;
+        AppUser appUser = findAppUserByOpenId(openId) ;
         AppUserGroups appUserGroups = getAppuserGroupsByGroupId(targetId) ;
         AppUserGroups currentGroups = getAppuserGroupsByGroupId(currentId) ;
         if(appUser !=null){
@@ -143,19 +149,22 @@ public class AppUserFacade extends BaseFacade {
         }
     }
 
-    /***
-     * 根据微信的OPENID找对应的用户
-     * @param openId
-     * @return
-     */
-    public AppUser getAppUserByOpenId(String openId) {
-        String hql = "from AppUser as user where user.openId = '"+openId+"'" ;
-        List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
-        if(appUsers.size()>0){
-            return appUsers.get(0) ;
-        }
-        return null;
-    }
+//    /***
+//     * 根据微信的OPENID找对应的用户
+//     * @param openId
+//     * @return
+//     */
+//    public AppUser getAppUserByOpenId(String openId) {
+//        if(openId==null || "".equals(openId)){
+//            return null;
+//        }
+//        String hql = "from AppUser as user where user.openId = '"+openId+"'" ;
+//        List<AppUser> appUsers = createQuery(AppUser.class,hql,new ArrayList<Object>()).getResultList() ;
+//        if(appUsers!=null&&appUsers.size()>0){
+//            return appUsers.get(0) ;
+//        }
+//        return null;
+//    }
 
 
 
@@ -165,11 +174,10 @@ public class AppUserFacade extends BaseFacade {
     * 根据openId 查询appUser
      */
     public AppUser findAppUserByOpenId(String openId) {
-       Object obj=entityManager.createQuery("from AppUser where openId='"+openId+"'").getSingleResult();
-        if(obj!=null)
-            return (AppUser)obj;
-
-        return null;
+        List<AppUser>  obj=entityManager.createQuery("from AppUser where openId='"+openId+"'").getResultList();
+        if(obj!=null&&!obj.isEmpty())
+            return obj.get(0);
+            return null;
      }
 
     /**
@@ -178,6 +186,14 @@ public class AppUserFacade extends BaseFacade {
      */
     @Transactional
     public void savePatVsUser(PatVsUser patVsUser) {
+        AppUser appUser=patVsUser.getAppUser();
+        if(appUser==null){
+            throw new IllegalArgumentException("参数非法！appUser 为空！");
+        }
+        PatInfo patInfo=patVsUser.getPatInfo();
+        if(patInfo==null){
+            throw new IllegalArgumentException("参数非法 patInfo 为空！");
+        }
         entityManager.merge(patVsUser);
     }
 
@@ -201,8 +217,10 @@ public class AppUserFacade extends BaseFacade {
      * @return
      */
     public boolean judgeIsFirstBangker(String openId) {
-
-        AppUser     appUser=findAppUserByOpenId(openId);
+        if(openId==null || "".equals(openId)){
+             throw new IllegalArgumentException("openId为空！");
+        }
+        AppUser appUser=findAppUserByOpenId(openId);
         if(appUser.getPatId()==null || "".equals(appUser.getPatId())){//之前还没有绑定过
             return true;
         }else{
@@ -216,13 +234,13 @@ public class AppUserFacade extends BaseFacade {
      */
     @Transactional
     public void deleteByObject(AppUser appUser) {
-        remove(appUser);
+         super.remove(appUser);
     }
 
-    @Transactional
-    public int deletebyOpenId(String openId) {
-        String sql="delete from AppUser where openId='"+openId+"'";
-        int count=entityManager.createQuery(sql).executeUpdate();
-        return count;
-    }
+//    @Transactional
+//    public int deletebyOpenId(String openId) {
+//        String sql="delete from AppUser where openId='"+openId+"'";
+//        int count=entityManager.createQuery(sql).executeUpdate();
+//        return count;
+//    }
 }

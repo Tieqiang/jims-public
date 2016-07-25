@@ -3,6 +3,7 @@ package com.jims.wx.facade;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.AppUser;
+import com.jims.wx.entity.BodyPart;
 import com.jims.wx.entity.PatInfo;
 import com.jims.wx.vo.PatInfoVo;
 
@@ -31,13 +32,10 @@ public class BodyPartFacade extends BaseFacade {
      * @return
      */
     public String findNameById(String bodyPartId) {
-
         String sql = "select b.name from BodyPart as b where  b.id='" + bodyPartId + "'";
-
-        Object bodyPartName = entityManager.createQuery(sql).getSingleResult();
-
-        if (bodyPartName != null && !"".equals(bodyPartName))
-            return (String) bodyPartName;
-        return "";
+        List<String> list = entityManager.createQuery(sql).getResultList();
+        if (list != null && !list.isEmpty())
+            return list.get(0);
+            return "";
     }
 }

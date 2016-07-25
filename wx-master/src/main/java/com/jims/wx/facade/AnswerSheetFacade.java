@@ -29,14 +29,17 @@ public class AnswerSheetFacade extends BaseFacade {
 
     //find by modelId
     public List<AnswerSheet> findByModelId(String modelId) {
-        String sqls = "from AnswerSheet where 1=1";
-        if (null != modelId && !modelId.trim().equals("")) {
-            sqls += " and questionnaireId='" + modelId + "'";
+        if(modelId==null || "".equals(modelId)){
+            return null;
         }
+        String sqls = "from AnswerSheet where questionnaireId='" + modelId + "'";
         return entityManager.createQuery(sqls).getResultList();
     }
 
     public List<AnswerResultVo> findById(String id) {
+        if(id==null || "".equals(id)){
+            return null;
+        }
         List<AnswerResultVo> vos = new ArrayList<AnswerResultVo>();
         List<AnswerResult> list = entityManager.createQuery("from AnswerResult as a where a.answerSheet.id='" + id + "'").getResultList();
         if (list != null && !list.isEmpty()) {

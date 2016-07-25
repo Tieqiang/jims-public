@@ -7,9 +7,11 @@ $(function () {
     /**
      * load datagrid data
      */
-    var loadDict = function () {
-        $.get("/api/doct-info/get-list", function (data) {
-//            var obj=[{description:1,headUrl:1,hospitalId:1,hospitalName:1,id:1,img:1,name:1,title:1}];
+    var loadDict = function (docName) {
+        if(docName=="undefined"){
+            docName="";
+        }
+        $.get("/api/doct-info/get-list?docName="+docName, function (data) {
              $("#t_user").datagrid('loadData', data);
         });
     }
@@ -36,26 +38,24 @@ $(function () {
         striped: true,
         loadMsg: '数据正在加载,请耐心的等待...',
         remoteSort: true,
-//        pa
         columns: [[{
             field: 'id',
             title: '编号',
             hidden:'true'
         }, {
-            field: 'img',
-            title: '医生头像',
-            width: "20%"
-
-        }, {
             field: 'name',
             title: '医生姓名',
-            width: "15%"
+            width: "33%"
 
         }, {
             field: 'title',
             title: '医生头衔',
-            width: "15%"
+            width: "33%"
 
+        }, {
+            field: 'img',
+            title: '医生头像',
+            width: "34%"
         }, {
             field: 'headUrl',
             title: '头像地址',
@@ -67,12 +67,16 @@ $(function () {
         }, {
             field: 'hospitalName',
             title: '所在医院',
-            width:"20%"
+            hidden:true
         }, {
-            field: 'tranDescription3',
+            field: 'tranDescription',
             title: '个人描述',
-            width: "30%"
-        }]]
+            hidden:true
+         }]],
+        onClickRow:function(rowIndex, rowData){
+            $("#descDlg").html(rowData.tranDescription);
+            $("#descDlg").dialog("open").dialog("setTitle","医生描述");
+        }
     });
     /**
      * button of add click
@@ -122,19 +126,20 @@ $(function () {
      *  button of submit click
      */
     $("#submitBtn").on('click', function () {
+        var description;
         if ($("#fm").form('validate')) {
             var doctInfo = {};
             doctInfo.id = $("#docId").val();
             doctInfo.name = $("#name").val();
             doctInfo.title = $("#title").val();
-            doctInfo.hospitalId = getValue();
+//            doctInfo.hospitalId = getValue();
             doctInfo.headUrl =$("#headUrl").val();
             var oEditor = CKEDITOR.instances.description;
-            var description =oEditor.getData();
+            description =oEditor.getData();
         }
 //        alert("headUrl"+$("#headUrl").val());
          if($("#headUrl").attr('value')==""){
-            if(flag="edit"){
+             if(flag="edit"){
                 $.postJSON("/api/doct-info/save?description=" + description, doctInfo, function (data) {
                     $('#dlg').dialog('close');
                     $.messager.alert("系统提示", "操作成功！","info");
@@ -280,5 +285,12 @@ $(function () {
         })
     }
 
+    $("#findBtn").on("click",function(){
+            var docName=$("#docName").textbox("getValue");
+            loadDict(docName);
+    });
+    $("#clearbtn").on("click",function(){
+        $("#docName").textbox("setValue","");
+    })
 });
 

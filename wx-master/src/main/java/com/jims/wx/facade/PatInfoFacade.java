@@ -52,10 +52,10 @@ public class PatInfoFacade extends BaseFacade {
      */
     public PatInfo findById(String patId) {
         String sql = "from PatInfo where id='" + patId + "' and flag='0'";
-        Object result = entityManager.createQuery(sql).getSingleResult();
-        if (result != null && !"".equals(result))
-            return (PatInfo) result;
-        return null;
+        List<PatInfo> result = entityManager.createQuery(sql).getResultList();
+        if (result != null && !result.isEmpty())
+            return result.get(0);
+            return null;
     }
 
     /**
@@ -77,7 +77,6 @@ public class PatInfoFacade extends BaseFacade {
         List<Object[]> resultList = qu.getResultList();
         if (resultList != null && !resultList.isEmpty()) {
             for (Object[] objects : resultList) {
-                objects = objects;
                 PatInfoVo patInfoVo = new PatInfoVo();
                 patInfoVo.setId(objects[0] == null ? null : objects[0].toString());
                 patInfoVo.setCellphone(objects[1] == null ? null : objects[1].toString());
@@ -86,7 +85,6 @@ public class PatInfoFacade extends BaseFacade {
                 patInfos.add(patInfoVo);
             }
         }
-
         return patInfos;
     }
 

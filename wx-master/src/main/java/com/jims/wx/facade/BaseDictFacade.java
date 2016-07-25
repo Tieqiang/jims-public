@@ -55,15 +55,11 @@ public class BaseDictFacade extends BaseFacade {
             dict.setInputCode(PinYin2Abbreviation.cn2py(dict.getBaseName()));
             this.merge(dict) ;
         }
-
         for(BaseDict dict:updated){
             dict.setInputCode(PinYin2Abbreviation.cn2py(dict.getBaseName()));
             this.merge(dict) ;
-
         }
-
         List<String> ids = new ArrayList<>() ;
-
         for(BaseDict dict:deleted){
             ids.add(dict.getId()) ;
         }
