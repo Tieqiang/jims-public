@@ -10,8 +10,7 @@ $(document).ready(function(){
 
 
 function symptomList(id){
-//    alert(id);
-	var sex = $('#sex').val();
+ 	var sex = $('#sex').val();
 	var age = $('#age').val();
 	$('[id^=symptomList_]').removeClass('changezndzzz');
 	$('#symptomList_'+id).addClass('changezndzzz');

@@ -749,6 +749,7 @@ public class ClinicForRegistService {
             if(deptDict==null){
                 throw new IllegalArgumentException("deptDict 为空！");
             }
+
         }
         for (DoctInfo doctInfo : doctInfos) {
             for (ClinicIndex clinicIndex : list) {

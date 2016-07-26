@@ -222,6 +222,7 @@ public class AppUserFacade extends BaseFacade {
         }
         AppUser appUser=findAppUserByOpenId(openId);
         if(appUser.getPatId()==null || "".equals(appUser.getPatId())){//之前还没有绑定过
+
             return true;
         }else{
             return false;

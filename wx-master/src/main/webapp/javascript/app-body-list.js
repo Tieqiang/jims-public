@@ -11,13 +11,11 @@ function getUrlParameter(name){
     }
 }
 var sexValue=getUrlParameter("sexValue");
-
 var openId=getUrlParameter("openId");
 var app = angular.module("myApp", []);
 app.controller('tableCtrl',function ($scope, $http) {
     $scope.findSysptomInfo=function (bodyId){
-//        alert(sexValue);
-        window.location.href="/api/wx-service/query-symptom?bodyId="+bodyId+"&openId="+openId+"&sexValue="+sexValue;
+         window.location.href="/api/wx-service/query-symptom?bodyId="+bodyId+"&openId="+openId+"&sexValue="+sexValue;
     };
     $http.get("/api/intelligent-guide/body-list")
         .success(function (data) {

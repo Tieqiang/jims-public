@@ -141,4 +141,25 @@ public class PatInfoFacade extends BaseFacade {
             return list.get(0);
         return null;
     }
+
+
+    /**
+     *
+     * @param openId
+     * @return
+     */
+    public boolean judgeIsFirstBangker(String openId) {
+        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+        String patId=appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            return true;
+        }else{
+            PatInfo patInfo=findById(patId);
+            if(patInfo==null){
+                return true;
+            }else{
+                return false;
+            }
+        }
+     }
 }

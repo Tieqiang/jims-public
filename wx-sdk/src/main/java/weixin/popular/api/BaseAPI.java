@@ -19,7 +19,8 @@ public abstract class BaseAPI {
 
     protected static final String PARAM_ACCESS_TOKEN = "access_token";
 	protected static final String PARAM_AUTHORIZER_ACCESS_TOKEN = "authorizer_access_token";
-	
+
+
 	/**
 	 * 获取 access token param name 名称
 	 * 

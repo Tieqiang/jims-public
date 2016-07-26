@@ -116,6 +116,7 @@ public class PatInfoService {
                 Boolean isBangker = this.patVsUserFacade.findIsBangker(idCard, openId);
                 if (isBangker) {
                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
+                    return;
                 } else {
                     /**
                      * 查询之前是否有绑定 但是已经被删掉
@@ -145,7 +146,7 @@ public class PatInfoService {
                          * 如果是第一次绑定的话，那么将此patId 放入appUser表中
                          * 否则就不放
                          */
-                        boolean isFirstBangker = appUserFacade.judgeIsFirstBangker(openId);
+                        boolean isFirstBangker = patInfoFacade.judgeIsFirstBangker(openId);
                         if (isFirstBangker) {//
                             //将patId放入appUser
                             AppUser appUser1 = appUserFacade.findAppUserByOpenId(openId);
@@ -157,7 +158,8 @@ public class PatInfoService {
                 }
                 //为查看详情做准备
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patInfo.getId()+"&openId="+openId);
-            }
+                return;
+             }
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -279,6 +281,9 @@ public class PatInfoService {
                 throw new IllegalArgumentException("patId为空！");
             }
             PatInfo patInfo = patInfoFacade.findById(patId);
+            if(patInfo==null){
+                 throw new IllegalArgumentException("patInfo 为空！");
+            }
             patInfoFacade.deleteByObject(patInfo);
             return patInfo;
         } catch (Exception e) {

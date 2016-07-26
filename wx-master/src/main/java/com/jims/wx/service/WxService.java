@@ -3,6 +3,7 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.AppUser;
 
+import com.jims.wx.entity.PatInfo;
 import com.jims.wx.facade.*;
 import com.jims.wx.util.WeiXinPayUtils;
 import com.jims.wx.vo.AppSetVo;
@@ -205,26 +206,56 @@ public class WxService {
     @GET
     @Path("questionnaire-survey")
     public String test(@QueryParam("code") String code) throws IOException {
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        SnsToken  snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
         if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
             throw new IllegalArgumentException("系统饭繁忙,请重试！snsToken.getOpenId()="+null);
         }
         AppUser appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
-        String patId = "";
-        if (appUser!=null) {
-            patId = appUser.getPatId();
+        if(appUser==null){
+            throw new IllegalArgumentException("appUser 为空！");
         }
-        response.sendRedirect("/views/his/public/questionnaire-survey.html?openId=" + snsToken.getOpenid() + "&patId=" + patId);
-        return "http://www.baidu.com/";
+        String patId = appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid() + "&patId=" + patId);
+            return "";
+        }
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        if(patInfo==null){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid() + "&patId=" + patId);
+            return "";
+        }
+        if(patInfo!=null){
+            response.sendRedirect("/views/his/public/questionnaire-survey.html?openId=" + snsToken.getOpenid() + "&patId=" + patId);
+            return "http://www.baidu.com/";
+        }
+        return "";
     }
 
     @GET
     @Path("pat-visit")
     public String inp(@QueryParam("code") String code) throws IOException {
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid());
+        SnsToken   snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+        if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+            throw new IllegalArgumentException("系统饭繁忙,请重试！snsToken.getOpenId()="+null);
+        }
+        AppUser appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
+        if(appUser==null){
+            throw new IllegalArgumentException("appUser 为空！");
+        }
+        String patId = appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid() + "&patId=" + patId);
+            return "";
+        }
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        if(patInfo==null){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid() + "&patId=" + patId);
+            return "";
+        }
+        if(patInfo!=null){
+            response.sendRedirect("/views/his/public/Pat-Visit.html?openId=" + snsToken.getOpenid());
+            return "";
+        }
         return "http://www.baidu.com/";
     }
 
@@ -232,8 +263,8 @@ public class WxService {
     @Path("user-bangker")
     public String userBangker(@QueryParam("code") String code) {
          //测试用
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
         try {
             if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
                 throw new IllegalArgumentException("系统繁忙，snsToken.getOpenid()="+snsToken.getOpenid());
@@ -257,9 +288,8 @@ public class WxService {
             String openIdStr = "";
             SnsToken snsToken = null;
             if (openId == null || openId == "") {
-                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-                openIdStr = snsToken.getOpenid();
+                 snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+                 openIdStr = snsToken.getOpenid();
             } else {
                 openIdStr = openId;
             }
@@ -310,9 +340,8 @@ public class WxService {
     @GET
     @Path("rcpt-list")
     public String rcpt(@QueryParam("code") String code) throws IOException {
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
-        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+         AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
         String patId = "";
         if (appUser!=null) {
             patId = appUser.getPatId();
@@ -340,12 +369,29 @@ public class WxService {
     @GET
     @Path("find-pat-info")
     public String findPatInfo(@QueryParam("code") String code) throws IOException {
-        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+//        AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+//        SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+
         if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
             throw new IllegalArgumentException("系统繁忙，请稍后，openId="+null);
         }
-        response.sendRedirect("/views/his/public/app-my-information.html?openId=" + snsToken.getOpenid());
+        String openId=snsToken.getOpenid();
+        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+        if(appUser==null){
+            throw new IllegalArgumentException("appUser 为空！");
+        }
+        String patId=appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+        }
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        if(patInfo==null){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + openId);
+        }
+        if(patInfo!=null){
+            response.sendRedirect("/views/his/public/app-my-information.html?openId=" + snsToken.getOpenid());
+        }
         return "";
     }
 
@@ -397,7 +443,7 @@ public class WxService {
     @GET
     @Path("find-by-id")
     public String findById(@QueryParam("patId") String patId, @QueryParam("openId") String openId, @QueryParam("mid") String mid) throws IOException {
-        if(patId==null || "".equals(patId) || openId==null || "".equals(openId) || mid==null || "".equals(mid)){
+        if(patId==null || "".equals(patId) || openId==null || "".equals(openId)){
             throw new IllegalArgumentException("参数非法,patId="+patId+"&openId="+openId+"&mid="+mid);
         }
         response.sendRedirect("/views/his/public/app-pat-info.html?patId=" + patId + "&openId=" + openId + "&mid=" + mid);
@@ -496,10 +542,10 @@ public class WxService {
     @Path("find-body")
     public String findBody(@QueryParam("code") String code) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-            //测试用
-            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+//            //测试用
+//            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+//            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
 //            System.out.println("snsToken.getOpenid()=" + snsToken.getOpenid());
             if(snsToken==null){
                 throw new IllegalArgumentException("snsToken非法 ，snsToken 为空！");
@@ -527,7 +573,7 @@ public class WxService {
             SnsToken snsToken = null;
             String openIdStr = "";
             if (openId == null || "".equals(openId)) {
-                AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+//                  AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
 //                snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
                 snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
                 openIdStr = snsToken.getOpenid();
@@ -575,10 +621,10 @@ public class WxService {
     @Path("feed-back")
     public String feedBack(@QueryParam("code") String code) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-            //测试用
-            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+//            //测试用
+//            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+//            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
             if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
                 throw new IllegalArgumentException("系统繁忙,snsToken.getOpenId()="+snsToken.getOpenid());
             }
@@ -624,7 +670,7 @@ public class WxService {
     @Path("body-list")
     public String bodyList(@QueryParam("sexValue") String sexValue,@QueryParam("openId") String openId) {
         try {
-           response.sendRedirect("/views/his/public/app-body-list.html?sexValue="+sexValue);
+           response.sendRedirect("/views/his/public/app-body-list.html?sexValue="+sexValue+"&openId="+openId);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -635,9 +681,9 @@ public class WxService {
     @Path("my-master")
     public String myMaster(@QueryParam("code") String code) {
         try {
-            // SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
-            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
+            SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+//            AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
+//            SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
             if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
                 throw new IllegalArgumentException("系统繁忙,snsToken.getOpenId()="+snsToken.getOpenid());
             }

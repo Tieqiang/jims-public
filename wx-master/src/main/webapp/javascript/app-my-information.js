@@ -41,15 +41,13 @@ app.controller('tableCtrl', function ($scope, $http) {
         if(obj==null || obj==""){
             obj=$("#id").val();
         }
-         window.location.href="/api/wx-service/find-by-id?patId="+obj+"&openId="+openId+"&mid="+$("#id").val();
+        window.location.href="/api/wx-service/find-by-id?patId="+obj+"&openId="+openId+"&mid="+nameId;
     }
     $scope.userBangker = function () {
         $http.get("/api/pat-info/find-all?openId=" + openId)
             .success(function (data) {
-//                console.log(data);
-                if (data.length < 3) {
-//                    alert(openId);
-                    window.location.href = "/api/wx-service/query-open?openId=" + openId;
+                 if (data.length < 3) {
+                     window.location.href = "/api/wx-service/query-open?openId=" + openId;
                 } else{
                     $("#alert").attr("style", "display:block;");
                     $('#no2').click(function () {
@@ -77,9 +75,7 @@ app.controller('tableCtrl', function ($scope, $http) {
         .success(function (data) {
             $http.post("/api/pat-info/find-info-by-open-id?openId=" + openId)
                 .success(function (node) {
-                    nameId = node.id;
-//                    console.log(node);
-//                    alert(nameId);
+                    nameId = node.id;//默认用户的id
                     for (var i = 0; i < data.length; i++) {
                         if (data[i].id != node.id) {
                             var nameAll = {};
@@ -88,12 +84,9 @@ app.controller('tableCtrl', function ($scope, $http) {
                             nameAll.cellphone = data[i].cellphone;
                             nameAll.sex = data[i].sex;
                             nameAll.idCard = data[i].idCard;
-//                            console.log(nameAll);
                             nameList.push(nameAll);
                         }
                     }
-//                    console.log(nameList);
-//                    console.log(data);
                     $scope.name = nameList;
                 })
 

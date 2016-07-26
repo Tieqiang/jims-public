@@ -71,8 +71,14 @@ public class PatVsUserFacade extends BaseFacade {
      */
     public boolean findIsExistsPatInfo(String openid) {
         AppUser appUser= appUserFacade.findAppUserByOpenId(openid);
+        if(appUser==null){
+            throw new IllegalArgumentException("appuser 为空！");
+        }
         if(appUser!=null){
             String patId=appUser.getPatId();
+            if(patId==null || "".equals(patId)){
+                return false;
+            }
             PatInfo patInfo=patInfoFacade.findById(patId);
             if(patInfo!=null&&!"".equals(patInfo)){
                 return true;
@@ -96,7 +102,7 @@ public class PatVsUserFacade extends BaseFacade {
         if(appUsers!=null){
             appUserId=appUsers.getId();
         }
-        List<PatInfo> list=findPatInfosByAppUserId(openId);
+        List<PatInfo> list=findPatInfosByAppUserId(appUserId);
         if(!list.isEmpty()){//绑定了患者
             String var="";
             for(PatInfo patInfo:list){
@@ -125,8 +131,7 @@ public class PatVsUserFacade extends BaseFacade {
         String sql="select p.patInfo from PatVsUser as p where p.appUser.id='"+appUserId+"' and p.patInfo.flag='0'";
         return entityManager.createQuery(sql).getResultList();
     }
-
-    /**
+     /**
      * 根据appUser的Id 删除
      * @param id
      */
