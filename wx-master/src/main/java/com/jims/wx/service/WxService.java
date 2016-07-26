@@ -46,10 +46,10 @@ public class WxService {
     private PatVsUserFacade patVsUserFacade;
     private HospitalInfoFacade hospitalInfoFacade;
     private PatInfoFacade patInfoFacade;
-    private static final String MCH_ID = "1318000301";//微信支付商号
-    private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
-    private static final String APP_ID = "wx1b3cf470d135a830";//商户的APP_ID
-    private static final String APP_SERECT = "df933603351f378c54883853e05dd228";
+//    private static final String MCH_ID = "1318000301";//微信支付商号
+//    private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
+    private static final String APP_ID = "wx43a128a6adebadd4";//商户的APP_ID
+    private static final String APP_SERECT = "244d08ecbed17c3fff2a52862f261b03";
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
 
@@ -340,15 +340,33 @@ public class WxService {
     @GET
     @Path("rcpt-list")
     public String rcpt(@QueryParam("code") String code) throws IOException {
-        SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
-         AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
-        String patId = "";
-        if (appUser!=null) {
-            patId = appUser.getPatId();
+         SnsToken snsToken = SnsAPI.oauth2AccessToken(APP_ID, APP_SERECT, code);
+        if(snsToken==null){
+            throw new IllegalArgumentException("系统繁忙，请稍后重试！");
         }
-        response.sendRedirect("/views/his/public/rcpt-master.html?openId=" + snsToken.getOpenid());
-        return "http://www.baidu.com/";
-    }
+        if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
+            throw new IllegalArgumentException("openId 为空 snsToken.getOpenId="+null);
+        }
+        AppUser  appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
+        if(appUser==null){
+            throw new IllegalArgumentException("appUser 为空");
+        }
+        String patId = appUser.getPatId();
+        if(patId==null || "".equals(patId)){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
+            return "";
+        }
+        PatInfo patInfo=patInfoFacade.findById(patId);
+        if(patInfo==null){
+            response.sendRedirect("/views/his/public/app-user-bangker.html?param=" + snsToken.getOpenid());
+            return "";
+        }
+        if(patInfo!=null){
+            response.sendRedirect("/views/his/public/rcpt-master.html?openId=" + snsToken.getOpenid());
+            return "http://www.baidu.com/";
+        }
+        return "";
+     }
 //    @POST
 //    @Path("pay-jsp")
 //    public String payJs2() {
