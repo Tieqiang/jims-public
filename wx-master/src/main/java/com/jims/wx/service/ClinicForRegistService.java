@@ -47,9 +47,11 @@ public class ClinicForRegistService {
     private TakeRegistSeqFacade takeRegistSeqFacade;
     private SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMdd");
     private UserCollectionFacade userCollectionFacade;
+    private PatMasterIndexFacade patMasterIndexFacade;
+    private ClinicMasterHisFacade clinicMasterHisFacade;
 
     @Inject
-    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response, PatInfoFacade patInfoFacade, ClinicScheduleFacade clinicScheduleFacade, HttpServletRequest request, TakeRegistSeqFacade takeRegistSeqFacade, UserCollectionFacade userCollectionFacade) {
+    public ClinicForRegistService(ClinicForRegistFacade clinicForRegistFacade, ClinicIndexFacade clinicIndexFacade, ClinicTypeChargeFacade clinicTypeChargeFacade, ClinicTypeSettingFacade clinicTypeSettingFacade, DeptDictFacade deptDictFacade, DoctInfoFacade doctInfoFacade, ClinicMasterFacade clinicMasterFacade, PatVsUserFacade patVsUserFacade, AppUserFacade appUserFacade, HttpServletResponse response, PatInfoFacade patInfoFacade, ClinicScheduleFacade clinicScheduleFacade, HttpServletRequest request, TakeRegistSeqFacade takeRegistSeqFacade, UserCollectionFacade userCollectionFacade,PatMasterIndexFacade patMasterIndexFacade,ClinicMasterHisFacade clinicMasterHisFacade) {
         this.clinicForRegistFacade = clinicForRegistFacade;
         this.clinicIndexFacade = clinicIndexFacade;
         this.clinicTypeChargeFacade = clinicTypeChargeFacade;
@@ -65,6 +67,8 @@ public class ClinicForRegistService {
         this.request = request;
         this.takeRegistSeqFacade = takeRegistSeqFacade;
         this.userCollectionFacade = userCollectionFacade;
+        this.patMasterIndexFacade=patMasterIndexFacade;
+        this.clinicMasterHisFacade=clinicMasterHisFacade;
     }
 
 
@@ -102,28 +106,13 @@ public class ClinicForRegistService {
                     throw new IllegalArgumentException("非法的patId=" + patId);
                 }
                 //            String idCard2 = patInfoFacade.findIdCard(patId);
-                String patientId = patInfo.getPatientId();
-                String registTime = clinicForRegist.getRegistTime();//就诊日期
-                if (patientId != null && !"".equals(patientId)) {
-                    clinicMaster.setPatientId(patientId);
-                } else {
-                    Integer sortMath = 1000;
-                    TakeRegistSeq a = null;
-                    TakeRegistSeq record = takeRegistSeqFacade.findByDate(registTime);
-                    if (record != null && !"".equals(record)) {
-                        sortMath = Integer.parseInt(record.getMath());
-                        sortMath++;
-                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath + 1));
-                        record.setMath(String.valueOf(sortMath));
-                        takeRegistSeqFacade.save(record);
-                    } else {//今天是第一位取号的人员  1000放入数据库
-                        a = takeRegistSeqFacade.save(new TakeRegistSeq("1000", registTime));
-                        clinicMaster.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(1000));
-                    }
-
-                    patInfo.setPatientId(sdf2.format(sdf2.parse(registTime)) + String.valueOf(sortMath + 1));
-                    patInfoFacade.save(patInfo);
+                String patientId =null;
+                patientId=this.patMasterIndexFacade.checkIdCard2(patInfo.getIdCard());
+                if(patientId==null || "".equals(patientId)){
+                    throw new IllegalArgumentException("根据一卡通卡号没有找到patientId" + patInfo.getIdCard());
                 }
+                String registTime = clinicForRegist.getRegistTime();//就诊日期
+                clinicMaster.setPatientId(patientId);
                 clinicMaster.setRegistFee(0.0);//设为0
                 clinicMaster.setClinicFee(0.0);///设为0
                 clinicMaster.setOtherFee(Double.valueOf(price));//和
@@ -131,12 +120,45 @@ public class ClinicForRegistService {
                 clinicMaster.setTakeStatus("0");//未取号
                 clinicMaster.setRegistDate(new Date());
                 clinicMaster.setVisitDate(sdf.parse(registTime));
-//                clinicMaster.setVisitDate(sdf.parse(clinicForRegist.getRegistTime()));
-                 /*
+                  /*
                  * 跟新号表的数据
                  * */
                 ClinicMaster c = clinicMasterFacade.saveRecord(clinicMaster);
-                //            ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
+                //
+                ClinicMasterHis clinicMasterHis=new ClinicMasterHis();
+                clinicMasterHis.setPatientId(patientId);
+                clinicMasterHis.setCardName("一卡通");
+                clinicMasterHis.setCardNo(patInfo.getIdCard());
+                clinicMasterHis.setVisitDate(sdf.parse(registTime));
+                clinicMasterHis.setRegistFee(0.0);//设为0
+                clinicMasterHis.setClinicFee(0.0);///设为0
+                clinicMasterHis.setOtherFee(Double.valueOf(price));//和
+                clinicMasterHis.setClinicCharge(Double.valueOf(price));
+                clinicMasterHis.setRegisteringDate(new Date());
+                clinicMasterHis.setClinicLabel(clinicForRegist.getClinicIndex().getClinicLabel());
+                clinicMasterHis.setVisitTimeDesc(clinicForRegist.getTimeDesc());
+                clinicMasterHis.setVisitNo(null);
+                clinicMasterHis.setSerialNo(null);
+                clinicMasterHis.setName(patInfo.getName());
+                clinicMasterHis.setSex(patInfo.getSex());
+                clinicMasterHis.setAge(null);
+                clinicMasterHis.setIdentity("一般人员");
+                clinicMasterHis.setChargeType("自费");
+                clinicMasterHis.setVisitDept(clinicForRegist.getClinicIndex().getClinicDept());
+               //todo 0000GL
+                DoctInfo doctInfo=doctInfoFacade.findById(clinicForRegist.getClinicIndex().getDoctorId());
+                String userName=doctInfoFacade.findHisUserName(doctInfo.getName());
+                clinicMasterHis.setDoctor(userName);
+                clinicMasterHis.setRegistrationStatus(2);
+                clinicMasterHis.setOperator("微信挂号");
+                clinicMasterHis.setModeCode("A");
+                clinicMasterHis.setPayWay("微信支付");
+                //todo clinicNo
+                clinicMasterHis.setClinicNo(null);
+                clinicMasterHis.setDateOfBirth(patInfo.getBirthday());
+                clinicMasterHis.setMrProvidedIndicator(0);
+                this.clinicMasterHisFacade.saveRecord(clinicMasterHis);
+                 //            ClinicForRegist clinicForRegist = clinicForRegistFacade.findById(clinicForRegistId);
                 //当日已经挂号数+1
                 clinicForRegist.setRegistrationNum(clinicForRegist.getRegistrationNum() + 1);
                 //当前号+1
@@ -276,19 +298,16 @@ public class ClinicForRegistService {
         return list;
     }
 
-//    /**
-//     * 号表查询
-//     *
-//     * @param clinicIndexName
-//     * @param date
-//     * @return
-//     */
-//    @GET
-//    @Path("list-all")
-//    public List<ClinicForRegist> listAll(@QueryParam("likeName") String clinicIndexName, @QueryParam("likeDate") String date) {
-//        List<ClinicForRegist> list = this.clinicForRegistFacade.findAll(ClinicForRegist.class, clinicIndexName, date);
-//        return list;
-//    }
+    /**
+     *
+     * @return
+     */
+    @GET
+    @Path("list-all")
+    public List<ClinicForRegist> listAll() {
+        List<ClinicForRegist> list = this.clinicForRegistFacade.findAll2();
+        return list;
+    }
 
     /**
      * 查询号别信息

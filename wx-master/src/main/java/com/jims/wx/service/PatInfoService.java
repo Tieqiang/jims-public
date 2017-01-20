@@ -109,7 +109,12 @@ public class PatInfoService {
                      response.sendRedirect("/views/his/public/user-bangker-failed.html");
                      throw new IllegalArgumentException("appUser为空，请重试！");
                  }
-                 patientId = patMasterIndexFacade.checkIdCard(idCard);
+                 //通过一卡通卡号查询病人Id
+                 patientId = patMasterIndexFacade.checkIdCard2(idCard);
+                 if(patientId==null || "".equals(patientId)){
+                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
+                     throw new IllegalArgumentException("一卡通号无效，请重试！");
+                 }
                  /**
                  * 查询之前是否绑定次idCard
                  */
@@ -130,6 +135,7 @@ public class PatInfoService {
                     patInfo.setCellphone(cellphone);
                     patInfo.setIdCard(idCard);
                     patInfo.setName(name);
+                    patInfo.setPatientId(patientId);
                     patInfo = patInfoFacade.save(patInfo);
                     if (StringUtils.isNotBlank(openId)) {
                         if(p!=null&&!"".equals(p)){// flag=1
@@ -142,7 +148,8 @@ public class PatInfoService {
                         }
                          /**
                          * 查询用户是否是第一次绑定
-                         * 如果是第一次绑定的话，那么将此patId 放入appUser表中
+                         * 如果是第一次绑定的话，那么将此
+                          * patId 放入appUser表中
                          * 否则就不放
                          */
                         boolean isFirstBangker = appUserFacade.judgeIsFirstBangker(openId);

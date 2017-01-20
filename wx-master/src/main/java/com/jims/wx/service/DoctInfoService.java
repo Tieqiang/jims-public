@@ -66,8 +66,10 @@ public class DoctInfoService {
     @GET
     @Path("get-list")
     public List<DoctInfo> getList(@QueryParam("docName") String docName) {
-        if(docName.equals("undefined")){
-            docName="";
+        if(docName!=null&&!"".equals(docName)){
+            if(docName.equals("undefined")){
+                docName="";
+            }
         }
         String addr = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
         List<DoctInfo> deptDicts = new ArrayList<DoctInfo>();

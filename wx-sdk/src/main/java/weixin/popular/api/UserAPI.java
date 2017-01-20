@@ -21,10 +21,11 @@ public class UserAPI extends BaseAPI{
 	 * 获取用户基本信息
 	 * @param access_token
 	 * @param openid
+     * @desc update by chenxy 2017-01-12
 	 * @return
 	 */
 	public static User userInfo(String access_token,String openid){
-		HttpUriRequest httpUriRequest = RequestBuilder.post()
+		HttpUriRequest httpUriRequest = RequestBuilder.get()
 				.setUri(BASE_URI+"/cgi-bin/user/info")
 				.addParameter(getATPN(),access_token)
 				.addParameter("openid",openid)

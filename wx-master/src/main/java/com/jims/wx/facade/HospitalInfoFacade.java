@@ -91,10 +91,10 @@ public class HospitalInfoFacade extends BaseFacade {
             setVo.setHospitalId(hospitalInfos.get(0).getHospitalId());
             setVo.setTranContent(hospitalInfos.get(0).getTranContent());
             //医院名字
-            HospitalDict hospitalDict=hospitalDictFacade.findHospitalDictById(hospitalInfos.get(0).getHospitalId());
-            if(hospitalDict!=null&&!"".equals(hospitalDict)){
-                setVo.setHospitalName(hospitalDict.getHospitalName());
-            }
+//            HospitalDict hospitalDict=hospitalDictFacade.findHospitalDictById(hospitalInfos.get(0).getHospitalId());
+//            if(hospitalDict!=null&&!"".equals(hospitalDict)){
+                setVo.setHospitalName("滦平妇幼");
+//            }
          }
         return setVo;
 

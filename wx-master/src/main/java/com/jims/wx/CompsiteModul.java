@@ -18,6 +18,7 @@ public class CompsiteModul extends JerseyServletModule {
     @Override
     protected void configureServlets() {
 
+
         bind(GuiceContainer.class) ;
         bind(CorsFilter.class).in(Singleton.class);
         filter("/api/*").through(CorsFilter.class);

@@ -13,6 +13,7 @@ import com.jims.wx.vo.DayOfWeek;
 import com.jims.wx.vo.TimeOfDay;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -600,5 +601,12 @@ public class ClinicForRegistFacade extends BaseFacade {
         if (!clinicForRegists.isEmpty())
             return clinicForRegists;
         return null;
+    }
+
+    public List<ClinicForRegist> findAll2() {
+        String sql = "from ClinicForRegist";
+        TypedQuery query = entityManager.createQuery(sql, ClinicForRegist.class);
+        List<ClinicForRegist> list = query.getResultList();
+        return list;
     }
 }

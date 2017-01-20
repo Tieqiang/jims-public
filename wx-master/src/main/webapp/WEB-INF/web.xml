@@ -6,7 +6,7 @@
          version="2.5">
 
     <welcome-file-list>
-        <welcome-file>login.html</welcome-file>
+        <welcome-file>/login.html</welcome-file>
     </welcome-file-list>
     <servlet>
         <servlet-name>imgUploadServlet</servlet-name>
@@ -80,11 +80,11 @@
     </listener>
     <context-param>
         <param-name>APP_ID</param-name>
-        <param-value>wx43a128a6adebadd4</param-value>
+        <param-value>wxef5d38d8d6af065e</param-value>
     </context-param>
     <context-param>
         <param-name>APP_SERECT</param-name>
-        <param-value>244d08ecbed17c3fff2a52862f261b03</param-value>
+        <param-value>ace48490b06a1415a03a98c73b6252f5</param-value>
     </context-param>
     <context-param>
         <param-name>MCH_ID</param-name>

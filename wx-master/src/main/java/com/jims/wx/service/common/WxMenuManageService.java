@@ -32,7 +32,7 @@ public class WxMenuManageService {
     @GET
     @Path("getMenu")
     public Menu getMenu(){
-        return MenuAPI.menuGet(TokenManager.getDefaultToken());
+        return MenuAPI.menuGet(TokenManager.getToken("wxf9532549ca01fa1f"));
     }
 
     @GET

@@ -4,10 +4,11 @@
     <META content="IE=11.0000" http-equiv="X-UA-Compatible">
     <META http-equiv="Content-Type" content="text/html; charset=utf-8">
     <META name="GENERATOR" content="MSHTML 11.00.9600.17496">
-    <TITLE>登录页面</TITLE>
     <SCRIPT src="assert/easyui/jquery.min.js" type="text/javascript"></SCRIPT>
     <SCRIPT src="assert/easyui/jquery.easyui.min.js" type="text/javascript"></SCRIPT>
     <link href="/style/login.css" type="text/css" rel="stylesheet"/>
+    <TITLE>登录页面</TITLE>
+
     <SCRIPT type="text/javascript">
         $(function () {
             var MANY_ZEROS = "000000000000000000";
@@ -42,7 +43,8 @@
                     top: "-38px"
                 }, {
                     step: function () {
-                        if (parseInt($("#right_hand").css("right")) > -70) {
+                        if (parseInt($("#right_hand").css("right")
+                        ) > -70) {
                             $("#right_hand").attr("class", "right_hand");
                         }
                     }
@@ -89,6 +91,7 @@
             }) ;
 
         });
+
     </SCRIPT>
 
 
@@ -102,7 +105,7 @@
         <DIV class="initial_right_hand" id="right_hand"></DIV>
     </DIV>
     <p class="tile-p">
-    <h1><img src="/assert/images/logo.png" width="85" height="32" style="vertical-align:bottom;"/>&nbsp;医院信息管理系统</h1>
+    <h1><img src="/assert/images/logo.png" width="85" height="32" style="vertical-align:bottom;"/>&nbsp;微信公众号平台系统</h1>
     </p>
     <P class="tile-p">
         <SPAN class="u_logo"></SPAN> <INPUT id="userName" class="ipt" type="text" placeholder="请输入用户名" value="">
@@ -124,5 +127,6 @@
     <div style="color:#aaa; ">© 2013 北京极目云软件有限公司&nbsp;&nbsp;网站备案：京ICP备13045463号</div>
 </DIV>
 </BODY>
+
 </HTML>
 

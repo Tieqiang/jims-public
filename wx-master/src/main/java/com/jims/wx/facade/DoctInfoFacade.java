@@ -68,4 +68,20 @@ public class DoctInfoFacade extends BaseFacade {
         }
         return (DoctInfo) entityManager.createQuery("from DoctInfo where id='" + doctId + "'").getSingleResult();
     }
- }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
+    public String findHisUserName(String name) {
+        String sql = "select USER_NAME  from COMM.staff_dict where name='" + name + "'";
+        List<Object> USER_NAME = entityManager.createNativeQuery(sql).getResultList();
+        if (USER_NAME != null && !USER_NAME.isEmpty()) {
+            return USER_NAME.get(0).toString();
+        } else {
+            return "";
+        }
+
+    }
+}

@@ -255,11 +255,11 @@ $(function () {
     $("#uploadBtn").on('click',function(){
         var fileToUpload=document.getElementById("fileToUpload");
         var suffer=fileToUpload.value.substring(fileToUpload.value.indexOf(".")+1);
-        if(suffer!="jpg"&&suffer!="png"&&suffer!="gif"&&suffer!="jpeg"&&suffer!="bmp"&&suffer!="swf"){
-            $.messager.alert("系统提示", "请选择正确格式的图片","error");
-        }else{
+//        if(suffer!="JPG"&&suffer!="jpg"&&suffer!="png"&&suffer!="gif"&&suffer!="jpeg"&&suffer!="bmp"&&suffer!="swf"){
+//            $.messager.alert("系统提示", "请选择正确格式的图片","error");
+//        }else{
             ajaxUpload();
-        }
+//        }
     });
     /**
      * ajax 上传

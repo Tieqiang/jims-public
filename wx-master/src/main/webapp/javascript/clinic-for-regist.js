@@ -330,9 +330,7 @@ var initDate1 = function () {
 }
 var loadRegistData = function () {
     var clinicIndexName = $("#clinicIndexName").val();
-//    var date=$("#dt").datebox("getValue");
-//    alert(date);
-    $.get("/api/clinic-for-regist/list-all?likeName=" + clinicIndexName, function (data) {
+    $.get("/api/clinic-for-regist/list-all", function (data) {
         $("#regist").datagrid('loadData', data);
     });
 }

@@ -16,6 +16,7 @@
     }
     var openId=getUrlParameter("openId");
     function symptomList2(id){
+        alert(openId)
         var sexValue = $('#changeSex').attr('v');// 1 女性 0 男性
         window.location.href="/api/wx-service/query-symptom?bodyId="+id+"&openId="+openId+"&sexValue="+sexValue;
     }

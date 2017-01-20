@@ -38,7 +38,7 @@ values ('4028864653d097e40153d0a9ece00008', '下午', '下午', 'xw', 'TIME_FLAG
 insert into BASE_DICT (id, base_code, base_name, input_code, base_type)
 values ('4028864653d097e40153d0a9ece50009', '全天', '全天', 'qt', 'TIME_FLAG');
 insert into BASE_DICT (id, base_code, base_name, input_code, base_type)
-values ('4028864653d097e40153d0a9ece9000a', '夜间', '页面', 'ym', 'TIME_FLAG');
+values ('4028864653d097e40153d0a9ece9000a', '夜间', '夜间', 'yj', 'TIME_FLAG');
 insert into BASE_DICT (id, base_code, base_name, input_code, base_type)
 values ('4028864653d097e40153d0a9ec5b0000', '星期一', '星期一', 'xqy', 'DAY_FLAG');
 insert into BASE_DICT (id, base_code, base_name, input_code, base_type)

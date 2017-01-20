@@ -167,7 +167,7 @@ public class DeptDictFacade extends BaseFacade {
      * @return
      */
     public List<DeptDict> findAllByCondition() {
-        String sql = "from DeptDict where parentId is null";
+        String sql = "from DeptDict";
         return entityManager.createQuery(sql).getResultList();
     }
 }

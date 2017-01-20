@@ -35,7 +35,20 @@ public class PatMasterIndexFacade extends BaseFacade {
             return "";
         }
     }
+    /**
+     * @param idCard
+     * @return
+     */
+    public String checkIdCard2(String idCard) {
+        String sql = "select patient_id  from MEDREC.MEDICAL_CARD_MEMO where CARD_NO='" + idCard + "'";
 
+        List<Object> patientId = entityManager.createNativeQuery(sql).getResultList();
+        if (patientId != null && !patientId.isEmpty()) {
+            return patientId.get(0).toString();
+        } else {
+            return "";
+        }
+    }
     /**
      * save data
      *

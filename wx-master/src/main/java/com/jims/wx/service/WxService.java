@@ -47,8 +47,8 @@ public class WxService {
     private PatInfoFacade patInfoFacade;
     private static final String MCH_ID = "1318000301";//微信支付商号
     private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
-    private static final String APP_ID = "wx1b3cf470d135a830";//商户的APP_ID
-    private static final String APP_SERECT = "df933603351f378c54883853e05dd228";
+    private static final String APP_ID = "wxef5d38d8d6af065e";//商户的APP_ID
+    private static final String APP_SERECT = "ace48490b06a1415a03a98c73b6252f5";
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
 
@@ -120,7 +120,12 @@ public class WxService {
                 }
                 AppUser appUser = appUserFacade.createUser(user);
                 if (appUser != null && !"".equals(appUser)) {//关注成功
-                    String message = "你好，欢迎关注双滦区人民医院微信公众号。";
+                    String message = "欢迎您关注我们，我们将以“母亲安全 、儿童健康”为神圣使命，全天候为您和宝宝保驾护航，24小时免费接诊电话：0314-8585407，腾讯微博：滦平县妇幼保健院，官网：www.lpfy.cn，联系方式 联系电话：0314-8589760 \n" +
+                            "24小时免费接诊电话：0314-8585407  \n" +
+                            "孕妇学校咨询电话：0314-8586813\n" +
+                            "体检咨询电话：0314-8586803\n" +
+                            "宝宝游泳电话：0314-8586856 ";
+
                     //创建回复
                     XMLMessage xmlTextMessage = new XMLTextMessage(
                             eventMessage.getFromUserName(),
@@ -148,6 +153,7 @@ public class WxService {
              }
             if ("text".equals(msgType) || "image".equals(msgType) || "voice".equals(msgType)
                     || "video".equals(msgType) || "shortvideo".equals(msgType)) {//普通消息
+
                 requestMessageFacade.saveMsg(eventMessage);
             }
 
@@ -208,7 +214,7 @@ public class WxService {
         AppSetVo appSetVo = hospitalInfoFacade.findAppSetVo();
         SnsToken snsToken = SnsAPI.oauth2AccessToken(appSetVo.getAppId(), appSetVo.getAppSecret(), code);
         if(snsToken.getOpenid()==null || "".equals(snsToken.getOpenid())){
-            throw new IllegalArgumentException("系统饭繁忙,请重试！snsToken.getOpenId()="+null);
+            throw new IllegalArgumentException("系统繁忙,请重试！snsToken.getOpenId()="+null);
         }
         AppUser appUser = appUserFacade.findAppUserByOpenId(snsToken.getOpenid());
         String patId = "";

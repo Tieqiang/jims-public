@@ -71,6 +71,7 @@ public class UserCollectionFacade extends BaseFacade {
     }
 
     /**
+     * 
      * 取消收藏
      * @param docId
      * @param openId

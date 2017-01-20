@@ -102,12 +102,11 @@ public class TokenManager{
 	/**
 	 * 获取第一个appid 的 access_token
 	 * 适用于单一微信号
-	 * @param appid
-	 * @return
+ 	 * @return
 	 */
 	public static String getDefaultToken(){
 		Object[] objs = tokenMap.values().toArray();
 		return objs.length>0?objs[0].toString():null;
-	}
+ 	}
 
 }

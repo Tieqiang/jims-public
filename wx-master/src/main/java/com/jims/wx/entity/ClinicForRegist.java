@@ -5,6 +5,7 @@ import java.util.Date;
 import javax.persistence.*;
 
 import com.google.inject.persist.Transactional;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.annotate.JsonIgnoreProperties;
 import org.hibernate.annotations.GenericGenerator;
 
@@ -13,10 +14,11 @@ import org.hibernate.annotations.GenericGenerator;
  */
 @Entity
 @Table(name = "CLINIC_FOR_REGIST", schema = "WX")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@JsonIgnoreProperties(value={"hibernateLazyInitializer"})
 public class ClinicForRegist implements java.io.Serializable {
     // Fields
     private String id;
+    @JsonIgnore
     private ClinicIndex clinicIndex;
     private Date clinicDate;
     private String timeDesc;
