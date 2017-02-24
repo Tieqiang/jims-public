@@ -18,7 +18,7 @@ public class Main {
         String webappDirLocation = "wx-master/src/main/webapp/";
         String webPort = System.getenv("PORT");
         if (webPort == null || webPort.isEmpty()) {
-            webPort = "80";
+            webPort = "8080";
         }
         File file = new File(webappDirLocation) ;
         if(file.exists()){

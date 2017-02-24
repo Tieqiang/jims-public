@@ -58,4 +58,14 @@ public class PatMasterIndexFacade extends BaseFacade {
     public void save(PatMasterIndex patMasterIndex) {
         merge(patMasterIndex);
     }
+
+    public String findsex(String patientId) {
+        String sql = "select sex  from wx.pat_master_index where patient_id='" + patientId + "'";
+        List<Object> patientIds = entityManager.createNativeQuery(sql).getResultList();
+        if (patientIds != null && !patientIds.isEmpty()) {
+            return patientIds.get(0).toString();
+        } else {
+            return "";
+        }
+    }
 }

@@ -75,23 +75,24 @@
         <listener-class>com.jims.wx.listener.TokenManagerListener</listener-class>
     </listener>
     <!--微信支付常量-->
+
     <listener>
         <listener-class>com.jims.wx.listener.WeiXinPayListener</listener-class>
     </listener>
     <context-param>
         <param-name>APP_ID</param-name>
-        <param-value>wxef5d38d8d6af065e</param-value>
+        <param-value>wxf9532549ca01fa1f</param-value>
     </context-param>
     <context-param>
         <param-name>APP_SERECT</param-name>
-        <param-value>ace48490b06a1415a03a98c73b6252f5</param-value>
+        <param-value>0af8d7a3a8d1933e0866295003163ed8</param-value>
     </context-param>
     <context-param>
         <param-name>MCH_ID</param-name>
-        <param-value>1346297801</param-value>
+        <param-value>1433533702</param-value>
     </context-param>
     <context-param>
         <param-name>KEY</param-name>
-        <param-value>shuangluanqurenminyiyuan20160622</param-value>
+        <param-value>wx135031431801773288618519710627</param-value>
     </context-param>
 </web-app>

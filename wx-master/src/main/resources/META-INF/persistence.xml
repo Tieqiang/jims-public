@@ -65,9 +65,9 @@
             <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver"/>
              <!--Database Connection URL -->
             <!--<property name="hibernate.connection.url" value="jdbc:oracle:thin:@192.168.0.12:1521:orcl"/>-->
-            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@(description=(address=(protocol=tcp)(port=1521)(host=192.168.1.144))(connect_data=(service_name=oracle)))"/>
-            <property name="hibernate.connection.username" value="wx"/>
-            <property name="hibernate.connection.password" value="wx"/>
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@(description=(address=(protocol=tcp)(port=1521)(host=192.168.100.151))(connect_data=(service_name=slyy)))"/>
+            <property name="hibernate.connection.username" value="weixin"/>
+            <property name="hibernate.connection.password" value="weixin"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
         </properties>

@@ -16,7 +16,7 @@ function getUrlParameter(name) {
     }
 }
 var v = getUrlParameter('param');
-alert("openId="+v);
+
 $("#openId").val(v);
  function clickFun (){
 

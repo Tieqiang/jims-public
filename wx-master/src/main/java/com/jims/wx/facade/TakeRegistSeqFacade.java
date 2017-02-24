@@ -42,4 +42,13 @@ public class TakeRegistSeqFacade extends BaseFacade {
                 return null;
             }
      }
+
+    public boolean findIsRecord(String prepareId) {
+        List<TakeRegistSeq> list=entityManager.createQuery("from TakeRegistSeq where math like '%"+prepareId+"%'").getResultList();
+        if(!list.isEmpty()){
+             return true;
+        }else{
+             return false;
+        }
+    }
 }

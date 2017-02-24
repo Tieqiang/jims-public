@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
  * AccessTooken entity. @author MyEclipse Persistence Tools
  */
 @Entity
-@Table(name = "ACCESS_TOOKEN", schema = "WX")
+@Table(name = "ACCESS_TOOKEN")
 public class AccessTooken implements java.io.Serializable {
 
 	// Fields

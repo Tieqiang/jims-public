@@ -528,7 +528,7 @@ public class ClinicForRegistFacade extends BaseFacade {
      * @return
      */
     public List<ClinicIndex> findClinicIndexAll() {
-        return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c ").getResultList();
+        return entityManager.createQuery("select DISTINCT c.clinicIndex from ClinicForRegist as c  ").getResultList();
     }
 
     /*

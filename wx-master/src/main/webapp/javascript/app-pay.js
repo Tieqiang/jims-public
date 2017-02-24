@@ -50,7 +50,7 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
       });
 
        $("#pay").on("click",function(){
-              //生成支付js
+               //生成支付js
             $.ajax({
                 type:"POST",
                 url:"/api/wx-service/pay-js?price="+price+"&openId="+openId,
@@ -61,10 +61,18 @@ var clinicForRegistId=getUrlParameter("clinicForRegistId");//号表Id
 //                        alert(json.package);
                         WeixinJSBridge.invoke('getBrandWCPayRequest',json,function(res){
 //                            alert("errorMsg"+res.err_msg);
+
                             if(res.err_msg == 'get_brand_wcpay_request:ok'){
+                                var flag=false;
                                  // 支付成功后微信会调用 notify_url
                                 //支付成功，后台数据库加入响应挂号操作
-                                window.location.href="/api/clinic-for-regist/regist?prepareId="+json.prepareId+"&price="+price+"&clinicForRegistId="+clinicForRegistId+"&openId="+openId;
+                                if(!flag){
+                                    alert("挂号保存数据");
+                                    window.location.href="/api/clinic-for-regist/regist?prepareId="+json.prepareId+"&price="+price+"&clinicForRegistId="+clinicForRegistId+"&openId="+openId;
+                                    flag=true;
+                                }else{
+//                                    return false;
+                                }
                             }else{
                                 //支付失败
                                 window.location.href="/views/his/public/app-pay-failed.html";

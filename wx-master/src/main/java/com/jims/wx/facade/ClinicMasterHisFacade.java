@@ -34,4 +34,13 @@ public class ClinicMasterHisFacade extends BaseFacade {
         return entityManager.merge(clinicMaster);
     }
 
+    public Integer getMaxVisitNo(Date date) {
+        SimpleDateFormat  s=new SimpleDateFormat("yyyy/MM/dd");
+        String hql ="select max(i.visitNo) from ClinicMasterHis" +
+                " as i where i.visitDate like '%"+s.format(date)+"%' ";
+        Integer result=createQuery(Integer.class, hql, new ArrayList<Object>()).getSingleResult();
+        if(result!=null)
+            return result;
+            return 0 ;
+    }
 }
