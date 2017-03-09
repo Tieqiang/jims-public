@@ -80,13 +80,13 @@ public class BatchSave {
                         " VISIT_DEPT,  REGISTRATION_STATUS,\n" +
                         " REGISTERING_DATE,  REGIST_FEE, CLINIC_FEE, OTHER_FEE, CLINIC_CHARGE,\n" +
                         " OPERATOR,  MODE_CODE, CARD_NAME, CARD_NO,\n" +
-                        "  PAY_WAY,sex,serial_no\n" +
+                        "  PAY_WAY,sex,serial_no,clinic_type\n" +
                         "  \n" +
                         " )values (to_date('"+clinicMasterHis.getVisitDateTrans()+"', 'dd-mm-yyyy'),\n" +
                         " "+clinicMasterHis.getVisitNo()+", '"+clinicMasterHis.getClinicLabel()+"', '"+clinicMasterHis.getVisitTimeDesc1()+"', '"+clinicMasterHis.getPatientId()+"',\n" +
                         " '"+clinicMasterHis.getName()+"','"+clinicMasterHis.getIdentity()+"', '"+clinicMasterHis.getChargeType()+"',\n" +
                         " '"+clinicMasterHis.getVisitDept()+"',  2, to_date('"+clinicMasterHis.getRegistDateTrans()+"', 'dd-mm-yyyy'), "+clinicMasterHis.getRegistFee()+", "+clinicMasterHis.getClinicFee()+","+clinicMasterHis.getOtherFee()+",\n" +
-                        ""+clinicMasterHis.getClinicCharge()+", '微信支付', 'A', '微信支付', "+clinicMasterHis.getCardNo()+", '微信','"+clinicMasterHis.getSex()+"',"+clinicMasterHis.getSerialNo()+")";
+                        ""+clinicMasterHis.getClinicCharge()+", '微信支付', 'A', '微信支付', "+clinicMasterHis.getCardNo()+", '微信','"+clinicMasterHis.getSex()+"',"+clinicMasterHis.getSerialNo()+",'"+clinicMasterHis.getClinicType()+"')";
                 System.out.println("sql="+sql);
                 int count = statement.executeUpdate(sql);
                 insertCount += count;

@@ -7,6 +7,7 @@ import com.jims.wx.facade.MenuDictFacade;
 import com.jims.wx.facade.ModuleDictFacade;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -23,6 +24,8 @@ public class MenuDictService {
 
     private MenuDictFacade menuDictFacade ;
     private ModuleDictFacade moduleDictFacade ;
+    private HttpServletRequest request;
+
 
 
     @Inject
@@ -34,6 +37,9 @@ public class MenuDictService {
     @GET
     @Path("list")
     public List<MenuDict> findAllMenuDict(){
+        //
+        String loginName= (String)request.getSession().getAttribute("loginName");
+
         List<MenuDict> all = menuDictFacade.findAllByPosition();
         return all ;
     }

@@ -30,6 +30,7 @@ public class PatMasterIndex implements Serializable {
     private Date createDate;
 
 
+
     private String mailingAddress;
     @Column(name="inp_no")
     public String getInpNo() {

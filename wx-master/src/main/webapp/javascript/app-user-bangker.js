@@ -22,18 +22,15 @@ $("#openId").val(v);
 
     var name = $("#name").val();
     var idCard = $("#idCard").val();
-    var cellphone = $("#cellphone").val();
     var openId = v;
     if (name.trim() == "" || name.trim() == null) {
         alert("姓名不能为空！");
     } else if (idCard.trim() == "" || idCard.trim() == null) {
-        alert("一卡通卡号不能为空！");
-    } else if (cellphone.trim() == "" || cellphone.trim() == null) {
         alert("手机号不能为空！");
     } else if (openId.trim() == "" || openId.trim() == null) {
         alert("openId为空暂时不能绑卡！");
     } else {
-        window.location.href = "/api/pat-info/save?name=" + name + "&idCard=" + idCard + "&cellphone=" + cellphone + "&openId=" + openId;
+        window.location.href = "/api/pat-info/save?name=" + name + "&idCard=" + idCard + "&openId=" + openId;
     }
 }
 //function isCardID(sId) {

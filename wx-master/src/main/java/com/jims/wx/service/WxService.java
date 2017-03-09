@@ -3,16 +3,19 @@ package com.jims.wx.service;
 
 import com.jims.wx.entity.AppUser;
 
+import com.jims.wx.entity.DeptDict;
 import com.jims.wx.facade.*;
 import com.jims.wx.util.WeiXinPayUtils;
 import com.jims.wx.vo.AppSetVo;
 import org.springframework.web.bind.annotation.RequestBody;
+import weixin.popular.api.MessageAPI;
 import weixin.popular.api.SnsAPI;
 import weixin.popular.api.UserAPI;
 import weixin.popular.bean.message.EventMessage;
 import weixin.popular.bean.sns.SnsToken;
 import weixin.popular.bean.user.User;
 import weixin.popular.bean.xmlmessage.XMLMessage;
+import weixin.popular.bean.xmlmessage.XMLNewsMessage;
 import weixin.popular.bean.xmlmessage.XMLTextMessage;
 import weixin.popular.support.ExpireKey;
 import weixin.popular.support.TokenManager;
@@ -20,15 +23,16 @@ import weixin.popular.support.expirekey.DefaultExpireKey;
 import weixin.popular.util.XMLConverUtil;
 
 import javax.inject.Inject;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletInputStream;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.*;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by heren on 2016/2/24.
@@ -45,15 +49,16 @@ public class WxService {
     private PatVsUserFacade patVsUserFacade;
     private HospitalInfoFacade hospitalInfoFacade;
     private PatInfoFacade patInfoFacade;
-    private static final String MCH_ID = "1318000301";//微信支付商号
-    private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
-    private static final String APP_ID = "wxef5d38d8d6af065e";//商户的APP_ID
-    private static final String APP_SERECT = "ace48490b06a1415a03a98c73b6252f5";
+    private DeptDictFacade deptDictFacade;
+//    private static final String MCH_ID = "1318000301";//微信支付商号
+//    private static final String KEY = "jmyruanjianyouxiangongsi84923632";//API密钥 or 商户支付密钥
+//    private static final String APP_ID = "wxef5d38d8d6af065e";//商户的APP_ID
+//    private static final String APP_SERECT = "ace48490b06a1415a03a98c73b6252f5";
     //重复通知过滤
     private static ExpireKey expireKey = new DefaultExpireKey();
 
     @Inject
-    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, WxOpenAccountConfigFacade wxOpenAccountConfigFacade, PatVsUserFacade patVsUserFacade, HospitalInfoFacade hospitalInfoFacade, PatInfoFacade patInfoFacade) {
+    public WxService(RequestMessageFacade requestMessageFacade, AppUserFacade appUserFacade, HttpServletRequest request, HttpServletResponse response, WxOpenAccountConfigFacade wxOpenAccountConfigFacade, PatVsUserFacade patVsUserFacade, HospitalInfoFacade hospitalInfoFacade, PatInfoFacade patInfoFacade,DeptDictFacade deptDictFacade) {
         this.requestMessageFacade = requestMessageFacade;
         this.appUserFacade = appUserFacade;
         this.request = request;
@@ -62,6 +67,7 @@ public class WxService {
         this.patVsUserFacade = patVsUserFacade;
         this.hospitalInfoFacade = hospitalInfoFacade;
         this.patInfoFacade = patInfoFacade;
+        this.deptDictFacade=deptDictFacade;
     }
 
     @Path("check")
@@ -111,7 +117,7 @@ public class WxService {
             //不同的消息类型有不同处理方式
             String msgType = eventMessage.getMsgType();
             String event = eventMessage.getEvent();
-            if ("event".equals(msgType) && "subscribe".equals(event)) {
+            if ("event".equalsIgnoreCase(msgType) && "subscribe".equalsIgnoreCase(event)) {
                 //公众号订阅
                 String fromUser = eventMessage.getFromUserName();
                 User user = UserAPI.userInfo(this.getToken(), fromUser);
@@ -120,17 +126,13 @@ public class WxService {
                 }
                 AppUser appUser = appUserFacade.createUser(user);
                 if (appUser != null && !"".equals(appUser)) {//关注成功
-                    String message = "欢迎您关注我们，我们将以“母亲安全 、儿童健康”为神圣使命，全天候为您和宝宝保驾护航，24小时免费接诊电话：0314-8585407，腾讯微博：滦平县妇幼保健院，官网：www.lpfy.cn，联系方式 联系电话：0314-8589760 \n" +
-                            "24小时免费接诊电话：0314-8585407  \n" +
-                            "孕妇学校咨询电话：0314-8586813\n" +
-                            "体检咨询电话：0314-8586803\n" +
-                            "宝宝游泳电话：0314-8586856 ";
-
-                    //创建回复
-                    XMLMessage xmlTextMessage = new XMLTextMessage(
+                    List<XMLNewsMessage.Article> list=new ArrayList<XMLNewsMessage.Article>();
+                    list=this.createArticleList(list);
+                      //创建回复
+                    XMLMessage xmlTextMessage = new XMLNewsMessage(
                             eventMessage.getFromUserName(),
                             eventMessage.getToUserName(),
-                            message);
+                            list);
                     //回复
                     xmlTextMessage.outputStreamWrite(outputStream);
                     return;
@@ -169,16 +171,22 @@ public class WxService {
             }
             //创建回复
             //创建回复
-            XMLMessage xmlTextMessage = new XMLTextMessage(
+            List<XMLNewsMessage.Article> list=new ArrayList<XMLNewsMessage.Article>();
+            list=this.createArticleList(list);
+            XMLMessage xmlTextMessage = new XMLNewsMessage(
                     eventMessage.getFromUserName(),
                     eventMessage.getToUserName(),
-                    "您所发送消息已经收到，会尽快回复您");
+                    list);
             //回复
             xmlTextMessage.outputStreamWrite(outputStream);
             return;
         }
         outputStreamWrite(outputStream, "");
     }
+
+
+
+
 
     /**
      * 数据流输出
@@ -359,12 +367,20 @@ public class WxService {
     @GET
     @Path("query-string")
     public String queryString(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
-        if(openId==null || "".equals(openId) || deptId==null || "".equals(deptId)){
-            throw new IllegalArgumentException("参数非法,openId="+openId+"&deptId="+deptId);
+        //判断选择的科室是否是西地卫生院
+        DeptDict deptDict=this.deptDictFacade.findById(deptId);
+        if(deptDict.getDeptName().contains("西地卫生")){
+            //去注册页面
+            response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
+            return "";
+        }else{
+            if(openId==null || "".equals(openId) || deptId==null || "".equals(deptId)){
+                throw new IllegalArgumentException("参数非法,openId="+openId+"&deptId="+deptId);
+            }
+            response.sendRedirect("/views/his/public/app-doct-info.html?openId=" + openId + "&deptId=" + deptId);
+            return "";
         }
-        response.sendRedirect("/views/his/public/app-doct-info.html?openId=" + openId + "&deptId=" + deptId);
-        return "";
-    }
+     }
 
     @GET
     @Path("app-pay")
@@ -560,6 +576,13 @@ public class WxService {
     @GET
     @Path("query-string-pre")
     public String queryStringPre(@QueryParam("openId") String openId, @QueryParam("deptId") String deptId) throws IOException {
+        //todo
+        DeptDict deptDict=this.deptDictFacade.findById(deptId);
+        if(deptDict.getDeptName().contains("西地卫生")){
+            //去注册页面
+            response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
+            return "";
+        }
         if(openId==null || "".equals(openId)){
             throw new IllegalArgumentException("openId 为空！");
         }
@@ -736,4 +759,56 @@ public class WxService {
 
         return null;
     }
+
+    /**
+     * 创建多图文消息
+     * @param list
+     * @return
+     */
+    private List<XMLNewsMessage.Article> createArticleList(List<XMLNewsMessage.Article> list) {
+        String addr="http://weixin.ch-groups-slyy.com";
+        XMLNewsMessage.Article article1 = new XMLNewsMessage.Article();
+        article1.setTitle("双滦区人民医院\\n简介");
+        article1.setDescription("");
+        article1.setPicurl(addr+"/head/img/idx_one.png");
+//        synopsis.html
+        article1.setUrl(addr+"/head/synopsis.html");
+
+        XMLNewsMessage.Article article2 = new XMLNewsMessage.Article();
+        article2.setTitle("科室介绍与专家团队");
+        article2.setDescription("");
+        article2.setPicurl(addr+"/head/img/idx_two_2.png");
+        article2.setUrl(addr+"/head/hospital.html");
+        XMLNewsMessage.Article article3 = new XMLNewsMessage.Article();
+        article3.setTitle("预约挂号");
+        article3.setDescription("");
+        article3.setPicurl(addr+"/head/img/idx_biao_1.png");
+        article3.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43a128a6adebadd4&redirect_uri=http://weixin.ch-groups-slyy.com/api/wx-service/find-dept-pre&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+
+        XMLNewsMessage.Article article4 = new XMLNewsMessage.Article();
+        article4.setTitle("智能导诊");
+        article4.setDescription("");
+        article4.setPicurl(addr+"/head/img/idx_biao_2.png");
+        article4.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43a128a6adebadd4&redirect_uri=http://weixin.ch-groups-slyy.com/api/wx-service/find-body&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+
+        XMLNewsMessage.Article article5 = new XMLNewsMessage.Article();
+        article5.setTitle("就诊办卡流程！");
+        article5.setDescription("");
+//        file:///C:/Users/admin/Documents/Tencent%20Files/779780284/FileRecv/head/jzkbllc.html
+        article5.setPicurl(addr+"/head/img/idx_biao_3.png");
+        article5.setUrl(addr+"/head/jzkbllc.html");
+        XMLNewsMessage.Article article6 = new XMLNewsMessage.Article();
+        article6.setTitle("就诊须知");
+        article6.setDescription("");
+        article6.setPicurl(addr+"/head/img/idx_biao_4.png");
+        article6.setUrl(addr+"/head/jzxz.html");
+        list.add(article1);
+        list.add(article2);
+        list.add(article3);
+        list.add(article4);
+        list.add(article5);
+        list.add(article6);
+        return list;
+    }
+
 }

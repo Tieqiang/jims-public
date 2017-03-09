@@ -24,8 +24,7 @@ var flag=getUrlParameter("flag");
  * 查看详情
  */
 function view(){
-//    if(){}
-   window.location.href="/api/wx-service/get-param?patId="+patId+"&openId="+openId;
+    window.location.href="/api/wx-service/get-param?patId="+patId+"&openId="+openId;
 }
 
 

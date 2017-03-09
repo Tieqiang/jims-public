@@ -4,6 +4,8 @@ import com.google.inject.Inject;
 import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.*;
+import com.jims.wx.util.SaveJKPT;
+import com.jims.wx.vo.JkptPat;
 import com.jims.wx.vo.PatInfoVo;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
@@ -75,6 +77,55 @@ public class PatInfoService {
     }
 
     /**
+     * 往健康平台pat_master_index 表中插入一条数据
+     * @param openId
+     * @param name
+     * @param idCard
+     * @param tel
+     */
+    @GET
+    @Path("saveJkpt")
+    public synchronized void saveJkpt(@QueryParam("openId") String openId, @QueryParam("name") String name, @QueryParam("idCard") String idCard, @QueryParam("tel") String tel) {
+        //先生成一个patient-id
+        String patientId="";
+        JkptPat jkptPat=new JkptPat();
+        jkptPat.setName(name);
+        jkptPat.setTel(tel);
+        jkptPat.setIdCard(idCard);
+        jkptPat.setId(UUID.randomUUID().toString());
+        String sql="SELECT SUBSTRING(MAX(patient_id),3)+1 FROM pat_master_index";
+        String maxPatientId=SaveJKPT.findMaxPatientId(sql);
+        jkptPat.setPatientId("CD"+maxPatientId);
+        AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+        PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
+        if(patInfo!=null){
+            patInfo.setCellphone(idCard);
+            patInfoFacade.save(patInfo);
+        }else{
+            try {
+                response.sendRedirect("/views/his/public/user-bangker-failed.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new IllegalArgumentException("patInfo为空！");
+        }
+        int rows=SaveJKPT.savePatMasterIndex(jkptPat);
+        if(rows>0){
+            try {
+                response.sendRedirect("/views/his/public/user-sign-success.html?openId=" + openId);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }else{
+            try {
+                response.sendRedirect("/views/his/public/user-bangker-failed.html");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            throw new IllegalArgumentException("注册失败");
+        }
+    }
+    /**
      * 保存患者信息
       * @param openId
      * @param name
@@ -83,14 +134,14 @@ public class PatInfoService {
      */
     @GET
     @Path("save")
-    public void save(@QueryParam("openId") String openId, @QueryParam("name") String name, @QueryParam("idCard") String idCard, @QueryParam("cellphone") String cellphone, @QueryParam("patId") String patId) {
+    public synchronized void save(@QueryParam("openId") String openId, @QueryParam("name") String name, @QueryParam("idCard") String idCard, @QueryParam("cellphone") String cellphone, @QueryParam("patId") String patId) {
         if(openId==null || openId.trim().equals("")){
             try {
                 response.sendRedirect("/views/his/public/user-bangker-failed.html");
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            throw new IllegalArgumentException("openId为空，请重试！");
+//            throw new IllegalArgumentException("openId为空，请重试！");
          }
         PatInfo patInfo = null;
         String patientId = null;
@@ -107,13 +158,15 @@ public class PatInfoService {
                  AppUser appUser = appUserFacade.findAppUserByOpenId(openId);
                  if(appUser==null){
                      response.sendRedirect("/views/his/public/user-bangker-failed.html");
-                     throw new IllegalArgumentException("appUser为空，请重试！");
+//                     throw new IllegalArgumentException("appUser为空，请重试！");
+                     return;
                  }
-                 //通过一卡通卡号查询病人Id
-                 patientId = patMasterIndexFacade.checkIdCard2(idCard);
+                 //通过手机号号查询病人Id
+                 patientId = patMasterIndexFacade.findPatientIdByTel(idCard);
                  if(patientId==null || "".equals(patientId)){
                      response.sendRedirect("/views/his/public/user-bangker-failed.html");
-                     throw new IllegalArgumentException("一卡通号无效，请重试！");
+//                     throw new IllegalArgumentException("手机号无效，请重试！");
+                     return ;
                  }
                  /**
                  * 查询之前是否绑定次idCard
@@ -121,6 +174,7 @@ public class PatInfoService {
                 Boolean isBangker = this.patVsUserFacade.findIsBangker(idCard, openId);
                 if (isBangker) {
                     response.sendRedirect("/views/his/public/user-bangker-failed.html");
+                    return ;
                 } else {
                     /**
                      * 查询之前是否有绑定 但是已经被删掉
@@ -164,12 +218,14 @@ public class PatInfoService {
                 }
                 //为查看详情做准备
                 response.sendRedirect("/views/his/public/user-bangker-success.html?patId=" + patInfo.getId()+"&openId="+openId);
-            }
+                return ;
+              }
         } catch (Exception e) {
             e.printStackTrace();
             try {
                 response.sendRedirect("/views/his/public/user-bangker-failed.html");
-            } catch (IOException e1) {
+                return ;
+             } catch (IOException e1) {
                 e1.printStackTrace();
             }
         }

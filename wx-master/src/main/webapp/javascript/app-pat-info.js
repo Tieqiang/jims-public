@@ -25,8 +25,7 @@ $(function(){
                 $("#patId").val(data.id);
                 $("#name").val(data.name);
                 $("#idCard").val(data.idCard);
-                $("#phone").val(data.cellphone);
-             }
+              }
         });
      }
     //var pId=$("#patId").val();

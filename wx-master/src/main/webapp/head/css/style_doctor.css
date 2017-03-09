@@ -1,0 +1,82 @@
+.hos_section>#doctor_act.hos_active>a:first-child{
+    border:1px solid #d0e1fa;
+    background: none;
+    color:#333;
+}
+.hos_section>#doctor_act.hos_active>a:last-child{
+    background-color: #639ced;
+    border: none;
+    border-top:1px solid #639ced;
+    color:#fff;
+}
+#dtr_content{
+    margin-left:100px;
+    padding:10px;
+}
+#dtr_content>dl{
+    overflow: hidden;
+    min-height: 110px;
+    margin-bottom:20px;
+    border-bottom: 1px solid #cbcbcc;
+}
+#dtr_content>dl:last-child{
+    border: none;
+}
+#dtr_content>dl>dt{
+    width:30%;
+    float: left;
+}
+#dtr_content>dl>dt>img{
+    width:100%;
+}
+#dtr_content>dl>dd{
+    font-size:12px;
+    width:70%;
+    padding-left: 8px;
+    float:left;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -43,6 +43,7 @@ public class ClinicMasterHis implements java.io.Serializable {
      private String payWay;
      private String clinicNo;
      private Date dateOfBirth;//DATE_OF_BIRTH
+     private String id;
 
     private Integer mrProvidedIndicator;// MR_PROVIDED_INDICATOR
     // Fields
@@ -316,6 +317,11 @@ public class ClinicMasterHis implements java.io.Serializable {
         return sdf.format(new Date());
     }
 
+    public String getId() {
+        return id;
+    }
 
-
+    public void setId(String id) {
+        this.id = id;
+    }
 }

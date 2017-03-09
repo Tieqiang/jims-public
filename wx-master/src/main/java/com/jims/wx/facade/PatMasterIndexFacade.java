@@ -59,6 +59,20 @@ public class PatMasterIndexFacade extends BaseFacade {
         merge(patMasterIndex);
     }
 
+
+     /**
+     * @param  tel
+     * @return
+     */
+    public String findPatientIdByTel(String tel) {
+        String sql = " select patient_id  from MEDREC.MEDICAL_PATID_VS_VALIDNO where CARD_TYPE='手机号' and VALID_NO='"+tel+"' ";
+        List<Object> patientId = entityManager.createNativeQuery(sql).getResultList();
+        if (patientId != null && !patientId.isEmpty()) {
+            return patientId.get(0).toString();
+        } else {
+            return "";
+        }
+    }
     public String findsex(String patientId) {
         String sql = "select sex  from wx.pat_master_index where patient_id='" + patientId + "'";
         List<Object> patientIds = entityManager.createNativeQuery(sql).getResultList();
@@ -68,4 +82,6 @@ public class PatMasterIndexFacade extends BaseFacade {
             return "";
         }
     }
+
+
 }

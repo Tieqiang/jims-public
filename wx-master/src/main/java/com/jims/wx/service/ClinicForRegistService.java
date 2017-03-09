@@ -6,6 +6,7 @@ import com.jims.wx.entity.*;
 import com.jims.wx.expection.ErrorException;
 import com.jims.wx.facade.*;
 import com.jims.wx.util.BatchSave;
+import com.jims.wx.util.SaveJKPT;
 import com.jims.wx.vo.*;
 import freemarker.template.SimpleDate;
 import freemarker.template.utility.StringUtil;
@@ -117,13 +118,16 @@ public class ClinicForRegistService {
                     if (patInfo == null) {
                         throw new IllegalArgumentException("非法的patId=" + patId);
                     }
-                    //            String idCard2 = patInfoFacade.findIdCard(patId);
                     String patientId =null;
-                    patientId=this.patMasterIndexFacade.checkIdCard2(patInfo.getIdCard());
-                    if(patientId==null || "".equals(patientId)){
-                        throw new IllegalArgumentException("根据一卡通卡号没有找到patientId" + patInfo.getIdCard());
-                    }
+                    String clinicLabel=clinicForRegist.getClinicIndex().getClinicLabel();
+                    if(clinicLabel.contains("西地卫生院")){
 
+                    }else{
+                        patientId=this.patMasterIndexFacade.findPatientIdByTel(patInfo.getIdCard());
+                        if(patientId==null || "".equals(patientId)){
+                            throw new IllegalArgumentException("根据手机号没有找到patientId" + patInfo.getIdCard());
+                        }
+                    }
                     String registTime = clinicForRegist.getRegistTime();//就诊日期
                     clinicMaster.setPatientId(patientId);
                     clinicMaster.setRegistFee(0.0);//设为0
@@ -140,7 +144,7 @@ public class ClinicForRegistService {
                     //
                     ClinicMasterHis clinicMasterHis=new ClinicMasterHis();
                     clinicMasterHis.setPatientId(patientId);
-                    clinicMasterHis.setCardName("一卡通");
+                    clinicMasterHis.setCardName("");
                     clinicMasterHis.setCardNo(patInfo.getIdCard());
                     clinicMasterHis.setVisitDate1(sdf.parse(registTime));
                     clinicMasterHis.setRegistFee(0.0);//设为0
@@ -150,7 +154,6 @@ public class ClinicForRegistService {
                     clinicMasterHis.setRegisteringDate(new Date());
                     clinicMasterHis.setClinicLabel(clinicForRegist.getClinicIndex().getClinicLabel());
                     clinicMasterHis.setVisitTimeDesc1(clinicForRegist.getTimeDesc());
-//                Integer max=clinicMasterHisFacade.getMaxVisitNo(sdf.parse(registTime));
                     Integer sortMath = 1000;
                     TakeRegistSeq a = null;
                     TakeRegistSeq record = takeRegistSeqFacade.findByDate(registTime);
@@ -166,8 +169,8 @@ public class ClinicForRegistService {
                     }
                     clinicMasterHis.setSerialNo(clinicForRegist.getRegistrationNum()!=null?clinicForRegist.getRegistrationNum()+1:1);
                     clinicMasterHis.setName(patInfo.getName());
-                    String sex=this.patMasterIndexFacade.findsex(patientId);
-                    clinicMasterHis.setSex(sex);
+//                    String sex=this.patMasterIndexFacade.findsex(patientId);
+//                    clinicMasterHis.setSex(sex);
                     clinicMasterHis.setAge(null);
                     clinicMasterHis.setIdentity("一般人员");
                     clinicMasterHis.setChargeType("自费");
@@ -180,12 +183,24 @@ public class ClinicForRegistService {
                     clinicMasterHis.setOperator("微信挂号");
                     clinicMasterHis.setModeCode("A");
                     clinicMasterHis.setPayWay("微信支付");
-                    clinicMasterHis.setClinicLabel(doctInfo.getTitle()+"号");
-                    //todo clinicNo
+                    clinicMasterHis.setClinicLabel(clinicForRegist.getClinicIndex().getClinicLabel());
+                    List<ClinicTypeSetting> typeSetting=this.clinicTypeSettingFacade.findById(clinicForRegist.getClinicIndex().getClinicTypeId());
+                    clinicMasterHis.setClinicType(typeSetting!=null?typeSetting.get(0).getClinicType():null);
                     clinicMasterHis.setClinicNo(null);
                     clinicMasterHis.setDateOfBirth(patInfo.getBirthday());
                     clinicMasterHis.setMrProvidedIndicator(0);
-                    boolean isSuccess=BatchSave.batchSaveTest(clinicMasterHis);
+                    if(clinicLabel.contains("西地卫生院")){
+                        //往健康平台库里插入数据
+                        String sql="SELECT patient_id from pat_master_index where id_no='"+patInfo.getCellphone()+"'";
+                        String pid=SaveJKPT.findMaxPatientId(sql);
+                        clinicMasterHis.setId(UUID.randomUUID().toString());
+                        clinicMasterHis.setPatientId(pid);
+                        clinicMasterHis.setName(patInfo.getName());
+                        SaveJKPT.batchSaveTest(clinicMasterHis);
+                    }else{
+                        //如果不是西地卫生院的号，则往his库李插入数据
+                        boolean isSuccess=BatchSave.batchSaveTest(clinicMasterHis);
+                    }
                     //当日已经挂号数+1
                     clinicForRegist.setRegistrationNum(clinicForRegist.getRegistrationNum() + 1);
                     //当前号+1

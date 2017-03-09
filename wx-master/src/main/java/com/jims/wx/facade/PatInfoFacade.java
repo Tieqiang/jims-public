@@ -124,9 +124,9 @@ public class PatInfoFacade extends BaseFacade {
     public String findByPaientId(String patientId) {
 
         String sql = "select name from PatInfo where patientId='" + patientId + "' and flag='0'";
-        String name = (String) entityManager.createQuery(sql).getSingleResult();
+        List<String> name =entityManager.createQuery(sql).getResultList();
         if (name != null && !"".equals(name))
-            return name;
+            return name.get(0);
         return "";
     }
 

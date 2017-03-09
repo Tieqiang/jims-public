@@ -142,7 +142,7 @@ public class ClinicMasterFacade extends BaseFacade {
         List<ClinicMaster> clinicMasters = entityManager.createQuery(todayHql).getResultList();
         for (ClinicMaster clinicMaster : clinicMasters) {
             ClinicMasterVo c = new ClinicMasterVo();
-            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
+            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicForRegistFacade.findById(clinicMaster.getClincRegistId())!=null?clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getClinicLabel():null);
             c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             today.add(c);
@@ -152,7 +152,7 @@ public class ClinicMasterFacade extends BaseFacade {
         List<ClinicMaster> clinicMasters2 = entityManager.createQuery(historyHql).getResultList();
         for (ClinicMaster clinicMaster : clinicMasters2) {
             ClinicMasterVo c = new ClinicMasterVo();
-            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicIndexFacade.findById(clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getId()).getClinicLabel());
+            c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicForRegistFacade.findById(clinicMaster.getClincRegistId())!=null?clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getClinicLabel():null);
             c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             history.add(c);
