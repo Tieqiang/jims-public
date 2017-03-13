@@ -22,12 +22,7 @@ public class SaveJKPT {
     private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     private static final org.apache.log4j.Logger logger = org.apache.log4j.Logger.getLogger(SaveJKPT.class);
     static {
-        try {
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        try {
+         try {
             ResourceBundle resourceBundle=ResourceBundle.getBundle("jdbc");
             URL=resourceBundle.getString("jdbc.url");
             USER_NAME=resourceBundle.getString("jdbc.username");
@@ -52,6 +47,10 @@ public class SaveJKPT {
             logger.error(e.getMessage());
             return null;
         }
+    }
+
+    public static void main(String[] args){
+        getConnection();
     }
 
 

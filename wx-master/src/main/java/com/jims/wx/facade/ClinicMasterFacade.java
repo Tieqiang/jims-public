@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.persist.Transactional;
 import com.jims.wx.BaseFacade;
 import com.jims.wx.entity.ClinicMaster;
+import com.jims.wx.entity.PatInfo;
 import com.jims.wx.vo.ClinicMasterVo;
 
 import javax.persistence.EntityManager;
@@ -126,7 +127,7 @@ public class ClinicMasterFacade extends BaseFacade {
      * @param patientIds
      * @return
      */
-    public Map<String, Object> findMyRegist(List<String> patientIds) {
+    public Map<String, Object> findMyRegist(List<String> patientIds,String patId) {
         Map<String, Object> map = new HashMap<String, Object>();
         List<ClinicMasterVo> today = new ArrayList<ClinicMasterVo>();
         List<ClinicMasterVo> history = new ArrayList<ClinicMasterVo>();
@@ -143,7 +144,10 @@ public class ClinicMasterFacade extends BaseFacade {
         for (ClinicMaster clinicMaster : clinicMasters) {
             ClinicMasterVo c = new ClinicMasterVo();
             c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicForRegistFacade.findById(clinicMaster.getClincRegistId())!=null?clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getClinicLabel():null);
-            c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
+            PatInfo patInfo=patInfoFacade.findById(patId);
+            if(patInfo!=null){
+                c.setName(patInfo.getName());
+            }
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             today.add(c);
         }
@@ -153,7 +157,10 @@ public class ClinicMasterFacade extends BaseFacade {
         for (ClinicMaster clinicMaster : clinicMasters2) {
             ClinicMasterVo c = new ClinicMasterVo();
             c.setClinicLabel(clinicMaster.getClincRegistId() == null ? null : clinicForRegistFacade.findById(clinicMaster.getClincRegistId())!=null?clinicForRegistFacade.findById(clinicMaster.getClincRegistId()).getClinicIndex().getClinicLabel():null);
-            c.setName(patInfoFacade.findByPaientId(clinicMaster.getPatientId()));
+            PatInfo patInfo=patInfoFacade.findById(patId);
+            if(patInfo!=null){
+                c.setName(patInfo.getName());
+            }
             c.setRegistDate(sdf.format(clinicMaster.getRegistDate()));
             history.add(c);
         }

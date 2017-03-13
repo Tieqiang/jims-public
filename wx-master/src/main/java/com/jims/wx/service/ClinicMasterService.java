@@ -90,7 +90,7 @@ public class ClinicMasterService {
                 patientIds.add(patientId);
             }
         }
-        map = clinicMasterFacade.findMyRegist(patientIds);
+        map = clinicMasterFacade.findMyRegist(patientIds,appUser.getPatId());
         return map;
     }
 }

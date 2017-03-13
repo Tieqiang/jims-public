@@ -4,6 +4,7 @@ package com.jims.wx.service;
 import com.jims.wx.entity.AppUser;
 
 import com.jims.wx.entity.DeptDict;
+import com.jims.wx.entity.PatInfo;
 import com.jims.wx.facade.*;
 import com.jims.wx.util.WeiXinPayUtils;
 import com.jims.wx.vo.AppSetVo;
@@ -370,10 +371,18 @@ public class WxService {
         //判断选择的科室是否是西地卫生院
         DeptDict deptDict=this.deptDictFacade.findById(deptId);
         if(deptDict.getDeptName().contains("西地卫生")){
-            //去注册页面
-            response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
-            return "";
-        }else{
+            AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+            PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
+            if(patInfo.getCellphone()!=null&&!"".equals(patInfo.getCellphone())){
+                //注册过
+                response.sendRedirect("/views/his/public/app-doct-info-pre.html?openId=" + openId + "&deptId=" + deptId);
+                return "";
+            }else{
+                //去注册页面
+                response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
+                return "";
+            }
+         }else{
             if(openId==null || "".equals(openId) || deptId==null || "".equals(deptId)){
                 throw new IllegalArgumentException("参数非法,openId="+openId+"&deptId="+deptId);
             }
@@ -579,9 +588,18 @@ public class WxService {
         //todo
         DeptDict deptDict=this.deptDictFacade.findById(deptId);
         if(deptDict.getDeptName().contains("西地卫生")){
-            //去注册页面
-            response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
-            return "";
+            // 判断是否注册过
+            AppUser appUser=appUserFacade.findAppUserByOpenId(openId);
+            PatInfo patInfo=patInfoFacade.findById(appUser.getPatId());
+            if(patInfo.getCellphone()!=null&&!"".equals(patInfo.getCellphone())){
+                //注册过
+                response.sendRedirect("/views/his/public/app-doct-info-pre.html?openId=" + openId + "&deptId=" + deptId);
+                return "";
+            }else{
+                //去注册页面
+                response.sendRedirect("/views/his/public/app-person-info.html?openId=" + openId);
+                return "";
+            }
         }
         if(openId==null || "".equals(openId)){
             throw new IllegalArgumentException("openId 为空！");
