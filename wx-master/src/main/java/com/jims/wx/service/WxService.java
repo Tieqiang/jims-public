@@ -722,6 +722,7 @@ public class WxService {
         return "";
     }
     /**
+     *
      * 我的收藏
      * @param openId
      * @return
@@ -786,7 +787,7 @@ public class WxService {
     private List<XMLNewsMessage.Article> createArticleList(List<XMLNewsMessage.Article> list) {
         String addr="http://weixin.ch-groups-slyy.com";
         XMLNewsMessage.Article article1 = new XMLNewsMessage.Article();
-        article1.setTitle("双滦区人民医院\\n简介");
+        article1.setTitle("医院简介");
         article1.setDescription("");
         article1.setPicurl(addr+"/head/img/idx_one.png");
 //        synopsis.html
@@ -810,7 +811,7 @@ public class WxService {
         article4.setUrl("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43a128a6adebadd4&redirect_uri=http://weixin.ch-groups-slyy.com/api/wx-service/find-body&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
 
         XMLNewsMessage.Article article5 = new XMLNewsMessage.Article();
-        article5.setTitle("就诊办卡流程！");
+        article5.setTitle("就诊办卡流程");
         article5.setDescription("");
 //        file:///C:/Users/admin/Documents/Tencent%20Files/779780284/FileRecv/head/jzkbllc.html
         article5.setPicurl(addr+"/head/img/idx_biao_3.png");

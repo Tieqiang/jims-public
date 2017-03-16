@@ -49,6 +49,7 @@ public class ClinicMasterHis implements java.io.Serializable {
     // Fields
 
     private SimpleDateFormat sdf=new SimpleDateFormat("dd-MM-yyyy");
+    private SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
 
 
 
@@ -313,10 +314,15 @@ public class ClinicMasterHis implements java.io.Serializable {
     public String getVisitDateTrans(){
          return sdf.format(this.visitDate1);
     }
+    public String getVisitDateTrans1(){
+        return sdf2.format(this.visitDate1);
+    }
     public String getRegistDateTrans(){
         return sdf.format(new Date());
     }
-
+    public String getRegistDateTrans1(){
+        return sdf2.format(new Date());
+    }
     public String getId() {
         return id;
     }

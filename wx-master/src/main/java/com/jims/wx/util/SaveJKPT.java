@@ -82,10 +82,10 @@ public class SaveJKPT {
                         " OPERATOR,  MODE_CODE, CARD_NAME, CARD_NO,\n" +
                         "  PAY_WAY,sex,serial_no,clinic_type\n" +
                         "  \n" +
-                        " )values ('"+clinicMasterHis.getId()+"','"+clinicMasterHis.getVisitDateTrans()+"',\n" +
+                        " )values ('"+clinicMasterHis.getId()+"','"+clinicMasterHis.getVisitDateTrans1()+"',\n" +
                         " "+clinicMasterHis.getVisitNo()+", '"+clinicMasterHis.getClinicLabel()+"', '"+clinicMasterHis.getVisitTimeDesc1()+"', '"+clinicMasterHis.getPatientId()+"',\n" +
                         " '"+clinicMasterHis.getName()+"','"+clinicMasterHis.getIdentity()+"', '"+clinicMasterHis.getChargeType()+"',\n" +
-                        " '"+clinicMasterHis.getVisitDept()+"',  2, '"+clinicMasterHis.getRegistDateTrans()+"', "+clinicMasterHis.getRegistFee()+", "+clinicMasterHis.getClinicFee()+","+clinicMasterHis.getOtherFee()+",\n" +
+                        " '"+clinicMasterHis.getVisitDept()+"',  2, '"+clinicMasterHis.getRegistDateTrans1()+"', "+clinicMasterHis.getRegistFee()+", "+clinicMasterHis.getClinicFee()+","+clinicMasterHis.getOtherFee()+",\n" +
                         ""+clinicMasterHis.getClinicCharge()+", '微信支付', 'A', '微信支付', "+clinicMasterHis.getCardNo()+", '微信','"+clinicMasterHis.getSex()+"',"+clinicMasterHis.getSerialNo()+",'"+clinicMasterHis.getClinicType()+"')";
                 System.out.println("sql="+sql);
                 int count = statement.executeUpdate(sql);
@@ -183,7 +183,7 @@ public class SaveJKPT {
              statement=connection.createStatement();
              rs=statement.executeQuery(sql);
             while(rs.next()){
-                 max=rs.getString(0);
+                 max=rs.getString(1);
                  break;
             }
         } catch (SQLException e) {
